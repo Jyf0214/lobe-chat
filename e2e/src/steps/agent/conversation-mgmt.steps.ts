@@ -201,8 +201,9 @@ When('用户选择重命名选项', async function (this: CustomWorld) {
   console.log('   📍 Step: 选择重命名选项...');
 
   // The context menu should be visible with "rename" option
-  // Use exact match to avoid matching "智能重命名"
-  const renameOption = this.page.getByRole('menuitem', { exact: true, name: '重命名' });
+  // Use exact match to avoid matching "AI Rename" / "智能重命名"
+  // Support both English and Chinese
+  const renameOption = this.page.getByRole('menuitem', { exact: true, name: /^(Rename|重命名)$/ });
 
   await expect(renameOption).toBeVisible({ timeout: 5000 });
   await renameOption.click();
@@ -247,9 +248,8 @@ When('用户选择删除选项', async function (this: CustomWorld) {
   console.log('   📍 Step: 选择删除选项...');
 
   // The context menu should be visible with "delete" option
-  const deleteOption = this.page.locator(
-    '.ant-dropdown-menu-item:has-text("删除"), .ant-dropdown-menu-item-danger',
-  );
+  // Support both English and Chinese
+  const deleteOption = this.page.getByRole('menuitem', { exact: true, name: /^(Delete|删除)$/ });
 
   await expect(deleteOption).toBeVisible({ timeout: 5000 });
   await deleteOption.click();
@@ -276,7 +276,10 @@ When('用户在搜索框中输入 {string}', async function (this: CustomWorld, 
   console.log(`   📍 Step: 在搜索框中输入 "${searchText}"...`);
 
   // Find the search input in the sidebar
-  const searchInput = this.page.locator('input[placeholder*="搜索"], [data-testid="search-input"]');
+  // Support both English and Chinese placeholders
+  const searchInput = this.page.locator(
+    'input[placeholder*="Search"], input[placeholder*="搜索"], [data-testid="search-input"]',
+  );
 
   if ((await searchInput.count()) > 0) {
     await searchInput.first().click();

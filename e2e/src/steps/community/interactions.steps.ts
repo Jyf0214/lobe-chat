@@ -28,10 +28,29 @@ When('I wait for the search results to load', async function (this: CustomWorld)
 When('I click on a category in the category menu', async function (this: CustomWorld) {
   await this.page.waitForLoadState('networkidle', { timeout: 30_000 });
 
-  // Find the category menu and click the first non-active category
+  // Find the category menu items - they are clickable elements in the sidebar
+  // The UI shows categories like "All", "Academic", "Career", etc.
   const categoryItems = this.page.locator(
-    '[data-testid="category-menu"] button, [role="menu"] button, nav[aria-label*="categor" i] button',
+    '[class*="CategoryMenu"] [class*="Item"], [class*="category"] a, [class*="category"] button, [role="menuitem"]',
   );
+
+  const count = await categoryItems.count();
+  console.log(`   📍 Found ${count} category items`);
+
+  if (count === 0) {
+    // Fallback: try finding by text content that looks like a category
+    const fallbackCategories = this.page.locator(
+      'text=/^(Academic|Career|Design|Programming|General)/',
+    );
+    const fallbackCount = await fallbackCategories.count();
+    console.log(`   📍 Fallback: Found ${fallbackCount} category items by text`);
+
+    if (fallbackCount > 0) {
+      await fallbackCategories.first().click();
+      this.testContext.selectedCategory = await fallbackCategories.first().textContent();
+      return;
+    }
+  }
 
   // Wait for categories to be visible
   await categoryItems.first().waitFor({ state: 'visible', timeout: 30_000 });

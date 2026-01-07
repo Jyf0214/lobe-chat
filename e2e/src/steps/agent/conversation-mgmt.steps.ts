@@ -215,33 +215,48 @@ When('用户选择重命名选项', async function (this: CustomWorld) {
 When('用户输入新的对话名称 {string}', async function (this: CustomWorld, newName: string) {
   console.log(`   📍 Step: 输入新名称 "${newName}"...`);
 
-  // The topic should now be in editing mode with an input field
-  this.page.locator('input[type="text"]').filter({
-    has: this.page.locator(':focus'),
-  });
+  // The rename input is inside a Popover (rendered as a portal in the body)
+  // The Input component has autoFocus, so it should receive focus automatically
+  // Wait for the popover to open and input to be visible
 
-  // Wait for input to appear
-  await this.page.waitForTimeout(500);
+  // The Popover from @lobehub/ui renders with ant-popover class
+  // Look for visible input in the popover
+  const popoverInput = this.page.locator(
+    '.ant-popover-content input, .ant-popover input, .ant-input',
+  );
 
-  // Find the visible input in the sidebar area
-  const sidebarInput = this.page.locator('[class*="NavItem"] input, .ant-input');
-  const inputCount = await sidebarInput.count();
-  console.log(`   📍 Found ${inputCount} input fields`);
+  // Wait for input to be visible with increased timeout
+  await expect(popoverInput.first())
+    .toBeVisible({ timeout: 5000 })
+    .catch(() => {
+      console.log('   ⚠️ Popover input not immediately visible, checking other selectors...');
+    });
+
+  const inputCount = await popoverInput.count();
+  console.log(`   📍 Found ${inputCount} popover input fields`);
 
   if (inputCount > 0) {
-    const input = sidebarInput.first();
+    const input = popoverInput.first();
+    // Clear existing content and fill with new name
+    await input.click();
     await input.clear();
     await input.fill(newName);
-    await this.page.keyboard.press('Enter');
+    // Press Enter to confirm the rename
+    await input.press('Enter');
     console.log(`   ✅ 已输入新名称 "${newName}"`);
   } else {
-    // Try finding by focused element
+    // Fallback: since Input has autoFocus, try typing directly
+    console.log('   📍 Fallback: using keyboard.type() for autoFocused input');
+    // First select all existing text and delete
+    await this.page.keyboard.press('Control+A');
+    await this.page.keyboard.press('Backspace');
     await this.page.keyboard.type(newName, { delay: 30 });
     await this.page.keyboard.press('Enter');
     console.log(`   ✅ 已通过键盘输入新名称 "${newName}"`);
   }
 
-  await this.page.waitForTimeout(500);
+  // Wait for the rename to be processed
+  await this.page.waitForTimeout(1000);
 });
 
 When('用户选择删除选项', async function (this: CustomWorld) {

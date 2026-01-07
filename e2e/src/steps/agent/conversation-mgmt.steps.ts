@@ -200,62 +200,182 @@ When('用户右键点击一个对话', async function (this: CustomWorld) {
 When('用户选择重命名选项', async function (this: CustomWorld) {
   console.log('   📍 Step: 选择重命名选项...');
 
-  // The context menu should be visible with "rename" option
-  // Use exact match to avoid matching "AI Rename" / "智能重命名"
-  // Support both English and Chinese
+  // First, close any open context menu by clicking elsewhere
+  await this.page.click('body', { position: { x: 500, y: 300 } });
+  await this.page.waitForTimeout(300);
+
+  // Instead of using right-click context menu, use the "..." dropdown menu
+  // which appears when hovering over a topic item
+  const topicItems = this.page.locator('svg.lucide-star').locator('..').locator('..');
+  const topicCount = await topicItems.count();
+  console.log(`   📍 Found ${topicCount} topic items`);
+
+  if (topicCount > 0) {
+    // Hover on the first topic to reveal the "..." action button
+    const firstTopic = topicItems.first();
+    await firstTopic.hover();
+    console.log('   📍 Hovering on topic item...');
+    await this.page.waitForTimeout(500);
+
+    // The "..." button should now be visible INSIDE the topic item
+    // Important: we must find the icon WITHIN the hovered topic, not the global one
+    // The topic item has a specific structure with nav-item-actions
+    const moreButtonInTopic = firstTopic.locator('svg.lucide-ellipsis, svg.lucide-more-horizontal');
+    let moreButtonCount = await moreButtonInTopic.count();
+    console.log(`   📍 Found ${moreButtonCount} more buttons inside topic`);
+
+    if (moreButtonCount > 0) {
+      // Click the "..." button to open dropdown menu
+      await moreButtonInTopic.first().click();
+      console.log('   📍 Clicked ... button inside topic');
+      await this.page.waitForTimeout(500);
+    } else {
+      // Fallback: try to find it by looking at the actions container
+      console.log('   📍 Trying alternative: looking for actions container...');
+
+      // Debug: print the topic item HTML structure
+      const topicHTML = await firstTopic.evaluate((el) => el.outerHTML.slice(0, 500));
+      console.log(`   📍 Topic HTML: ${topicHTML}`);
+
+      // The actions might be in a sibling or parent element
+      // Try finding any ellipsis icon that's near the topic
+      const allEllipsis = this.page.locator('svg.lucide-ellipsis');
+      const ellipsisCount = await allEllipsis.count();
+      console.log(`   📍 Total ellipsis icons on page: ${ellipsisCount}`);
+
+      // Skip the first one (which is the global topic list menu)
+      // and click the second one (which should be in the topic item)
+      if (ellipsisCount > 1) {
+        await allEllipsis.nth(1).click();
+        console.log('   📍 Clicked second ellipsis icon');
+        await this.page.waitForTimeout(500);
+      }
+    }
+  }
+
+  // Now find the rename option in the dropdown menu
   const renameOption = this.page.getByRole('menuitem', { exact: true, name: /^(Rename|重命名)$/ });
 
   await expect(renameOption).toBeVisible({ timeout: 5000 });
+  console.log('   📍 Found rename menu item');
+
+  // Click the rename option
   await renameOption.click();
+  console.log('   📍 Clicked rename menu item');
+
+  // Wait for the popover/input to appear
+  await this.page.waitForTimeout(500);
+
+  // Check if input appeared
+  const inputCount = await this.page.locator('input').count();
+  console.log(`   📍 After click: ${inputCount} inputs on page`);
 
   console.log('   ✅ 已选择重命名选项');
-  await this.page.waitForTimeout(300);
 });
 
 When('用户输入新的对话名称 {string}', async function (this: CustomWorld, newName: string) {
   console.log(`   📍 Step: 输入新名称 "${newName}"...`);
 
-  // The rename input is inside a Popover (rendered as a portal in the body)
-  // The Input component has autoFocus, so it should receive focus automatically
-  // Wait for the popover to open and input to be visible
+  // Debug: check what's on the page
+  const debugInfo = await this.page.evaluate(() => {
+    const allInputs = document.querySelectorAll('input');
+    const allPopovers = document.querySelectorAll('[class*="popover"], .ant-popover');
+    const focusedElement = document.activeElement;
+    return {
+      focusedClass: focusedElement?.className,
+      focusedTag: focusedElement?.tagName,
+      inputCount: allInputs.length,
+      inputTags: Array.from(allInputs).map((i) => ({
+        className: i.className,
+        placeholder: i.placeholder,
+        type: i.type,
+        visible: i.offsetParent !== null,
+      })),
+      popoverCount: allPopovers.length,
+    };
+  });
+  console.log('   📍 Debug info:', JSON.stringify(debugInfo, null, 2));
 
-  // The Popover from @lobehub/ui renders with ant-popover class
-  // Look for visible input in the popover
-  const popoverInput = this.page.locator(
-    '.ant-popover-content input, .ant-popover input, .ant-input',
-  );
+  // Wait a short moment for the popover to render
+  await this.page.waitForTimeout(300);
 
-  // Wait for input to be visible with increased timeout
-  await expect(popoverInput.first())
-    .toBeVisible({ timeout: 5000 })
-    .catch(() => {
-      console.log('   ⚠️ Popover input not immediately visible, checking other selectors...');
-    });
+  // Try to find the popover input using various selectors
+  // @lobehub/ui Popover uses antd's Popover internally
+  const popoverInputSelectors = [
+    // antd popover structure
+    '.ant-popover-inner input',
+    '.ant-popover-content input',
+    '.ant-popover input',
+    // Generic input that's visible and not the chat input
+    'input:not([data-testid="chat-input"] input)',
+  ];
 
-  const inputCount = await popoverInput.count();
-  console.log(`   📍 Found ${inputCount} popover input fields`);
+  let renameInput = null;
 
-  if (inputCount > 0) {
-    const input = popoverInput.first();
-    // Clear existing content and fill with new name
-    await input.click();
-    await input.clear();
-    await input.fill(newName);
-    // Press Enter to confirm the rename
-    await input.press('Enter');
+  // Wait for any popover input to appear
+  for (const selector of popoverInputSelectors) {
+    try {
+      const locator = this.page.locator(selector).first();
+      await locator.waitFor({ state: 'visible', timeout: 2000 });
+      renameInput = locator;
+      console.log(`   📍 Found input with selector: ${selector}`);
+      break;
+    } catch {
+      // Try next selector
+    }
+  }
+
+  if (!renameInput) {
+    // Fallback: find any visible input that's not the search or chat input
+    console.log('   📍 Trying fallback: finding any visible input...');
+    const allInputs = this.page.locator('input:visible');
+    const count = await allInputs.count();
+    console.log(`   📍 Found ${count} visible inputs`);
+
+    for (let i = 0; i < count; i++) {
+      const input = allInputs.nth(i);
+      const placeholder = await input.getAttribute('placeholder').catch(() => '');
+      const testId = await input.dataset.testid.catch(() => '');
+
+      // Skip search inputs and chat inputs
+      if (placeholder?.includes('Search') || placeholder?.includes('搜索')) continue;
+      if (testId === 'chat-input') continue;
+
+      // Check if it's inside a popover-like container
+      const isInPopover = await input.evaluate((el) => {
+        return el.closest('.ant-popover') !== null || el.closest('[class*="popover"]') !== null;
+      });
+
+      if (isInPopover || count === 1) {
+        renameInput = input;
+        console.log(`   📍 Found candidate input at index ${i}`);
+        break;
+      }
+    }
+  }
+
+  if (renameInput) {
+    // Clear and fill the input
+    await renameInput.click();
+    await renameInput.clear();
+    await renameInput.fill(newName);
+    console.log(`   📍 Filled input with "${newName}"`);
+
+    // Press Enter to confirm
+    await renameInput.press('Enter');
     console.log(`   ✅ 已输入新名称 "${newName}"`);
   } else {
-    // Fallback: since Input has autoFocus, try typing directly
-    console.log('   📍 Fallback: using keyboard.type() for autoFocused input');
-    // First select all existing text and delete
-    await this.page.keyboard.press('Control+A');
-    await this.page.keyboard.press('Backspace');
-    await this.page.keyboard.type(newName, { delay: 30 });
+    // Last resort: the input should have autoFocus, so keyboard should work
+    console.log('   ⚠️ Could not find rename input element, using keyboard fallback...');
+    // Select all and replace
+    await this.page.keyboard.press('Meta+A');
+    await this.page.waitForTimeout(50);
+    await this.page.keyboard.type(newName, { delay: 20 });
     await this.page.keyboard.press('Enter');
     console.log(`   ✅ 已通过键盘输入新名称 "${newName}"`);
   }
 
-  // Wait for the rename to be processed
+  // Wait for the rename to be saved
   await this.page.waitForTimeout(1000);
 });
 

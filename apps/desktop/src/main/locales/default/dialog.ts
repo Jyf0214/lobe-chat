@@ -1,0 +1,25 @@
+const dialog = {
+  'about.button': 'OK',
+  'about.detail': 'An LLM-powered chat app',
+  'about.message': '{{appName}} {{appVersion}}',
+  'about.title': 'About',
+  'confirm.cancel': 'Cancel',
+  'confirm.no': 'Cancel',
+  'confirm.title': 'Please confirm',
+  'confirm.yes': 'Continue',
+  'error.button': 'OK',
+  'error.detail': 'Couldn\'t complete the action. Retry or try again later.',
+  'error.message': 'An error occurred',
+  'error.title': 'Error',
+  'update.downloadAndInstall': 'Download and Install',
+  'update.downloadComplete': 'Download Complete',
+  'update.downloadCompleteMessage': 'Update downloaded. Install now?',
+  'update.installLater': 'Install Later',
+  'update.installNow': 'Install Now',
+  'update.later': 'Remind Me Later',
+  'update.newVersion': 'New Version Found',
+  'update.newVersionAvailable': 'New version: {{version}}',
+  'update.skipThisVersion': 'Skip This Version',
+};
+
+export default dialog;

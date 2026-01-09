@@ -1,0 +1,23 @@
+{
+  "about.button": "Tamam",
+  "about.detail": "Büyük dil modeli tabanlı bir sohbet uygulaması",
+  "about.message": "{{appName}} {{appVersion}}",
+  "about.title": "Hakkında",
+  "confirm.cancel": "İptal",
+  "confirm.no": "Hayır",
+  "confirm.title": "Onay",
+  "confirm.yes": "Evet",
+  "error.button": "Tamam",
+  "error.detail": "İşlem sırasında bir hata oluştu, lütfen daha sonra tekrar deneyin",
+  "error.message": "Hata oluştu",
+  "error.title": "Hata",
+  "update.downloadAndInstall": "İndir ve Yükle",
+  "update.downloadComplete": "İndirme tamamlandı",
+  "update.downloadCompleteMessage": "Güncelleme paketi indirildi, hemen yüklemek ister misiniz?",
+  "update.installLater": "Sonra yükle",
+  "update.installNow": "Şimdi yükle",
+  "update.later": "Sonra hatırlat",
+  "update.newVersion": "Yeni sürüm bulundu",
+  "update.newVersionAvailable": "Yeni sürüm bulundu: {{version}}",
+  "update.skipThisVersion": "Bu sürümü atla"
+}

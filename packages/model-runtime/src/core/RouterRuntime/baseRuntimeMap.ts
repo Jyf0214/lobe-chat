@@ -1,0 +1,25 @@
+import { LobeAnthropicAI } from '../../providers/anthropic';
+import { LobeAzureAI } from '../../providers/azureai';
+import { LobeBedrockAI } from '../../providers/bedrock';
+import { LobeCloudflareAI } from '../../providers/cloudflare';
+import { LobeDeepSeekAI } from '../../providers/deepseek';
+import { LobeFalAI } from '../../providers/fal';
+import { LobeGoogleAI } from '../../providers/google';
+import { LobeMinimaxAI } from '../../providers/minimax';
+import { LobeOpenAI } from '../../providers/openai';
+import { LobeQwenAI } from '../../providers/qwen';
+import { LobeXAI } from '../../providers/xai';
+
+export const baseRuntimeMap = {
+  anthropic: LobeAnthropicAI,
+  azure: LobeAzureAI,
+  bedrock: LobeBedrockAI,
+  cloudflare: LobeCloudflareAI,
+  deepseek: LobeDeepSeekAI,
+  fal: LobeFalAI,
+  google: LobeGoogleAI,
+  minimax: LobeMinimaxAI,
+  openai: LobeOpenAI,
+  qwen: LobeQwenAI,
+  xai: LobeXAI,
+};

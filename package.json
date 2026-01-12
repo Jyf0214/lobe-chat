@@ -33,7 +33,7 @@
   ],
   "scripts": {
     "prebuild": "tsx scripts/prebuild.mts && npm run lint",
-    "build": "next build",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 next build",
     "postbuild": "npm run build-sitemap && npm run build-migrate-db",
     "build:analyze": "ANALYZE=true next build",
     "build:docker": "npm run prebuild && DOCKER=true next build && npm run build-sitemap",

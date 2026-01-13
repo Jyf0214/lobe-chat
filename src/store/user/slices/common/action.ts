@@ -47,7 +47,9 @@ export const createCommonSlice: StateCreator<
   CommonAction
 > = (set, get) => ({
   refreshUserState: async () => {
+    console.log('[refreshUserState] calling mutate...');
     await mutate(GET_USER_STATE_KEY);
+    console.log('[refreshUserState] mutate done');
   },
   updateAvatar: async (avatar) => {
     await userService.updateAvatar(avatar);
@@ -97,6 +99,11 @@ export const createCommonSlice: StateCreator<
           options?.onError?.(error);
         },
         onSuccess: (data) => {
+          console.log('[useInitUserState] onSuccess triggered', {
+            avatar: data?.avatar,
+            fullName: data?.fullName,
+            username: data?.username,
+          });
           options?.onSuccess?.(data);
 
           if (data) {

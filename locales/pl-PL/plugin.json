@@ -323,6 +323,8 @@
   "dev.title.create": "Dodaj niestandardową umiejętność",
   "dev.title.edit": "Edytuj niestandardową umiejętność",
   "dev.title.editCommunity": "Edytuj umiejętność społeczności",
+  "dev.title.skillDetails": "Szczegóły umiejętności",
+  "dev.title.skillSettings": "Ustawienia umiejętności",
   "dev.type.lobe": "Umiejętność {{appName}}",
   "dev.type.openai": "Umiejętność OpenAI",
   "dev.update": "Aktualizuj",

@@ -327,6 +327,8 @@
   "dev.title.create": "Adicionar Skill personalizada",
   "dev.title.edit": "Editar Skill personalizada",
   "dev.title.editCommunity": "Editar habilidade da comunidade",
+  "dev.title.skillDetails": "Detalhes da Habilidade",
+  "dev.title.skillSettings": "Configurações da Habilidade",
   "dev.type.lobe": "Skill do {{appName}}",
   "dev.type.openai": "Skill OpenAI",
   "dev.update": "Atualizar",

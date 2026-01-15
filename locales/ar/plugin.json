@@ -327,6 +327,8 @@
   "dev.title.create": "إضافة مهارة مخصصة",
   "dev.title.edit": "تعديل مهارة مخصصة",
   "dev.title.editCommunity": "تعديل مهارة المجتمع",
+  "dev.title.skillDetails": "تفاصيل المهارة",
+  "dev.title.skillSettings": "إعدادات المهارة",
   "dev.type.lobe": "مهارة {{appName}}",
   "dev.type.openai": "مهارة OpenAI",
   "dev.update": "تحديث",

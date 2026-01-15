@@ -328,6 +328,8 @@
   "dev.title.create": "Ajouter une compétence personnalisée",
   "dev.title.edit": "Modifier une compétence personnalisée",
   "dev.title.editCommunity": "Modifier la compétence communautaire",
+  "dev.title.skillDetails": "Détails de la compétence",
+  "dev.title.skillSettings": "Paramètres de la compétence",
   "dev.type.lobe": "Compétence {{appName}}",
   "dev.type.openai": "Compétence OpenAI",
   "dev.update": "Mettre à jour",

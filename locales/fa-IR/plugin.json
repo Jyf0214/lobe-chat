@@ -327,6 +327,8 @@
   "dev.title.create": "افزودن مهارت سفارشی",
   "dev.title.edit": "ویرایش مهارت سفارشی",
   "dev.title.editCommunity": "ویرایش مهارت جامعه",
+  "dev.title.skillDetails": "جزئیات مهارت",
+  "dev.title.skillSettings": "تنظیمات مهارت",
   "dev.type.lobe": "مهارت {{appName}}",
   "dev.type.openai": "مهارت OpenAI",
   "dev.update": "به‌روزرسانی",

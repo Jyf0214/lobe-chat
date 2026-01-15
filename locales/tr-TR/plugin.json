@@ -327,6 +327,8 @@
   "dev.title.create": "Özel Yetenek ekle",
   "dev.title.edit": "Özel Yeteneği düzenle",
   "dev.title.editCommunity": "Topluluk Yeteneğini Düzenle",
+  "dev.title.skillDetails": "Yetenek Detayları",
+  "dev.title.skillSettings": "Yetenek Ayarları",
   "dev.type.lobe": "{{appName}} Yeteneği",
   "dev.type.openai": "OpenAI Yeteneği",
   "dev.update": "Güncelle",

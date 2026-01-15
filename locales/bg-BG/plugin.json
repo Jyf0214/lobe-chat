@@ -327,6 +327,8 @@
   "dev.title.create": "Добави персонализирано умение",
   "dev.title.edit": "Редактирай персонализирано умение",
   "dev.title.editCommunity": "Редактиране на умение на общността",
+  "dev.title.skillDetails": "Детайли за умението",
+  "dev.title.skillSettings": "Настройки на умението",
   "dev.type.lobe": "Умение на {{appName}}",
   "dev.type.openai": "Умение на OpenAI",
   "dev.update": "Актуализирай",

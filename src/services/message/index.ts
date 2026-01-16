@@ -4,20 +4,19 @@ import {
   type ChatTTS,
   type ChatTranslate,
   type CreateMessageParams,
-  type CreateMessageResult,
   type MessageMetadata,
   type MessagePluginItem,
   type ModelRankItem,
   type UIChatMessage,
   type UpdateMessageParams,
   type UpdateMessageRAGParams,
-  type UpdateMessageResult,
 } from '@lobechat/types';
 import type { HeatmapsProps } from '@lobehub/charts';
 
 import { lambdaClient } from '@/libs/trpc/client';
 
-import { abortableRequest } from '../utils/abortableRequest';
+import { generateMessageId, messagesBatcher } from './batcher';
+import { messagesCache } from './cache';
 
 /**
  * Query context for message operations
@@ -32,15 +31,245 @@ export interface MessageQueryContext {
 }
 
 export class MessageService {
-  createMessage = async (params: CreateMessageParams): Promise<CreateMessageResult> => {
-    return lambdaClient.message.createMessage.mutate(params as any);
+  // ==========================================
+  // Batched Operations (with local cache)
+  // These return immediately from local cache
+  // ==========================================
+
+  /**
+   * Create a message with optimistic update
+   * Updates local cache immediately, dispatches to batcher
+   */
+  createMessage = async (
+    params: CreateMessageParams & { id?: string },
+  ): Promise<{ id: string; messages: UIChatMessage[] }> => {
+    const id = params.id || generateMessageId();
+    const now = Date.now();
+
+    if (!params.agentId) {
+      console.warn('createMessage: agentId is required');
+      return { id, messages: [] };
+    }
+
+    const ctx = {
+      agentId: params.agentId,
+      groupId: params.groupId ?? undefined,
+      threadId: params.threadId,
+      topicId: params.topicId,
+    };
+
+    // Create the message object for local cache
+    const newMessage: UIChatMessage = {
+      ...params,
+      content: params.content || '',
+      createdAt: now,
+      id,
+      meta: {},
+      updatedAt: now,
+    } as UIChatMessage;
+
+    // Update local cache
+    const messages = messagesCache.addMessage(ctx, newMessage);
+
+    // Dispatch to batcher (async, non-blocking)
+    messagesBatcher.dispatch({
+      context: ctx,
+      messageId: id,
+      payload: { ...params, id },
+      type: 'create',
+    });
+
+    return { id, messages };
   };
+
+  /**
+   * Update a message with optimistic update
+   */
+  updateMessage = async (
+    id: string,
+    value: Partial<UpdateMessageParams>,
+    ctx?: MessageQueryContext,
+  ): Promise<{ messages?: UIChatMessage[]; success: boolean }> => {
+    if (!ctx?.agentId) {
+      console.warn('updateMessage: agentId is required');
+      return { success: false };
+    }
+
+    const context = {
+      agentId: ctx.agentId,
+      groupId: ctx.groupId,
+      threadId: ctx.threadId,
+      topicId: ctx.topicId,
+    };
+
+    // Update local cache
+    const messages = messagesCache.updateMessage(context, id, value as Partial<UIChatMessage>);
+
+    // Dispatch to batcher
+    messagesBatcher.dispatch({
+      context,
+      messageId: id,
+      payload: value,
+      type: 'update',
+    });
+
+    return { messages, success: true };
+  };
+
+  /**
+   * Update message metadata with optimistic update
+   */
+  updateMessageMetadata = async (
+    id: string,
+    value: Partial<MessageMetadata>,
+    ctx?: MessageQueryContext,
+  ): Promise<{ messages?: UIChatMessage[]; success: boolean }> => {
+    if (!ctx?.agentId) {
+      console.warn('updateMessageMetadata: agentId is required');
+      return { success: false };
+    }
+
+    const context = {
+      agentId: ctx.agentId,
+      groupId: ctx.groupId,
+      threadId: ctx.threadId,
+      topicId: ctx.topicId,
+    };
+
+    // Update local cache
+    const messages = messagesCache.updateMessageMetadata(context, id, value);
+
+    // Dispatch to batcher
+    messagesBatcher.dispatch({
+      context,
+      messageId: id,
+      payload: value,
+      type: 'updateMetadata',
+    });
+
+    return { messages, success: true };
+  };
+
+  /**
+   * Update tool message with optimistic update
+   */
+  updateToolMessage = async (
+    id: string,
+    value: {
+      content?: string;
+      metadata?: Record<string, any>;
+      pluginError?: any;
+      pluginState?: Record<string, any>;
+    },
+    ctx?: MessageQueryContext,
+  ): Promise<{ messages?: UIChatMessage[]; success: boolean }> => {
+    if (!ctx?.agentId) {
+      console.warn('updateToolMessage: agentId is required');
+      return { success: false };
+    }
+
+    const context = {
+      agentId: ctx.agentId,
+      groupId: ctx.groupId,
+      threadId: ctx.threadId,
+      topicId: ctx.topicId,
+    };
+
+    // Update local cache with the relevant fields
+    const updateValue: Partial<UIChatMessage> = {};
+    if (value.content !== undefined) updateValue.content = value.content;
+    if (value.metadata !== undefined) updateValue.metadata = value.metadata;
+    if (value.pluginError !== undefined) (updateValue as any).pluginError = value.pluginError;
+    if (value.pluginState !== undefined) (updateValue as any).pluginState = value.pluginState;
+
+    const messages = messagesCache.updateMessage(context, id, updateValue);
+
+    // Dispatch to batcher
+    messagesBatcher.dispatch({
+      context,
+      messageId: id,
+      payload: value,
+      type: 'updateToolMessage',
+    });
+
+    return { messages, success: true };
+  };
+
+  /**
+   * Remove a message with optimistic update
+   */
+  removeMessage = async (
+    id: string,
+    ctx?: MessageQueryContext,
+  ): Promise<{ messages?: UIChatMessage[]; success: boolean }> => {
+    if (!ctx?.agentId) {
+      console.warn('removeMessage: agentId is required');
+      return { success: false };
+    }
+
+    const context = {
+      agentId: ctx.agentId,
+      groupId: ctx.groupId,
+      threadId: ctx.threadId,
+      topicId: ctx.topicId,
+    };
+
+    // Remove from local cache
+    const messages = messagesCache.removeMessage(context, id);
+
+    // Dispatch to batcher
+    messagesBatcher.dispatch({
+      context,
+      messageId: id,
+      payload: {},
+      type: 'delete',
+    });
+
+    return { messages, success: true };
+  };
+
+  // ==========================================
+  // Query Operations (with cache)
+  // ==========================================
 
   getMessages = async (params: MessageQueryContext): Promise<UIChatMessage[]> => {
-    const data = await lambdaClient.message.getMessages.query(params);
+    // For shared topics, always fetch from backend
+    if (params.topicShareId) {
+      const data = await lambdaClient.message.getMessages.query(params);
+      return data as unknown as UIChatMessage[];
+    }
 
+    // Check if agentId is provided for cache
+    if (params.agentId) {
+      const ctx = {
+        agentId: params.agentId,
+        groupId: params.groupId,
+        threadId: params.threadId,
+        topicId: params.topicId,
+      };
+
+      // Check cache first
+      const cached = messagesCache.get(ctx);
+      if (cached) {
+        return cached;
+      }
+
+      // Fetch from backend and cache
+      const data = await lambdaClient.message.getMessages.query(params);
+      const messages = data as unknown as UIChatMessage[];
+      messagesCache.set(ctx, messages);
+      return messages;
+    }
+
+    // Fallback to backend
+    const data = await lambdaClient.message.getMessages.query(params);
     return data as unknown as UIChatMessage[];
   };
+
+  // ==========================================
+  // Direct API Operations (no batching)
+  // These operations need immediate server response
+  // ==========================================
 
   countMessages = async (params?: {
     endDate?: string;
@@ -86,10 +315,6 @@ export class MessageService {
   /**
    * Update tool arguments by toolCallId - updates both tool message and parent assistant message in one transaction
    * This is the preferred method for updating tool arguments as it prevents race conditions
-   *
-   * @param toolCallId - The tool call ID (stable identifier from AI response)
-   * @param value - The new arguments value
-   * @param ctx - Message query context
    */
   updateToolArguments = async (
     toolCallId: string,
@@ -97,18 +322,6 @@ export class MessageService {
     ctx?: MessageQueryContext,
   ) => {
     return lambdaClient.message.updateToolArguments.mutate({ ...ctx, toolCallId, value });
-  };
-
-  updateMessage = async (
-    id: string,
-    value: Partial<UpdateMessageParams>,
-    ctx?: MessageQueryContext,
-  ): Promise<UpdateMessageResult> => {
-    return lambdaClient.message.update.mutate({
-      ...ctx,
-      id,
-      value,
-    });
   };
 
   updateMessageTranslate = async (id: string, translate: Partial<ChatTranslate> | false) => {
@@ -119,21 +332,11 @@ export class MessageService {
     return lambdaClient.message.updateTTS.mutate({ id, value: tts });
   };
 
-  updateMessageMetadata = async (
-    id: string,
-    value: Partial<MessageMetadata>,
-    ctx?: MessageQueryContext,
-  ): Promise<UpdateMessageResult> => {
-    return abortableRequest.execute(`message-metadata-${id}`, (signal) =>
-      lambdaClient.message.updateMetadata.mutate({ ...ctx, id, value }, { signal }),
-    );
-  };
-
   updateMessagePluginState = async (
     id: string,
     value: Record<string, any>,
     ctx?: MessageQueryContext,
-  ): Promise<UpdateMessageResult> => {
+  ) => {
     return lambdaClient.message.updatePluginState.mutate({ ...ctx, id, value });
   };
 
@@ -141,7 +344,7 @@ export class MessageService {
     id: string,
     error: ChatMessagePluginError | null,
     ctx?: MessageQueryContext,
-  ): Promise<UpdateMessageResult> => {
+  ) => {
     return lambdaClient.message.updatePluginError.mutate({ ...ctx, id, value: error as any });
   };
 
@@ -149,46 +352,26 @@ export class MessageService {
     id: string,
     value: Partial<Omit<MessagePluginItem, 'id'>>,
     ctx?: MessageQueryContext,
-  ): Promise<UpdateMessageResult> => {
+  ) => {
     return lambdaClient.message.updateMessagePlugin.mutate({ ...ctx, id, value });
   };
 
-  updateMessageRAG = async (
-    id: string,
-    data: UpdateMessageRAGParams,
-    ctx?: MessageQueryContext,
-  ): Promise<UpdateMessageResult> => {
+  updateMessageRAG = async (id: string, data: UpdateMessageRAGParams, ctx?: MessageQueryContext) => {
     return lambdaClient.message.updateMessageRAG.mutate({ ...ctx, id, value: data });
   };
 
-  /**
-   * Update tool message with content, metadata, pluginState, and pluginError in a single request
-   * This prevents race conditions when updating multiple fields
-   * Uses abortableRequest to cancel previous requests for the same message
-   */
-  updateToolMessage = async (
-    id: string,
-    value: {
-      content?: string;
-      metadata?: Record<string, any>;
-      pluginError?: any;
-      pluginState?: Record<string, any>;
-    },
-    ctx?: MessageQueryContext,
-  ): Promise<UpdateMessageResult> => {
-    return abortableRequest.execute(`tool-message-${id}`, (signal) =>
-      lambdaClient.message.updateToolMessage.mutate({ ...ctx, id, value }, { signal }),
-    );
-  };
+  removeMessages = async (ids: string[], ctx?: MessageQueryContext) => {
+    // Update local cache if context is provided
+    if (ctx?.agentId) {
+      const context = {
+        agentId: ctx.agentId,
+        groupId: ctx.groupId,
+        threadId: ctx.threadId,
+        topicId: ctx.topicId,
+      };
+      messagesCache.removeMessages(context, ids);
+    }
 
-  removeMessage = async (id: string, ctx?: MessageQueryContext): Promise<UpdateMessageResult> => {
-    return lambdaClient.message.removeMessage.mutate({ ...ctx, id });
-  };
-
-  removeMessages = async (
-    ids: string[],
-    ctx?: MessageQueryContext,
-  ): Promise<UpdateMessageResult> => {
     return lambdaClient.message.removeMessages.mutate({ ...ctx, ids });
   };
 
@@ -201,20 +384,18 @@ export class MessageService {
   };
 
   removeAllMessages = async () => {
+    // Clear all cache
+    messagesCache.clearAll();
     return lambdaClient.message.removeAllMessages.mutate();
   };
 
-  /**
-   * Add files to a message
-   * Used to associate exported files from code interpreter with the tool message
-   */
-  addFilesToMessage = async (
-    id: string,
-    fileIds: string[],
-    ctx?: MessageQueryContext,
-  ): Promise<UpdateMessageResult> => {
+  addFilesToMessage = async (id: string, fileIds: string[], ctx?: MessageQueryContext) => {
     return lambdaClient.message.addFilesToMessage.mutate({ ...ctx, fileIds, id });
   };
 }
 
 export const messageService = new MessageService();
+
+// Re-export batcher utilities
+export { generateMessageId, messagesBatcher } from './batcher';
+export { messagesCache } from './cache';

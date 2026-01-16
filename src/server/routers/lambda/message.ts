@@ -30,6 +30,50 @@ const messageProcedure = authedProcedure.use(serverDatabase).use(async (opts) =>
 });
 
 export const messageRouter = router({
+  /**
+   * Batch operations for messages
+   * Executes multiple operations in a single request and returns the updated message list
+   * This reduces HTTP calls by combining create/update/delete operations
+   */
+  batchOperations: messageProcedure
+    .input(
+      z
+        .object({
+          operations: z.array(
+            z.object({
+              data: z.record(z.any()).optional(),
+              messageId: z.string(),
+              type: z.enum([
+                'create',
+                'update',
+                'updateMetadata',
+                'updateToolMessage',
+                'updateToolArguments',
+                'delete',
+              ]),
+            }),
+          ),
+        })
+        .extend(basicContextSchema.shape),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { operations, agentId, ...options } = input;
+
+      if (!agentId) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'agentId is required for batch operations',
+        });
+      }
+
+      const resolved = await resolveContext({ agentId, ...options }, ctx.serverDB, ctx.userId);
+
+      return ctx.messageService.batchOperations(operations, {
+        ...resolved,
+        agentId,
+      });
+    }),
+
   addFilesToMessage: messageProcedure
     .input(
       z

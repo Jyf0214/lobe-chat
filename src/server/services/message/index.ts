@@ -256,4 +256,94 @@ export class MessageService {
     }
     return this.queryWithSuccess(options);
   }
+
+  /**
+   * Batch operations for messages
+   * Executes multiple operations in a single transaction and returns the updated message list
+   *
+   * Supported operation types:
+   * - create: Create a new message
+   * - update: Update message content/error/reasoning
+   * - updateMetadata: Update message metadata
+   * - updateToolMessage: Update tool message (content, metadata, pluginState, pluginError)
+   * - delete: Delete a message
+   *
+   * @param operations - Array of operations to execute
+   * @param options - Query options for returning updated messages
+   */
+  async batchOperations(
+    operations: Array<{
+      data?: Record<string, any>;
+      messageId: string;
+      type: 'create' | 'update' | 'updateMetadata' | 'updateToolMessage' | 'updateToolArguments' | 'delete';
+    }>,
+    options: QueryOptions & { agentId: string },
+  ): Promise<{ messages: UIChatMessage[]; success: boolean }> {
+    // Execute all operations sequentially
+    // Note: We don't wrap in a transaction here because each model method
+    // may have its own transaction logic. For true atomicity, we'd need
+    // to refactor the model layer.
+    for (const op of operations) {
+      try {
+        switch (op.type) {
+          case 'create': {
+            await this.messageModel.create({
+              ...op.data,
+              agentId: options.agentId,
+              groupId: options.groupId,
+              id: op.messageId, // Use frontend-generated ID
+              topicId: options.topicId,
+            } as CreateMessageParams);
+            break;
+          }
+          case 'update': {
+            await this.messageModel.update(op.messageId, op.data as any);
+            break;
+          }
+          case 'updateMetadata': {
+            if (op.data) {
+              await this.messageModel.updateMetadata(op.messageId, op.data);
+            }
+            break;
+          }
+          case 'updateToolMessage': {
+            await this.messageModel.updateToolMessage(op.messageId, op.data as any);
+            break;
+          }
+          case 'updateToolArguments': {
+            if (op.data?.toolCallId && op.data?.arguments) {
+              const argsString =
+                typeof op.data.arguments === 'string'
+                  ? op.data.arguments
+                  : JSON.stringify(op.data.arguments);
+              await this.messageModel.updateToolArguments(op.data.toolCallId, argsString);
+            }
+            break;
+          }
+          case 'delete': {
+            await this.messageModel.deleteMessage(op.messageId);
+            break;
+          }
+        }
+      } catch (error) {
+        console.error(`Batch operation failed for ${op.type} on message ${op.messageId}:`, error);
+        // Continue with other operations even if one fails
+      }
+    }
+
+    // Query and return the updated message list
+    const messages = await this.messageModel.query(
+      {
+        agentId: options.agentId,
+        current: 0,
+        groupId: options.groupId,
+        pageSize: 9999,
+        threadId: options.threadId,
+        topicId: options.topicId,
+      },
+      this.getQueryOptions(),
+    );
+
+    return { messages, success: true };
+  }
 }

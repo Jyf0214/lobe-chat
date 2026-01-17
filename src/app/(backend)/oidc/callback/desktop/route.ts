@@ -8,6 +8,18 @@ import { correctOIDCUrl } from '@/utils/server/correctOIDCUrl';
 const log = debug('lobe-oidc:callback:desktop');
 
 const errorPathname = '/oauth/callback/error';
+const DESKTOP_NOTIFY_PORT_MIN = 34210;
+const DESKTOP_NOTIFY_PORT_MAX = 34219;
+
+const isAllowedNotifyPort = (value: number): boolean =>
+  Number.isInteger(value) && value >= DESKTOP_NOTIFY_PORT_MIN && value <= DESKTOP_NOTIFY_PORT_MAX;
+
+interface OAuthCallbackPayload {
+  code?: string;
+  error?: string;
+  error_description?: string;
+  state: string;
+}
 
 /**
  * 安全地构建重定向URL，使用经过验证的 correctOIDCUrl 防止开放重定向攻击
@@ -25,10 +37,22 @@ export const GET = async (req: NextRequest) => {
   try {
     const searchParams = req.nextUrl.searchParams;
     const code = searchParams.get('code');
+    const error = searchParams.get('error');
+    const errorDescription = searchParams.get('error_description');
     const state = searchParams.get('state'); // This `state` is the handoff ID
 
-    if (!code || !state || typeof code !== 'string' || typeof state !== 'string') {
-      log('Missing code or state in form data');
+    if (!state || typeof state !== 'string') {
+      log('Missing state in callback');
+
+      const errorUrl = buildRedirectUrl(req, errorPathname);
+      errorUrl.searchParams.set('reason', 'invalid_request');
+
+      log('Redirecting to error URL: %s', errorUrl.toString());
+      return NextResponse.redirect(errorUrl);
+    }
+
+    if (!code && !error) {
+      log('Missing code or error in callback');
 
       const errorUrl = buildRedirectUrl(req, errorPathname);
       errorUrl.searchParams.set('reason', 'invalid_request');
@@ -41,20 +65,19 @@ export const GET = async (req: NextRequest) => {
 
     // The 'client' is 'desktop' because this redirect_uri is for the desktop client.
     const client = 'desktop';
-    const payload = { code, state };
+    const payload: OAuthCallbackPayload = error
+      ? { error, error_description: errorDescription || undefined, state }
+      : { code: code as string, state };
     const id = state;
 
     const authHandoffModel = new OAuthHandoffModel(serverDB);
-    await authHandoffModel.create({ client, id, payload });
+    const existing = await authHandoffModel.findActive(id, client);
+    const mergedPayload = { ...(existing?.payload || {}), ...payload };
+    const notifyPort =
+      typeof mergedPayload.notifyPort === 'number' ? mergedPayload.notifyPort : undefined;
+
+    await authHandoffModel.upsertPayload(id, client, mergedPayload);
     log('Handoff record created successfully for id: %s', id);
-
-    const successUrl = buildRedirectUrl(req, '/oauth/callback/success');
-
-    // 添加调试日志
-    log('Request host header: %s', req.headers.get('host'));
-    log('Request x-forwarded-host: %s', req.headers.get('x-forwarded-host'));
-    log('Request x-forwarded-proto: %s', req.headers.get('x-forwarded-proto'));
-    log('Constructed success URL: %s', successUrl.toString());
 
     // cleanup expired
     after(async () => {
@@ -62,6 +85,41 @@ export const GET = async (req: NextRequest) => {
 
       log('Cleaned up %d expired handoff records', cleanedCount);
     });
+
+    if (notifyPort && isAllowedNotifyPort(notifyPort)) {
+      const localNotifyUrl = new URL(`http://127.0.0.1:${notifyPort}/notify`);
+
+      if (error) {
+        localNotifyUrl.searchParams.set('error', error);
+        if (errorDescription) {
+          localNotifyUrl.searchParams.set('error_description', errorDescription);
+        }
+      } else if (code) {
+        localNotifyUrl.searchParams.set('code', code);
+      }
+
+      localNotifyUrl.searchParams.set('state', state);
+
+      return NextResponse.redirect(localNotifyUrl);
+    }
+
+    const successUrl = buildRedirectUrl(req, '/oauth/callback/success');
+    const errorUrl = buildRedirectUrl(req, errorPathname);
+
+    // 添加调试日志
+    log('Request host header: %s', req.headers.get('host'));
+    log('Request x-forwarded-host: %s', req.headers.get('x-forwarded-host'));
+    log('Request x-forwarded-proto: %s', req.headers.get('x-forwarded-proto'));
+    log('Constructed success URL: %s', successUrl.toString());
+
+    if (error) {
+      errorUrl.searchParams.set('reason', error);
+      if (errorDescription) {
+        errorUrl.searchParams.set('errorMessage', errorDescription);
+      }
+
+      return NextResponse.redirect(errorUrl);
+    }
 
     return NextResponse.redirect(successUrl);
   } catch (error) {

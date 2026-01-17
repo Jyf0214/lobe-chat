@@ -4,6 +4,7 @@ import crypto from 'node:crypto';
 import querystring from 'node:querystring';
 import { URL } from 'node:url';
 
+import type { OIDCCallbackResult } from '@/core/infrastructure/OIDCCallbackServerManager';
 import { createLogger } from '@/utils/logger';
 
 import RemoteServerConfigCtr from './RemoteServerConfigCtr';
@@ -12,9 +13,23 @@ import { ControllerModule, IpcMethod } from './index';
 // Create logger
 const logger = createLogger('controllers:AuthCtr');
 
+interface AuthorizationSuccess {
+  code: string;
+  state: string;
+}
+
+interface AuthorizationError {
+  error: string;
+  errorDescription?: string;
+  state: string;
+}
+
+type AuthorizationResult = AuthorizationSuccess | AuthorizationError;
+type AuthorizationSource = 'local' | 'polling';
+
 /**
  * Authentication Controller
- * Implements OAuth authorization flow using intermediate page + polling mechanism
+ * Implements OAuth authorization flow using local callback with polling fallback
  */
 export default class AuthCtr extends ControllerModule {
   static override readonly groupName = 'auth';
@@ -25,11 +40,16 @@ export default class AuthCtr extends ControllerModule {
     return this.app.getController(RemoteServerConfigCtr);
   }
 
+  private get oidcCallbackServerManager() {
+    return this.app.oidcCallbackServerManager;
+  }
+
   /**
    * Current PKCE parameters
    */
   private codeVerifier: string | null = null;
   private authRequestState: string | null = null;
+  private authorizationHandled = false;
 
   /**
    * Polling related parameters
@@ -60,6 +80,7 @@ export default class AuthCtr extends ControllerModule {
   @IpcMethod()
   async requestAuthorization(config: DataSyncConfig) {
     // Clear any old authorization state
+    this.authorizationHandled = false;
     this.clearAuthorizationState();
 
     const remoteUrl = await this.remoteServerConfigCtr.getRemoteServerUrl(config);
@@ -80,6 +101,31 @@ export default class AuthCtr extends ControllerModule {
       // Generate state parameter to prevent CSRF attacks
       this.authRequestState = crypto.randomBytes(16).toString('hex');
       logger.debug(`Generated state parameter: ${this.authRequestState}`);
+
+      const callbackManager = this.oidcCallbackServerManager;
+      let localCallback: { port: number; waitForCallback: Promise<OIDCCallbackResult> } | null =
+        null;
+
+      if (callbackManager) {
+        try {
+          localCallback = await callbackManager.startCallbackServer(this.authRequestState);
+          const registered = await this.registerNotifyPort(
+            remoteUrl,
+            this.authRequestState,
+            localCallback.port,
+          );
+
+          if (!registered) {
+            localCallback.waitForCallback.catch(() => undefined);
+            await callbackManager.stopCallbackServer();
+            localCallback = null;
+          }
+        } catch (error) {
+          logger.warn('Failed to start local callback server:', error);
+          await callbackManager.stopCallbackServer();
+          localCallback = null;
+        }
+      }
 
       // Construct authorization URL with new redirect_uri
       const authUrl = new URL('/oidc/auth', remoteUrl);
@@ -110,9 +156,18 @@ export default class AuthCtr extends ControllerModule {
       // Start polling for credentials
       this.startPolling();
 
+      if (localCallback) {
+        localCallback.waitForCallback
+          .then((result) => this.handleAuthorizationResult(result, 'local'))
+          .catch((error) => {
+            logger.warn('Local callback channel stopped:', error);
+          });
+      }
+
       return { success: true };
     } catch (error) {
       logger.error('Authorization request failed:', error);
+      this.clearAuthorizationState();
       return { error: error.message, success: false };
     }
   }
@@ -142,6 +197,95 @@ export default class AuthCtr extends ControllerModule {
     }
   }
 
+  private async registerNotifyPort(
+    remoteUrl: string,
+    state: string,
+    notifyPort: number,
+  ): Promise<boolean> {
+    try {
+      const url = new URL('/oidc/handoff', remoteUrl);
+      const response = await fetch(url.toString(), {
+        body: JSON.stringify({ client: 'desktop', id: state, notifyPort }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        logger.warn(`Failed to register notifyPort: ${response.status} ${response.statusText}`);
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      logger.warn('Failed to register notifyPort:', error);
+      return false;
+    }
+  }
+
+  private isAuthorizationError(result: AuthorizationResult): result is AuthorizationError {
+    return 'error' in result && typeof result.error === 'string';
+  }
+
+  private getAuthorizationErrorMessage(result: AuthorizationError): string {
+    if (result.errorDescription) {
+      return `${result.error}: ${result.errorDescription}`;
+    }
+
+    return result.error;
+  }
+
+  private async handleAuthorizationResult(
+    result: AuthorizationResult,
+    source: AuthorizationSource,
+  ): Promise<void> {
+    if (this.authorizationHandled) return;
+
+    this.authorizationHandled = true;
+    this.stopPolling();
+    await this.oidcCallbackServerManager?.stopCallbackServer();
+
+    logger.info(`Received authorization result via ${source} channel`);
+
+    if (!this.authRequestState || result.state !== this.authRequestState) {
+      logger.error(
+        `Invalid state parameter: expected ${this.authRequestState}, received ${result.state}`,
+      );
+      this.broadcastAuthorizationFailed('Invalid state parameter');
+      this.clearAuthorizationState();
+      return;
+    }
+
+    if (this.isAuthorizationError(result)) {
+      const errorMessage = this.getAuthorizationErrorMessage(result);
+      this.broadcastAuthorizationFailed(errorMessage);
+      this.clearAuthorizationState();
+      return;
+    }
+
+    try {
+      if (!this.codeVerifier) {
+        throw new Error('Missing code verifier');
+      }
+
+      const exchangeResult = await this.exchangeCodeForToken(result.code, this.codeVerifier);
+
+      if (exchangeResult.success) {
+        logger.info('Authorization successful');
+        this.broadcastAuthorizationSuccessful();
+      } else {
+        logger.warn(`Authorization failed: ${exchangeResult.error || 'Unknown error'}`);
+        this.broadcastAuthorizationFailed(exchangeResult.error || 'Unknown error');
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      this.broadcastAuthorizationFailed(message);
+    } finally {
+      this.clearAuthorizationState();
+    }
+  }
+
   /**
    * 启动轮询机制获取凭证
    */
@@ -158,9 +302,13 @@ export default class AuthCtr extends ControllerModule {
 
     this.pollingInterval = setInterval(async () => {
       try {
+        if (this.authorizationHandled) return;
+
         // Check if polling has timed out
         if (Date.now() - startTime > maxPollTime) {
           logger.warn('Credential polling timed out');
+          this.authorizationHandled = true;
+          void this.oidcCallbackServerManager?.stopCallbackServer();
           this.clearAuthorizationState();
           this.broadcastAuthorizationFailed('Authorization timed out');
           return;
@@ -171,30 +319,12 @@ export default class AuthCtr extends ControllerModule {
 
         if (result) {
           logger.info('Successfully received credentials from polling');
-          this.stopPolling();
-
-          // Validate state parameter
-          if (result.state !== this.authRequestState) {
-            logger.error(
-              `Invalid state parameter: expected ${this.authRequestState}, received ${result.state}`,
-            );
-            this.broadcastAuthorizationFailed('Invalid state parameter');
-            return;
-          }
-
-          // Exchange code for tokens
-          const exchangeResult = await this.exchangeCodeForToken(result.code, this.codeVerifier!);
-
-          if (exchangeResult.success) {
-            logger.info('Authorization successful');
-            this.broadcastAuthorizationSuccessful();
-          } else {
-            logger.warn(`Authorization failed: ${exchangeResult.error || 'Unknown error'}`);
-            this.broadcastAuthorizationFailed(exchangeResult.error || 'Unknown error');
-          }
+          await this.handleAuthorizationResult(result, 'polling');
         }
       } catch (error) {
         logger.error('Error during credential polling:', error);
+        this.authorizationHandled = true;
+        void this.oidcCallbackServerManager?.stopCallbackServer();
         this.clearAuthorizationState();
         this.broadcastAuthorizationFailed('Polling error: ' + error.message);
       }
@@ -218,6 +348,7 @@ export default class AuthCtr extends ControllerModule {
   private clearAuthorizationState() {
     logger.debug('Clearing authorization state');
     this.stopPolling();
+    void this.oidcCallbackServerManager?.stopCallbackServer();
     this.codeVerifier = null;
     this.authRequestState = null;
     this.cachedRemoteUrl = null;
@@ -287,7 +418,7 @@ export default class AuthCtr extends ControllerModule {
    * Poll for credentials
    * Sends HTTP request directly to remote server
    */
-  private async pollForCredentials(): Promise<{ code: string; state: string } | null> {
+  private async pollForCredentials(): Promise<AuthorizationResult | null> {
     if (!this.authRequestState || !this.cachedRemoteUrl) {
       return null;
     }
@@ -325,17 +456,27 @@ export default class AuthCtr extends ControllerModule {
       const data = (await response.json()) as {
         data: {
           id: string;
-          payload: { code: string; state: string };
+          payload: Record<string, unknown>;
         };
         success: boolean;
       };
 
       if (data.success && data.data?.payload) {
         logger.debug('Successfully retrieved credentials from handoff');
-        return {
-          code: data.data.payload.code,
-          state: data.data.payload.state,
-        };
+        const payload = data.data.payload as Record<string, unknown>;
+        const code = typeof payload.code === 'string' ? payload.code : undefined;
+        const state = typeof payload.state === 'string' ? payload.state : undefined;
+        const error = typeof payload.error === 'string' ? payload.error : undefined;
+        const errorDescription =
+          typeof payload.error_description === 'string' ? payload.error_description : undefined;
+
+        if (code && state) {
+          return { code, state };
+        }
+
+        if (error && state) {
+          return { error, errorDescription, state };
+        }
       }
 
       return null;
@@ -590,6 +731,7 @@ export default class AuthCtr extends ControllerModule {
     logger.debug('Cleaning up AuthCtr timers');
     this.stopPolling();
     this.stopAutoRefresh();
+    void this.oidcCallbackServerManager?.stopCallbackServer();
   }
 
   /**

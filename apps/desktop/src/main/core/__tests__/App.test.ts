@@ -129,6 +129,14 @@ vi.mock('../infrastructure/StaticFileServerManager', () => ({
   })),
 }));
 
+vi.mock('../infrastructure/OIDCCallbackServerManager', () => ({
+  OIDCCallbackServerManager: vi.fn().mockImplementation(() => ({
+    destroy: vi.fn(),
+    startCallbackServer: vi.fn(),
+    stopCallbackServer: vi.fn(),
+  })),
+}));
+
 vi.mock('../infrastructure/UpdaterManager', () => ({
   UpdaterManager: vi.fn().mockImplementation(() => ({
     initialize: vi.fn().mockResolvedValue(undefined),

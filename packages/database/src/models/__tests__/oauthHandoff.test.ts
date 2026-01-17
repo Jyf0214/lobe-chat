@@ -81,6 +81,23 @@ describe('OAuthHandoffModel', () => {
       expect(deleted).toBeUndefined();
     });
 
+    it('should ignore pending records without credentials', async () => {
+      await oauthHandoffModel.create({
+        id: 'handoff-pending',
+        client: 'desktop',
+        payload: { notifyPort: 34210 },
+      });
+
+      const result = await oauthHandoffModel.fetchAndConsume('handoff-pending', 'desktop');
+
+      expect(result).toBeNull();
+
+      const record = await serverDB.query.oauthHandoffs.findFirst({
+        where: eq(oauthHandoffs.id, 'handoff-pending'),
+      });
+      expect(record).toBeDefined();
+    });
+
     it('should return null for non-existent credentials', async () => {
       const result = await oauthHandoffModel.fetchAndConsume('non-existent', 'desktop');
 

@@ -11,6 +11,15 @@ export class OAuthHandoffModel {
     this.db = db;
   }
 
+  private isCredentialPayload(payload: Record<string, unknown> | null | undefined): boolean {
+    if (!payload) return false;
+    return typeof payload.code === 'string' || typeof payload.error === 'string';
+  }
+
+  private getFreshCutoff(): Date {
+    return new Date(Date.now() - 5 * 60 * 1000);
+  }
+
   /**
    * Create a new OAuth handoff record
    * @param params Credential data
@@ -27,6 +36,41 @@ export class OAuthHandoffModel {
   };
 
   /**
+   * Find an active handoff record without consuming it
+   */
+  findActive = async (id: string, client: string): Promise<OAuthHandoffItem | null> => {
+    const fiveMinutesAgo = this.getFreshCutoff();
+
+    return this.db.query.oauthHandoffs.findFirst({
+      where: and(
+        eq(oauthHandoffs.id, id),
+        eq(oauthHandoffs.client, client),
+        sql`${oauthHandoffs.createdAt} > ${fiveMinutesAgo}`,
+      ),
+    });
+  };
+
+  /**
+   * Upsert payload for a handoff record
+   */
+  upsertPayload = async (
+    id: string,
+    client: string,
+    payload: Record<string, unknown>,
+  ): Promise<OAuthHandoffItem> => {
+    const [result] = await this.db
+      .insert(oauthHandoffs)
+      .values({ client, id, payload })
+      .onConflictDoUpdate({
+        set: { payload },
+        target: oauthHandoffs.id,
+      })
+      .returning();
+
+    return result;
+  };
+
+  /**
    * Fetch and consume OAuth credentials
    * This method queries the record first, and if found, deletes it immediately to ensure credentials can only be used once
    * @param id Credential ID
@@ -35,7 +79,7 @@ export class OAuthHandoffModel {
    */
   fetchAndConsume = async (id: string, client: string): Promise<OAuthHandoffItem | null> => {
     // First find the record while checking if it's expired (5 minute TTL)
-    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    const fiveMinutesAgo = this.getFreshCutoff();
 
     const handoff = await this.db.query.oauthHandoffs.findFirst({
       where: and(
@@ -47,6 +91,10 @@ export class OAuthHandoffModel {
     });
 
     if (!handoff) {
+      return null;
+    }
+
+    if (!this.isCredentialPayload(handoff.payload)) {
       return null;
     }
 
@@ -62,7 +110,7 @@ export class OAuthHandoffModel {
    * @returns Number of records cleaned up
    */
   cleanupExpired = async (): Promise<number> => {
-    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    const fiveMinutesAgo = this.getFreshCutoff();
 
     const result = await this.db
       .delete(oauthHandoffs)
@@ -79,7 +127,7 @@ export class OAuthHandoffModel {
    * @returns Whether it exists and is not expired
    */
   exists = async (id: string, client: string): Promise<boolean> => {
-    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    const fiveMinutesAgo = this.getFreshCutoff();
 
     const handoff = await this.db.query.oauthHandoffs.findFirst({
       where: and(

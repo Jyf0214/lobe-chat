@@ -16,6 +16,7 @@ import { createLogger } from '@/utils/logger';
 import { BrowserManager } from './browser/BrowserManager';
 import { I18nManager } from './infrastructure/I18nManager';
 import { IoCContainer } from './infrastructure/IoCContainer';
+import { OIDCCallbackServerManager } from './infrastructure/OIDCCallbackServerManager';
 import { ProtocolManager } from './infrastructure/ProtocolManager';
 import { RendererUrlManager } from './infrastructure/RendererUrlManager';
 import { StaticFileServerManager } from './infrastructure/StaticFileServerManager';
@@ -44,6 +45,7 @@ export class App {
   shortcutManager: ShortcutManager;
   trayManager: TrayManager;
   staticFileServerManager: StaticFileServerManager;
+  oidcCallbackServerManager: OIDCCallbackServerManager;
   protocolManager: ProtocolManager;
   rendererUrlManager: RendererUrlManager;
   chromeFlags: string[] = ['OverlayScrollbar', 'FluentOverlayScrollbar', 'FluentScrollbar'];
@@ -118,6 +120,7 @@ export class App {
     this.shortcutManager = new ShortcutManager(this);
     this.trayManager = new TrayManager(this);
     this.staticFileServerManager = new StaticFileServerManager(this);
+    this.oidcCallbackServerManager = new OIDCCallbackServerManager(this);
     this.protocolManager = new ProtocolManager(this);
 
     // Configure renderer loading strategy (dev server vs static export)
@@ -397,5 +400,6 @@ export class App {
 
     // 执行清理操作
     this.staticFileServerManager.destroy();
+    this.oidcCallbackServerManager.destroy();
   };
 }

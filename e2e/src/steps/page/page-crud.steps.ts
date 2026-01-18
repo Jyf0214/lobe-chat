@@ -255,8 +255,8 @@ When('用户右键点击该文稿', async function (this: CustomWorld) {
 When('用户在菜单中选择复制', async function (this: CustomWorld) {
   console.log('   📍 Step: 选择复制选项...');
 
-  // Look for duplicate option (复制 or Duplicate)
-  const duplicateOption = this.page.getByRole('menuitem', { name: /复制|duplicate/i });
+  // Look for duplicate option: "创建副本" (zh-CN), "Duplicate" (en-US), or "复制" (fallback)
+  const duplicateOption = this.page.getByRole('menuitem', { name: /创建副本|duplicate|复制/i });
   await expect(duplicateOption).toBeVisible({ timeout: 5000 });
   await duplicateOption.click();
   await this.page.waitForTimeout(1000);

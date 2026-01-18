@@ -232,8 +232,12 @@ When('I click on the sort dropdown', async function (this: CustomWorld) {
 When('I select a sort option', async function (this: CustomWorld) {
   await this.page.waitForTimeout(500);
 
-  // Find and click a sort option (assuming dropdown opens a menu)
-  const sortOptions = this.page.locator('[role="option"], [role="menuitem"]');
+  // Find and click a sort option
+  // The sort dropdown uses checkbox menu items, so role is "menuitemcheckbox"
+  // Also support "option" and "menuitem" for compatibility
+  const sortOptions = this.page.locator(
+    '[role="menuitemcheckbox"], [role="option"], [role="menuitem"]',
+  );
 
   // Wait for options to appear
   await sortOptions.first().waitFor({ state: 'visible', timeout: 30_000 });

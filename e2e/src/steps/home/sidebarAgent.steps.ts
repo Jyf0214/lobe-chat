@@ -302,9 +302,15 @@ When('用户在菜单中选择删除', async function (this: CustomWorld) {
 When('用户在弹窗中确认删除', async function (this: CustomWorld) {
   console.log('   📍 Step: 确认删除...');
 
-  const confirmButton = this.page.locator('.ant-modal-confirm-btns button.ant-btn-dangerous');
-  await expect(confirmButton).toBeVisible({ timeout: 5000 });
-  await confirmButton.click();
+  // Try multiple selectors for the confirm button in the modal
+  // Supports both Ant Design v4 and v5 modal structures
+  const confirmButton = this.page.locator(
+    '.ant-modal-confirm-btns button.ant-btn-dangerous, ' +
+      '.ant-modal-footer button.ant-btn-dangerous, ' +
+      '.ant-modal button.ant-btn-dangerous',
+  );
+  await expect(confirmButton.first()).toBeVisible({ timeout: 5000 });
+  await confirmButton.first().click();
   await this.page.waitForTimeout(500);
 
   console.log('   ✅ 已确认删除');

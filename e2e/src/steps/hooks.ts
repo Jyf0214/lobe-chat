@@ -6,8 +6,9 @@ import { startWebServer, stopWebServer } from '../support/webServer';
 import { CustomWorld } from '../support/world';
 
 process.env['E2E'] = '1';
-// Set default timeout for all steps to 10 seconds
-setDefaultTimeout(10_000);
+// Set default timeout for all steps to 30 seconds
+// This allows for network latency, animations, and complex UI operations
+setDefaultTimeout(30_000);
 
 // Store base URL and cached session cookies
 let baseUrl: string;

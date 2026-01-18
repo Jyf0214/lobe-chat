@@ -196,10 +196,14 @@ When('用户点击消息的更多操作按钮', async function (this: CustomWorl
   const messageBox = await assistantMessage.boundingBox();
   console.log(`   📍 Message bounding box: y=${messageBox?.y}, height=${messageBox?.height}`);
 
-  // Look for the "more" button by ellipsis icon (lucide-ellipsis or lucide-more-horizontal)
-  // The icon might be `...` which is lucide-ellipsis
+  // Look for the "more" button by lucide icon class names
+  // MoreHorizontal icon has class "lucide-more-horizontal"
+  // Also try "lucide-ellipsis" for compatibility
+  // Use broader selector with lucide class as prefix
   const ellipsisButtons = this.page
-    .locator('svg.lucide-ellipsis, svg.lucide-more-horizontal')
+    .locator(
+      'svg.lucide-more-horizontal, svg.lucide-ellipsis, svg[class*="lucide"][class*="more"], svg[class*="lucide"][class*="ellipsis"]',
+    )
     .locator('..');
   let ellipsisCount = await ellipsisButtons.count();
   console.log(`   📍 Found ${ellipsisCount} buttons with ellipsis/more icon`);

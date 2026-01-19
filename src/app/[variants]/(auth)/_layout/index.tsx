@@ -1,6 +1,6 @@
 'use client';
 
-import { COPYRIGHT } from '@lobechat/business-const';
+import { COPYRIGHT_FULL } from '@lobechat/business-const';
 import { Center, Flexbox, Text } from '@lobehub/ui';
 import { Divider } from 'antd';
 import { cx } from 'antd-style';
@@ -42,7 +42,7 @@ const AuthContainer: FC<PropsWithChildren> = ({ children }) => {
         </Center>
         <Center padding={24}>
           <Text align={'center'} type={'secondary'}>
-            {COPYRIGHT}
+            {COPYRIGHT_FULL}
           </Text>
         </Center>
       </Flexbox>

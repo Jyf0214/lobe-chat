@@ -3,6 +3,7 @@
 import { SiDiscord } from '@icons-pack/react-simple-icons';
 import { SOCIAL_URL } from '@lobechat/business-const';
 import { Alert, Button, Flexbox, Icon } from '@lobehub/ui';
+import { cssVar } from 'antd-style';
 import { parseAsString, useQueryState } from 'nuqs';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,24 +24,19 @@ const AuthErrorPage = memo(() => {
   return (
     <AuthCard
       footer={
-        <Flexbox gap={12} justify="center" width="100%" wrap="wrap">
-          <Link href="/signin" style={{ width: '100%' }}>
+        <Flexbox gap={12} justify="center" wrap="wrap">
+          <Link href="/signin">
             <Button block size={'large'} type="primary">
               {t('actions.retry')}
             </Button>
           </Link>
-          <Link href="/" style={{ width: '100%' }}>
+          <Link href="/">
             <Button block size={'large'}>
               {t('actions.home')}
             </Button>
           </Link>
-          <Link
-            href={SOCIAL_URL.discord}
-            rel="noopener noreferrer"
-            style={{ width: '100%' }}
-            target="_blank"
-          >
-            <Button block icon={<Icon icon={SiDiscord} />} type="text">
+          <Link href={SOCIAL_URL.discord} rel="noopener noreferrer" target="_blank">
+            <Button block icon={<Icon fill={cssVar.colorText} icon={SiDiscord} />} type="text">
               {t('actions.discord')}
             </Button>
           </Link>

@@ -71,8 +71,11 @@
   "builtins.lobe-group-management.apiName.summarize": "会話を要約",
   "builtins.lobe-group-management.apiName.vote": "投票を開始",
   "builtins.lobe-group-management.inspector.broadcast.title": "次のエージェントが話します：",
+<<<<<<< HEAD
   "builtins.lobe-group-management.inspector.executeAgentTask.assignTo": "割り当てる",
   "builtins.lobe-group-management.inspector.executeAgentTask.task": "タスク：",
+=======
+>>>>>>> 2cb1aecad (chore: update i18n files)
   "builtins.lobe-group-management.inspector.executeAgentTasks.title": "タスクの割り当て先：",
   "builtins.lobe-group-management.inspector.speak.title": "指定されたエージェントが話します：",
   "builtins.lobe-group-management.title": "チームの調整",
@@ -319,6 +322,7 @@
   "dev.tabs.meta": "スキルメタ情報",
   "dev.title.create": "カスタムスキルを追加",
   "dev.title.edit": "カスタムスキルを編集",
+  "dev.title.editCommunity": "コミュニティスキルを編集",
   "dev.type.lobe": "{{appName}} スキル",
   "dev.type.openai": "OpenAIスキル",
   "dev.update": "更新",
@@ -481,6 +485,7 @@
   "settings.title": "スキルコミュニティの設定",
   "showInPortal": "ワークスペースで詳細を確認してください",
   "store.actions.cancel": "インストールをキャンセル",
+  "store.actions.configure": "設定",
   "store.actions.confirmUninstall": "このスキルをアンインストールすると設定も削除されます。操作を確認してください",
   "store.actions.detail": "詳細",
   "store.actions.install": "インストール",

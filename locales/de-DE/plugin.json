@@ -71,8 +71,11 @@
   "builtins.lobe-group-management.apiName.summarize": "Gespräch zusammenfassen",
   "builtins.lobe-group-management.apiName.vote": "Abstimmung starten",
   "builtins.lobe-group-management.inspector.broadcast.title": "Folgende Agenten sprechen:",
+<<<<<<< HEAD
   "builtins.lobe-group-management.inspector.executeAgentTask.assignTo": "Zuweisen",
   "builtins.lobe-group-management.inspector.executeAgentTask.task": "Aufgabe:",
+=======
+>>>>>>> 2cb1aecad (chore: update i18n files)
   "builtins.lobe-group-management.inspector.executeAgentTasks.title": "Aufgaben zuweisen an:",
   "builtins.lobe-group-management.inspector.speak.title": "Zugewiesener Agent spricht:",
   "builtins.lobe-group-management.title": "Gruppenkoordinator",
@@ -319,6 +322,7 @@
   "dev.tabs.meta": "Metadaten",
   "dev.title.create": "Benutzerdefinierten Skill hinzufügen",
   "dev.title.edit": "Benutzerdefinierten Skill bearbeiten",
+  "dev.title.editCommunity": "Community-Fähigkeit bearbeiten",
   "dev.type.lobe": "{{appName}} Skill",
   "dev.type.openai": "OpenAI Skill",
   "dev.update": "Aktualisieren",
@@ -481,6 +485,7 @@
   "settings.title": "Skill-Community-Einstellungen",
   "showInPortal": "Details im Workspace anzeigen",
   "store.actions.cancel": "Abbrechen",
+  "store.actions.configure": "Konfigurieren",
   "store.actions.confirmUninstall": "Durch Deinstallation wird die Skill-Konfiguration gelöscht. Fortfahren?",
   "store.actions.detail": "Details",
   "store.actions.install": "Installieren",

@@ -71,8 +71,11 @@
   "builtins.lobe-group-management.apiName.summarize": "Podsumuj rozmowę",
   "builtins.lobe-group-management.apiName.vote": "Rozpocznij głosowanie",
   "builtins.lobe-group-management.inspector.broadcast.title": "Mówią następujący Agenci:",
+<<<<<<< HEAD
   "builtins.lobe-group-management.inspector.executeAgentTask.assignTo": "Przypisz",
   "builtins.lobe-group-management.inspector.executeAgentTask.task": "zadanie:",
+=======
+>>>>>>> 2cb1aecad (chore: update i18n files)
   "builtins.lobe-group-management.inspector.executeAgentTasks.title": "Przypisywanie zadań do:",
   "builtins.lobe-group-management.inspector.speak.title": "Mówi wyznaczony Agent:",
   "builtins.lobe-group-management.title": "Koordynator Grupy",
@@ -319,6 +322,7 @@
   "dev.tabs.meta": "Informacje meta",
   "dev.title.create": "Dodaj niestandardową umiejętność",
   "dev.title.edit": "Edytuj niestandardową umiejętność",
+  "dev.title.editCommunity": "Edytuj umiejętność społeczności",
   "dev.type.lobe": "Umiejętność {{appName}}",
   "dev.type.openai": "Umiejętność OpenAI",
   "dev.update": "Aktualizuj",
@@ -481,6 +485,7 @@
   "settings.title": "Ustawienia społeczności Umiejętności",
   "showInPortal": "Zobacz szczegóły w Workspace",
   "store.actions.cancel": "Anuluj",
+  "store.actions.configure": "Konfiguruj",
   "store.actions.confirmUninstall": "Odinstalowanie usunie konfigurację Umiejętności. Kontynuować?",
   "store.actions.detail": "Szczegóły",
   "store.actions.install": "Zainstaluj",

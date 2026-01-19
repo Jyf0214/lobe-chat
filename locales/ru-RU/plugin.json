@@ -71,8 +71,11 @@
   "builtins.lobe-group-management.apiName.summarize": "Подвести итоги беседы",
   "builtins.lobe-group-management.apiName.vote": "Начать голосование",
   "builtins.lobe-group-management.inspector.broadcast.title": "Следующие агенты говорят:",
+<<<<<<< HEAD
   "builtins.lobe-group-management.inspector.executeAgentTask.assignTo": "Назначить",
   "builtins.lobe-group-management.inspector.executeAgentTask.task": "задача:",
+=======
+>>>>>>> 2cb1aecad (chore: update i18n files)
   "builtins.lobe-group-management.inspector.executeAgentTasks.title": "Назначение задач для:",
   "builtins.lobe-group-management.inspector.speak.title": "Назначенный агент говорит:",
   "builtins.lobe-group-management.title": "Координатор группы",
@@ -319,6 +322,7 @@
   "dev.tabs.meta": "Мета-информация",
   "dev.title.create": "Добавить пользовательский навык",
   "dev.title.edit": "Редактировать пользовательский навык",
+  "dev.title.editCommunity": "Редактировать навык сообщества",
   "dev.type.lobe": "Навык {{appName}}",
   "dev.type.openai": "Навык OpenAI",
   "dev.update": "Обновить",
@@ -481,6 +485,7 @@
   "settings.title": "Настройки сообщества навыков",
   "showInPortal": "Посмотреть в рабочем пространстве",
   "store.actions.cancel": "Отмена",
+  "store.actions.configure": "Настроить",
   "store.actions.confirmUninstall": "Удаление очистит настройки навыка. Продолжить?",
   "store.actions.detail": "Детали",
   "store.actions.install": "Установить",

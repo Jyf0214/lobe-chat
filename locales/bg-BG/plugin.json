@@ -64,15 +64,22 @@
   "builtins.lobe-group-management.apiName.broadcast": "Всички говорят",
   "builtins.lobe-group-management.apiName.createWorkflow": "Планиране на работен процес",
   "builtins.lobe-group-management.apiName.executeAgentTask": "Изпълни задача на агент",
+<<<<<<< HEAD
   "builtins.lobe-group-management.apiName.executeAgentTasks": "Изпълни паралелни задачи на агенти",
+=======
+  "builtins.lobe-group-management.apiName.executeAgentTasks": "Изпълни паралелни задачи на агент",
+>>>>>>> 2cb1aecad (chore: update i18n files)
   "builtins.lobe-group-management.apiName.getAgentInfo": "Извличане на информация за член",
   "builtins.lobe-group-management.apiName.interrupt": "Прекъсване на задача",
   "builtins.lobe-group-management.apiName.speak": "Назначен член говори",
   "builtins.lobe-group-management.apiName.summarize": "Обобщаване на разговора",
   "builtins.lobe-group-management.apiName.vote": "Започване на гласуване",
   "builtins.lobe-group-management.inspector.broadcast.title": "Следните агенти говорят:",
+<<<<<<< HEAD
   "builtins.lobe-group-management.inspector.executeAgentTask.assignTo": "Назначи",
   "builtins.lobe-group-management.inspector.executeAgentTask.task": "задача:",
+=======
+>>>>>>> 2cb1aecad (chore: update i18n files)
   "builtins.lobe-group-management.inspector.executeAgentTasks.title": "Възлагане на задачи на:",
   "builtins.lobe-group-management.inspector.speak.title": "Назначен агент говори:",
   "builtins.lobe-group-management.title": "Координатор на група",
@@ -319,6 +326,7 @@
   "dev.tabs.meta": "Мета информация",
   "dev.title.create": "Добави персонализирано умение",
   "dev.title.edit": "Редактирай персонализирано умение",
+  "dev.title.editCommunity": "Редактиране на умение на общността",
   "dev.type.lobe": "Умение на {{appName}}",
   "dev.type.openai": "Умение на OpenAI",
   "dev.update": "Актуализирай",
@@ -481,6 +489,7 @@
   "settings.title": "Настройки на общността за умения",
   "showInPortal": "Преглед на подробности в Работното пространство",
   "store.actions.cancel": "Отказ",
+  "store.actions.configure": "Конфигурирай",
   "store.actions.confirmUninstall": "Деинсталирането ще изчисти конфигурацията на умението. Продължите ли?",
   "store.actions.detail": "Подробности",
   "store.actions.install": "Инсталирай",

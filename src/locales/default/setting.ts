@@ -621,6 +621,7 @@ export default {
   'systemAgent.translation.modelDesc': 'Specify the model used for translation',
   'systemAgent.translation.title': 'Message Translation Agent',
   'tab.about': 'About',
+  'tab.addCustomSkill': 'Add Custom Skill',
   'tab.agent': 'Agent Service',
   'tab.apikey': 'API Key Management',
   'tab.chatAppearance': 'Chat Appearance',

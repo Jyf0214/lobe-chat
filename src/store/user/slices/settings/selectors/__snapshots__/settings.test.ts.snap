@@ -51,35 +51,35 @@ exports[`settingsSelectors > currentSettings > should merge DEFAULT_SETTINGS and
 exports[`settingsSelectors > currentSystemAgent > should merge DEFAULT_SYSTEM_AGENT_CONFIG and s.settings.systemAgent correctly 1`] = `
 {
   "agentMeta": {
-    "model": "gpt-5-mini",
-    "provider": "openai",
+    "model": "claude-sonnet-4-5-20250929",
+    "provider": "lobehub",
   },
   "enableAutoReply": true,
   "generationTopic": {
     "model": "gpt-5-mini",
-    "provider": "openai",
+    "provider": "lobehub",
   },
   "historyCompress": {
-    "model": "gpt-5-mini",
-    "provider": "openai",
+    "model": "claude-sonnet-4-5-20250929",
+    "provider": "lobehub",
   },
   "queryRewrite": {
     "enabled": true,
     "model": "gpt-5-mini",
-    "provider": "openai",
+    "provider": "lobehub",
   },
   "replyMessage": "Custom auto reply",
   "thread": {
-    "model": "gpt-5-mini",
-    "provider": "openai",
+    "model": "claude-sonnet-4-5-20250929",
+    "provider": "lobehub",
   },
   "topic": {
     "model": "gpt-5-mini",
-    "provider": "openai",
+    "provider": "lobehub",
   },
   "translation": {
     "model": "gpt-5-mini",
-    "provider": "openai",
+    "provider": "lobehub",
   },
 }
 `;
@@ -108,8 +108,8 @@ exports[`settingsSelectors > defaultAgent > should merge DEFAULT_AGENT and s.set
       "historyCount": 20,
       "reasoningBudgetToken": 1024,
       "searchFCModel": {
-        "model": "gpt-5-mini",
-        "provider": "openai",
+        "model": "claude-sonnet-4-5-20250929",
+        "provider": "lobehub",
       },
       "searchMode": "off",
     },
@@ -122,7 +122,7 @@ exports[`settingsSelectors > defaultAgent > should merge DEFAULT_AGENT and s.set
       "top_p": 1,
     },
     "plugins": [],
-    "provider": "openai",
+    "provider": "lobehub",
     "systemRole": "user",
     "tts": {
       "showAllLocaleVoice": false,
@@ -152,8 +152,8 @@ exports[`settingsSelectors > defaultAgentConfig > should merge DEFAULT_AGENT_CON
     "historyCount": 20,
     "reasoningBudgetToken": 1024,
     "searchFCModel": {
-      "model": "gpt-5-mini",
-      "provider": "openai",
+      "model": "claude-sonnet-4-5-20250929",
+      "provider": "lobehub",
     },
     "searchMode": "off",
   },
@@ -166,7 +166,7 @@ exports[`settingsSelectors > defaultAgentConfig > should merge DEFAULT_AGENT_CON
     "top_p": 1,
   },
   "plugins": [],
-  "provider": "openai",
+  "provider": "lobehub",
   "systemRole": "custom role",
   "tts": {
     "showAllLocaleVoice": false,

@@ -1,15 +1,14 @@
 'use client';
 
 import { SiDiscord } from '@icons-pack/react-simple-icons';
+import { SOCIAL_URL } from '@lobechat/business-const';
 import { Alert, Button, Flexbox, Icon } from '@lobehub/ui';
-import Link from '@/libs/next/Link';
 import { parseAsString, useQueryState } from 'nuqs';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import AuthCard from '@/features/AuthCard';
-
-const DISCORD_URL = 'https://discord.gg/AYFPHvv2jT';
+import Link from '@/libs/next/Link';
 
 const normalizeErrorCode = (code?: string | null) =>
   (code || 'UNKNOWN').trim().toUpperCase().replaceAll('-', '_');
@@ -24,18 +23,23 @@ const AuthErrorPage = memo(() => {
   return (
     <AuthCard
       footer={
-        <Flexbox gap={12} justify="center" wrap="wrap">
-          <Link href="/signin">
+        <Flexbox gap={12} justify="center" width="100%" wrap="wrap">
+          <Link href="/signin" style={{ width: '100%' }}>
             <Button block size={'large'} type="primary">
               {t('actions.retry')}
             </Button>
           </Link>
-          <Link href="/">
+          <Link href="/" style={{ width: '100%' }}>
             <Button block size={'large'}>
               {t('actions.home')}
             </Button>
           </Link>
-          <Link href={DISCORD_URL} rel="noopener noreferrer" target="_blank">
+          <Link
+            href={SOCIAL_URL.discord}
+            rel="noopener noreferrer"
+            style={{ width: '100%' }}
+            target="_blank"
+          >
             <Button block icon={<Icon icon={SiDiscord} />} type="text">
               {t('actions.discord')}
             </Button>

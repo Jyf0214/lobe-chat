@@ -549,15 +549,13 @@ export const marketRouter = router({
         const uploadUrl = await s3.createPreSignedUrl(key);
         log('Generated upload URL for key: %s', key);
 
-        // Step 2: Use MarketService from ctx
-        const market = ctx.marketService.market;
-
-        // Step 3: Call sandbox's exportFile tool with the upload URL
-        const response = await market.plugins.runBuildInTool(
-          'exportFile',
-          { path, uploadUrl },
-          { topicId, userId: ctx.userId },
-        );
+        // Step 2: Call sandbox's exportFile tool with the upload URL
+        const response = await ctx.marketService.exportFile({
+          path,
+          topicId,
+          uploadUrl,
+          userId: ctx.userId,
+        });
 
         log('Sandbox exportFile response: %O', response);
 

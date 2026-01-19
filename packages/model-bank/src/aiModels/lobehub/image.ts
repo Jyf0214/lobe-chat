@@ -30,7 +30,6 @@ export const lobehubImageModels: AIImageModelCard[] = [
     description:
       "Nano Banana is Google's newest, fastest, and most efficient native multimodal model, enabling conversational image generation and editing.",
     displayName: 'Nano Banana',
-    enabled: true,
     id: 'gemini-2.5-flash-image-preview:image',
     parameters: nanoBananaParameters,
     pricing: {
@@ -48,7 +47,6 @@ export const lobehubImageModels: AIImageModelCard[] = [
   {
     description: 'Imagen 4th generation text-to-image model series',
     displayName: 'Imagen 4 Fast',
-    enabled: true,
     id: 'imagen-4.0-fast-generate-001',
     organization: 'Deepmind',
     parameters: imagenBaseParameters,
@@ -61,7 +59,6 @@ export const lobehubImageModels: AIImageModelCard[] = [
   {
     description: 'Imagen 4th generation text-to-image model series',
     displayName: 'Imagen 4',
-    enabled: true,
     id: 'imagen-4.0-generate-001',
     organization: 'Deepmind',
     parameters: imagenBaseParameters,
@@ -74,7 +71,6 @@ export const lobehubImageModels: AIImageModelCard[] = [
   {
     description: 'Imagen 4th generation text-to-image model series Ultra version',
     displayName: 'Imagen 4 Ultra',
-    enabled: true,
     id: 'imagen-4.0-ultra-generate-001',
     organization: 'Deepmind',
     parameters: imagenBaseParameters,
@@ -107,7 +103,6 @@ export const lobehubImageModels: AIImageModelCard[] = [
   {
     description: 'ChatGPT native multimodal image generation model.',
     displayName: 'GPT Image 1',
-    enabled: true,
     id: 'gpt-image-1',
     parameters: gptImage1Schema,
     pricing: {
@@ -126,7 +121,6 @@ export const lobehubImageModels: AIImageModelCard[] = [
     description:
       'The latest DALL·E model, released in November 2023, supports more realistic, accurate image generation with stronger detail.',
     displayName: 'DALL·E 3',
-    enabled: true,
     id: 'dall-e-3',
     parameters: {
       prompt: { default: '' },
@@ -185,7 +179,6 @@ export const lobehubImageModels: AIImageModelCard[] = [
     description:
       'Seedream 4.0, built by ByteDance Seed, supports text and image inputs for highly controllable, high-quality image generation from prompts.',
     displayName: 'Seedream 4.0',
-    enabled: false,
     id: 'fal-ai/bytedance/seedream/v4',
     parameters: {
       height: { default: 1024, max: 4096, min: 1024, step: 1 },

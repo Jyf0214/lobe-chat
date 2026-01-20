@@ -52,34 +52,34 @@ exports[`settingsSelectors > currentSystemAgent > should merge DEFAULT_SYSTEM_AG
 {
   "agentMeta": {
     "model": "claude-sonnet-4-5-20250929",
-    "provider": "lobehub",
+    "provider": "anthropic",
   },
   "enableAutoReply": true,
   "generationTopic": {
     "model": "gpt-5-mini",
-    "provider": "lobehub",
+    "provider": "openai",
   },
   "historyCompress": {
     "model": "claude-sonnet-4-5-20250929",
-    "provider": "lobehub",
+    "provider": "anthropic",
   },
   "queryRewrite": {
     "enabled": true,
     "model": "gpt-5-mini",
-    "provider": "lobehub",
+    "provider": "openai",
   },
   "replyMessage": "Custom auto reply",
   "thread": {
     "model": "claude-sonnet-4-5-20250929",
-    "provider": "lobehub",
+    "provider": "anthropic",
   },
   "topic": {
     "model": "gpt-5-mini",
-    "provider": "lobehub",
+    "provider": "openai",
   },
   "translation": {
     "model": "gpt-5-mini",
-    "provider": "lobehub",
+    "provider": "openai",
   },
 }
 `;
@@ -109,7 +109,7 @@ exports[`settingsSelectors > defaultAgent > should merge DEFAULT_AGENT and s.set
       "reasoningBudgetToken": 1024,
       "searchFCModel": {
         "model": "claude-sonnet-4-5-20250929",
-        "provider": "lobehub",
+        "provider": "anthropic",
       },
       "searchMode": "off",
     },
@@ -122,7 +122,7 @@ exports[`settingsSelectors > defaultAgent > should merge DEFAULT_AGENT and s.set
       "top_p": 1,
     },
     "plugins": [],
-    "provider": "lobehub",
+    "provider": "anthropic",
     "systemRole": "user",
     "tts": {
       "showAllLocaleVoice": false,
@@ -153,7 +153,7 @@ exports[`settingsSelectors > defaultAgentConfig > should merge DEFAULT_AGENT_CON
     "reasoningBudgetToken": 1024,
     "searchFCModel": {
       "model": "claude-sonnet-4-5-20250929",
-      "provider": "lobehub",
+      "provider": "anthropic",
     },
     "searchMode": "off",
   },
@@ -166,7 +166,7 @@ exports[`settingsSelectors > defaultAgentConfig > should merge DEFAULT_AGENT_CON
     "top_p": 1,
   },
   "plugins": [],
-  "provider": "lobehub",
+  "provider": "anthropic",
   "systemRole": "custom role",
   "tts": {
     "showAllLocaleVoice": false,

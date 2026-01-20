@@ -11,8 +11,15 @@ import { useTranslation } from 'react-i18next';
 import { FORM_STYLE } from '@/const/layoutTokens';
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { sttOptions } from './const';
+
+const styles = StyleSheet.create({
+  style: {
+    opacity: 0.5,
+  },
+});
 
 const STT = memo(() => {
   const { t } = useTranslation('setting');
@@ -41,7 +48,7 @@ const STT = memo(() => {
         valuePropName: 'checked',
       },
     ],
-    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />,
+    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={styles.style} />,
     title: t('settingTTS.stt'),
   };
 

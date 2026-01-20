@@ -9,9 +9,17 @@ import { SCROLL_PARENT_ID } from '@/app/[variants]/(main)/community/features/con
 import { withSuspense } from '@/components/withSuspense';
 import { useQuery } from '@/hooks/useQuery';
 import { useDiscoverStore } from '@/store/discover';
+import { StyleSheet } from '@/utils/styles';
 
 import CategoryMenu from '../../../../components/CategoryMenu';
 import { useCategory } from './useCategory';
+
+const styles = StyleSheet.create({
+  spacing: {
+    borderRadius: 12,
+    paddingInline: 6,
+  },
+});
 
 const Category = memo(() => {
   const useModelCategories = useDiscoverStore((s) => s.useModelCategories);
@@ -45,24 +53,12 @@ const Category = memo(() => {
           extra:
             item.key === 'all'
               ? total > 0 && (
-                  <Tag
-                    size={'small'}
-                    style={{
-                      borderRadius: 12,
-                      paddingInline: 6,
-                    }}
-                  >
+                  <Tag size={'small'} style={styles.spacing}>
                     {total}
                   </Tag>
                 )
               : itemData && (
-                  <Tag
-                    size={'small'}
-                    style={{
-                      borderRadius: 12,
-                      paddingInline: 6,
-                    }}
-                  >
+                  <Tag size={'small'} style={styles.spacing}>
                     {itemData.count}
                   </Tag>
                 ),

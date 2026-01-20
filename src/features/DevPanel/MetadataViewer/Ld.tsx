@@ -3,7 +3,15 @@ import { Code } from 'lucide-react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { useLd } from './useHead';
+
+const styles = StyleSheet.create({
+  style: {
+    maxWidth: 400,
+  },
+});
 
 const Ld = memo(() => {
   const { t } = useTranslation('components');
@@ -16,7 +24,7 @@ const Ld = memo(() => {
           description={t('devTools.metadata.empty')}
           descriptionProps={{ fontSize: 14 }}
           icon={Code}
-          style={{ maxWidth: 400 }}
+          style={styles.style}
         />
       </Center>
     );

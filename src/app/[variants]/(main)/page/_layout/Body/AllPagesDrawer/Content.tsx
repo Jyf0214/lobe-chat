@@ -8,8 +8,15 @@ import SkeletonList from '@/features/NavPanel/components/SkeletonList';
 import PageEmpty from '@/features/PageEmpty';
 import { pageSelectors, usePageStore } from '@/store/page';
 import { type LobeDocument } from '@/types/document';
+import { StyleSheet } from '@/utils/styles';
 
 import Item from '../List/Item';
+
+const styles = StyleSheet.create({
+  style: {
+    height: '100%',
+  },
+});
 
 interface ContentProps {
   searchKeyword: string;
@@ -72,7 +79,7 @@ const Content = memo<ContentProps>(({ searchKeyword }) => {
       bufferSize={typeof window !== 'undefined' ? window.innerHeight : 0}
       onScroll={handleScroll}
       ref={virtuaRef}
-      style={{ height: '100%' }}
+      style={styles.style}
     >
       {displayDocuments.map((doc) => (
         <Flexbox gap={1} key={doc.id} padding={'4px 8px'}>

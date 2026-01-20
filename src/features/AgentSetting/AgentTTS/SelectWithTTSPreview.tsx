@@ -9,6 +9,22 @@ import { useTranslation } from 'react-i18next';
 
 import { useTTS } from '@/hooks/useTTS';
 import { type TTSServer } from '@/types/agent';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+    padding: 0,
+    width: 'unset',
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  fullWidth1: {
+    alignItems: 'center',
+    width: '100%',
+  },
+});
 
 interface SelectWithTTSPreviewProps extends SelectProps {
   server: TTSServer;
@@ -71,7 +87,7 @@ const SelectWithTTSPreview = forwardRef<RefSelectProps, SelectWithTTSPreviewProp
     };
     return (
       <Flexbox gap={8}>
-        <Flexbox align={'center'} gap={8} horizontal style={{ width: '100%' }}>
+        <Flexbox align={'center'} gap={8} horizontal style={styles.fullWidth}>
           <Select onSelect={handleSelect} options={options} ref={ref} value={value} {...rest} />
           <AudioPlayer
             allowPause={false}
@@ -88,7 +104,7 @@ const SelectWithTTSPreview = forwardRef<RefSelectProps, SelectWithTTSPreviewProp
             showDonload={false}
             showSlider={false}
             showTime={false}
-            style={{ flex: 'none', padding: 0, width: 'unset' }}
+            style={styles.flexContainer}
             title={t('settingTTS.voice.preview', { ns: 'setting' })}
           />
         </Flexbox>
@@ -108,7 +124,7 @@ const SelectWithTTSPreview = forwardRef<RefSelectProps, SelectWithTTSPreviewProp
               )
             }
             onClose={handleCloseError}
-            style={{ alignItems: 'center', width: '100%' }}
+            style={styles.fullWidth1}
             title={error.message}
             type="error"
           />

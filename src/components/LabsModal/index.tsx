@@ -6,8 +6,16 @@ import { useTranslation } from 'react-i18next';
 
 import { useUserStore } from '@/store/user';
 import { labPreferSelectors, preferenceSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import LabCard from './LabCard';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    alignItems: 'center',
+    width: '100%',
+  },
+});
 
 interface LabItem {
   checked: boolean;
@@ -43,7 +51,7 @@ const LabsModal = memo<LabsModalProps>(({ open, onClose }) => {
 
   return (
     <Modal footer={null} onCancel={onClose} open={open} title={t('title')} width={700}>
-      <Flexbox gap={16} padding={16} style={{ alignItems: 'center', width: '100%' }}>
+      <Flexbox gap={16} padding={16} style={styles.fullWidth}>
         {labItems.map((item) => (
           <LabCard
             checked={item.checked}

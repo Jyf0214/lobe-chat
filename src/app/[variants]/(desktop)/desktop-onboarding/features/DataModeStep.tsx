@@ -8,9 +8,35 @@ import { useTranslation } from 'react-i18next';
 
 import { useUserStore } from '@/store/user';
 import { userGeneralSettingsSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import LobeMessage from '../components/LobeMessage';
 import OnboardingFooterActions from '../components/OnboardingFooterActions';
+
+const styles = StyleSheet.create({
+  colored2: {
+    color: cssVar.colorTextDescription,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  spacing: {
+    listStyle: 'none',
+    padding: 0,
+  },
+  spacing1: {
+    marginTop: 16,
+  },
+  style: {
+    position: 'absolute',
+    right: 12,
+    top: 12,
+  },
+  style1: {
+    height: '100%',
+    minHeight: '100%',
+  },
+});
 
 type DataMode = 'share' | 'privacy';
 
@@ -38,23 +64,36 @@ const DataModeStep = memo<DataModeStepProps>(({ onBack, onNext }) => {
     [telemetryEnabled, updateGeneralConfig],
   );
 
+  // Dynamic styles based on selectedMode
+  const dynamicShareStyle = StyleSheet.create({
+    colored: {
+      borderColor: selectedMode === 'share' ? cssVar.colorSuccess : undefined,
+    },
+  });
+
+  const dynamicPrivacyStyle = StyleSheet.create({
+    colored1: {
+      borderColor: selectedMode === 'privacy' ? cssVar.colorSuccess : undefined,
+    },
+  });
+
   const checkIcon = (
     <Checkbox
       backgroundColor={cssVar.colorSuccess}
       checked
       shape={'circle'}
       size={20}
-      style={{ position: 'absolute', right: 12, top: 12 }}
+      style={styles.style}
     />
   );
 
   return (
-    <Flexbox gap={16} style={{ height: '100%', minHeight: '100%' }}>
+    <Flexbox gap={16} style={styles.style1}>
       <Flexbox>
         <LobeMessage sentences={[t('screen4.title'), t('screen4.title2'), t('screen4.title3')]} />
         <Text as={'p'}>{t('screen4.description')}</Text>
       </Flexbox>
-      <Flexbox gap={16} style={{ width: '100%' }}>
+      <Flexbox gap={16} style={styles.fullWidth}>
         {/* 共享数据选项 */}
         <Block
           clickable
@@ -62,7 +101,7 @@ const DataModeStep = memo<DataModeStepProps>(({ onBack, onNext }) => {
           gap={16}
           onClick={() => setMode('share')}
           padding={16}
-          style={{ borderColor: selectedMode === 'share' ? cssVar.colorSuccess : undefined }}
+          style={StyleSheet.compose(styles.fullWidth, dynamicShareStyle.colored)}
           variant={'outlined'}
         >
           {selectedMode === 'share' && checkIcon}
@@ -79,7 +118,7 @@ const DataModeStep = memo<DataModeStepProps>(({ onBack, onNext }) => {
             }}
             type={'page'}
           />
-          <Flexbox as={'ul'} gap={4} style={{ listStyle: 'none', padding: 0 }}>
+          <Flexbox as={'ul'} gap={4} style={styles.spacing}>
             <li>
               <Text>• {t('screen4.share.items.1')}</Text>
             </li>
@@ -99,7 +138,7 @@ const DataModeStep = memo<DataModeStepProps>(({ onBack, onNext }) => {
           gap={6}
           onClick={() => setMode('privacy')}
           padding={16}
-          style={{ borderColor: selectedMode === 'privacy' ? cssVar.colorSuccess : undefined }}
+          style={StyleSheet.compose(styles.fullWidth, dynamicPrivacyStyle.colored1)}
           variant={'outlined'}
         >
           {selectedMode === 'privacy' && checkIcon}
@@ -111,17 +150,12 @@ const DataModeStep = memo<DataModeStepProps>(({ onBack, onNext }) => {
           </Text>
         </Block>
       </Flexbox>
-      <Text color={cssVar.colorTextSecondary} fontSize={12} style={{ marginTop: 16 }}>
+      <Text color={cssVar.colorTextSecondary} fontSize={12} style={styles.spacing1}>
         {t('screen4.footerNote')}
       </Text>
       <OnboardingFooterActions
         left={
-          <Button
-            icon={Undo2Icon}
-            onClick={onBack}
-            style={{ color: cssVar.colorTextDescription }}
-            type={'text'}
-          >
+          <Button icon={Undo2Icon} onClick={onBack} style={styles.colored2} type={'text'}>
             {t('back')}
           </Button>
         }

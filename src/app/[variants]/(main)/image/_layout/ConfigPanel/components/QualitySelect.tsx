@@ -3,6 +3,13 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGenerationConfigParam } from '@/store/image/slices/generationConfig/hooks';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 const QualitySelect = memo(() => {
   const { t } = useTranslation('image');
@@ -17,7 +24,7 @@ const QualitySelect = memo(() => {
       value: quality,
     })) ?? [];
 
-  return <Select onChange={setValue} options={options} style={{ width: '100%' }} value={value} />;
+  return <Select onChange={setValue} options={options} style={styles.fullWidth} value={value} />;
 });
 
 export default QualitySelect;

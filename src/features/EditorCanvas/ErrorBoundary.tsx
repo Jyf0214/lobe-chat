@@ -3,6 +3,17 @@
 import { Alert } from '@lobehub/ui';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    margin: 16,
+    overflow: 'hidden',
+    position: 'relative',
+    width: '100%',
+  },
+});
+
 interface EditorErrorBoundaryState {
   error: Error | null;
   hasError: boolean;
@@ -49,12 +60,7 @@ export class EditorErrorBoundary extends Component<
         <Alert
           message={this.state.error?.message || 'An unknown error occurred in the editor'}
           showIcon
-          style={{
-            margin: 16,
-            overflow: 'hidden',
-            position: 'relative',
-            width: '100%',
-          }}
+          style={styles.fullWidth}
           title="Editor Error"
           type="error"
         />

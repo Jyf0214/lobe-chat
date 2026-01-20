@@ -8,8 +8,19 @@ import { useTranslation } from 'react-i18next';
 import { fetchErrorNotification } from '@/components/Error/fetchErrorNotification';
 import { useUserStore } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { labelStyle, rowStyle } from './ProfileRow';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  style: {
+    cursor: 'pointer',
+    fontSize: 13,
+  },
+});
 
 interface FullNameRowProps {
   mobile?: boolean;
@@ -93,7 +104,7 @@ const FullNameRow = ({ mobile }: FullNameRowProps) => {
       ) : (
         <Flexbox align="center" horizontal justify="space-between">
           <Text>{fullName || '--'}</Text>
-          <Text onClick={handleStartEdit} style={{ cursor: 'pointer', fontSize: 13 }}>
+          <Text onClick={handleStartEdit} style={styles.style}>
             {t('profile.updateFullName')}
           </Text>
         </Flexbox>
@@ -107,7 +118,7 @@ const FullNameRow = ({ mobile }: FullNameRowProps) => {
         <Flexbox align="center" horizontal justify="space-between">
           <Text strong>{t('profile.fullName')}</Text>
           {!isEditing && (
-            <Text onClick={handleStartEdit} style={{ cursor: 'pointer', fontSize: 13 }}>
+            <Text onClick={handleStartEdit} style={styles.style}>
               {t('profile.updateFullName')}
             </Text>
           )}
@@ -120,7 +131,7 @@ const FullNameRow = ({ mobile }: FullNameRowProps) => {
   return (
     <Flexbox gap={24} horizontal style={rowStyle}>
       <Text style={labelStyle}>{t('profile.fullName')}</Text>
-      <Flexbox style={{ flex: 1 }}>
+      <Flexbox style={styles.flexContainer}>
         <AnimatePresence mode="wait">{isEditing ? editingContent : displayContent}</AnimatePresence>
       </Flexbox>
     </Flexbox>

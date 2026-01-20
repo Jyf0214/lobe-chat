@@ -10,15 +10,25 @@ import { createStoreUpdater } from 'zustand-utils';
 import { useSaveDocumentHotkey } from '@/hooks/useHotkeys';
 import { useDocumentStore } from '@/store/document';
 import { editorSelectors } from '@/store/document/slices/editor';
+import { StyleSheet } from '@/utils/styles';
 
 import type { EditorCanvasProps } from './EditorCanvas';
 import InternalEditor from './InternalEditor';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBlock: 24,
+  },
+  spacing1: {
+    margin: 16,
+  },
+});
 
 /**
  * Loading skeleton for the editor
  */
 const EditorSkeleton = memo(() => (
-  <div style={{ paddingBlock: 24 }}>
+  <div style={styles.spacing}>
     <Skeleton active paragraph={{ rows: 8 }} />
   </div>
 ));
@@ -33,7 +43,7 @@ const EditorError = memo<{ error: Error }>(({ error }) => {
     <Alert
       description={error.message || t('pageEditor.loadError', 'Failed to load document')}
       showIcon
-      style={{ margin: 16 }}
+      style={styles.spacing1}
       title={t('pageEditor.error', 'Error')}
       type="error"
     />

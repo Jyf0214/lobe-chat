@@ -6,9 +6,17 @@ import { Link } from 'react-router-dom';
 import urlJoin from 'url-join';
 
 import { useDetailContext } from '@/features/MCPPluginDetail/DetailProvider';
+import { StyleSheet } from '@/utils/styles';
 
 import Title from '../../../../../features/Title';
 import Item from './Item';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+    overflow: 'hidden',
+  },
+});
 
 const Related = memo(() => {
   const { t } = useTranslation('discover');
@@ -31,7 +39,7 @@ const Related = memo(() => {
         {related?.map((item, index) => {
           const link = urlJoin('/community/mcp', item.identifier);
           return (
-            <Link key={index} style={{ color: 'inherit', overflow: 'hidden' }} to={link}>
+            <Link key={index} style={styles.colored} to={link}>
               <Item {...item} />
             </Link>
           );

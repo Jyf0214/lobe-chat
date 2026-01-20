@@ -6,6 +6,22 @@ import { useTranslation } from 'react-i18next';
 
 import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextQuaternary,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  style: {
+    fontSize: 12,
+  },
+  style1: {
+    height: 42,
+  },
+});
 
 const alertCls = css`
   .ant-alert-message {
@@ -30,7 +46,7 @@ const Warning = memo(() => {
     temperature >= 1.5 && (
       <Alert
         classNames={{ alert: cx(alertCls) }}
-        style={{ fontSize: 12 }}
+        style={styles.style}
         title={t('settingModel.temperature.warning')}
         type={'warning'}
         variant={'borderless'}
@@ -47,21 +63,21 @@ interface TemperatureProps {
 
 const Temperature = memo<TemperatureProps>(({ value, onChange, disabled }) => {
   return (
-    <Flexbox gap={4} style={{ width: '100%' }}>
+    <Flexbox gap={4} style={styles.fullWidth}>
       <SliderWithInput
         changeOnWheel
         controls={false}
         disabled={disabled}
         marks={{
-          0: <Icon icon={Sparkle} size={'small'} style={{ color: cssVar.colorTextQuaternary }} />,
+          0: <Icon icon={Sparkle} size={'small'} style={styles.colored} />,
           1: <div />,
-          2: <Icon icon={Sparkles} size={'small'} style={{ color: cssVar.colorTextQuaternary }} />,
+          2: <Icon icon={Sparkles} size={'small'} style={styles.colored} />,
         }}
         max={2}
         onChange={onChange}
         size={'small'}
         step={0.1}
-        style={{ height: 42 }}
+        style={styles.style1}
         styles={{
           input: {
             maxWidth: 43,

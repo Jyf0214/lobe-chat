@@ -10,11 +10,18 @@ import ErrorDetails from '@/features/MCP/MCPInstallProgress/InstallError/ErrorDe
 import { useToolStore } from '@/store/tool';
 import { mcpStoreSelectors, pluginSelectors } from '@/store/tool/selectors';
 import { type MCPErrorInfoMetadata } from '@/types/plugins';
+import { StyleSheet } from '@/utils/styles';
 
 import ArgsInput from './ArgsInput';
 import CollapsibleSection from './CollapsibleSection';
 import MCPTypeSelect from './MCPTypeSelect';
 import QuickImportSection from './QuickImportSection';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 interface MCPManifestFormProps {
   form: FormInstance;
@@ -223,7 +230,7 @@ const MCPManifestForm = ({ form, isEditMode }: MCPManifestFormProps) => {
                       value: 'bearer',
                     },
                   ]}
-                  style={{ width: '100%' }}
+                  style={styles.fullWidth}
                 />
               </FormItem>
               {authType === 'bearer' && (

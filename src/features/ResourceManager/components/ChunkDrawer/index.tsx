@@ -1,12 +1,25 @@
 import { Flexbox } from '@lobehub/ui';
 import { Drawer } from 'antd';
 import { cssVar } from 'antd-style';
-import dynamic from '@/libs/next/dynamic';
 import { memo } from 'react';
 
+import dynamic from '@/libs/next/dynamic';
 import { fileManagerSelectors, useFileStore } from '@/store/file';
+import { StyleSheet } from '@/utils/styles';
 
 import Content from './Content';
+
+const styles = StyleSheet.create({
+  colored: {
+    borderInlineStart: `1px solid ${cssVar.colorSplit}`,
+  },
+  style: {
+    overflow: 'hidden',
+  },
+  style1: {
+    overflow: 'scroll',
+  },
+});
 
 const FileViewer = dynamic(() => import('@/features/FileViewer'), { ssr: false });
 
@@ -33,13 +46,13 @@ const ChunkDrawer = memo(() => {
       }}
       title={file?.name}
     >
-      <Flexbox height={'100%'} horizontal style={{ overflow: 'hidden' }}>
+      <Flexbox height={'100%'} horizontal style={styles.style}>
         {file && (
-          <Flexbox flex={2} style={{ overflow: 'scroll' }}>
+          <Flexbox flex={2} style={styles.style1}>
             <FileViewer {...file} />
           </Flexbox>
         )}
-        <Flexbox flex={1} style={{ borderInlineStart: `1px solid ${cssVar.colorSplit}` }}>
+        <Flexbox flex={1} style={styles.colored}>
           <Content />
         </Flexbox>
       </Flexbox>

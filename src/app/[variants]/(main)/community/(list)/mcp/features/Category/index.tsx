@@ -11,12 +11,23 @@ import { useCategory } from '@/hooks/useMCPCategory';
 import { useQuery } from '@/hooks/useQuery';
 import { useDiscoverStore } from '@/store/discover';
 import { McpCategory, McpSorts } from '@/types/discover';
+import { StyleSheet } from '@/utils/styles';
 
 import CategoryMenu from '../../../../components/CategoryMenu';
 
+const styles = StyleSheet.create({
+  spacing: {
+    borderRadius: 12,
+    paddingInline: 6,
+  },
+});
+
 const Category = memo(() => {
   const useMcpCategories = useDiscoverStore((s) => s.useMcpCategories);
-  const { category = McpCategory.Discover, q } = useQuery() as { category?: McpCategory; q?: string };
+  const { category = McpCategory.Discover, q } = useQuery() as {
+    category?: McpCategory;
+    q?: string;
+  };
   const { data: items = [] } = useMcpCategories({ q });
   const navigate = useNavigate();
   const cates = useCategory();
@@ -50,24 +61,12 @@ const Category = memo(() => {
           extra:
             item.key === 'all'
               ? total > 0 && (
-                  <Tag
-                    size={'small'}
-                    style={{
-                      borderRadius: 12,
-                      paddingInline: 6,
-                    }}
-                  >
+                  <Tag size={'small'} style={styles.spacing}>
                     {total}
                   </Tag>
                 )
               : itemData && (
-                  <Tag
-                    size={'small'}
-                    style={{
-                      borderRadius: 12,
-                      paddingInline: 6,
-                    }}
-                  >
+                  <Tag size={'small'} style={styles.spacing}>
                     {itemData.count}
                   </Tag>
                 ),

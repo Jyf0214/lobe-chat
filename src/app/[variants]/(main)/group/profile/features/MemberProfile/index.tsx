@@ -16,10 +16,27 @@ import { agentByIdSelectors } from '@/store/agent/selectors';
 import { useAgentGroupStore } from '@/store/agentGroup';
 import { agentGroupSelectors } from '@/store/agentGroup/selectors';
 import { useGroupProfileStore } from '@/store/groupProfile';
+import { StyleSheet } from '@/utils/styles';
 
 import AutoSaveHint from '../Header/AutoSaveHint';
 import AgentHeader from './AgentHeader';
 import AgentTool from './AgentTool';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+  spacing: {
+    cursor: 'default',
+    marginBottom: 12,
+  },
+  spacing1: {
+    marginBottom: 12,
+  },
+  spacing2: {
+    marginTop: 16,
+  },
+});
 
 const MemberProfile = memo(() => {
   const { t } = useTranslation(['setting', 'chat']);
@@ -78,7 +95,7 @@ const MemberProfile = memo(() => {
         {isExternal && !isSupervisor && (
           <Alert
             icon={<Icon icon={InfoIcon} />}
-            style={{ width: '100%' }}
+            style={styles.fullWidth}
             title={t('group.profile.externalAgentWarning', { ns: 'chat' })}
             type="secondary"
             variant={'outlined'}
@@ -92,18 +109,12 @@ const MemberProfile = memo(() => {
         onClick={(e) => {
           e.stopPropagation();
         }}
-        style={{ cursor: 'default', marginBottom: 12 }}
+        style={styles.spacing}
       >
         {/* Header: Avatar + Name */}
         <AgentHeader readOnly={isSupervisor} />
         {/* Config Bar: Model Selector */}
-        <Flexbox
-          align={'center'}
-          gap={8}
-          horizontal
-          justify={'flex-start'}
-          style={{ marginBottom: 12 }}
-        >
+        <Flexbox align={'center'} gap={8} horizontal justify={'flex-start'} style={styles.spacing1}>
           <ModelSelect
             onChange={updateAgentConfig}
             value={{
@@ -113,13 +124,7 @@ const MemberProfile = memo(() => {
           />
         </Flexbox>
         <AgentTool />
-        <Flexbox
-          align={'center'}
-          gap={8}
-          horizontal
-          justify={'flex-start'}
-          style={{ marginTop: 16 }}
-        >
+        <Flexbox align={'center'} gap={8} horizontal justify={'flex-start'} style={styles.spacing2}>
           <Button
             icon={PlayIcon}
             onClick={() => {

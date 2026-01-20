@@ -9,9 +9,26 @@ import { useTranslation } from 'react-i18next';
 import EmojiPicker from '@/components/EmojiPicker';
 import { useGlobalStore } from '@/store/global';
 import { globalGeneralSelectors } from '@/store/global/selectors';
+import { StyleSheet } from '@/utils/styles';
 import { truncateByWeightedLength } from '@/utils/textLength';
 
 import { usePageEditorStore } from './store';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    fontSize: 36,
+    fontWeight: 600,
+    padding: 0,
+    resize: 'none',
+    width: '100%',
+  },
+  style: {
+    cursor: 'default',
+  },
+  style1: {
+    width: 'fit-content',
+  },
+});
 
 const TitleSection = memo(() => {
   const { t } = useTranslation('file');
@@ -26,6 +43,12 @@ const TitleSection = memo(() => {
   const [isHoveringTitle, setIsHoveringTitle] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
+  const style1Dynamic = {
+    ...styles.style1,
+    opacity: isHoveringTitle ? 1 : 0,
+    transition: `opacity ${cssVar.motionDurationMid} ${cssVar.motionEaseInOut}`,
+  };
+
   return (
     <Flexbox
       gap={16}
@@ -36,9 +59,7 @@ const TitleSection = memo(() => {
       onMouseEnter={() => setIsHoveringTitle(true)}
       onMouseLeave={() => setIsHoveringTitle(false)}
       paddingBlock={16}
-      style={{
-        cursor: 'default',
-      }}
+      style={styles.style}
     >
       {/* Emoji picker above Choose Icon button */}
       {(emoji || showEmojiPicker) && (
@@ -73,11 +94,7 @@ const TitleSection = memo(() => {
             setShowEmojiPicker(true);
           }}
           size="small"
-          style={{
-            opacity: isHoveringTitle ? 1 : 0,
-            transition: `opacity ${cssVar.motionDurationMid} ${cssVar.motionEaseInOut}`,
-            width: 'fit-content',
-          }}
+          style={style1Dynamic}
           type="text"
         >
           {t('pageEditor.chooseIcon')}
@@ -98,13 +115,7 @@ const TitleSection = memo(() => {
           }
         }}
         placeholder={t('pageEditor.titlePlaceholder')}
-        style={{
-          fontSize: 36,
-          fontWeight: 600,
-          padding: 0,
-          resize: 'none',
-          width: '100%',
-        }}
+        style={styles.fullWidth}
         value={title}
         variant={'borderless'}
       />

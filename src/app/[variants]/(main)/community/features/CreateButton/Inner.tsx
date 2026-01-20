@@ -1,11 +1,20 @@
 import { Button, Icon, Tag, Typography } from '@lobehub/ui';
 import { Divider } from 'antd';
 import { Github, Settings, Share2 } from 'lucide-react';
-import Image from '@/libs/next/Image';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AGENTS_INDEX_GITHUB, imageUrl } from '@/const/url';
+import Image from '@/libs/next/Image';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    height: 'auto',
+    marginBottom: 24,
+    width: '100%',
+  },
+});
 
 const Inner = memo(() => {
   const { t } = useTranslation('discover');
@@ -15,7 +24,7 @@ const Inner = memo(() => {
         alt={'banner'}
         height={602}
         src={imageUrl('banner_market_modal.webp')}
-        style={{ height: 'auto', marginBottom: 24, width: '100%' }}
+        style={styles.fullWidth}
         width={1602}
       />
       <h3>

@@ -5,6 +5,19 @@ import { TrashIcon } from 'lucide-react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    minWidth: 200,
+    width: '100%',
+  },
+  fullWidth1: {
+    alignItems: 'center',
+    width: '100%',
+  },
+});
+
 interface PlayerProps extends AudioPlayerProps {
   error?: ChatMessageError;
   onDelete: () => void;
@@ -15,7 +28,7 @@ const Player = memo<PlayerProps>(({ onRetry, error, onDelete, audio, isLoading, 
   const { t } = useTranslation('chat');
 
   return (
-    <Flexbox align={'center'} horizontal style={{ minWidth: 200, width: '100%' }}>
+    <Flexbox align={'center'} horizontal style={styles.fullWidth}>
       {error ? (
         <Alert
           action={
@@ -32,7 +45,7 @@ const Player = memo<PlayerProps>(({ onRetry, error, onDelete, audio, isLoading, 
             )
           }
           onClose={onDelete}
-          style={{ alignItems: 'center', width: '100%' }}
+          style={styles.fullWidth1}
           title={error.message}
           type="error"
         />

@@ -10,8 +10,15 @@ import { useTranslation } from 'react-i18next';
 import { FORM_STYLE } from '@/const/layoutTokens';
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { opeanaiSTTOptions, opeanaiTTSOptions } from './const';
+
+const styles = StyleSheet.create({
+  style: {
+    opacity: 0.5,
+  },
+});
 
 const OpenAI = memo(() => {
   const { t } = useTranslation('setting');
@@ -35,7 +42,7 @@ const OpenAI = memo(() => {
         name: ['openAI', 'sttModel'],
       },
     ],
-    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />,
+    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={styles.style} />,
     title: t('settingTTS.openai.title'),
   };
 

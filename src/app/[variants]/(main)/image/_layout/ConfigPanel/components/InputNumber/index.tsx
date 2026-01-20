@@ -7,6 +7,17 @@ import { type CSSProperties, memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { generateUniqueSeeds } from '@/utils/number';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+    width: 48,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 export interface SeedNumberInputProps {
   className?: string;
@@ -33,7 +44,7 @@ const SeedNumberInput = memo<SeedNumberInputProps>(
           onChange={onChange as any}
           placeholder={t('config.seed.random')}
           step={1}
-          style={{ width: '100%' }}
+          style={styles.fullWidth}
           value={value}
           {...rest}
         />
@@ -41,7 +52,7 @@ const SeedNumberInput = memo<SeedNumberInputProps>(
           <Button
             icon={Dices}
             onClick={handleClick}
-            style={{ flex: 'none', width: 48 }}
+            style={styles.flexContainer}
             variant={'outlined'}
           />
         </Tooltip>

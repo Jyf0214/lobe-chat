@@ -10,6 +10,16 @@ import {
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: 'transparent',
+    borderRadius: 0,
+    height: '100%',
+  },
+});
+
 interface DebugProps {
   apiName: string;
   identifier: string;
@@ -49,11 +59,7 @@ const Debug = memo<DebugProps>(
       () => [
         {
           children: (
-            <Highlighter
-              language={'json'}
-              style={{ background: 'transparent', borderRadius: 0, height: '100%' }}
-              variant={'filled'}
-            >
+            <Highlighter language={'json'} style={styles.colored} variant={'filled'}>
               {params}
             </Highlighter>
           ),
@@ -65,7 +71,7 @@ const Debug = memo<DebugProps>(
           children: (
             <Highlighter
               language={isJsonResult ? 'json' : 'plaintext'}
-              style={{ background: 'transparent', borderRadius: 0, height: '100%' }}
+              style={styles.colored}
               variant={'filled'}
             >
               {isJsonResult ? JSON.stringify(result?.content, null, 2) : result?.content || ''}
@@ -77,11 +83,7 @@ const Debug = memo<DebugProps>(
         },
         {
           children: (
-            <Highlighter
-              language={'json'}
-              style={{ background: 'transparent', borderRadius: 0, height: '100%' }}
-              variant={'filled'}
-            >
+            <Highlighter language={'json'} style={styles.colored} variant={'filled'}>
               {JSON.stringify(functionCall, null, 2)}
             </Highlighter>
           ),
@@ -91,11 +93,7 @@ const Debug = memo<DebugProps>(
         },
         {
           children: (
-            <Highlighter
-              language={'json'}
-              style={{ background: 'transparent', borderRadius: 0, height: '100%' }}
-              variant={'filled'}
-            >
+            <Highlighter language={'json'} style={styles.colored} variant={'filled'}>
               {JSON.stringify(result?.state, null, 2)}
             </Highlighter>
           ),
@@ -105,11 +103,7 @@ const Debug = memo<DebugProps>(
         },
         {
           children: (
-            <Highlighter
-              language={'json'}
-              style={{ background: 'transparent', borderRadius: 0, height: '100%' }}
-              variant={'filled'}
-            >
+            <Highlighter language={'json'} style={styles.colored} variant={'filled'}>
               {JSON.stringify(intervention, null, 2)}
             </Highlighter>
           ),

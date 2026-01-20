@@ -11,11 +11,34 @@ import { aiModelSelectors, useAiInfraStore } from '@/store/aiInfra';
 import { useGlobalStore } from '@/store/global';
 import { systemStatusSelectors } from '@/store/global/selectors';
 import { formatNumber, formatShortenNumber } from '@/utils/format';
+import { StyleSheet } from '@/utils/styles';
 
 import AnimatedNumber from './AnimatedNumber';
 import ModelCard from './ModelCard';
 import TokenProgress, { type TokenProgressItem } from './TokenProgress';
 import { getDetailsToken } from './tokens';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextDescription,
+    fontSize: 12,
+  },
+  colored1: {
+    color: cssVar.colorTextSecondary,
+  },
+  spacing: {
+    marginBlock: 8,
+  },
+  style: {
+    minWidth: 200,
+  },
+  style1: {
+    fontWeight: 500,
+  },
+  style2: {
+    cursor: 'pointer',
+  },
+});
 
 interface TokenDetailProps {
   model: string;
@@ -133,7 +156,7 @@ const TokenDetail = memo<TokenDetailProps>(({ usage, performance, model, provide
   return (
     <Popover
       content={
-        <Flexbox gap={8} style={{ minWidth: 200 }}>
+        <Flexbox gap={8} style={styles.style}>
           {modelCard && <ModelCard {...modelCard} provider={provider} />}
 
           <Flexbox gap={20}>
@@ -146,9 +169,7 @@ const TokenDetail = memo<TokenDetailProps>(({ usage, performance, model, provide
                   justify={'space-between'}
                   width={'100%'}
                 >
-                  <div style={{ color: cssVar.colorTextDescription, fontSize: 12 }}>
-                    {t('messages.tokenDetails.inputTitle')}
-                  </div>
+                  <div style={styles.colored}>{t('messages.tokenDetails.inputTitle')}</div>
                 </Flexbox>
                 <TokenProgress data={inputDetails} showIcon />
               </Flexbox>
@@ -162,50 +183,40 @@ const TokenDetail = memo<TokenDetailProps>(({ usage, performance, model, provide
                   justify={'space-between'}
                   width={'100%'}
                 >
-                  <div style={{ color: cssVar.colorTextDescription, fontSize: 12 }}>
-                    {t('messages.tokenDetails.outputTitle')}
-                  </div>
+                  <div style={styles.colored}>{t('messages.tokenDetails.outputTitle')}</div>
                 </Flexbox>
                 <TokenProgress data={outputDetails} showIcon />
               </Flexbox>
             )}
             <Flexbox>
               <TokenProgress data={totalDetail} showIcon />
-              <Divider style={{ marginBlock: 8 }} />
+              <Divider style={styles.spacing} />
               <Flexbox align={'center'} gap={4} horizontal justify={'space-between'}>
-                <div style={{ color: cssVar.colorTextSecondary }}>
-                  {t('messages.tokenDetails.total')}
-                </div>
-                <div style={{ fontWeight: 500 }}>{detailTotal}</div>
+                <div style={styles.colored1}>{t('messages.tokenDetails.total')}</div>
+                <div style={styles.style1}>{detailTotal}</div>
               </Flexbox>
               {isShowCredit && (
                 <Flexbox align={'center'} gap={4} horizontal justify={'space-between'}>
-                  <div style={{ color: cssVar.colorTextSecondary }}>
-                    {t('messages.tokenDetails.average')}
-                  </div>
-                  <div style={{ fontWeight: 500 }}>{averagePricing}</div>
+                  <div style={styles.colored1}>{t('messages.tokenDetails.average')}</div>
+                  <div style={styles.style1}>{averagePricing}</div>
                 </Flexbox>
               )}
               {tps && (
                 <Flexbox align={'center'} gap={4} horizontal justify={'space-between'}>
                   <Flexbox gap={8} horizontal>
-                    <div style={{ color: cssVar.colorTextSecondary }}>
-                      {t('messages.tokenDetails.speed.tps.title')}
-                    </div>
+                    <div style={styles.colored1}>{t('messages.tokenDetails.speed.tps.title')}</div>
                     <InfoTooltip title={t('messages.tokenDetails.speed.tps.tooltip')} />
                   </Flexbox>
-                  <div style={{ fontWeight: 500 }}>{tps}</div>
+                  <div style={styles.style1}>{tps}</div>
                 </Flexbox>
               )}
               {ttft && (
                 <Flexbox align={'center'} gap={4} horizontal justify={'space-between'}>
                   <Flexbox gap={8} horizontal>
-                    <div style={{ color: cssVar.colorTextSecondary }}>
-                      {t('messages.tokenDetails.speed.ttft.title')}
-                    </div>
+                    <div style={styles.colored1}>{t('messages.tokenDetails.speed.ttft.title')}</div>
                     <InfoTooltip title={t('messages.tokenDetails.speed.ttft.tooltip')} />
                   </Flexbox>
-                  <div style={{ fontWeight: 500 }}>{ttft}s</div>
+                  <div style={styles.style1}>{ttft}s</div>
                 </Flexbox>
               )}
             </Flexbox>
@@ -224,7 +235,7 @@ const TokenDetail = memo<TokenDetailProps>(({ usage, performance, model, provide
           e.stopPropagation();
           updateSystemStatus({ tokenDisplayFormatShort: !isShortFormat });
         }}
-        style={{ cursor: 'pointer' }}
+        style={styles.style2}
       >
         <Icon icon={isShowCredit ? BadgeCent : CoinsIcon} />
         <AnimatedNumber

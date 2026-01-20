@@ -17,6 +17,22 @@ import { agentGroupSelectors } from '@/store/agentGroup/selectors';
 import { useFileStore } from '@/store/file';
 import { useGlobalStore } from '@/store/global';
 import { globalGeneralSelectors } from '@/store/global/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    fontSize: 36,
+    fontWeight: 600,
+    padding: 0,
+    width: '100%',
+  },
+  style: {
+    cursor: 'default',
+  },
+  style1: {
+    height: 38,
+  },
+});
 
 const MAX_AVATAR_SIZE = 1024 * 1024; // 1MB limit for server actions
 
@@ -94,9 +110,7 @@ const GroupHeader = memo(() => {
         e.preventDefault();
       }}
       paddingBlock={16}
-      style={{
-        cursor: 'default',
-      }}
+      style={styles.style}
     >
       <EmojiPicker
         allowDelete={!!groupMeta.avatar}
@@ -129,8 +143,8 @@ const GroupHeader = memo(() => {
                 <Suspense
                   fallback={
                     <Flexbox gap={8}>
-                      <Skeleton.Button block style={{ height: 38 }} />
-                      <Skeleton.Button block style={{ height: 38 }} />
+                      <Skeleton.Button block style={styles.style1} />
+                      <Skeleton.Button block style={styles.style1} />
                     </Flexbox>
                   }
                 >
@@ -165,12 +179,7 @@ const GroupHeader = memo(() => {
           debouncedSaveTitle(e.target.value);
         }}
         placeholder={t('name.placeholder')}
-        style={{
-          fontSize: 36,
-          fontWeight: 600,
-          padding: 0,
-          width: '100%',
-        }}
+        style={styles.fullWidth}
         value={localTitle}
         variant={'borderless'}
       />

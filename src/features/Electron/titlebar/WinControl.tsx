@@ -1,5 +1,13 @@
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  container: {
+    width: 132,
+  },
+});
+
 const WinControl = () => {
-  return <div style={{ width: 132 }} />;
+  return <div style={styles.container} />;
 };
 
 export default WinControl;

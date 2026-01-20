@@ -8,9 +8,16 @@ import { useTranslation } from 'react-i18next';
 import { DEFAULT_USER_AVATAR_URL } from '@/const/meta';
 import { useUserStore } from '@/store/user';
 import { authSelectors, userProfileSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import Title from '../../../../../features/Title';
 import { useDetailContext } from '../../DetailProvider';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 const Overview = memo(() => {
   const [userAvatar, username] = useUserStore((s) => [
@@ -61,6 +68,10 @@ const Overview = memo(() => {
     };
   });
 
+  const coloredStyle = {
+    background: theme.colorBgContainerSecondary,
+  };
+
   return (
     <Flexbox gap={16}>
       <Collapse
@@ -76,18 +87,13 @@ const Overview = memo(() => {
         variant={'outlined'}
       />
       <Title>{t('assistants.details.overview.example')}</Title>
-      <Block
-        style={{
-          background: theme.colorBgContainerSecondary,
-        }}
-        variant={'outlined'}
-      >
+      <Block style={coloredStyle} variant={'outlined'}>
         <ChatList
           data={data}
           renderMessages={{
             default: ({ id, editableContent }) => <div id={id}>{editableContent}</div>,
           }}
-          style={{ width: '100%' }}
+          style={styles.fullWidth}
         />
       </Block>
     </Flexbox>

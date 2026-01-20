@@ -7,6 +7,16 @@ import { type ReactNode, memo, useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useElectronStore } from '@/store/electron';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    padding: 16,
+  },
+  spacing1: {
+    margin: 0,
+  },
+});
 
 interface ModalUpdateOptions {
   closable?: boolean;
@@ -78,8 +88,8 @@ const AuthRequiredModalContent = memo<AuthRequiredModalContentProps>(
     }, [onClose]);
 
     return (
-      <Flexbox gap={16} style={{ padding: 16 }}>
-        <p style={{ margin: 0 }}>{t('authModal.description')}</p>
+      <Flexbox gap={16} style={styles.spacing}>
+        <p style={styles.spacing1}>{t('authModal.description')}</p>
         <Flexbox gap={8} horizontal justify="flex-end">
           <Button disabled={isSigningIn} onClick={handleLater}>
             {t('authModal.later')}

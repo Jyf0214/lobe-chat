@@ -2,9 +2,24 @@ import { type PluginRenderProps } from '@lobehub/chat-plugin-sdk/client';
 import { Skeleton } from '@lobehub/ui';
 import { memo, useRef, useState } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { useOnPluginReadyForInteraction } from '../../utils/iframeOnReady';
 import { useOnPluginFetchMessage } from '../../utils/listenToPlugin';
 import { sendMessageContentToPlugin } from '../../utils/postMessage';
+
+const styles = StyleSheet.create({
+  colored: {
+    border: 0,
+    // iframe 在 color-scheme:dark 模式下无法透明
+    // refs: https://www.jianshu.com/p/bc5a37bb6a7b
+    colorScheme: 'light',
+    maxWidth: '100%',
+  },
+  fullWidth: {
+    maxWidth: '100%',
+  },
+});
 
 interface IFrameRenderProps extends PluginRenderProps {
   height?: number;
@@ -15,6 +30,11 @@ interface IFrameRenderProps extends PluginRenderProps {
 const IFrameRender = memo<IFrameRenderProps>(({ url, width = 800, height = 300, ...props }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [loading, setLoading] = useState(true);
+
+  const fullWidthStyle = {
+    ...styles.fullWidth,
+    width,
+  };
 
   // 当 props 发生变化时，主动向 iframe 发送数据
   useOnPluginReadyForInteraction(() => {
@@ -35,7 +55,7 @@ const IFrameRender = memo<IFrameRenderProps>(({ url, width = 800, height = 300, 
 
   return (
     <>
-      {loading && <Skeleton active style={{ maxWidth: '100%', width }} />}
+      {loading && <Skeleton active style={fullWidthStyle} />}
       <iframe
         // @ts-ignore
         allowtransparency="true"
@@ -46,13 +66,7 @@ const IFrameRender = memo<IFrameRenderProps>(({ url, width = 800, height = 300, 
         }}
         ref={iframeRef}
         src={url}
-        style={{
-          border: 0,
-          // iframe 在 color-scheme:dark 模式下无法透明
-          // refs: https://www.jianshu.com/p/bc5a37bb6a7b
-          colorScheme: 'light',
-          maxWidth: '100%',
-        }}
+        style={styles.colored}
         width={width}
       />
     </>

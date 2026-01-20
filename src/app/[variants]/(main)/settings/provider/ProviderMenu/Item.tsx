@@ -9,6 +9,13 @@ import { ProductLogo } from '@/components/Branding/ProductLogo';
 import { isCustomBranding } from '@/const/version';
 import NavItem from '@/features/NavPanel/components/NavItem';
 import { type AiProviderListItem, AiProviderSourceEnum } from '@/types/aiProvider';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    borderRadius: 4,
+  },
+});
 
 interface ProviderItemProps extends AiProviderListItem {
   onClick: (id: string) => void;
@@ -31,13 +38,7 @@ const ProviderItem = memo<ProviderItemProps>(
     const isCustom = source === AiProviderSourceEnum.Custom;
     const providerIcon =
       isCustom && logo ? (
-        <Avatar
-          alt={name || id}
-          avatar={logo}
-          shape={'square'}
-          size={22}
-          style={{ borderRadius: 4 }}
-        />
+        <Avatar alt={name || id} avatar={logo} shape={'square'} size={22} style={styles.style} />
       ) : isCustomBranding && id === BRANDING_PROVIDER ? (
         <ProductLogo size={24} type={'flat'} />
       ) : (
@@ -45,7 +46,7 @@ const ProviderItem = memo<ProviderItemProps>(
           provider={id}
           shape={'square'}
           size={22}
-          style={{ borderRadius: 4 }}
+          style={styles.style}
           type={'avatar'}
         />
       );

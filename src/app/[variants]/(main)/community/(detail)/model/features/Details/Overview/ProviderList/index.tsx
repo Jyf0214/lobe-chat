@@ -14,8 +14,18 @@ import { ModelInfoTags } from '@/components/ModelSelect';
 import { BASE_PROVIDER_DOC_URL } from '@/const/url';
 import { formatPriceByCurrency, formatTokenNumber } from '@/utils/format';
 import { getTextInputUnitRate, getTextOutputUnitRate } from '@/utils/pricing';
+import { StyleSheet } from '@/utils/styles';
 
 import { useDetailContext } from '../../../DetailProvider';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+  },
+  style: {
+    fontWeight: 500,
+  },
+});
 
 const ProviderList = memo(() => {
   const { providers = [] } = useDetailContext();
@@ -31,10 +41,10 @@ const ProviderList = memo(() => {
               key: 'provider',
               render: (_, record) => {
                 return (
-                  <Link style={{ color: 'inherit' }} to={urlJoin('/community/provider', record.id)}>
+                  <Link style={styles.colored} to={urlJoin('/community/provider', record.id)}>
                     <Flexbox align="center" gap={8} horizontal>
                       <ProviderIcon provider={record.id} size={24} type={'avatar'} />
-                      <div style={{ fontWeight: 500 }}>{record.name}</div>
+                      <div style={styles.style}>{record.name}</div>
                     </Flexbox>
                   </Link>
                 );
@@ -167,10 +177,7 @@ const ProviderList = memo(() => {
                         <ActionIcon icon={BookIcon} size={'small'} variant={'filled'} />
                       </a>
                     </Tooltip>
-                    <Link
-                      style={{ color: 'inherit' }}
-                      to={urlJoin('/community/provider', record.id)}
-                    >
+                    <Link style={styles.colored} to={urlJoin('/community/provider', record.id)}>
                       <ActionIcon
                         color={cssVar.colorTextDescription}
                         icon={ChevronRightIcon}

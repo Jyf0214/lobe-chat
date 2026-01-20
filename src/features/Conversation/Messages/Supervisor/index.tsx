@@ -11,6 +11,7 @@ import { ChatItem } from '@/features/Conversation/ChatItem';
 import { useNewScreen } from '@/features/Conversation/Messages/components/useNewScreen';
 import { useAgentGroupStore } from '@/store/agentGroup';
 import { agentGroupSelectors } from '@/store/agentGroup/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { useAgentMeta } from '../../hooks';
 import { dataSelectors, messageStateSelectors, useConversationStore } from '../../store';
@@ -22,11 +23,14 @@ import Usage from '../components/Extras/Usage';
 import MessageBranch from '../components/MessageBranch';
 import Group from './components/Group';
 
+const styles = StyleSheet.create({
+  style: {
+    height: '28px',
+  },
+});
+
 const actionBarHolder = (
-  <div
-    {...{ [MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES.assistantGroup]: '' }}
-    style={{ height: '28px' }}
-  />
+  <div {...{ [MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES.assistantGroup]: '' }} style={styles.style} />
 );
 interface GroupMessageProps {
   disableEditing?: boolean;

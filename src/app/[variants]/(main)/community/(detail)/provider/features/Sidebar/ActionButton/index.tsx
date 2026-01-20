@@ -7,10 +7,17 @@ import { useTranslation } from 'react-i18next';
 import urlJoin from 'url-join';
 
 import { OFFICIAL_URL } from '@/const/url';
+import { StyleSheet } from '@/utils/styles';
 
 import ShareButton from '../../../../features/ShareButton';
 import { useDetailContext } from '../../DetailProvider';
 import ProviderConfig from './ProviderConfig';
+
+const styles = StyleSheet.create({
+  spacing: {
+    margin: 0,
+  },
+});
 
 const ActionButton = memo(() => {
   const { models = [], identifier, name } = useDetailContext();
@@ -28,7 +35,7 @@ const ActionButton = memo(() => {
                 .slice(0, 4)
                 .filter(Boolean)
                 .map((item) => (
-                  <ModelTag key={item.id} model={item.id} style={{ margin: 0 }} />
+                  <ModelTag key={item.id} model={item.id} style={styles.spacing} />
                 ))}
               {models.length > 3 && <Tag>+{models.length - 3}</Tag>}
             </Flexbox>

@@ -6,8 +6,15 @@ import { ListChecksIcon, Loader2, XIcon } from 'lucide-react';
 import { memo } from 'react';
 
 import { ThreadStatus } from '@/types/index';
+import { StyleSheet } from '@/utils/styles';
 
 import { isProcessingStatus } from '../shared';
+
+const styles = StyleSheet.create({
+  style: {
+    fontSize: 12,
+  },
+});
 
 interface TaskTitleProps {
   status?: ThreadStatus;
@@ -40,9 +47,7 @@ const TaskStatusIndicator = memo<{ status?: ThreadStatus }>(({ status }) => {
       height={24}
       horizontal
       justify={'center'}
-      style={{
-        fontSize: 12,
-      }}
+      style={styles.style}
       variant={'outlined'}
       width={24}
     >

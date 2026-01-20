@@ -5,11 +5,18 @@ import { memo, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { type GlobalLLMProviderKey } from '@/types/user/settings';
+import { StyleSheet } from '@/utils/styles';
 
 import BedrockForm from './Bedrock';
 import ComfyUIForm from './ComfyUIForm';
 import { LoadingContext } from './LoadingContext';
 import ProviderApiKeyForm from './ProviderApiKeyForm';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginTop: 8,
+  },
+});
 
 interface APIKeyFormProps {
   bedrockDescription: string;
@@ -22,6 +29,10 @@ interface APIKeyFormProps {
 
 const APIKeyForm = memo<APIKeyFormProps>(
   ({ provider, description, bedrockDescription, onRecreate, onClose }) => {
+    const styleObject = {
+      maxWidth: provider === ModelProvider.ComfyUI ? 900 : 300,
+      width: provider === ModelProvider.ComfyUI ? '80%' : 'auto',
+    };
     const { t } = useTranslation('error');
     const [loading, setLoading] = useState(false);
 
@@ -67,13 +78,7 @@ const APIKeyForm = memo<APIKeyFormProps>(
 
     return (
       <LoadingContext value={{ loading, setLoading }}>
-        <Center
-          gap={16}
-          style={{
-            maxWidth: provider === ModelProvider.ComfyUI ? 900 : 300,
-            width: provider === ModelProvider.ComfyUI ? '80%' : 'auto',
-          }}
-        >
+        <Center gap={16} style={styleObject}>
           {provider === ModelProvider.Bedrock ? (
             <BedrockForm description={bedrockDescription} />
           ) : provider === ModelProvider.ComfyUI ? (
@@ -94,7 +99,7 @@ const APIKeyForm = memo<APIKeyFormProps>(
               onClick={() => {
                 onRecreate();
               }}
-              style={{ marginTop: 8 }}
+              style={styles.spacing}
               type={'primary'}
             >
               {t('unlock.confirm')}

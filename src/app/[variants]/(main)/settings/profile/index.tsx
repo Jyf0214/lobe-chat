@@ -13,6 +13,7 @@ import { useToolStore } from '@/store/tool';
 import { KlavisServerStatus } from '@/store/tool/slices/klavisStore';
 import { useUserStore } from '@/store/user';
 import { authSelectors, userProfileSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import AvatarRow from './features/AvatarRow';
 import FullNameRow from './features/FullNameRow';
@@ -22,6 +23,12 @@ import PasswordRow from './features/PasswordRow';
 import ProfileRow, { labelStyle, rowStyle } from './features/ProfileRow';
 import SSOProvidersList from './features/SSOProvidersList';
 import UsernameRow from './features/UsernameRow';
+
+const styles = StyleSheet.create({
+  spacing1: {
+    margin: 0,
+  },
+});
 
 const SkeletonRow = ({ mobile }: { mobile?: boolean }) => {
   if (mobile) {
@@ -92,28 +99,28 @@ const ProfileSetting = ({ mobile }: ProfileSettingProps) => {
       <FormGroup collapsible={false} gap={16} title={t('profile.account')} variant={'filled'}>
         <Flexbox style={{ display: isLoading ? 'flex' : 'none' }}>
           <SkeletonRow mobile={mobile} />
-          <Divider style={{ margin: 0 }} />
+          <Divider style={styles.spacing1} />
           <SkeletonRow mobile={mobile} />
-          <Divider style={{ margin: 0 }} />
+          <Divider style={styles.spacing1} />
           <SkeletonRow mobile={mobile} />
-          <Divider style={{ margin: 0 }} />
+          <Divider style={styles.spacing1} />
           <SkeletonRow mobile={mobile} />
         </Flexbox>
         <Flexbox style={{ display: isLoading ? 'none' : 'flex' }}>
           {/* Avatar Row - Editable */}
           <AvatarRow mobile={mobile} />
 
-          <Divider style={{ margin: 0 }} />
+          <Divider style={styles.spacing1} />
 
           {/* Full Name Row - Editable */}
           <FullNameRow mobile={mobile} />
 
-          <Divider style={{ margin: 0 }} />
+          <Divider style={styles.spacing1} />
 
           {/* Username Row - Editable */}
           <UsernameRow mobile={mobile} />
 
-          <Divider style={{ margin: 0 }} />
+          <Divider style={styles.spacing1} />
 
           {/* Interests Row - Editable */}
           <InterestsRow mobile={mobile} />
@@ -121,7 +128,7 @@ const ProfileSetting = ({ mobile }: ProfileSettingProps) => {
           {/* Password Row - For Better Auth users to change or set password */}
           {!isDesktop && isLoginWithBetterAuth && (
             <>
-              <Divider style={{ margin: 0 }} />
+              <Divider style={styles.spacing1} />
               <PasswordRow mobile={mobile} />
             </>
           )}
@@ -129,7 +136,7 @@ const ProfileSetting = ({ mobile }: ProfileSettingProps) => {
           {/* Email Row - Read Only */}
           {isLoginWithAuth && userProfile?.email && (
             <>
-              <Divider style={{ margin: 0 }} />
+              <Divider style={styles.spacing1} />
               <ProfileRow label={t('profile.email')} mobile={mobile}>
                 <Text>{userProfile.email}</Text>
               </ProfileRow>
@@ -139,7 +146,7 @@ const ProfileSetting = ({ mobile }: ProfileSettingProps) => {
           {/* SSO Providers Row */}
           {isLoginWithAuth && (
             <>
-              <Divider style={{ margin: 0 }} />
+              <Divider style={styles.spacing1} />
               <ProfileRow label={t('profile.sso.providers')} mobile={mobile}>
                 <SSOProvidersList />
               </ProfileRow>
@@ -149,7 +156,7 @@ const ProfileSetting = ({ mobile }: ProfileSettingProps) => {
           {/* Klavis Authorizations Row */}
           {enableKlavis && connectedServers.length > 0 && (
             <>
-              <Divider style={{ margin: 0 }} />
+              <Divider style={styles.spacing1} />
               <ProfileRow label={t('profile.authorizations.title')} mobile={mobile}>
                 <KlavisAuthorizationList servers={connectedServers} />
               </ProfileRow>

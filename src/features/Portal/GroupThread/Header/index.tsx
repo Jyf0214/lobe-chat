@@ -10,6 +10,16 @@ import { useAgentGroupStore } from '@/store/agentGroup';
 import { useChatStore } from '@/store/chat';
 import { useSessionStore } from '@/store/session';
 import { sessionSelectors } from '@/store/session/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorBgContainer,
+  },
+  style: {
+    fontWeight: 600,
+  },
+});
 
 const Header = memo(() => {
   const clearPortalStack = useChatStore((s) => s.clearPortalStack);
@@ -32,7 +42,7 @@ const Header = memo(() => {
             shape={'square'}
             size={20}
           />
-          <div style={{ fontWeight: 600 }}>
+          <div style={styles.style}>
             {currentAgent?.title || t('defaultSession', { ns: 'common' })}
           </div>
         </Flexbox>
@@ -45,9 +55,7 @@ const Header = memo(() => {
         </Flexbox>
       }
       showTogglePanelButton={false}
-      style={{
-        background: cssVar.colorBgContainer,
-      }}
+      style={styles.colored}
     />
   );
 });

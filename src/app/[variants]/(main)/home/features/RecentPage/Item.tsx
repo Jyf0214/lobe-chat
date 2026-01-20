@@ -9,6 +9,31 @@ import { memo } from 'react';
 import Time from '@/app/[variants]/(main)/home/features/components/Time';
 import { RECENT_BLOCK_SIZE } from '@/app/[variants]/(main)/home/features/const';
 import { type FileListItem } from '@/types/files';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorFillTertiary,
+    overflow: 'hidden',
+  },
+  spacing: {
+    marginTop: -28,
+  },
+  spacing1: {
+    marginLeft: -4,
+  },
+  style: {
+    borderRadius: cssVar.borderRadiusLG,
+    overflow: 'hidden',
+  },
+  style1: {
+    fontSize: 14,
+    lineHeight: 1.4,
+  },
+  style2: {
+    lineHeight: 1.5,
+  },
+});
 
 // Helper to extract title from markdown content
 const extractTitle = (content: string): string | null => {
@@ -50,45 +75,25 @@ const RecentPageItem = memo<RecentPageItemProps>(({ document }) => {
       clickable
       flex={'none'}
       height={RECENT_BLOCK_SIZE.PAGE.HEIGHT}
-      style={{
-        borderRadius: cssVar.borderRadiusLG,
-        overflow: 'hidden',
-      }}
+      style={styles.style}
       variant={'outlined'}
       width={RECENT_BLOCK_SIZE.PAGE.WIDTH}
     >
-      <Center
-        flex={'none'}
-        height={44}
-        style={{
-          background: cssVar.colorFillTertiary,
-          overflow: 'hidden',
-        }}
-      />
+      <Center flex={'none'} height={44} style={styles.colored} />
       <Flexbox flex={1} gap={6} justify={'space-between'} padding={12}>
-        <Flexbox
-          gap={6}
-          style={{
-            marginTop: -28,
-          }}
-        >
+        <Flexbox gap={6} style={styles.spacing}>
           {emoji ? (
             <Avatar avatar={emoji} shape={'square'} size={30} />
           ) : (
-            <Center flex={'none'} height={30} style={{ marginLeft: -4 }} width={30}>
+            <Center flex={'none'} height={30} style={styles.spacing1} width={30}>
               <Icon color={cssVar.colorTextDescription} icon={FileTextIcon} size={24} />
             </Center>
           )}
-          <Text ellipsis={{ rows: 2 }} style={{ fontSize: 14, lineHeight: 1.4 }} weight={500}>
+          <Text ellipsis={{ rows: 2 }} style={styles.style1} weight={500}>
             {title}
           </Text>
           {previewText && (
-            <Text
-              ellipsis={{ rows: 2 }}
-              fontSize={13}
-              style={{ lineHeight: 1.5 }}
-              type={'secondary'}
-            >
+            <Text ellipsis={{ rows: 2 }} fontSize={13} style={styles.style2} type={'secondary'}>
               {previewText}
             </Text>
           )}

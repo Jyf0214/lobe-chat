@@ -17,9 +17,16 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAiInfraStore } from '@/store/aiInfra/store';
 import { type CreateAiProviderParams } from '@/types/aiProvider';
+import { StyleSheet } from '@/utils/styles';
 
 import { KeyVaultsConfigKey, LLMProviderApiTokenKey, LLMProviderBaseUrlKey } from '../../const';
 import { CUSTOM_PROVIDER_SDK_OPTIONS } from '../customProviderSdkOptions';
+
+const styles = StyleSheet.create({
+  style: {
+    minHeight: 80,
+  },
+});
 
 interface CreateNewProviderProps {
   onClose?: () => void;
@@ -91,7 +98,7 @@ const CreateNewProvider = memo<CreateNewProviderProps>(({ onClose, open }) => {
       children: (
         <TextArea
           placeholder={t('createNewAiProvider.description.placeholder')}
-          style={{ minHeight: 80 }}
+          style={styles.style}
           variant={'filled'}
         />
       ),

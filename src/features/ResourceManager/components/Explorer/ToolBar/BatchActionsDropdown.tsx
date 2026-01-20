@@ -13,8 +13,15 @@ import { useTranslation } from 'react-i18next';
 import { useResourceManagerStore } from '@/app/[variants]/(main)/resource/features/store';
 import RepoIcon from '@/components/LibIcon';
 import { useKnowledgeBaseStore } from '@/store/library';
+import { StyleSheet } from '@/utils/styles';
 
 import ActionIconWithChevron from './ActionIconWithChevron';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginLeft: 8,
+  },
+});
 
 export type MultiSelectActionType =
   | 'addToKnowledgeBase'
@@ -75,7 +82,7 @@ const BatchActionsDropdown = memo<BatchActionsDropdownProps>(({ selectCount, onA
       disabled: selectCount === 0,
       icon: <RepoIcon />,
       key: `add-to-kb-${kb.id}`,
-      label: <span style={{ marginLeft: 8 }}>{kb.name}</span>,
+      label: <span style={styles.spacing}>{kb.name}</span>,
       onClick: async () => {
         try {
           await addFilesToKnowledgeBase(kb.id, selectedFileIds);

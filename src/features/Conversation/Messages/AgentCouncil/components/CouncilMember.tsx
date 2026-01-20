@@ -10,6 +10,7 @@ import ErrorMessageExtra, { useErrorContent } from '@/features/Conversation/Erro
 import { AssistantMessageExtra } from '@/features/Conversation/Messages/Assistant/Extra';
 import { normalizeThinkTags, processWithArtifact } from '@/features/Conversation/utils/markdown';
 import type { UIChatMessage } from '@/types/index';
+import { StyleSheet } from '@/utils/styles';
 
 import { useAgentMeta } from '../../../hooks';
 import { messageStateSelectors, useConversationStore } from '../../../store';
@@ -20,8 +21,14 @@ import {
 } from '../../Contexts/message-action-context';
 import AutoScrollShadow from './AutoScrollShadow';
 
+const styles = StyleSheet.create({
+  style: {
+    height: '28px',
+  },
+});
+
 const actionBarHolder = (
-  <div {...{ [MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES.assistant]: '' }} style={{ height: '28px' }} />
+  <div {...{ [MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES.assistant]: '' }} style={styles.style} />
 );
 
 interface CouncilMemberProps {

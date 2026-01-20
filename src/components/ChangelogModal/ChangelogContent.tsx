@@ -11,8 +11,15 @@ import { OFFICIAL_SITE } from '@/const/url';
 import type { Locales } from '@/locales/resources';
 import { ChangelogService } from '@/server/services/changelog';
 import type { ChangelogIndexItem } from '@/types/changelog';
+import { StyleSheet } from '@/utils/styles';
 
 import VersionTag from './VersionTag';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+  },
+});
 
 interface ChangelogContentProps {
   data: ChangelogIndexItem[];
@@ -38,7 +45,7 @@ const PostItem = ({ id, versionRange, locale, showDivider = true }: PostItemProp
         <a
           href={urlJoin(OFFICIAL_SITE, '/changelog', id)}
           rel="noopener noreferrer"
-          style={{ color: 'inherit' }}
+          style={styles.colored}
           target="_blank"
         >
           <h2 id={id}>{data.rawTitle || data.title}</h2>

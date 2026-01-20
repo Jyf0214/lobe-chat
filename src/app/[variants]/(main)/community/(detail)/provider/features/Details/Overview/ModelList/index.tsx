@@ -13,8 +13,25 @@ import InlineTable from '@/components/InlineTable';
 import { ModelInfoTags } from '@/components/ModelSelect';
 import { formatPriceByCurrency, formatTokenNumber } from '@/utils/format';
 import { getTextInputUnitRate, getTextOutputUnitRate } from '@/utils/pricing';
+import { StyleSheet } from '@/utils/styles';
 
 import { useDetailContext } from '../../../DetailProvider';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+  },
+  colored1: {
+    color: cssVar.colorTextSecondary,
+    fontSize: 12,
+  },
+  style: {
+    overflow: 'hidden',
+  },
+  style1: {
+    fontWeight: 500,
+  },
+});
 
 const ModelList = memo(() => {
   const { models = [] } = useDetailContext();
@@ -30,14 +47,12 @@ const ModelList = memo(() => {
               key: 'model',
               render: (_, record) => {
                 return (
-                  <Link style={{ color: 'inherit' }} to={urlJoin('/community/model', record.id)}>
+                  <Link style={styles.colored} to={urlJoin('/community/model', record.id)}>
                     <Flexbox align="center" gap={8} horizontal>
                       <ModelIcon model={record.id} size={24} type={'avatar'} />
-                      <Flexbox style={{ overflow: 'hidden' }}>
-                        <div style={{ fontWeight: 500 }}>{record.displayName}</div>
-                        <div style={{ color: cssVar.colorTextSecondary, fontSize: 12 }}>
-                          {record.id}
-                        </div>
+                      <Flexbox style={styles.style}>
+                        <div style={styles.style1}>{record.displayName}</div>
+                        <div style={styles.colored1}>{record.id}</div>
                       </Flexbox>
                     </Flexbox>
                   </Link>
@@ -132,7 +147,7 @@ const ModelList = memo(() => {
               render: (_, record) => {
                 return (
                   <Flexbox align="center" gap={4} horizontal justify={'flex-end'}>
-                    <Link style={{ color: 'inherit' }} to={urlJoin('/community/model', record.id)}>
+                    <Link style={styles.colored} to={urlJoin('/community/model', record.id)}>
                       <ActionIcon
                         color={cssVar.colorTextDescription}
                         icon={ChevronRightIcon}

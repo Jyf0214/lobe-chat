@@ -9,6 +9,16 @@ import { useNavigate } from 'react-router-dom';
 import { useMarketAuth, useMarketUserProfile } from '@/layout/AuthProvider/MarketAuth';
 import { useServerConfigStore } from '@/store/serverConfig';
 import { serverConfigSelectors } from '@/store/serverConfig/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    borderRadius: 6,
+  },
+  style1: {
+    height: 30,
+  },
+});
 
 /**
  * 检查用户是否需要完善资料
@@ -76,7 +86,7 @@ const UserAvatar = memo(() => {
   }, [navigate, userProfile?.userName, userProfile?.namespace]);
 
   if (isLoading) {
-    return <Skeleton.Avatar active shape={'square'} size={28} style={{ borderRadius: 6 }} />;
+    return <Skeleton.Avatar active shape={'square'} size={28} style={styles.style} />;
   }
 
   // 如果启用了 trustedClient，不显示"成为创作者"按钮，直接显示头像
@@ -87,9 +97,7 @@ const UserAvatar = memo(() => {
         icon={UserCircleIcon}
         loading={loading}
         onClick={handleSignIn}
-        style={{
-          height: 30,
-        }}
+        style={styles.style1}
         type="text"
       >
         {t('user.login')}

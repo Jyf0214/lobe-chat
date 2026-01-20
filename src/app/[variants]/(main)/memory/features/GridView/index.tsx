@@ -3,8 +3,15 @@ import { type ReactNode, forwardRef, memo } from 'react';
 import { VirtuosoGrid } from 'react-virtuoso';
 
 import Loading from '@/app/[variants]/(main)/memory/features/Loading';
+import { StyleSheet } from '@/utils/styles';
 
 import { useScrollParent } from '../TimeLineView/useScrollParent';
+
+const styles = StyleSheet.create({
+  style: {
+    minHeight: '100%',
+  },
+});
 
 interface GridViewProps<T> {
   /**
@@ -87,7 +94,7 @@ function GridViewInner<T extends { id: string }>({
         return renderItem(item, actions);
       }}
       overscan={48}
-      style={{ minHeight: '100%' }}
+      style={styles.style}
     />
   );
 }

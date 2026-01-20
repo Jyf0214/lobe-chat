@@ -3,13 +3,22 @@
 import type { IconType } from '@lobehub/icons';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+    lineHeight: 1,
+  },
+});
+
 const OfficialIcon: IconType = memo(({ size = 18, style, fill = '#1d9bf0', ...rest }) => {
   return (
     <svg
       fill={fill}
       fillRule="evenodd"
       height={size}
-      style={{ flex: 'none', lineHeight: 1, ...style }}
+      style={StyleSheet.compose(styles.flexContainer, style)}
       viewBox="0 0 22 22"
       width={size}
       xmlns="http://www.w3.org/2000/svg"

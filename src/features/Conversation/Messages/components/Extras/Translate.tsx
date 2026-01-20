@@ -7,8 +7,15 @@ import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import BubblesLoading from '@/components/BubblesLoading';
+import { StyleSheet } from '@/utils/styles';
 
 import { useConversationStore } from '../../../store';
+
+const styles = StyleSheet.create({
+  spacing: {
+    margin: 0,
+  },
+});
 
 interface TranslateProps extends ChatTranslate {
   id: string;
@@ -26,7 +33,7 @@ const Translate = memo<TranslateProps>(({ content = '', from, to, id, loading })
       <Flexbox align={'center'} horizontal justify={'space-between'}>
         <div>
           <Flexbox gap={4} horizontal>
-            <Tag style={{ margin: 0 }}>{from ? t(`lang.${from}` as any) : '...'}</Tag>
+            <Tag style={styles.spacing}>{from ? t(`lang.${from}` as any) : '...'}</Tag>
             <Icon color={cssVar.colorTextTertiary} icon={ChevronsRight} />
             <Tag>{t(`lang.${to}` as any)}</Tag>
           </Flexbox>

@@ -10,6 +10,13 @@ import UserInfo from '@/features/User/UserInfo';
 import UserLoginOrSignup from '@/features/User/UserLoginOrSignup/Community';
 import { useUserStore } from '@/store/user';
 import { authSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+  },
+});
 
 const UserBanner = memo(() => {
   const isLoginWithAuth = useUserStore(authSelectors.isLoginWithAuth);
@@ -19,10 +26,10 @@ const UserBanner = memo(() => {
     <Flexbox gap={12} paddingBlock={8}>
       {!enableAuth || (enableAuth && isLoginWithAuth) ? (
         <>
-          <Link style={{ color: 'inherit' }} to="/settings/profile">
+          <Link style={styles.colored} to="/settings/profile">
             <UserInfo />
           </Link>
-          <Link style={{ color: 'inherit' }} to="/settings/stats">
+          <Link style={styles.colored} to="/settings/stats">
             <DataStatistics paddingInline={12} />
           </Link>
         </>

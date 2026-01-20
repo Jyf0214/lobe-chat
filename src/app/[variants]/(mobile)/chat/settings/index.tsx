@@ -15,6 +15,13 @@ import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
 import { ChatSettingsTabs } from '@/store/global/initialState';
 import { useSessionStore } from '@/store/session';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    borderBottom: `1px solid ${cssVar.colorBorderSecondary}`,
+  },
+});
 
 export default memo(() => {
   const { t } = useTranslation('setting');
@@ -40,9 +47,7 @@ export default memo(() => {
         compact
         items={cateItems as any}
         onChange={(value) => setTab(value as ChatSettingsTabs)}
-        style={{
-          borderBottom: `1px solid ${cssVar.colorBorderSecondary}`,
-        }}
+        style={styles.colored}
       />
       <AgentSettings
         config={config}

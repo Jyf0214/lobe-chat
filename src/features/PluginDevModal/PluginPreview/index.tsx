@@ -10,9 +10,23 @@ import ManifestPreviewer from '@/components/ManifestPreviewer';
 import PluginAvatar from '@/components/Plugins/PluginAvatar';
 import PluginTag from '@/components/Plugins/PluginTag';
 import { pluginHelpers } from '@/store/tool';
+import { StyleSheet } from '@/utils/styles';
 
 import ApiVisualizer from './ApiVisualizer';
 import PluginEmptyState from './EmptyState';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorBgLayout,
+  },
+  colored1: {
+    background: cssVar.colorBgLayout,
+    overflowY: 'auto',
+  },
+  style: {
+    fontSize: 12,
+  },
+});
 
 const PluginPreview = memo<{ form: FormInstance }>(({ form }) => {
   const { t } = useTranslation('plugin');
@@ -21,18 +35,13 @@ const PluginPreview = memo<{ form: FormInstance }>(({ form }) => {
 
   if (!manifest)
     return (
-      <Flexbox flex={2} height={'100%'} style={{ background: cssVar.colorBgLayout }}>
+      <Flexbox flex={2} height={'100%'} style={styles.colored}>
         <PluginEmptyState />
       </Flexbox>
     );
 
   return (
-    <Flexbox
-      flex={2}
-      gap={24}
-      padding={12}
-      style={{ background: cssVar.colorBgLayout, overflowY: 'auto' }}
-    >
+    <Flexbox flex={2} gap={24} padding={12} style={styles.colored1}>
       <Block
         gap={16}
         horizontal
@@ -48,7 +57,7 @@ const PluginPreview = memo<{ form: FormInstance }>(({ form }) => {
               {pluginHelpers.getPluginTitle(meta) || 'Plugin Title'}
               <PluginTag type={'customPlugin'} />
             </Flexbox>
-            <Text style={{ fontSize: 12 }} type={'secondary'}>
+            <Text style={styles.style} type={'secondary'}>
               {pluginHelpers.getPluginDesc(meta) || 'Plugin Description'}
             </Text>
           </Flexbox>

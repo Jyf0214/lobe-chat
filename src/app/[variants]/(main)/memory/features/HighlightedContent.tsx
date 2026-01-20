@@ -2,6 +2,15 @@ import { Flexbox, Markdown, Text } from '@lobehub/ui';
 import { cssVar } from 'antd-style';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorText,
+    overflow: 'visible',
+  },
+});
+
 interface HighlightedContentProps {
   children?: string | null;
   title?: string | null;
@@ -10,14 +19,7 @@ interface HighlightedContentProps {
 const HighlightedContent = memo<HighlightedContentProps>(({ title, children }) => {
   if (!children) return;
   const content = (
-    <Markdown
-      fontSize={14}
-      style={{
-        color: cssVar.colorText,
-        overflow: 'visible',
-      }}
-      variant={'chat'}
-    >
+    <Markdown fontSize={14} style={styles.colored} variant={'chat'}>
       {children || ''}
     </Markdown>
   );

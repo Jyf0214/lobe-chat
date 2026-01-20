@@ -9,8 +9,15 @@ import SkeletonList from '@/features/NavPanel/components/SkeletonList';
 import TopicEmpty from '@/features/TopicEmpty';
 import { useChatStore } from '@/store/chat';
 import { topicSelectors } from '@/store/chat/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import TopicItem from '../List/Item';
+
+const styles = StyleSheet.create({
+  style: {
+    height: '100%',
+  },
+});
 
 const ITEM_HEIGHT = 44; // Each topic item height
 
@@ -155,7 +162,7 @@ const Content = memo<ContentProps>(({ open, searchKeyword }) => {
       bufferSize={typeof window !== 'undefined' ? window.innerHeight : 0}
       onScroll={handleScroll}
       ref={virtuaRef}
-      style={{ height: '100%' }}
+      style={styles.style}
     >
       {activeTopicList?.map((topic) => (
         <Flexbox gap={1} key={topic.id} padding={'4px 8px'}>

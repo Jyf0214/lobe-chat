@@ -9,6 +9,13 @@ import ManifestPreviewer from '@/components/ManifestPreviewer';
 import { useAgentStore } from '@/store/agent';
 import { useToolStore } from '@/store/tool';
 import { customPluginSelectors, toolSelectors } from '@/store/tool/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginRight: 0,
+  },
+});
 
 interface PluginStatusProps {
   deprecated?: boolean;
@@ -55,7 +62,7 @@ const PluginStatus = memo<PluginStatusProps>(({ title, id, deprecated }) => {
   const tag =
     // 拒绝标签
     deprecated ? (
-      <Tag color={'red'} style={{ marginRight: 0 }} variant={'filled'}>
+      <Tag color={'red'} style={styles.spacing} variant={'filled'}>
         {t('list.item.deprecated.title', { ns: 'plugin' })}
       </Tag>
     ) : // 自定义标签

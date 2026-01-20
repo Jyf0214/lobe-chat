@@ -6,9 +6,17 @@ import { useTranslation } from 'react-i18next';
 
 import { useAgentStore } from '@/store/agent';
 import { chatConfigByIdSelectors } from '@/store/agent/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { useAgentId } from '../../hooks/useAgentId';
 import { useUpdateAgentConfig } from '../../hooks/useUpdateAgentConfig';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBlock: 8,
+    paddingLeft: 4,
+  },
+});
 
 interface ControlsProps {
   setUpdating: (updating: boolean) => void;
@@ -50,7 +58,7 @@ const Controls = memo<ControlsProps>(({ updating, setUpdating }) => {
           min={0}
           size={'small'}
           step={1}
-          style={{ marginBlock: 8, paddingLeft: 4 }}
+          style={styles.spacing}
           styles={{
             input: {
               maxWidth: 64,

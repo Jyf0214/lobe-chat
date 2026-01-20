@@ -14,6 +14,13 @@ import hotkeyMeta from '@/locales/default/hotkey';
 import { useElectronStore } from '@/store/electron';
 import { desktopHotkeysSelectors } from '@/store/electron/selectors';
 import { type DesktopHotkeyItem } from '@/types/hotkey';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    opacity: 0.5,
+  },
+});
 
 const HotkeySetting = memo(() => {
   const { t } = useTranslation(['setting', 'hotkey']);
@@ -70,7 +77,7 @@ const HotkeySetting = memo(() => {
 
   const desktop: FormGroupItemType = {
     children: DESKTOP_HOTKEYS_REGISTRATION.map((item) => mapHotkeyItem(item)),
-    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />,
+    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={styles.style} />,
     title: t('hotkey.group.desktop'),
   };
 

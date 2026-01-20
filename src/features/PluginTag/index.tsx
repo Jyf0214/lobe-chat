@@ -8,8 +8,15 @@ import { memo } from 'react';
 import Avatar from '@/components/Plugins/PluginAvatar';
 import { pluginHelpers, useToolStore } from '@/store/tool';
 import { toolSelectors } from '@/store/tool/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import PluginStatus from './PluginStatus';
+
+const styles = StyleSheet.create({
+  style: {
+    minWidth: 24,
+  },
+});
 
 export interface PluginTagProps {
   plugins: string[];
@@ -30,7 +37,7 @@ const PluginTag = memo<PluginTagProps>(({ plugins }) => {
 
     return {
       icon: (
-        <Center style={{ minWidth: 24 }}>
+        <Center style={styles.style}>
           <Avatar avatar={avatar} size={24} />
         </Center>
       ),

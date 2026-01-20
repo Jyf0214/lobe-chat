@@ -6,6 +6,13 @@ import { memo } from 'react';
 import useMergeState from 'use-merge-value';
 
 import { useIsDark } from '@/hooks/useIsDark';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginTop: 4,
+  },
+});
 
 export interface AspectRatioSelectProps extends Omit<GridProps, 'children' | 'onChange'> {
   defaultValue?: string;
@@ -30,6 +37,19 @@ const AspectRatioSelect = memo<AspectRatioSelectProps>(
             const [width, height] = item.value.split(':').map(Number);
             const isWidthGreater = width > height;
             const isActive = active === item.value;
+
+            const coloredStyle = {
+              backgroundColor: isActive ? cssVar.colorBgElevated : 'transparent',
+            };
+
+            const colored1Style = {
+              aspectRatio: `${width} / ${height}`,
+              border: `2px solid ${isActive ? cssVar.colorText : cssVar.colorTextDescription}`,
+              borderRadius: 3,
+              height: isWidthGreater ? undefined : 16,
+              width: isWidthGreater ? 16 : undefined,
+            };
+
             return (
               <Block
                 align={'center'}
@@ -43,21 +63,11 @@ const AspectRatioSelect = memo<AspectRatioSelectProps>(
                 }}
                 padding={8}
                 shadow={isActive && !isDarkMode}
-                style={{
-                  backgroundColor: isActive ? cssVar.colorBgElevated : 'transparent',
-                }}
+                style={coloredStyle}
                 variant={'filled'}
               >
-                <Center height={16} style={{ marginTop: 4 }} width={16}>
-                  <div
-                    style={{
-                      aspectRatio: `${width} / ${height}`,
-                      border: `2px solid ${isActive ? cssVar.colorText : cssVar.colorTextDescription}`,
-                      borderRadius: 3,
-                      height: isWidthGreater ? undefined : 16,
-                      width: isWidthGreater ? 16 : undefined,
-                    }}
-                  />
+                <Center height={16} style={styles.spacing} width={16}>
+                  <div style={colored1Style} />
                 </Center>
                 <Text fontSize={12} type={isActive ? undefined : 'secondary'}>
                   {item.label || item.value}

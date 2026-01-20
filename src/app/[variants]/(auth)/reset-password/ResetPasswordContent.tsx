@@ -3,7 +3,18 @@ import { Form } from 'antd';
 import { Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { useResetPassword } from './useResetPassword';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginInline: 6,
+  },
+  spacing1: {
+    marginBottom: 0,
+  },
+});
 
 interface ResetPasswordContentProps {
   email: string | null;
@@ -45,14 +56,7 @@ export const ResetPasswordContent = ({
       >
         <InputPassword
           placeholder={t('betterAuth.resetPassword.newPasswordPlaceholder')}
-          prefix={
-            <Icon
-              icon={Lock}
-              style={{
-                marginInline: 6,
-              }}
-            />
-          }
+          prefix={<Icon icon={Lock} style={styles.spacing} />}
           size="large"
         />
       </Form.Item>
@@ -71,18 +75,11 @@ export const ResetPasswordContent = ({
       >
         <InputPassword
           placeholder={t('betterAuth.resetPassword.confirmPasswordPlaceholder')}
-          prefix={
-            <Icon
-              icon={Lock}
-              style={{
-                marginInline: 6,
-              }}
-            />
-          }
+          prefix={<Icon icon={Lock} style={styles.spacing} />}
           size="large"
         />
       </Form.Item>
-      <Form.Item style={{ marginBottom: 0 }}>
+      <Form.Item style={styles.spacing1}>
         <Button block htmlType="submit" loading={loading} size="large" type="primary">
           {t('betterAuth.resetPassword.submit')}
         </Button>

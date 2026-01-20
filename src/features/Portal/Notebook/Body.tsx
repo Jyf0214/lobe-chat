@@ -8,8 +8,15 @@ import { useTranslation } from 'react-i18next';
 
 import { useFetchNotebookDocuments } from '@/hooks/useFetchNotebookDocuments';
 import { useChatStore } from '@/store/chat';
+import { StyleSheet } from '@/utils/styles';
 
 import DocumentItem from './DocumentItem';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'auto',
+  },
+});
 
 const NotebookBody = memo(() => {
   const { t } = useTranslation('portal');
@@ -45,7 +52,7 @@ const NotebookBody = memo(() => {
 
   // Render document list
   return (
-    <Flexbox gap={8} height={'100%'} paddingInline={12} style={{ overflow: 'auto' }}>
+    <Flexbox gap={8} height={'100%'} paddingInline={12} style={styles.style}>
       {documents.map((doc) => (
         <DocumentItem document={doc} key={doc.id} topicId={topicId} />
       ))}

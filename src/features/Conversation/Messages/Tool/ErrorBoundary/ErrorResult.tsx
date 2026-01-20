@@ -3,6 +3,16 @@
 import { Alert, Highlighter } from '@lobehub/ui';
 import { type ErrorInfo, memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    overflow: 'hidden',
+    position: 'relative',
+    width: '100%',
+  },
+});
+
 interface ErrorDisplayProps {
   apiName?: string;
   error: Error | null;
@@ -28,11 +38,7 @@ export const ErrorDisplay = memo<ErrorDisplayProps>(({ error, identifier, apiNam
       extraIsolate={false}
       message={error?.message || 'An unknown error occurred'}
       showIcon
-      style={{
-        overflow: 'hidden',
-        position: 'relative',
-        width: '100%',
-      }}
+      style={styles.fullWidth}
       title={title}
       type="secondary"
     />

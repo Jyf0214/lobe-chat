@@ -12,8 +12,24 @@ import { useAiInfraStore } from '@/store/aiInfra';
 import { aiModelSelectors } from '@/store/aiInfra/selectors';
 import { useGlobalStore } from '@/store/global';
 import { systemStatusSelectors } from '@/store/global/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import ModelItem from './ModelItem';
+
+const styles = StyleSheet.create({
+  spacing: {
+    fontSize: 12,
+    marginTop: 8,
+  },
+  spacing1: {
+    fontSize: 12,
+    marginTop: 4,
+  },
+  style: {
+    height: 1,
+    width: '0',
+  },
+});
 
 interface DisabledModelsProps {
   activeTab: string;
@@ -236,7 +252,7 @@ const DisabledModels = memo<DisabledModelsProps>(({ activeTab, providerId }) => 
     shouldRenderSection && (
       <Flexbox>
         <Flexbox align="center" horizontal justify="space-between">
-          <Text style={{ fontSize: 12, marginTop: 8 }} type={'secondary'}>
+          <Text style={styles.spacing} type={'secondary'}>
             {t('providerModels.list.disabled')}
           </Text>
           {sourceDisabledModels.length > 1 && (
@@ -304,9 +320,9 @@ const DisabledModels = memo<DisabledModelsProps>(({ activeTab, providerId }) => 
         </TooltipGroup>
 
         <Flexbox align="center" horizontal justify="center" paddingBlock={8}>
-          <div ref={loadMoreRef} style={{ height: 1, width: '0' }} />
+          <div ref={loadMoreRef} style={styles.style} />
           {(isInitialLoading || isLoadingMore) && (
-            <Text style={{ fontSize: 12, marginTop: 4 }} type={'secondary'}>
+            <Text style={styles.spacing1} type={'secondary'}>
               {t('common:loading')}
             </Text>
           )}

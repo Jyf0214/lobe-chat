@@ -6,9 +6,17 @@ import { Virtuoso } from 'react-virtuoso';
 import { useToolStore } from '@/store/tool';
 import { pluginSelectors } from '@/store/tool/selectors';
 import { type LobeToolType } from '@/types/tool/tool';
+import { StyleSheet } from '@/utils/styles';
 
 import PluginEmpty from '../../PluginEmpty';
 import PluginItem from './Item';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    height: '100%',
+    width: '100%',
+  },
+});
 
 interface ListProps {
   identifier?: string;
@@ -63,7 +71,7 @@ export const List = memo<ListProps>(({ keywords, identifier, setIdentifier }) =>
         );
       }}
       overscan={24}
-      style={{ height: '100%', width: '100%' }}
+      style={styles.fullWidth}
       totalCount={filteredPluginList.length}
     />
   );

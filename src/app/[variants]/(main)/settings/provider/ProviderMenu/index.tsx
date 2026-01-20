@@ -8,10 +8,32 @@ import { useTranslation } from 'react-i18next';
 
 import SkeletonList from '@/features/NavPanel/components/SkeletonList';
 import { useAiInfraStore } from '@/store/aiInfra/store';
+import { StyleSheet } from '@/utils/styles';
 
 import AddNew from './AddNew';
 import ProviderList from './List';
 import SearchResult from './SearchResult';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorBgContainer,
+    borderRight: `1px solid ${cssVar.colorBorderSecondary}`,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  spacing: {
+    background: cssVar.colorBgContainer,
+    borderBottom: `1px solid ${cssVar.colorBorderSecondary}`,
+    marginBottom: 8,
+    position: 'sticky',
+    top: 0,
+    zIndex: 50,
+  },
+  spacing1: {
+    marginRight: 12,
+  },
+});
 
 interface ProviderMenuProps {
   children: ReactNode;
@@ -29,30 +51,20 @@ const Layout = memo(({ children, mobile }: ProviderMenuProps) => {
   useFetchAiProviderList();
 
   const width = mobile ? undefined : 280;
+  const coloredStyle = {
+    ...styles.colored,
+    minWidth: width,
+    overflow: mobile ? undefined : 'scroll',
+  };
   return (
-    <Flexbox
-      style={{
-        background: cssVar.colorBgContainer,
-        borderRight: `1px solid ${cssVar.colorBorderSecondary}`,
-        minWidth: width,
-        overflow: mobile ? undefined : 'scroll',
-      }}
-      width={width}
-    >
+    <Flexbox style={coloredStyle} width={width}>
       <Flexbox
         align={'center'}
         gap={8}
         horizontal
         justify={'space-between'}
         padding={8}
-        style={{
-          background: cssVar.colorBgContainer,
-          borderBottom: `1px solid ${cssVar.colorBorderSecondary}`,
-          marginBottom: 8,
-          position: 'sticky',
-          top: 0,
-          zIndex: 50,
-        }}
+        style={styles.spacing}
         width={'100%'}
       >
         <SearchBar
@@ -64,15 +76,9 @@ const Layout = memo(({ children, mobile }: ProviderMenuProps) => {
           onSearch={(v) => useAiInfraStore.setState({ providerSearchKeyword: v })}
           placeholder={t('menu.searchProviders')}
           prefix={
-            <Icon
-              color={cssVar.colorTextDescription}
-              icon={SearchIcon}
-              style={{
-                marginRight: 12,
-              }}
-            />
+            <Icon color={cssVar.colorTextDescription} icon={SearchIcon} style={styles.spacing1} />
           }
-          style={{ width: '100%' }}
+          style={styles.fullWidth}
           styles={{
             input: {
               paddingBlock: 3,

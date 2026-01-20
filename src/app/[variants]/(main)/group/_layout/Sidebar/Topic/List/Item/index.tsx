@@ -10,11 +10,26 @@ import { useAgentStore } from '@/store/agent';
 import { useAgentGroupStore } from '@/store/agentGroup';
 import { useChatStore } from '@/store/chat';
 import { useGlobalStore } from '@/store/global';
+import { StyleSheet } from '@/utils/styles';
 
 import ThreadList from '../../TopicListContent/ThreadList';
 import Actions from './Actions';
 import Editing from './Editing';
 import { useTopicItemDropdownMenu } from './useDropdownMenu';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextDescription,
+    fontSize: 10,
+  },
+  fullWidth: {
+    height: 18,
+    width: '100%',
+  },
+  style: {
+    position: 'relative',
+  },
+});
 
 interface TopicItemProps {
   active?: boolean;
@@ -82,13 +97,7 @@ const TopicItem = memo<TopicItemProps>(({ id, title, fav, active, threadId }) =>
         title={
           <Flexbox align={'center'} flex={1} gap={6} horizontal>
             {t('defaultTitle')}
-            <Tag
-              size={'small'}
-              style={{
-                color: cssVar.colorTextDescription,
-                fontSize: 10,
-              }}
-            >
+            <Tag size={'small'} style={styles.colored}>
               {t('temp')}
             </Tag>
           </Flexbox>
@@ -98,7 +107,7 @@ const TopicItem = memo<TopicItemProps>(({ id, title, fav, active, threadId }) =>
   }
 
   return (
-    <Flexbox style={{ position: 'relative' }}>
+    <Flexbox style={styles.style}>
       <NavItem
         actions={<Actions dropdownMenu={dropdownMenu} />}
         active={active && !threadId}
@@ -127,8 +136,8 @@ const TopicItem = memo<TopicItemProps>(({ id, title, fav, active, threadId }) =>
         <Suspense
           fallback={
             <Flexbox gap={8} paddingBlock={8} paddingInline={24} width={'100%'}>
-              <Skeleton.Button active size={'small'} style={{ height: 18, width: '100%' }} />
-              <Skeleton.Button active size={'small'} style={{ height: 18, width: '100%' }} />
+              <Skeleton.Button active size={'small'} style={styles.fullWidth} />
+              <Skeleton.Button active size={'small'} style={styles.fullWidth} />
             </Flexbox>
           }
         >

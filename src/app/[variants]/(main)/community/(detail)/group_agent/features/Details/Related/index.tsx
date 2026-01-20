@@ -6,9 +6,29 @@ import { useNavigate } from 'react-router-dom';
 import urlJoin from 'url-join';
 
 import { type DiscoverGroupAgentItem } from '@/types/discover';
+import { StyleSheet } from '@/utils/styles';
 
 import Title from '../../../../../features/Title';
 import { useDetailContext } from '../../DetailProvider';
+
+const styles = StyleSheet.create({
+  colored: {
+    border: '1px solid var(--lobe-border-color)',
+    borderRadius: 8,
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  },
+  colored1: {
+    color: '#999',
+  },
+  style: {
+    fontWeight: 500,
+  },
+  style1: {
+    fontSize: 12,
+    opacity: 0.65,
+  },
+});
 
 const GroupAgentCard = memo<DiscoverGroupAgentItem>((item) => {
   const navigate = useNavigate();
@@ -23,24 +43,14 @@ const GroupAgentCard = memo<DiscoverGroupAgentItem>((item) => {
   };
 
   return (
-    <Flexbox
-      gap={12}
-      onClick={handleClick}
-      padding={16}
-      style={{
-        border: '1px solid var(--lobe-border-color)',
-        borderRadius: 8,
-        cursor: 'pointer',
-        transition: 'all 0.2s',
-      }}
-    >
+    <Flexbox gap={12} onClick={handleClick} padding={16} style={styles.colored}>
       <Flexbox align="center" gap={12} horizontal>
         <Avatar avatar={item.avatar || item.title[0]} shape="square" size={48} />
         <Flexbox flex={1} gap={4}>
-          <Text ellipsis style={{ fontWeight: 500 }}>
+          <Text ellipsis style={styles.style}>
             {item.title}
           </Text>
-          <Text ellipsis style={{ fontSize: 12, opacity: 0.65 }} type="secondary">
+          <Text ellipsis style={styles.style1} type="secondary">
             {item.description}
           </Text>
         </Flexbox>
@@ -76,7 +86,7 @@ const Related = memo(() => {
           ))}
         </Grid>
       ) : (
-        <Flexbox align="center" padding={32} style={{ color: '#999' }}>
+        <Flexbox align="center" padding={32} style={styles.colored1}>
           {t('groupAgents.details.related.empty', {
             defaultValue: 'No related group agents found',
           })}

@@ -9,6 +9,7 @@ import { useResourceManagerStore } from '@/app/[variants]/(main)/resource/featur
 import { fileService } from '@/services/file';
 import { useFileStore } from '@/store/file';
 import type { ResourceQueryParams } from '@/types/resource';
+import { StyleSheet } from '@/utils/styles';
 
 import { HierarchyNode } from './HierarchyNode';
 import TreeSkeleton from './TreeSkeleton';
@@ -19,6 +20,15 @@ import {
   sortTreeItems,
 } from './treeState';
 import type { TreeItem } from './types';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBottom: 2,
+  },
+  style: {
+    height: '100%',
+  },
+});
 
 // Export for external use
 export { clearTreeFolderCache } from './treeState';
@@ -366,13 +376,13 @@ const LibraryHierarchy = memo(() => {
       : currentFolderSlug;
 
   return (
-    <Flexbox paddingInline={4} style={{ height: '100%' }}>
+    <Flexbox paddingInline={4} style={styles.style}>
       <VList
         bufferSize={typeof window !== 'undefined' ? window.innerHeight : 0}
-        style={{ height: '100%' }}
+        style={styles.style}
       >
         {visibleNodes.map(({ item, key, level }) => (
-          <div key={key} style={{ paddingBottom: 2 }}>
+          <div key={key} style={styles.spacing}>
             <HierarchyNode
               expandedFolders={expandedFolders}
               folderChildrenCache={folderChildrenCache}

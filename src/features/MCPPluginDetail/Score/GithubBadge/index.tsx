@@ -6,8 +6,22 @@ import { useTranslation } from 'react-i18next';
 import urlJoin from 'url-join';
 
 import { OFFICIAL_SITE } from '@/const/url';
+import { StyleSheet } from '@/utils/styles';
 
 import { useDetailContext } from '../../DetailProvider';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextDescription,
+    fontSize: 12,
+  },
+  spacing: {
+    marginRight: 4,
+  },
+  style: {
+    fontSize: 12,
+  },
+});
 
 type BadgeStyle = 'flat' | 'flat-square' | 'plastic' | 'for-the-badge';
 type BadgeTheme = 'dark' | 'light';
@@ -52,10 +66,10 @@ const GithubBadge = memo(() => {
       <Select
         onChange={setSelectedStyle}
         options={styleOptions}
-        prefix={<Tag style={{ marginRight: 4 }}>style</Tag>}
+        prefix={<Tag style={styles.spacing}>style</Tag>}
         value={selectedStyle}
       />
-      <Snippet language={'md'} style={{ fontSize: 12 }} variant={'outlined'}>
+      <Snippet language={'md'} style={styles.style} variant={'outlined'}>
         {badgeLite}
       </Snippet>
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -64,14 +78,14 @@ const GithubBadge = memo(() => {
         height={selectedStyle === 'for-the-badge' ? 28 : 20}
         src={styledBadgeUrl}
       />
-      <Divider style={{ color: cssVar.colorTextDescription, fontSize: 12 }}>OR</Divider>
+      <Divider style={styles.colored}>OR</Divider>
       <Select
         onChange={setSelectedTheme}
         options={themeOptions}
-        prefix={<Tag style={{ marginRight: 4 }}>theme</Tag>}
+        prefix={<Tag style={styles.spacing}>theme</Tag>}
         value={selectedTheme}
       />
-      <Snippet language={'md'} style={{ fontSize: 12 }} variant={'outlined'}>
+      <Snippet language={'md'} style={styles.style} variant={'outlined'}>
         {badge}
       </Snippet>
       {/* eslint-disable-next-line @next/next/no-img-element */}

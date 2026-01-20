@@ -6,6 +6,16 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    paddingBottom: 32,
+    paddingTop: 48,
+    width: '100%',
+  },
+});
+
 interface PublishResultModalProps {
   identifier?: string;
   onCancel: () => void;
@@ -37,11 +47,7 @@ const PublishResultModal = memo<PublishResultModalProps>(({ identifier, onCancel
     >
       <Result
         icon={<FluentEmoji emoji={'🎉'} size={96} type={'anim'} />}
-        style={{
-          paddingBottom: 32,
-          paddingTop: 48,
-          width: '100%',
-        }}
+        style={styles.fullWidth}
         subTitle={
           <Text fontSize={14} type={'secondary'}>
             {t('marketPublish.resultModal.message')}

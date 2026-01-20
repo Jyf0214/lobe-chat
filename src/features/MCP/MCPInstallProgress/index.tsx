@@ -9,10 +9,17 @@ import { useTranslation } from 'react-i18next';
 import { useToolStore } from '@/store/tool';
 import { mcpStoreSelectors } from '@/store/tool/selectors';
 import { MCPInstallStep } from '@/types/plugins';
+import { StyleSheet } from '@/utils/styles';
 
 import InstallError from './InstallError';
 import MCPConfigForm from './MCPConfigForm';
 import MCPDependenciesGuide from './MCPDependenciesGuide';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginTop: 4,
+  },
+});
 
 const MCPInstallProgress = memo<{ identifier: string }>(({ identifier }) => {
   const { t } = useTranslation('plugin');
@@ -49,7 +56,7 @@ const MCPInstallProgress = memo<{ identifier: string }>(({ identifier }) => {
               strokeColor={{ '0%': cssVar.blue, '100%': cssVar.geekblue }}
             />
             {stepText && (
-              <Text fontSize={11} style={{ marginTop: 4 }} type={'secondary'}>
+              <Text fontSize={11} style={styles.spacing} type={'secondary'}>
                 ({installProgress.progress}%) {stepText}
               </Text>
             )}

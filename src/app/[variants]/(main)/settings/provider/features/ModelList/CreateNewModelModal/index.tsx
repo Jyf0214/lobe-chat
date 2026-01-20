@@ -4,9 +4,16 @@ import { memo, use, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAiInfraStore } from '@/store/aiInfra';
+import { StyleSheet } from '@/utils/styles';
 
 import { ProviderSettingsContext } from '../ProviderSettingsContext';
 import ModelConfigForm from './Form';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginInlineStart: '16px',
+  },
+});
 
 interface ModelConfigModalProps {
   open: boolean;
@@ -54,7 +61,7 @@ const ModelConfigModal = memo<ModelConfigModalProps>(({ open, setOpen }) => {
               setLoading(false);
             }
           }}
-          style={{ marginInlineStart: '16px' }}
+          style={styles.spacing}
           type="primary"
         >
           {t('ok', { ns: 'common' })}

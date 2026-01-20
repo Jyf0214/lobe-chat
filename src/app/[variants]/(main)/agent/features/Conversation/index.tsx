@@ -7,9 +7,17 @@ import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
 import { useGlobalStore } from '@/store/global';
 import { systemStatusSelectors } from '@/store/global/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import ConversationArea from './ConversationArea';
 import ChatHeader from './Header';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'hidden',
+    position: 'relative',
+  },
+});
 
 const wrapperStyle: React.CSSProperties = {
   height: '100%',
@@ -28,11 +36,7 @@ const ChatConversation = memo(() => {
   return (
     <Suspense fallback={<Loading debugId="Agent > ChatConversation" />}>
       <DragUploadZone onUploadFiles={handleUploadFiles} style={wrapperStyle}>
-        <Flexbox
-          height={'100%'}
-          style={{ overflow: 'hidden', position: 'relative' }}
-          width={'100%'}
-        >
+        <Flexbox height={'100%'} style={styles.style} width={'100%'}>
           {showHeader && <ChatHeader />}
           <TooltipGroup>
             <ConversationArea />

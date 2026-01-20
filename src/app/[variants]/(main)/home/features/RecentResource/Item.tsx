@@ -9,6 +9,25 @@ import { RECENT_BLOCK_SIZE } from '@/app/[variants]/(main)/home/features/const';
 import FileIcon from '@/components/FileIcon';
 import { type FileListItem } from '@/types/files';
 import { formatSize } from '@/utils/format';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorFillTertiary,
+    overflow: 'hidden',
+  },
+  fullWidth: {
+    borderRadius: 0,
+    width: '100%',
+  },
+  style: {
+    borderRadius: cssVar.borderRadiusLG,
+    overflow: 'hidden',
+  },
+  style1: {
+    lineHeight: 1.4,
+  },
+});
 
 const IMAGE_FILE_TYPES = new Set([
   'image/png',
@@ -31,18 +50,11 @@ const RecentResourceItem = memo<RecentResourceItemProps>(({ file }) => {
       clickable
       flex={'none'}
       height={RECENT_BLOCK_SIZE.RESOURCE.HEIGHT}
-      style={{
-        borderRadius: cssVar.borderRadiusLG,
-        overflow: 'hidden',
-      }}
+      style={styles.style}
       variant={'outlined'}
       width={RECENT_BLOCK_SIZE.RESOURCE.WIDTH}
     >
-      <Center
-        flex={'none'}
-        height={126}
-        style={{ background: cssVar.colorFillTertiary, overflow: 'hidden' }}
-      >
+      <Center flex={'none'} height={126} style={styles.colored}>
         {isImage && file.url ? (
           <Image
             alt={file.name}
@@ -50,10 +62,7 @@ const RecentResourceItem = memo<RecentResourceItemProps>(({ file }) => {
             objectFit={'cover'}
             preview={false}
             src={file.url}
-            style={{
-              borderRadius: 0,
-              width: '100%',
-            }}
+            style={styles.fullWidth}
             width={'100%'}
           />
         ) : (
@@ -63,7 +72,7 @@ const RecentResourceItem = memo<RecentResourceItemProps>(({ file }) => {
 
       {/* File Info */}
       <Flexbox flex={1} gap={6} justify={'space-between'} padding={12}>
-        <Text ellipsis={{ rows: 2 }} fontSize={13} style={{ lineHeight: 1.4 }} weight={500}>
+        <Text ellipsis={{ rows: 2 }} fontSize={13} style={styles.style1} weight={500}>
           {file.name}
         </Text>
         <Flexbox align={'center'} gap={8} horizontal>

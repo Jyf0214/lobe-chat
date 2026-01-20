@@ -7,8 +7,19 @@ import { useTranslation } from 'react-i18next';
 
 import { useClientDataSWR } from '@/libs/swr';
 import { messageService } from '@/services/message';
+import { StyleSheet } from '@/utils/styles';
 
 import StatsFormGroup from '../components/StatsFormGroup';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextDescription,
+    fontSize: 12,
+  },
+  style: {
+    alignSelf: 'center',
+  },
+});
 
 const AiHeatmaps = memo<
   Omit<HeatmapsProps, 'data' | 'ref'> & { inShare?: boolean; mobile?: boolean }
@@ -51,9 +62,7 @@ const AiHeatmaps = memo<
       }}
       loading={isLoading || !data}
       maxLevel={4}
-      style={{
-        alignSelf: 'center',
-      }}
+      style={styles.style}
       {...rest}
     />
   );
@@ -71,14 +80,7 @@ const AiHeatmaps = memo<
     return (
       <Flexbox gap={4}>
         <Flexbox align={'baseline'} gap={4} horizontal justify={'space-between'}>
-          <div
-            style={{
-              color: cssVar.colorTextDescription,
-              fontSize: 12,
-            }}
-          >
-            {t('stats.lastYearActivity')}
-          </div>
+          <div style={styles.colored}>{t('stats.lastYearActivity')}</div>
           {tags}
         </Flexbox>
         {content}

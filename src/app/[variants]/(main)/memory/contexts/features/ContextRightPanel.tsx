@@ -18,8 +18,22 @@ import { DESKTOP_HEADER_ICON_SIZE } from '@/const/layoutTokens';
 import { useQueryState } from '@/hooks/useQueryParam';
 import { useUserMemoryStore } from '@/store/userMemory';
 import { LayersEnum } from '@/types/userMemory';
+import { StyleSheet } from '@/utils/styles';
 
 import ContextDropdown from './ContextDropdown';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    display: 'inline-flex',
+  },
+  spacing: {
+    lineHeight: 1.4,
+    marginBottom: 0,
+  },
+  spacing1: {
+    marginLeft: 8,
+  },
+});
 
 const ContextRightPanel = memo(() => {
   const [contextId] = useQueryState('contextId', { clearOnDefault: true });
@@ -35,21 +49,13 @@ const ContextRightPanel = memo(() => {
     content = (
       <>
         <CateTag cate={context.type} />
-        <Text
-          as={'h1'}
-          fontSize={20}
-          style={{
-            lineHeight: 1.4,
-            marginBottom: 0,
-          }}
-          weight={'bold'}
-        >
+        <Text as={'h1'} fontSize={20} style={styles.spacing} weight={'bold'}>
           {context.title}
           <Tooltip title={context.currentStatus}>
-            <Center flex={'none'} height={20} style={{ display: 'inline-flex' }} width={20}>
+            <Center flex={'none'} height={20} style={styles.flexContainer} width={20}>
               <Badge
                 status="processing"
-                style={{ marginLeft: 8 }}
+                style={styles.spacing1}
                 styles={{
                   indicator: { alignSelf: 'center', marginBottom: 4 },
                 }}

@@ -2,6 +2,14 @@ import { ActionIcon, DropdownMenu, type MenuProps } from '@lobehub/ui';
 import { MoreHorizontalIcon } from 'lucide-react';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+  },
+});
+
 interface ActionsProps {
   dropdownMenu: MenuProps['items'];
   isLoading?: boolean;
@@ -14,7 +22,7 @@ const Actions = memo<ActionsProps>(({ dropdownMenu, isLoading }) => {
         icon={MoreHorizontalIcon}
         loading={isLoading}
         size={'small'}
-        style={{ flex: 'none' }}
+        style={styles.flexContainer}
       />
     </DropdownMenu>
   );

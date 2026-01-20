@@ -1,7 +1,17 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import type { ChatMessage } from './types';
+
+const sheetStyles = StyleSheet.create({
+  spacing: {
+    opacity: 0.5,
+    padding: '16px',
+    textAlign: 'center',
+  },
+});
 
 interface ChatListProps {
   messages: ChatMessage[];
@@ -19,9 +29,7 @@ const ChatList = memo<ChatListProps>(({ messages, styles }) => {
   return (
     <div className={styles.chatContainer}>
       {messages.length === 0 ? (
-        <div style={{ opacity: 0.5, padding: '16px', textAlign: 'center' }}>
-          {t('cmdk.aiModeEmptyState')}
-        </div>
+        <div style={sheetStyles.spacing}>{t('cmdk.aiModeEmptyState')}</div>
       ) : (
         messages.map((message) => (
           <div className={styles.chatMessage} key={message.id}>

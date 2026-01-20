@@ -11,10 +11,17 @@ import { useAgentStore } from '@/store/agent';
 import { agentSelectors, builtinAgentSelectors } from '@/store/agent/selectors';
 import { useUserStore } from '@/store/user';
 import { userGeneralSettingsSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import AddButton from './AddButton';
 import OpeningQuestions from './OpeningQuestions';
 import ToolAuthAlert from './ToolAuthAlert';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBottom: 'max(10vh, 32px)',
+  },
+});
 
 const InboxWelcome = memo(() => {
   const { t } = useTranslation(['welcome', 'chat']);
@@ -40,13 +47,7 @@ const InboxWelcome = memo(() => {
   return (
     <>
       <Flexbox flex={1} />
-      <Flexbox
-        gap={12}
-        style={{
-          paddingBottom: 'max(10vh, 32px)',
-        }}
-        width={'100%'}
-      >
+      <Flexbox gap={12} style={styles.spacing} width={'100%'}>
         <Avatar
           avatar={isInbox ? DEFAULT_INBOX_AVATAR : meta.avatar || DEFAULT_AVATAR}
           background={meta.backgroundColor}

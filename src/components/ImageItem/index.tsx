@@ -4,6 +4,7 @@ import { Trash } from 'lucide-react';
 import { type CSSProperties, memo } from 'react';
 
 import { usePlatform } from '@/hooks/usePlatform';
+import { StyleSheet } from '@/utils/styles';
 
 import { MIN_IMAGE_SIZE } from './style';
 
@@ -75,7 +76,7 @@ const ImageItem = memo<ImageItemProps>(
         preview={preview}
         size={IMAGE_SIZE as any}
         src={url}
-        style={{ height: isSafari ? 'auto' : '100%', width: '100%', ...style }}
+        style={StyleSheet.compose({ height: isSafari ? 'auto' : '100%', width: '100%' }, style)}
       />
     );
   },

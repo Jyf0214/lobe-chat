@@ -9,8 +9,19 @@ import { mcpStoreSelectors } from '@/store/tool/selectors';
 import { type DiscoverMcpItem } from '@/types/discover';
 import { MCPInstallStep } from '@/types/plugins';
 import { type LobeToolType } from '@/types/tool/tool';
+import { StyleSheet } from '@/utils/styles';
 
 import Actions from './Action';
+
+const styles = StyleSheet.create({
+  style: {
+    position: 'relative',
+  },
+  style1: {
+    overflow: 'hidden',
+    position: 'relative',
+  },
+});
 
 interface PluginItemProps extends DiscoverMcpItem {
   active?: boolean;
@@ -47,18 +58,12 @@ const Item = memo<PluginItemProps>(
           onClick={() => setIdentifier(identifier)}
           paddingBlock={8}
           paddingInline={12}
-          style={{ position: 'relative' }}
+          style={styles.style}
           variant={active ? 'filled' : 'borderless'}
         >
-          <Flexbox
-            align={'center'}
-            flex={1}
-            gap={8}
-            horizontal
-            style={{ overflow: 'hidden', position: 'relative' }}
-          >
+          <Flexbox align={'center'} flex={1} gap={8} horizontal style={styles.style1}>
             <PluginAvatar avatar={icon} />
-            <Flexbox flex={1} gap={4} style={{ overflow: 'hidden', position: 'relative' }}>
+            <Flexbox flex={1} gap={4} style={styles.style1}>
               <Text ellipsis strong>
                 {name}
               </Text>

@@ -1,6 +1,16 @@
 import { Block, Flexbox, Text } from '@lobehub/ui';
 import { type ReactNode, memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    overflow: 'hidden',
+    position: 'relative',
+    width: '100%',
+  },
+});
+
 interface BaseErrorFormProps {
   action?: ReactNode;
   avatar?: ReactNode;
@@ -15,11 +25,7 @@ const BaseErrorForm = memo<BaseErrorFormProps>(({ title, desc, action, avatar })
       horizontal
       justify={'space-between'}
       padding={16}
-      style={{
-        overflow: 'hidden',
-        position: 'relative',
-        width: '100%',
-      }}
+      style={styles.fullWidth}
       variant={'outlined'}
     >
       <Flexbox align="center" gap={12} horizontal>

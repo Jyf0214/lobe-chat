@@ -43,17 +43,16 @@ const PasswordRow = ({ mobile }: PasswordRowProps) => {
     }
   }, [userProfile?.email, t]);
 
+  const style = {
+    cursor: sending ? 'default' : 'pointer',
+    fontSize: 13,
+    opacity: sending ? 0.5 : 1,
+  };
+
   return (
     <ProfileRow
       action={
-        <Text
-          onClick={sending ? undefined : handleChangePassword}
-          style={{
-            cursor: sending ? 'default' : 'pointer',
-            fontSize: 13,
-            opacity: sending ? 0.5 : 1,
-          }}
-        >
+        <Text onClick={sending ? undefined : handleChangePassword} style={style}>
           {hasPasswordAccount ? t('profile.changePassword') : t('profile.setPassword')}
         </Text>
       }

@@ -3,7 +3,6 @@ import { AgentRuntimeErrorType, type ILobeAgentRuntimeErrorType } from '@lobecha
 import { ChatErrorType, type ChatMessageError, type ErrorType } from '@lobechat/types';
 import { type IPluginErrorType } from '@lobehub/chat-plugin-sdk';
 import { type AlertProps, Block, Highlighter, Skeleton } from '@lobehub/ui';
-import dynamic from '@/libs/next/dynamic';
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -12,8 +11,18 @@ import useBusinessErrorContent from '@/business/client/hooks/useBusinessErrorCon
 import useRenderBusinessChatErrorMessageExtra from '@/business/client/hooks/useRenderBusinessChatErrorMessageExtra';
 import ErrorContent from '@/features/Conversation/ChatItem/components/ErrorContent';
 import { useProviderName } from '@/hooks/useProviderName';
+import dynamic from '@/libs/next/dynamic';
+import { StyleSheet } from '@/utils/styles';
 
 import ChatInvalidAPIKey from './ChatInvalidApiKey';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    overflow: 'hidden',
+    position: 'relative',
+    width: '100%',
+  },
+});
 
 interface ErrorMessageData {
   error?: ChatMessageError | null;
@@ -21,16 +30,7 @@ interface ErrorMessageData {
 }
 
 const loading = () => (
-  <Block
-    align={'center'}
-    padding={16}
-    style={{
-      overflow: 'hidden',
-      position: 'relative',
-      width: '100%',
-    }}
-    variant={'outlined'}
-  >
+  <Block align={'center'} padding={16} style={styles.fullWidth} variant={'outlined'}>
     <Skeleton.Button active block />
   </Block>
 );

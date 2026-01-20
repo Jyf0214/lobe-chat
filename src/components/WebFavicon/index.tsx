@@ -1,4 +1,11 @@
 import Image from '@/libs/next/Image';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    borderRadius: 4,
+  },
+});
 
 interface WebFaviconProps {
   alt?: string;
@@ -16,7 +23,7 @@ const WebFavicon = ({ url, title, alt, size = 14 }: WebFaviconProps) => {
       alt={alt || title || url}
       height={size}
       src={`https://icons.duckduckgo.com/ip3/${host}.ico`}
-      style={{ borderRadius: 4 }}
+      style={styles.style}
       unoptimized
       width={size}
     />

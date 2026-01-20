@@ -3,6 +3,18 @@ import { memo } from 'react';
 
 import { useActionSWR } from '@/libs/swr';
 import { useSessionStore } from '@/store/session';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    alignItems: 'center',
+    borderRadius: 4,
+    height: '20px',
+    justifyContent: 'center',
+    padding: '0 1px',
+    width: '20px',
+  },
+});
 
 const AddButton = memo(() => {
   const createSession = useSessionStore((s) => s.createSession);
@@ -14,14 +26,7 @@ const AddButton = memo(() => {
     <Button
       loading={isValidating}
       onClick={() => mutate()}
-      style={{
-        alignItems: 'center',
-        borderRadius: 4,
-        height: '20px',
-        justifyContent: 'center',
-        padding: '0 1px',
-        width: '20px',
-      }}
+      style={styles.spacing}
       variant={'filled'}
     >
       +

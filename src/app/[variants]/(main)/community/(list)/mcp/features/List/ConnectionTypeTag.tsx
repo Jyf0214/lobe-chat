@@ -4,6 +4,15 @@ import { Blend, Cloud, LaptopMinimalIcon } from 'lucide-react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextSecondary,
+    fontSize: 12,
+  },
+});
+
 interface ConnectionTypeTagProps {
   type?: 'hybrid' | 'local' | 'remote';
 }
@@ -30,15 +39,7 @@ const ConnectionTypeTag = memo<ConnectionTypeTagProps>(({ type }) => {
 
   return (
     <Tooltip title={t(`mcp.details.connectionType.${type}.desc`)}>
-      <Flexbox
-        align={'center'}
-        gap={6}
-        horizontal
-        style={{
-          color: cssVar.colorTextSecondary,
-          fontSize: 12,
-        }}
-      >
+      <Flexbox align={'center'} gap={6} horizontal style={styles.colored}>
         <Icon color={icons[type].color} icon={icons[type].icon} size={14} />
         {t(`mcp.details.connectionType.${type}.title`)}
       </Flexbox>

@@ -4,6 +4,13 @@ import { useTranslation } from 'react-i18next';
 
 import { useKnowledgeBaseStore } from '@/store/library';
 import { type CreateKnowledgeBaseParams } from '@/types/knowledgeBase';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    minHeight: 120,
+  },
+});
 
 interface CreateFormProps {
   onClose?: () => void;
@@ -52,10 +59,7 @@ const CreateForm = memo<CreateFormProps>(({ onClose, onSuccess }) => {
         },
         {
           children: (
-            <TextArea
-              placeholder={t('createNew.description.placeholder')}
-              style={{ minHeight: 120 }}
-            />
+            <TextArea placeholder={t('createNew.description.placeholder')} style={styles.style} />
           ),
           label: t('createNew.description.placeholder'),
           name: 'description',

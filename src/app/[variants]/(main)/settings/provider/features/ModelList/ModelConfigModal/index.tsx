@@ -5,9 +5,16 @@ import { memo, use, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { aiModelSelectors, useAiInfraStore } from '@/store/aiInfra';
+import { StyleSheet } from '@/utils/styles';
 
 import ModelConfigForm from '../CreateNewModelModal/Form';
 import { ProviderSettingsContext } from '../ProviderSettingsContext';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginInlineStart: '16px',
+  },
+});
 
 interface ModelConfigModalProps {
   id: string;
@@ -50,7 +57,7 @@ const ModelConfigModal = memo<ModelConfigModalProps>(({ id, open, setOpen }) => 
 
             closeModal();
           }}
-          style={{ marginInlineStart: '16px' }}
+          style={styles.spacing}
           type="primary"
         >
           {t('ok')}

@@ -6,7 +6,35 @@ import { ChevronLeft, ChevronRight, Lock } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import AuthCard from '../../../../features/AuthCard';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+  },
+  colored1: {
+    color: cssVar.colorPrimary,
+  },
+  spacing: {
+    marginTop: 16,
+  },
+  spacing1: {
+    marginTop: 12,
+  },
+  spacing2: {
+    marginBottom: 0,
+  },
+  spacing3: {
+    marginInline: 6,
+  },
+  spacing4: {
+    padding: 6,
+  },
+});
 
 export interface SignInPasswordStepProps {
   email: string;
@@ -37,19 +65,11 @@ export const SignInPasswordStep = ({
       footer={
         <>
           <Text fontSize={13} type={'secondary'}>
-            <a
-              onClick={onForgotPassword}
-              style={{ color: 'inherit', cursor: 'pointer', textDecoration: 'underline' }}
-            >
+            <a onClick={onForgotPassword} style={styles.colored}>
               {t('betterAuth.signin.forgotPassword')}
             </a>
           </Text>
-          <Button
-            icon={ChevronLeft}
-            onClick={onBackToEmail}
-            size={'large'}
-            style={{ marginTop: 16 }}
-          >
+          <Button icon={ChevronLeft} onClick={onBackToEmail} size={'large'} style={styles.spacing}>
             {t('betterAuth.signin.backToEmail')}
           </Button>
         </>
@@ -62,34 +82,25 @@ export const SignInPasswordStep = ({
         form={form}
         layout="vertical"
         onFinish={(values) => onSubmit(values as { password: string })}
-        style={{ marginTop: 12 }}
+        style={styles.spacing1}
       >
         <Form.Item
           name="password"
           rules={[{ message: t('betterAuth.errors.passwordRequired'), required: true }]}
-          style={{ marginBottom: 0 }}
+          style={styles.spacing2}
         >
           <InputPassword
             placeholder={t('betterAuth.signin.passwordPlaceholder')}
-            prefix={
-              <Icon
-                icon={Lock}
-                style={{
-                  marginInline: 6,
-                }}
-              />
-            }
+            prefix={<Icon icon={Lock} style={styles.spacing3} />}
             ref={passwordInputRef}
             size="large"
-            style={{
-              padding: 6,
-            }}
+            style={styles.spacing4}
             suffix={
               <Button
                 icon={ChevronRight}
                 loading={loading}
                 onClick={() => form.submit()}
-                style={{ color: cssVar.colorPrimary }}
+                style={styles.colored1}
                 title={t('betterAuth.signin.submit')}
                 variant={'filled'}
               />

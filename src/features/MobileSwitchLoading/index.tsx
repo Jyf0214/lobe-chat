@@ -5,14 +5,27 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ProductLogo } from '@/components/Branding';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    position: 'relative',
+    userSelect: 'none',
+  },
+  style1: {
+    fontSize: 15,
+    lineHeight: 1.5,
+    opacity: 0.66,
+  },
+});
 
 const MobileSwitchLoading: DynamicOptions['loading'] = memo(() => {
   const { t } = useTranslation('common');
   return (
-    <Flexbox height={'100%'} style={{ position: 'relative', userSelect: 'none' }} width={'100%'}>
+    <Flexbox height={'100%'} style={styles.style} width={'100%'}>
       <Center flex={1} gap={16} width={'100%'}>
         <ProductLogo size={48} type={'combine'} />
-        <Center gap={12} horizontal style={{ fontSize: 15, lineHeight: 1.5, opacity: 0.66 }}>
+        <Center gap={12} horizontal style={styles.style1}>
           <Icon icon={Loader2} size={16} spin />
           {t('layoutInitializing')}
         </Center>

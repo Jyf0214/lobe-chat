@@ -14,9 +14,16 @@ import DragUpload from '@/components/DragUpload';
 import GuideModal from '@/components/GuideModal';
 import GuideVideo from '@/components/GuideVideo';
 import { useFileStore } from '@/store/file';
+import { StyleSheet } from '@/utils/styles';
 
 import useNotionImport from './hooks/useNotionImport';
 import useUploadFolder from './hooks/useUploadFolder';
+
+const styles = StyleSheet.create({
+  display: {
+    display: 'none',
+  },
+});
 
 const AddButton = () => {
   const { t } = useTranslation('file');
@@ -235,7 +242,7 @@ const AddButton = () => {
         id="folder-upload-input"
         multiple
         onChange={handleFolderUploadWithClose}
-        style={{ display: 'none' }}
+        style={styles.display}
         type="file"
         // @ts-expect-error - webkitdirectory is not in the React types
         webkitdirectory=""
@@ -244,7 +251,7 @@ const AddButton = () => {
         accept=".zip"
         onChange={handleNotionImport}
         ref={notionInputRef}
-        style={{ display: 'none' }}
+        style={styles.display}
         type="file"
       />
     </>

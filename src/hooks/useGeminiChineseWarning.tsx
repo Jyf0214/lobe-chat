@@ -6,6 +6,13 @@ import { useTranslation } from 'react-i18next';
 
 import { useGlobalStore } from '@/store/global';
 import { systemStatusSelectors } from '@/store/global/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginTop: 16,
+  },
+});
 
 const shouldShowChineseWarning = (
   model: string,
@@ -60,7 +67,7 @@ export const useGeminiChineseWarning = () => {
           content: (
             <div>
               <p>{t('geminiImageChineseWarning.content')}</p>
-              <div style={{ marginTop: 16 }}>
+              <div style={styles.spacing}>
                 <Checkbox
                   onChange={(v) => {
                     doNotShowAgain = v;

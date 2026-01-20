@@ -5,6 +5,7 @@ import { memo, useState } from 'react';
 
 import { ThreadStatus } from '@/types/index';
 import type { UIChatMessage } from '@/types/index';
+import { StyleSheet } from '@/utils/styles';
 
 import {
   CompletedState,
@@ -14,6 +15,12 @@ import {
   isProcessingStatus,
 } from '../shared';
 import TaskTitle from './TaskTitle';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBlock: 8,
+  },
+});
 
 interface TaskItemProps {
   item: UIChatMessage;
@@ -43,7 +50,7 @@ const TaskItem = memo<TaskItemProps>(({ item }) => {
       paddingInline={4}
       title={<TaskTitle status={status} title={title} />}
     >
-      <Block gap={16} padding={12} style={{ marginBlock: 8 }} variant={'outlined'}>
+      <Block gap={16} padding={12} style={styles.spacing} variant={'outlined'}>
         {instruction && (
           <Block padding={12}>
             <Text fontSize={13} type={'secondary'}>

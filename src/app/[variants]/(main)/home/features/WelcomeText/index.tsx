@@ -6,6 +6,16 @@ import { shuffle } from 'es-toolkit/compat';
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBlock: '36px 24px',
+  },
+});
+
 const WelcomeText = memo(() => {
   const { t, i18n } = useTranslation('welcome');
   const locale = i18n.language;
@@ -16,13 +26,7 @@ const WelcomeText = memo(() => {
   }, [t]);
 
   return (
-    <Center
-      style={{
-        fontSize: 28,
-        fontWeight: 'bold',
-        marginBlock: '36px 24px',
-      }}
-    >
+    <Center style={styles.spacing}>
       <TypewriterEffect
         cursorCharacter={<LoadingDots color={cssVar.colorText} size={20} variant={'pulse'} />}
         cursorFade={false}

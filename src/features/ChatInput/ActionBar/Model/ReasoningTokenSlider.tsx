@@ -3,6 +3,14 @@ import { Slider } from 'antd';
 import { memo, useMemo } from 'react';
 import useMergeState from 'use-merge-value';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    width: 80,
+  },
+});
+
 const Kibi = 1024;
 
 const exponent = (num: number) => Math.log2(num);
@@ -83,7 +91,7 @@ const ReasoningTokenSlider = memo<MaxTokenSliderProps>(({ value, onChange, defau
             updateWithRealValue(e as number);
           }}
           step={step}
-          style={{ width: 80 }}
+          style={styles.style}
           value={token}
         />
       </div>

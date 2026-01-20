@@ -3,6 +3,14 @@ import { Slider } from 'antd';
 import { memo, useMemo } from 'react';
 import useMergeState from 'use-merge-value';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    width: 80,
+  },
+});
+
 // 定义特殊值映射
 const SPECIAL_VALUES = {
   AUTO: -1,
@@ -146,7 +154,7 @@ const ThinkingBudgetSlider = memo<ThinkingBudgetSliderProps>(
               return SPECIAL_VALUES.AUTO;
             }}
             step={inputStep}
-            style={{ width: 80 }}
+            style={styles.style}
             value={budget}
           />
         </div>

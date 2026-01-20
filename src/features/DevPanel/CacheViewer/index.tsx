@@ -2,9 +2,17 @@ import { Center, Empty } from '@lobehub/ui';
 import { Database } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import DataTable from './DataTable';
 import { CachePanelContextProvider } from './cacheProvider';
 import { getCacheFiles } from './getCacheEntries';
+
+const styles = StyleSheet.create({
+  style: {
+    maxWidth: 400,
+  },
+});
 
 const CacheViewer = async () => {
   const { t } = useTranslation('components');
@@ -17,7 +25,7 @@ const CacheViewer = async () => {
           description={t('devTools.cache.empty')}
           descriptionProps={{ fontSize: 14 }}
           icon={Database}
-          style={{ maxWidth: 400 }}
+          style={styles.style}
         />
       </Center>
     );

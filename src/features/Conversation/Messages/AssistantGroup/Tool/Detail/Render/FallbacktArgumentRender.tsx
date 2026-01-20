@@ -3,7 +3,21 @@ import { Divider } from 'antd';
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import Arguments from '../Arguments';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: 'transparent',
+    borderRadius: 0,
+    maxHeight: 300,
+    overflow: 'auto',
+  },
+  spacing: {
+    marginBlock: 0,
+  },
+});
 
 interface FallbackArgumentRenderProps {
   content: string;
@@ -35,20 +49,11 @@ export const FallbackArgumentRender = memo<FallbackArgumentRenderProps>(
         <Arguments arguments={requestArgs} />
         {content && (
           <>
-            <Divider style={{ marginBlock: 0 }} />
+            <Divider style={styles.spacing} />
             <Flexbox paddingBlock={'8px 0'} paddingInline={16}>
               <Text>{t('debug.response')}</Text>
             </Flexbox>
-            <Highlighter
-              language={language}
-              style={{
-                background: 'transparent',
-                borderRadius: 0,
-                maxHeight: 300,
-                overflow: 'auto',
-              }}
-              variant={'filled'}
-            >
+            <Highlighter language={language} style={styles.colored} variant={'filled'}>
               {data}
             </Highlighter>
           </>

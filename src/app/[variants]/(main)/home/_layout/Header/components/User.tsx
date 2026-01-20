@@ -10,6 +10,21 @@ import UserAvatar from '@/features/User/UserAvatar';
 import UserPanel from '@/features/User/UserPanel';
 import { useUserStore } from '@/store/user';
 import { authSelectors, userProfileSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  spacingBase: {
+    minWidth: 32,
+    overflow: 'hidden',
+    paddingInlineStart: 2,
+  },
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 export const USER_DROPDOWN_ICON_ID = 'user-dropdown-icon';
 
@@ -19,6 +34,12 @@ const User = memo<{ lite?: boolean }>(({ lite }) => {
     userProfileSelectors.username(s),
     authSelectors.isLogin(s),
   ]);
+
+  const spacingStyle = {
+    ...styles.spacingBase,
+    paddingInlineEnd: lite ? 2 : 8,
+  };
+
   return (
     <UserPanel>
       <Block
@@ -27,27 +48,16 @@ const User = memo<{ lite?: boolean }>(({ lite }) => {
         gap={8}
         horizontal
         paddingBlock={2}
-        style={{
-          minWidth: 32,
-          overflow: 'hidden',
-          paddingInlineEnd: lite ? 2 : 8,
-          paddingInlineStart: 2,
-        }}
+        style={spacingStyle}
         variant={'borderless'}
       >
         <UserAvatar shape={'square'} size={28} />
         {!lite && (
-          <Flexbox align={'center'} gap={4} horizontal style={{ overflow: 'hidden' }}>
+          <Flexbox align={'center'} gap={4} horizontal style={styles.style}>
             {!isSignedIn && (nickname || username) ? (
               <ProductLogo color={cssVar.colorText} size={28} type={'text'} />
             ) : (
-              <Text
-                ellipsis
-                style={{
-                  flex: 1,
-                }}
-                weight={500}
-              >
+              <Text ellipsis style={styles.flexContainer} weight={500}>
                 {nickname || username}
               </Text>
             )}

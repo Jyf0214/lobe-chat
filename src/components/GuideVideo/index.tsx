@@ -1,6 +1,16 @@
 import { cssVar } from 'antd-style';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    background: cssVar.colorFillSecondary,
+    height: 'auto',
+    width: '100%',
+  },
+});
+
 interface GuideVideoProps {
   height: number;
   src: string;
@@ -16,11 +26,7 @@ const GuideVideo = memo<GuideVideoProps>(({ height, width, src }) => {
       loop
       muted
       src={src}
-      style={{
-        background: cssVar.colorFillSecondary,
-        height: 'auto',
-        width: '100%',
-      }}
+      style={styles.fullWidth}
       width={width}
     />
   );

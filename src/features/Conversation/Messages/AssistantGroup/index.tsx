@@ -2,16 +2,17 @@
 
 import type { AssistantContentBlock } from '@lobechat/types';
 import isEqual from 'fast-deep-equal';
-import dynamic from '@/libs/next/dynamic';
 import { type MouseEventHandler, Suspense, memo, useCallback, useMemo } from 'react';
 
 import { MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES } from '@/const/messageActionPortal';
 import { ChatItem } from '@/features/Conversation/ChatItem';
 import { useNewScreen } from '@/features/Conversation/Messages/components/useNewScreen';
 import { useOpenChatSettings } from '@/hooks/useInterceptingRoutes';
+import dynamic from '@/libs/next/dynamic';
 import { useAgentStore } from '@/store/agent';
 import { builtinAgentSelectors } from '@/store/agent/selectors';
 import { useGlobalStore } from '@/store/global';
+import { StyleSheet } from '@/utils/styles';
 
 import { useAgentMeta } from '../../hooks';
 import { dataSelectors, messageStateSelectors, useConversationStore } from '../../store';
@@ -24,15 +25,21 @@ import Usage from '../components/Extras/Usage';
 import MessageBranch from '../components/MessageBranch';
 import Group from './components/Group';
 
+const styles = StyleSheet.create({
+  spacing: {
+    marginTop: 8,
+  },
+  style: {
+    height: '28px',
+  },
+});
+
 const EditState = dynamic(() => import('./components/EditState'), {
   ssr: false,
 });
 
 const actionBarHolder = (
-  <div
-    {...{ [MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES.assistantGroup]: '' }}
-    style={{ height: '28px' }}
-  />
+  <div {...{ [MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES.assistantGroup]: '' }} style={styles.style} />
 );
 interface GroupMessageProps {
   disableEditing?: boolean;
@@ -131,7 +138,7 @@ const GroupMessage = memo<GroupMessageProps>(({ id, index, disableEditing, isLat
         />
       )}
       {aggregatedFileList.length > 0 && (
-        <div style={{ marginTop: 8 }}>
+        <div style={styles.spacing}>
           <FileListViewer items={aggregatedFileList} />
         </div>
       )}

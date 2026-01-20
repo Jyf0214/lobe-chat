@@ -10,8 +10,29 @@ import { useTranslation } from 'react-i18next';
 import { type Locales, localeOptions, normalizeLocale } from '@/locales/resources';
 import { useGlobalStore } from '@/store/global';
 import { useUserStore } from '@/store/user';
+import { StyleSheet } from '@/utils/styles';
 
 import LobeMessage from '../components/LobeMessage';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextDescription,
+  },
+  fullWidth: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    width: '100%',
+  },
+  spacing: {
+    marginTop: 32,
+  },
+  style: {
+    zoom: 1.5,
+  },
+  style1: {
+    fontSize: 12,
+  },
+});
 
 interface ResponseLanguageStepProps {
   onBack: () => void;
@@ -77,33 +98,25 @@ const ResponseLanguageStep = memo<ResponseLanguageStepProps>(({ onBack, onNext }
           options={localeOptions}
           showSearch
           size="large"
-          style={{
-            fontSize: 20,
-            fontWeight: 'bold',
-            width: '100%',
-          }}
+          style={styles.fullWidth}
           value={value}
         />
         <SendButton
           disabled={isNavigating}
           onClick={handleNext}
-          style={{
-            zoom: 1.5,
-          }}
+          style={styles.style}
           type="primary"
         />
       </Flexbox>
-      <Text style={{ fontSize: 12 }} type="secondary">
+      <Text style={styles.style1} type="secondary">
         {t('responseLanguage.hint')}
       </Text>
-      <Flexbox horizontal justify={'flex-start'} style={{ marginTop: 32 }}>
+      <Flexbox horizontal justify={'flex-start'} style={styles.spacing}>
         <Button
           disabled={isNavigating}
           icon={Undo2Icon}
           onClick={handleBack}
-          style={{
-            color: cssVar.colorTextDescription,
-          }}
+          style={styles.colored}
           type={'text'}
         >
           {t('back')}

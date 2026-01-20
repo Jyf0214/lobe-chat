@@ -2,18 +2,25 @@ import { BarList } from '@lobehub/charts';
 import { ActionIcon, Icon, Modal } from '@lobehub/ui';
 import { cssVar } from 'antd-style';
 import { MaximizeIcon, MessageSquareIcon } from 'lucide-react';
-import Link from '@/libs/router/Link';
 import qs from 'query-string';
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { INBOX_SESSION_ID } from '@/const/session';
+import Link from '@/libs/router/Link';
 import { useClientDataSWR } from '@/libs/swr';
 import { topicService } from '@/services/topic';
 import { type TopicRankItem } from '@/types/topic';
+import { StyleSheet } from '@/utils/styles';
 
 import StatsFormGroup from '../components/StatsFormGroup';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+  },
+});
 
 export const TopicsRank = memo<{ mobile?: boolean }>(({ mobile }) => {
   const [open, setOpen] = useState(false);
@@ -38,7 +45,7 @@ export const TopicsRank = memo<{ mobile?: boolean }>(({ mobile }) => {
       icon: <Icon color={cssVar.colorTextDescription} icon={MessageSquareIcon} size={16} />,
       link,
       name: (
-        <Link href={link} style={{ color: 'inherit' }}>
+        <Link href={link} style={styles.colored}>
           {item.title}
         </Link>
       ),

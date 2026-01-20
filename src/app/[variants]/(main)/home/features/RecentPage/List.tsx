@@ -8,8 +8,16 @@ import { RECENT_BLOCK_SIZE } from '@/app/[variants]/(main)/home/features/const';
 import { useHomeStore } from '@/store/home';
 import { homeRecentSelectors } from '@/store/home/selectors';
 import { standardizeIdentifier } from '@/utils/identifier';
+import { StyleSheet } from '@/utils/styles';
 
 import RecentPageItem from './Item';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+    textDecoration: 'none',
+  },
+});
 
 const RecentPageList = memo(() => {
   const documents = useHomeStore(homeRecentSelectors.recentPages);
@@ -26,14 +34,7 @@ const RecentPageList = memo(() => {
     const pageUrl = `/page/${standardizeIdentifier(document.id)}`;
 
     return (
-      <Link
-        key={document.id}
-        style={{
-          color: 'inherit',
-          textDecoration: 'none',
-        }}
-        to={pageUrl}
-      >
+      <Link key={document.id} style={styles.colored} to={pageUrl}>
         <RecentPageItem document={document} />
       </Link>
     );

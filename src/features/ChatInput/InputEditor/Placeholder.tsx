@@ -5,6 +5,13 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { useUserStore } from '@/store/user';
 import { preferenceSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+  },
+});
 
 const Placeholder = memo(() => {
   const useCmdEnterToSend = useUserStore(preferenceSelectors.useCmdEnterToSend);
@@ -26,7 +33,7 @@ const Placeholder = memo(() => {
                   <Hotkey
                     as={'span'}
                     keys={wrapperShortcut}
-                    style={{ color: 'inherit' }}
+                    style={styles.colored}
                     styles={{ kbdStyle: { color: 'inhert' } }}
                     variant={'borderless'}
                   />

@@ -1,9 +1,20 @@
 'use server';
 
 import { Image } from '@lobehub/ui/mdx';
-import Img from '@/libs/next/Image';
 import { getPlaiceholder } from 'plaiceholder';
 import { type FC } from 'react';
+
+import Img from '@/libs/next/Image';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    filter: 'blur(24px)',
+    height: 'auto',
+    scale: 1.2,
+    width: '100%',
+  },
+});
 
 const DEFAULT_WIDTH = 800;
 
@@ -33,7 +44,7 @@ const ImageWrapper: FC<{ alt: string; src: string }> = async ({ alt, src, ...res
             alt={alt}
             height={height}
             src={base64}
-            style={{ filter: 'blur(24px)', height: 'auto', scale: 1.2, width: '100%' }}
+            style={styles.fullWidth}
             width={DEFAULT_WIDTH}
           />
         }

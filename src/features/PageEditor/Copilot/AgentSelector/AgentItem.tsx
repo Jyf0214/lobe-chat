@@ -4,6 +4,13 @@ import { useTranslation } from 'react-i18next';
 
 import AgentAvatar from '@/app/[variants]/(main)/home/_layout/Body/Agent/List/AgentItem/Avatar';
 import NavItem from '@/features/NavPanel/components/NavItem';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flexShrink: 0,
+  },
+});
 
 interface AgentItemProps {
   active: boolean;
@@ -26,7 +33,7 @@ const AgentItem = memo<AgentItemProps>(
           onAgentChange(agentId);
           onClose();
         }}
-        style={{ flexShrink: 0 }}
+        style={styles.flexContainer}
         title={agentTitle || t('untitledAgent')}
       />
     );

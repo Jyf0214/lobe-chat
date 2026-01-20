@@ -11,6 +11,17 @@ import { useServerConfigStore } from '@/store/serverConfig';
 import { serverConfigSelectors } from '@/store/serverConfig/selectors';
 import { useUserStore } from '@/store/user';
 import { authSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    fontSize: 12,
+  },
+  style1: {
+    cursor: 'pointer',
+    fontSize: 12,
+  },
+});
 
 const providerNameStyle: CSSProperties = {
   textTransform: 'capitalize',
@@ -98,7 +109,7 @@ export const SSOProvidersList = memo(() => {
           justify={'space-between'}
           key={[item.provider, item.providerAccountId].join('-')}
         >
-          <Flexbox align={'center'} gap={6} horizontal style={{ fontSize: 12 }}>
+          <Flexbox align={'center'} gap={6} horizontal style={styles.style}>
             {AuthIcons(item.provider, 16)}
             <span style={providerNameStyle}>{item.provider}</span>
             {item.email && (
@@ -121,7 +132,7 @@ export const SSOProvidersList = memo(() => {
       {/* Link Account Button - Only show for Better-Auth users with available providers */}
       {enableBetterAuthActions && availableProviders.length > 0 && (
         <DropdownMenu items={linkMenuItems} popupProps={{ style: { maxWidth: '200px' } }}>
-          <Flexbox align={'center'} gap={6} horizontal style={{ cursor: 'pointer', fontSize: 12 }}>
+          <Flexbox align={'center'} gap={6} horizontal style={styles.style1}>
             <Plus size={14} />
             <span>{t('profile.sso.link.button')}</span>
             <ArrowRight size={14} />

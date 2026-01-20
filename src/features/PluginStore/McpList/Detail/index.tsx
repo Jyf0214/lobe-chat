@@ -15,8 +15,18 @@ import DetailLoading from '@/features/PluginStore/McpList/Detail/Loading';
 import { useDiscoverStore } from '@/store/discover';
 import { useToolStore } from '@/store/tool';
 import { McpNavKey } from '@/types/discover';
+import { StyleSheet } from '@/utils/styles';
 
 import Settings from './Settings';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: undefined,
+  },
+  style: {
+    maxWidth: 400,
+  },
+});
 
 interface DetailProps {
   identifier?: string;
@@ -42,16 +52,14 @@ const Detail = memo<DetailProps>(({ identifier: defaultIdentifier }) => {
     return (
       <Center
         height={'100%'}
-        style={{
-          background: theme.colorBgContainerSecondary,
-        }}
+        style={{ ...styles.colored, background: theme.colorBgContainerSecondary }}
         width={'100%'}
       >
         <Empty
           description={t('store.emptySelectHint')}
           descriptionProps={{ fontSize: 14 }}
           icon={Boxes}
-          style={{ maxWidth: 400 }}
+          style={styles.style}
         />
       </Center>
     );

@@ -13,8 +13,16 @@ import { DESKTOP_HEADER_ICON_SIZE } from '@/const/layoutTokens';
 import { useQueryState } from '@/hooks/useQueryParam';
 import { useUserMemoryStore } from '@/store/userMemory';
 import { LayersEnum } from '@/types/userMemory';
+import { StyleSheet } from '@/utils/styles';
 
 import IdentityDropdown from './IdentityDropdown';
+
+const styles = StyleSheet.create({
+  spacing: {
+    lineHeight: 1.4,
+    marginBottom: 0,
+  },
+});
 
 const IdentityRightPanel = memo(() => {
   const [identityId] = useQueryState('identityId', { clearOnDefault: true });
@@ -30,15 +38,7 @@ const IdentityRightPanel = memo(() => {
     content = (
       <>
         <CateTag cate={identity.type} />
-        <Text
-          as={'h1'}
-          fontSize={20}
-          style={{
-            lineHeight: 1.4,
-            marginBottom: 0,
-          }}
-          weight={'bold'}
-        >
+        <Text as={'h1'} fontSize={20} style={styles.spacing} weight={'bold'}>
           {identity.role || identity.relationship || 'Identity'}
         </Text>
         <Time capturedAt={identity.capturedAt || identity.updatedAt || identity.createdAt} />

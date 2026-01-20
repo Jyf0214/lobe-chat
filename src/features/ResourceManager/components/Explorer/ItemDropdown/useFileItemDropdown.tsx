@@ -22,8 +22,15 @@ import { documentService } from '@/services/document';
 import { useFileStore } from '@/store/file';
 import { useKnowledgeBaseStore } from '@/store/library';
 import { downloadFile } from '@/utils/client/downloadFile';
+import { StyleSheet } from '@/utils/styles';
 
 import MoveToFolderModal from '../MoveToFolderModal';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginLeft: 8,
+  },
+});
 
 interface UseFileItemDropdownParams {
   enabled?: boolean;
@@ -86,7 +93,7 @@ export const useFileItemDropdown = ({
     const addToKnowledgeBaseSubmenu: ItemType[] = availableKnowledgeBases.map((kb) => ({
       icon: <RepoIcon />,
       key: `add-to-kb-${kb.id}`,
-      label: <span style={{ marginLeft: 8 }}>{kb.name}</span>,
+      label: <span style={styles.spacing}>{kb.name}</span>,
       onClick: async ({ domEvent }) => {
         domEvent.stopPropagation();
         try {

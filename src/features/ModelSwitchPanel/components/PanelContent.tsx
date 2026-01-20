@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Rnd } from 'react-rnd';
 
 import { useEnabledChatModels } from '@/hooks/useEnabledChatModels';
+import { StyleSheet } from '@/utils/styles';
 
 import { ENABLE_RESIZING, MAX_WIDTH, MIN_WIDTH } from '../const';
 import { usePanelHandlers } from '../hooks/usePanelHandlers';
@@ -11,6 +12,14 @@ import { usePanelState } from '../hooks/usePanelState';
 import { Footer } from './Footer';
 import { List } from './List';
 import { Toolbar } from './Toolbar';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
+  },
+});
 
 interface PanelContentProps {
   model?: string;
@@ -45,7 +54,7 @@ export const PanelContent: FC<PanelContentProps> = ({
       }}
       position={{ x: 0, y: 0 }}
       size={{ height: panelHeight, width: panelWidth }}
-      style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}
+      style={styles.flexContainer}
     >
       <Toolbar
         groupMode={groupMode}

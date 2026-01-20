@@ -7,6 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { useMarketAuth } from '@/layout/AuthProvider/MarketAuth';
 import { socialService } from '@/services/social';
 import { useDiscoverStore } from '@/store/discover';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    fontWeight: 500,
+    minWidth: 120,
+  },
+});
 
 interface FollowButtonProps {
   userId: number;
@@ -56,10 +64,7 @@ const FollowButton = memo<FollowButtonProps>(({ userId }) => {
       onClick={handleClick}
       shape={'round'}
       size={'large'}
-      style={{
-        fontWeight: 500,
-        minWidth: 120,
-      }}
+      style={styles.style}
       type={isFollowing ? 'default' : 'primary'}
     >
       {isFollowing ? t('user.unfollow') : t('user.follow')}

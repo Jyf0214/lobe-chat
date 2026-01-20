@@ -9,6 +9,7 @@ import WideScreenButton from '@/features/WideScreenContainer/WideScreenButton';
 import { useQueryState } from '@/hooks/useQueryParam';
 import { useUserMemoryStore } from '@/store/userMemory';
 import { type TypesEnum } from '@/types/userMemory';
+import { StyleSheet } from '@/utils/styles';
 
 import EditableModal from '../features/EditableModal';
 import Loading from '../features/Loading';
@@ -17,6 +18,13 @@ import ViewModeSwitcher, { type ViewMode } from '../features/ViewModeSwitcher';
 import IdentityRightPanel from './features/IdentityRightPanel';
 import List, { type IdentityType } from './features/List';
 import SegmentedBar from './features/SegmentedBar';
+
+const styles = StyleSheet.create({
+  spacing: {
+    overflowY: 'auto',
+    paddingBottom: '16vh',
+  },
+});
 
 const IdentitiesArea = memo(() => {
   const [viewMode, setViewMode] = useState<ViewMode>('timeline');
@@ -80,12 +88,7 @@ const IdentitiesArea = memo(() => {
           </>
         }
       />
-      <Flexbox
-        height={'100%'}
-        id={SCROLL_PARENT_ID}
-        style={{ overflowY: 'auto', paddingBottom: '16vh' }}
-        width={'100%'}
-      >
+      <Flexbox height={'100%'} id={SCROLL_PARENT_ID} style={styles.spacing} width={'100%'}>
         <WideScreenContainer gap={32} paddingBlock={48}>
           <Flexbox align={'center'} gap={12} horizontal justify={'space-between'}>
             <SegmentedBar onTypeChange={handleTypeChange} typeValue={typeFilter} />

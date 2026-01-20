@@ -11,10 +11,18 @@ import { useToolStore } from '@/store/tool';
 import { toolSelectors } from '@/store/tool/selectors';
 import { getBuiltinRender } from '@/tools/renders';
 import { getBuiltinStreaming } from '@/tools/streamings';
+import { StyleSheet } from '@/utils/styles';
 
 import { ToolErrorBoundary } from '../../Tool/ErrorBoundary';
 import Actions from './Actions';
 import Inspectors from './Inspector';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBottom: 0,
+    marginTop: 8,
+  },
+});
 
 const Debug = dynamic(() => import('./Debug'), {
   loading: () => <Skeleton.Block active height={300} width={'100%'} />,
@@ -168,7 +176,7 @@ const Tool = memo<GroupToolProps>(
               type={type}
             />
           </ToolErrorBoundary>
-          <Divider dashed style={{ marginBottom: 0, marginTop: 8 }} />
+          <Divider dashed style={styles.spacing} />
         </Flexbox>
       </AccordionItem>
     );

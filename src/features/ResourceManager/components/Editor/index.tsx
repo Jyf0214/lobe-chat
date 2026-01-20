@@ -17,9 +17,27 @@ import { useAgentStore } from '@/store/agent';
 import { builtinAgentSelectors } from '@/store/agent/selectors';
 import { fileManagerSelectors, useFileStore } from '@/store/file';
 import { downloadFile } from '@/utils/client/downloadFile';
+import { StyleSheet } from '@/utils/styles';
 
 import FileContent from './FileContent';
 import FileCopilot from './FileCopilot';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: undefined,
+    fontSize: 14,
+    fontWeight: 500,
+  },
+  colored1: {
+    borderBottom: `1px solid ${cssVar.colorBorderSecondary}`,
+  },
+  style: {
+    minHeight: 32,
+  },
+  style1: {
+    overflow: 'hidden',
+  },
+});
 
 interface FileEditorProps {
   onBack?: () => void;
@@ -40,15 +58,9 @@ const FileEditorCanvas = memo<FileEditorProps>(({ onBack }) => {
         <Flexbox flex={1} height={'100%'}>
           <NavHeader
             left={
-              <Flexbox align={'center'} gap={12} horizontal style={{ minHeight: 32 }}>
+              <Flexbox align={'center'} gap={12} horizontal style={styles.style}>
                 <ActionIcon icon={ArrowLeftIcon} onClick={onBack} title={t('back')} />
-                <span
-                  style={{
-                    color: theme.colorText,
-                    fontSize: 14,
-                    fontWeight: 500,
-                  }}
-                >
+                <span style={{ ...styles.colored, color: theme.colorText }}>
                   {fileDetail?.name}
                 </span>
               </Flexbox>
@@ -70,14 +82,12 @@ const FileEditorCanvas = memo<FileEditorProps>(({ onBack }) => {
                 <ActionIcon icon={InfoIcon} onClick={() => setIsDetailModalOpen(true)} />
               </Flexbox>
             }
-            style={{
-              borderBottom: `1px solid ${cssVar.colorBorderSecondary}`,
-            }}
+            style={styles.colored1}
             styles={{
               left: { padding: 0 },
             }}
           />
-          <Flexbox flex={1} style={{ overflow: 'hidden' }}>
+          <Flexbox flex={1} style={styles.style1}>
             <FileContent fileId={currentViewItemId} />
           </Flexbox>
         </Flexbox>

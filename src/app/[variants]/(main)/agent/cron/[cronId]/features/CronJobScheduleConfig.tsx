@@ -5,6 +5,8 @@ import dayjs from 'dayjs';
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import {
   SCHEDULE_TYPE_OPTIONS,
   type ScheduleType,
@@ -12,6 +14,31 @@ import {
   WEEKDAY_LABELS,
   WEEKDAY_OPTIONS,
 } from '../CronConfig';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flexWrap: 'wrap',
+  },
+  style: {
+    borderRadius: 12,
+  },
+  style1: {
+    minWidth: 120,
+  },
+  style2: {
+    minWidth: 150,
+  },
+  style3: {
+    width: 80,
+  },
+  style4: {
+    maxWidth: 300,
+    minWidth: 200,
+  },
+  style5: {
+    width: 160,
+  },
+});
 
 interface CronJobScheduleConfigProps {
   hourlyInterval?: number;
@@ -89,11 +116,11 @@ const CronJobScheduleConfig = memo<CronJobScheduleConfigProps>(
     }, [scheduleType, triggerTime, timezone, weekdays, hourlyInterval, t]);
 
     return (
-      <Card size="small" style={{ borderRadius: 12 }} styles={{ body: { padding: 12 } }}>
+      <Card size="small" style={styles.style} styles={{ body: { padding: 12 } }}>
         <Flexbox gap={12}>
           {/* Summary Tags */}
           {summaryTags.length > 0 && (
-            <Flexbox align="center" gap={8} horizontal style={{ flexWrap: 'wrap' }}>
+            <Flexbox align="center" gap={8} horizontal style={styles.flexContainer}>
               {summaryTags.map((tag) => (
                 <Tag key={tag.key} variant={'filled'}>
                   {tag.label}
@@ -102,7 +129,7 @@ const CronJobScheduleConfig = memo<CronJobScheduleConfigProps>(
             </Flexbox>
           )}
           {/* Schedule Configuration - All in one row */}
-          <Flexbox align="center" gap={8} horizontal style={{ flexWrap: 'wrap' }}>
+          <Flexbox align="center" gap={8} horizontal style={styles.flexContainer}>
             <Tag variant={'borderless'}>{t('agentCronJobs.schedule')}</Tag>
             <Select
               onChange={(value: ScheduleType) =>
@@ -116,7 +143,7 @@ const CronJobScheduleConfig = memo<CronJobScheduleConfigProps>(
                 value: opt.value,
               }))}
               size="small"
-              style={{ minWidth: 120 }}
+              style={styles.style1}
               value={scheduleType}
             />
 
@@ -129,7 +156,7 @@ const CronJobScheduleConfig = memo<CronJobScheduleConfigProps>(
                 options={WEEKDAY_OPTIONS}
                 placeholder="Select days"
                 size="small"
-                style={{ minWidth: 150 }}
+                style={styles.style2}
                 value={weekdays}
               />
             )}
@@ -143,7 +170,7 @@ const CronJobScheduleConfig = memo<CronJobScheduleConfigProps>(
                   if (value) onScheduleChange({ triggerTime: value });
                 }}
                 size="small"
-                style={{ minWidth: 120 }}
+                style={styles.style1}
                 value={triggerTime ?? dayjs().hour(0).minute(0)}
               />
             )}
@@ -159,7 +186,7 @@ const CronJobScheduleConfig = memo<CronJobScheduleConfigProps>(
                     onScheduleChange({ hourlyInterval: value ?? 1 })
                   }
                   size="small"
-                  style={{ width: 80 }}
+                  style={styles.style3}
                   value={hourlyInterval ?? 1}
                 />
                 <Text type="secondary">hour(s) at</Text>
@@ -172,7 +199,7 @@ const CronJobScheduleConfig = memo<CronJobScheduleConfigProps>(
                     { label: ':30', value: 30 },
                   ]}
                   size="small"
-                  style={{ width: 80 }}
+                  style={styles.style3}
                   value={triggerTime?.minute() ?? 0}
                 />
               </>
@@ -184,13 +211,13 @@ const CronJobScheduleConfig = memo<CronJobScheduleConfigProps>(
               options={TIMEZONE_OPTIONS}
               showSearch
               size="small"
-              style={{ maxWidth: 300, minWidth: 200 }}
+              style={styles.style4}
               value={timezone}
             />
           </Flexbox>
 
           {/* Max Executions */}
-          <Flexbox align="center" gap={8} horizontal style={{ flexWrap: 'wrap' }}>
+          <Flexbox align="center" gap={8} horizontal style={styles.flexContainer}>
             <Tag variant={'borderless'}>{t('agentCronJobs.maxExecutions')}</Tag>
             <InputNumber
               min={1}
@@ -199,7 +226,7 @@ const CronJobScheduleConfig = memo<CronJobScheduleConfigProps>(
               }
               placeholder={t('agentCronJobs.form.maxExecutions.placeholder')}
               size="small"
-              style={{ width: 160 }}
+              style={styles.style5}
               value={maxExecutions ?? null}
             />
           </Flexbox>

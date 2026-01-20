@@ -8,6 +8,13 @@ import { DEFAULT_INBOX_AVATAR } from '@/const/index';
 import { conversationSelectors, useConversationStore } from '@/features/Conversation';
 import { useAgentStore } from '@/store/agent';
 import { agentByIdSelectors } from '@/store/agent/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBottom: 'max(10vh, 32px)',
+  },
+});
 
 const AgentBuilderWelcome = memo(() => {
   const { t } = useTranslation('chat');
@@ -17,13 +24,7 @@ const AgentBuilderWelcome = memo(() => {
   return (
     <>
       <Flexbox flex={1} />
-      <Flexbox
-        gap={12}
-        style={{
-          paddingBottom: 'max(10vh, 32px)',
-        }}
-        width={'100%'}
-      >
+      <Flexbox gap={12} style={styles.spacing} width={'100%'}>
         <Avatar avatar={agent.avatar || DEFAULT_INBOX_AVATAR} shape={'square'} size={78} />
         <Text fontSize={24} weight={'bold'}>
           {t('agentBuilder.title')}

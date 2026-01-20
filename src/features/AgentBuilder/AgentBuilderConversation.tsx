@@ -6,9 +6,20 @@ import type { ActionKeys } from '@/features/ChatInput';
 import { ChatInput, ChatList } from '@/features/Conversation';
 import { useAgentStore } from '@/store/agent';
 import { agentByIdSelectors } from '@/store/agent/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import AgentBuilderWelcome from './AgentBuilderWelcome';
 import TopicSelector from './TopicSelector';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+    height: '100%',
+  },
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 interface AgentBuilderConversationProps {
   agentId: string;
@@ -26,10 +37,10 @@ const AgentBuilderConversation = memo<AgentBuilderConversationProps>(({ agentId 
   const { handleUploadFiles } = useUploadFiles({ model, provider });
 
   return (
-    <DragUploadZone onUploadFiles={handleUploadFiles} style={{ flex: 1, height: '100%' }}>
+    <DragUploadZone onUploadFiles={handleUploadFiles} style={styles.flexContainer}>
       <Flexbox flex={1} height={'100%'}>
         <TopicSelector agentId={agentId} />
-        <Flexbox flex={1} style={{ overflow: 'hidden' }}>
+        <Flexbox flex={1} style={styles.style}>
           <ChatList welcome={<AgentBuilderWelcome />} />
         </Flexbox>
         <ChatInput leftActions={actions} />

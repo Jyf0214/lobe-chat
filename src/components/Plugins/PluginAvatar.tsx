@@ -2,6 +2,15 @@ import { MCP } from '@lobehub/icons';
 import { Avatar } from '@lobehub/ui';
 import { type CSSProperties, memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+    overflow: 'hidden',
+  },
+});
+
 interface PluginAvatarProps {
   alt?: string;
   avatar?: string;
@@ -15,7 +24,7 @@ const PluginAvatar = memo<PluginAvatarProps>(({ avatar, style, size = 40, alt })
       className={'ant-avatar'}
       shape={'square'}
       size={size}
-      style={{ flex: 'none', overflow: 'hidden', ...style }}
+      style={StyleSheet.compose(styles.flexContainer, style)}
     />
   ) : (
     <Avatar
@@ -23,7 +32,7 @@ const PluginAvatar = memo<PluginAvatarProps>(({ avatar, style, size = 40, alt })
       avatar={avatar}
       shape={'square'}
       size={size}
-      style={{ flex: 'none', overflow: 'hidden', ...style }}
+      style={StyleSheet.compose(styles.flexContainer, style)}
     />
   );
 });

@@ -8,8 +8,19 @@ import {
   useSyncExternalStore,
 } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
 import Sidebar from '../../app/[variants]/(main)/home/_layout/Sidebar';
 import { NavPanelDraggable } from './components/NavPanelDraggable';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    height: '100%',
+    position: 'relative',
+    width: 0,
+    zIndex: 10,
+  },
+});
 
 export const NAV_PANEL_RIGHT_DRAWER_ID = 'nav-panel-drawer';
 
@@ -45,15 +56,7 @@ const NavPanel = memo(() => {
   return (
     <>
       <NavPanelDraggable activeContent={activeContent} />
-      <div
-        id={NAV_PANEL_RIGHT_DRAWER_ID}
-        style={{
-          height: '100%',
-          position: 'relative',
-          width: 0,
-          zIndex: 10,
-        }}
-      />
+      <div id={NAV_PANEL_RIGHT_DRAWER_ID} style={styles.fullWidth} />
     </>
   );
 });

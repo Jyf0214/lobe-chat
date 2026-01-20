@@ -3,7 +3,40 @@ import { Flexbox } from '@lobehub/ui';
 import { cssVar } from 'antd-style';
 import { type ReactNode, memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { type MentionListOption } from './types';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorBgElevated,
+    border: `1px solid ${cssVar.colorBorderSecondary}`,
+    borderRadius: 12,
+    boxShadow: cssVar.boxShadowSecondary,
+    maxHeight: 260,
+    maxWidth: 400,
+    minWidth: 150,
+    overflow: 'hidden auto',
+    position: 'fixed',
+    zIndex: 9999,
+  },
+  colored1: {
+    borderTop: `1px solid ${cssVar.colorBorderSecondary}`,
+  },
+  colored2: {
+    cursor: 'pointer',
+  },
+  colored3: {
+    color: cssVar.colorText,
+    fontSize: 14,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  flexContainer: {
+    flex: 'none',
+  },
+});
 
 /**
  * Get cursor position from browser selection API
@@ -47,35 +80,27 @@ const MentionDropdown = memo<MenuRenderProps>(
 
     if (!open || !options.length || !position) return null;
 
+    const positionedStyle = {
+      ...styles.colored,
+      left: position.x,
+      top: position.y,
+    };
+
     return (
-      <Flexbox
-        style={{
-          background: cssVar.colorBgElevated,
-          border: `1px solid ${cssVar.colorBorderSecondary}`,
-          borderRadius: 12,
-          boxShadow: cssVar.boxShadowSecondary,
-          left: position.x,
-          maxHeight: 260,
-          maxWidth: 400,
-          minWidth: 150,
-          overflow: 'hidden auto',
-          position: 'fixed',
-          top: position.y,
-          zIndex: 9999,
-        }}
-      >
+      <Flexbox style={positionedStyle}>
         {options.map((option) => {
           if ((option as any)?.type === 'divider') {
             return (
-              <div
-                key={`divider-${(option as any)?.key ?? 'divider'}`}
-                style={{ borderTop: `1px solid ${cssVar.colorBorderSecondary}` }}
-              />
+              <div key={`divider-${(option as any)?.key ?? 'divider'}`} style={styles.colored1} />
             );
           }
 
           const item = option as MentionListOption;
           const isActive = activeKey === item.key;
+          const itemStyle = {
+            ...styles.colored2,
+            background: isActive ? cssVar.colorFillSecondary : undefined,
+          };
 
           return (
             <Flexbox
@@ -91,23 +116,12 @@ const MentionDropdown = memo<MenuRenderProps>(
               paddingBlock={8}
               paddingInline={12}
               ref={isActive ? activeItemRef : null}
-              style={{
-                background: isActive ? cssVar.colorFillSecondary : undefined,
-                cursor: 'pointer',
-              }}
+              style={itemStyle}
             >
-              {item.icon && <Flexbox style={{ flex: 'none' }}>{item?.icon as ReactNode}</Flexbox>}
-              <div
-                style={{
-                  color: cssVar.colorText,
-                  fontSize: 14,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {item.label}
-              </div>
+              {item.icon && (
+                <Flexbox style={styles.flexContainer}>{item?.icon as ReactNode}</Flexbox>
+              )}
+              <div style={styles.colored3}>{item.label}</div>
             </Flexbox>
           );
         })}

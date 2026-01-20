@@ -3,7 +3,16 @@ import { cssVar } from 'antd-style';
 import { BanIcon, CircleCheckBigIcon, CircleDashedIcon } from 'lucide-react';
 import { type ReactNode, memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
 import Title from '../../../app/[variants]/(main)/community/features/Title';
+
+const styles = StyleSheet.create({
+  spacing: {
+    color: cssVar.colorTextSecondary,
+    margin: 0,
+  },
+});
 
 export interface ScoreItemProps {
   check: boolean;
@@ -25,7 +34,7 @@ const ScoreItem = memo<ScoreItemProps>(({ required, check, desc, title }) => {
       />
       <Flexbox gap={4}>
         <Title level={3}>{title}</Title>
-        <p style={{ color: cssVar.colorTextSecondary, margin: 0 }}>{desc}</p>
+        <p style={styles.spacing}>{desc}</p>
       </Flexbox>
     </Flexbox>
   );

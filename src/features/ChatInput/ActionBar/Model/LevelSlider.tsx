@@ -4,6 +4,15 @@ import { type SliderSingleProps } from 'antd/es/slider';
 import { type CSSProperties, memo, useMemo } from 'react';
 import useMergeState from 'use-merge-value';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    minWidth: 200,
+    width: '100%',
+  },
+});
+
 export interface LevelSliderProps<T extends string = string> {
   /**
    * Default value when uncontrolled
@@ -72,7 +81,7 @@ function LevelSlider<T extends string = string>({
       gap={12}
       horizontal
       paddingInline={'0 20px'}
-      style={{ minWidth: 200, width: '100%', ...style }}
+      style={StyleSheet.compose(styles.fullWidth, style)}
     >
       <Flexbox flex={1}>
         <Slider

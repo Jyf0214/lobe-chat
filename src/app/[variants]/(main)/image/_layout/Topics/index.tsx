@@ -9,9 +9,20 @@ import { useImageStore } from '@/store/image';
 import { generationTopicSelectors } from '@/store/image/selectors';
 import { useUserStore } from '@/store/user';
 import { authSelectors } from '@/store/user/slices/auth/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import NewTopicButton from './NewTopicButton';
 import TopicItem from './TopicItem';
+
+const styles = StyleSheet.create({
+  spacing: {
+    padding: '0',
+  },
+  style: {
+    maxHeight: '100%',
+    overflowY: 'auto',
+  },
+});
 
 const TopicsList = memo(() => {
   const isLogin = useUserStore(authSelectors.isLogin);
@@ -31,39 +42,30 @@ const TopicsList = memo(() => {
   }
 
   return (
-    <Flexbox
-      align="center"
-      gap={12}
-      padding={12}
-      ref={ref}
-      style={{
-        maxHeight: '100%',
-        overflowY: 'auto',
-      }}
-      width={'100%'}
-    >
+    <Flexbox align="center" gap={12} padding={12} ref={ref} style={styles.style} width={'100%'}>
       <NewTopicButton
         count={generationTopics?.length}
         onClick={openNewGenerationTopic}
         showMoreInfo={showMoreInfo}
       />
       <Flexbox align="center" gap={12} ref={parent} width={'100%'}>
-        {generationTopics.map((topic, index) => (
-          <TopicItem
-            key={topic.id}
-            showMoreInfo={showMoreInfo}
-            style={{
-              padding:
-                // fix the avatar border is clipped by overflow hidden
-                generationTopics.length === 1
-                  ? '4px 0'
-                  : index === generationTopics.length - 1
-                    ? '0 0 4px'
-                    : '0',
-            }}
-            topic={topic}
-          />
-        ))}
+        {generationTopics.map((topic, index) => {
+          const itemPadding =
+            generationTopics.length === 1
+              ? '4px 0'
+              : index === generationTopics.length - 1
+                ? '0 0 4px'
+                : '0';
+
+          const itemStyle = {
+            ...styles.spacing,
+            padding: itemPadding,
+          };
+
+          return (
+            <TopicItem key={topic.id} showMoreInfo={showMoreInfo} style={itemStyle} topic={topic} />
+          );
+        })}
       </Flexbox>
     </Flexbox>
   );

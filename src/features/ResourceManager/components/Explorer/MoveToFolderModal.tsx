@@ -8,6 +8,24 @@ import FolderTree, { type FolderTreeItem } from '@/features/ResourceManager/comp
 import { clearTreeFolderCache } from '@/features/ResourceManager/components/LibraryHierarchy';
 import { fileService } from '@/services/file';
 import { useFileStore } from '@/store/file';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'var(--lobe-color-text-secondary)',
+  },
+  spacing: {
+    marginBottom: 12,
+  },
+  style: {
+    maxHeight: 400,
+    minHeight: 200,
+    overflowY: 'auto',
+  },
+  style1: {
+    minHeight: 200,
+  },
+});
 
 interface MoveToFolderModalProps {
   fileId: string;
@@ -271,7 +289,7 @@ const MoveToFolderModal = memo<MoveToFolderModalProps>(
         open={open}
         title={t('FileManager.actions.moveToFolder')}
       >
-        <Flexbox horizontal justify="flex-end" style={{ marginBottom: 12 }}>
+        <Flexbox horizontal justify="flex-end" style={styles.spacing}>
           <Button
             icon={<Icon icon={FolderIcon} />}
             loading={isCreatingFolder}
@@ -282,14 +300,12 @@ const MoveToFolderModal = memo<MoveToFolderModalProps>(
             {t('header.actions.newFolder', { ns: 'file' })}
           </Button>
         </Flexbox>
-        <Flexbox style={{ maxHeight: 400, minHeight: 200, overflowY: 'auto' }}>
+        <Flexbox style={styles.style}>
           {loading ? (
             <div>{t('loading', { ns: 'common' })}</div>
           ) : folders.length === 0 ? (
-            <Flexbox align="center" justify="center" style={{ minHeight: 200 }}>
-              <div style={{ color: 'var(--lobe-color-text-secondary)' }}>
-                {t('FileManager.noFolders')}
-              </div>
+            <Flexbox align="center" justify="center" style={styles.style1}>
+              <div style={styles.colored}>{t('FileManager.noFolders')}</div>
             </Flexbox>
           ) : (
             <FolderTree

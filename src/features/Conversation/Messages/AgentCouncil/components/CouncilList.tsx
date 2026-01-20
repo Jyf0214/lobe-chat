@@ -10,9 +10,23 @@ import { CONVERSATION_MIN_WIDTH } from '@/const/layoutTokens';
 import WideScreenContainer from '@/features/WideScreenContainer';
 import { useGlobalStore } from '@/store/global';
 import { systemStatusSelectors } from '@/store/global/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import CouncilMember from './CouncilMember';
 import ScrollShadowWithButton from './ScrollShadowWithButton';
+
+const styles = StyleSheet.create({
+  spacing: {
+    height: 'unset',
+    marginInline: 16,
+  },
+  style: {
+    minWidth: 0,
+  },
+  style1: {
+    position: 'relative',
+  },
+});
 
 export type DisplayMode = 'horizontal' | 'tab';
 
@@ -52,15 +66,21 @@ const CouncilList = memo<CouncilListProps>(({ members, displayMode, activeTab })
         );
       }
       const MIN_WIDTH = CONVERSATION_MIN_WIDTH / 2;
+      const styleWithMinWidth = {
+        ...styles.style,
+        minWidth: MIN_WIDTH * members.length + 32 + 32 * (members.length - 1),
+      };
+      const style1WithMinWidth = {
+        ...styles.style1,
+        minWidth: MIN_WIDTH,
+      };
       return (
         <ScrollShadowWithButton justify={wideScreen ? 'flex-start' : 'center'}>
           <Flexbox
             horizontal
             justify={wideScreen ? 'flex-start' : 'center'}
             paddingInline={16}
-            style={{
-              minWidth: MIN_WIDTH * members.length + 32 + 32 * (members.length - 1),
-            }}
+            style={styleWithMinWidth}
           >
             {members.map((member, idx) => {
               if (!member) return null;
@@ -69,20 +89,13 @@ const CouncilList = memo<CouncilListProps>(({ members, displayMode, activeTab })
                   <Flexbox
                     gap={12}
                     key={member.id}
-                    style={{
-                      minWidth: MIN_WIDTH,
-                      position: 'relative',
-                    }}
+                    style={style1WithMinWidth}
                     width={`min(${MIN_WIDTH}px, 100%)`}
                   >
                     <CouncilMember index={idx} item={member} />
                   </Flexbox>
                   {idx < members.length - 1 && (
-                    <Divider
-                      dashed
-                      orientation={'vertical'}
-                      style={{ height: 'unset', marginInline: 16 }}
-                    />
+                    <Divider dashed orientation={'vertical'} style={styles.spacing} />
                   )}
                 </Fragment>
               );

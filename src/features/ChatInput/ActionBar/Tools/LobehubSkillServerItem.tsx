@@ -8,6 +8,22 @@ import { agentSelectors } from '@/store/agent/selectors';
 import { useToolStore } from '@/store/tool';
 import { lobehubSkillStoreSelectors } from '@/store/tool/selectors';
 import { LobehubSkillStatus } from '@/store/tool/slices/lobehubSkillStore/types';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'red',
+    fontSize: 12,
+  },
+  style: {
+    cursor: 'pointer',
+    opacity: 0.65,
+  },
+  style1: {
+    cursor: 'pointer',
+    opacity: 0.5,
+  },
+});
 
 const POLL_INTERVAL_MS = 1000;
 const POLL_TIMEOUT_MS = 15_000;
@@ -225,7 +241,7 @@ const LobehubSkillServerItem = memo<LobehubSkillServerItemProps>(({ provider, la
             e.stopPropagation();
             handleConnect();
           }}
-          style={{ cursor: 'pointer', opacity: 0.65 }}
+          style={styles.style}
         >
           {t('tools.lobehubSkill.connect', { defaultValue: 'Connect' })}
           <Icon icon={SquareArrowOutUpRight} size="small" />
@@ -247,7 +263,7 @@ const LobehubSkillServerItem = memo<LobehubSkillServerItemProps>(({ provider, la
                 handleDisconnect();
               }}
               size="small"
-              style={{ cursor: 'pointer', opacity: 0.5 }}
+              style={styles.style1}
             />
             <Checkbox
               checked={checked}
@@ -282,7 +298,7 @@ const LobehubSkillServerItem = memo<LobehubSkillServerItemProps>(({ provider, la
                 console.error('[LobehubSkill] Failed to get authorize URL:', error);
               }
             }}
-            style={{ cursor: 'pointer', opacity: 0.65 }}
+            style={styles.style}
           >
             {t('tools.lobehubSkill.authorize', { defaultValue: 'Authorize' })}
             <Icon icon={SquareArrowOutUpRight} size="small" />
@@ -299,7 +315,7 @@ const LobehubSkillServerItem = memo<LobehubSkillServerItemProps>(({ provider, la
               e.stopPropagation();
               handleConnect();
             }}
-            style={{ cursor: 'pointer', opacity: 0.65 }}
+            style={styles.style}
           >
             {t('tools.lobehubSkill.connect', { defaultValue: 'Connect' })}
             <Icon icon={SquareArrowOutUpRight} size="small" />
@@ -308,7 +324,7 @@ const LobehubSkillServerItem = memo<LobehubSkillServerItemProps>(({ provider, la
       }
       case LobehubSkillStatus.ERROR: {
         return (
-          <span style={{ color: 'red', fontSize: 12 }}>
+          <span style={styles.colored}>
             {t('tools.lobehubSkill.error', { defaultValue: 'Error' })}
           </span>
         );

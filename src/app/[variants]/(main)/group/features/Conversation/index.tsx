@@ -6,9 +6,21 @@ import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
 import { useGlobalStore } from '@/store/global';
 import { systemStatusSelectors } from '@/store/global/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import ConversationArea from './ConversationArea';
 import ChatHeader from './Header';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    height: '100%',
+    width: '100%',
+  },
+  style: {
+    overflow: 'hidden',
+    position: 'relative',
+  },
+});
 
 const ChatConversation = memo(() => {
   const showHeader = useGlobalStore(systemStatusSelectors.showChatHeader);
@@ -19,8 +31,8 @@ const ChatConversation = memo(() => {
   const { handleUploadFiles } = useUploadFiles({ model, provider });
 
   return (
-    <DragUploadZone onUploadFiles={handleUploadFiles} style={{ height: '100%', width: '100%' }}>
-      <Flexbox height={'100%'} style={{ overflow: 'hidden', position: 'relative' }} width={'100%'}>
+    <DragUploadZone onUploadFiles={handleUploadFiles} style={styles.fullWidth}>
+      <Flexbox height={'100%'} style={styles.style} width={'100%'}>
         {showHeader && <ChatHeader />}
         <ConversationArea />
       </Flexbox>

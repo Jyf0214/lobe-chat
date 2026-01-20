@@ -7,10 +7,18 @@ import { XIcon } from 'lucide-react';
 import { type ReactNode, Suspense, memo } from 'react';
 
 import { DESKTOP_HEADER_ICON_SIZE } from '@/const/layoutTokens';
+import { StyleSheet } from '@/utils/styles';
 
 import { NAV_PANEL_RIGHT_DRAWER_ID } from './';
 import SideBarHeaderLayout from './SideBarHeaderLayout';
 import SkeletonList from './components/SkeletonList';
+
+const styles = StyleSheet.create({
+  spacing: {
+    fontWeight: 600,
+    paddingLeft: 8,
+  },
+});
 
 interface SideBarDrawerProps {
   action?: ReactNode;
@@ -63,12 +71,7 @@ const SideBarDrawer = memo<SideBarDrawerProps>(
             <SideBarHeaderLayout
               left={
                 typeof title === 'string' ? (
-                  <Text
-                    ellipsis
-                    fontSize={14}
-                    style={{ fontWeight: 600, paddingLeft: 8 }}
-                    weight={400}
-                  >
+                  <Text ellipsis fontSize={14} style={styles.spacing} weight={400}>
                     {title}
                   </Text>
                 ) : (

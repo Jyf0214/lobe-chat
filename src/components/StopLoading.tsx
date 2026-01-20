@@ -2,6 +2,15 @@ import type { IconType } from '@lobehub/icons';
 import { cssVar, cx } from 'antd-style';
 import { forwardRef } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+    lineHeight: 1,
+  },
+});
+
 const StopLoadingIcon: IconType = forwardRef(({ size = 16, className, style, ...rest }, ref) => {
   return (
     <svg
@@ -9,7 +18,7 @@ const StopLoadingIcon: IconType = forwardRef(({ size = 16, className, style, ...
       color="currentColor"
       height={size}
       ref={ref}
-      style={{ flex: 'none', lineHeight: 1, ...style }}
+      style={StyleSheet.compose(styles.flexContainer, style)}
       viewBox="0 0 1024 1024"
       width={size}
       xmlns="http://www.w3.org/2000/svg"

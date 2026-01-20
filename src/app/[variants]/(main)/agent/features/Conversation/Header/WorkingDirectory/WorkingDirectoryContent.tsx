@@ -10,6 +10,27 @@ import { useAgentStore } from '@/store/agent';
 import { agentByIdSelectors } from '@/store/agent/selectors';
 import { useChatStore } from '@/store/chat';
 import { topicSelectors } from '@/store/chat/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+    fontSize: 12,
+  },
+  spacing: {
+    margin: 0,
+  },
+  style: {
+    maxWidth: 600,
+    minWidth: 320,
+  },
+  style1: {
+    fontSize: 12,
+  },
+  style2: {
+    cursor: 'pointer',
+  },
+});
 
 interface WorkingDirectoryContentProps {
   agentId: string;
@@ -91,9 +112,9 @@ const WorkingDirectoryContent = memo<WorkingDirectoryContentProps>(({ agentId, o
   ]);
 
   return (
-    <Flexbox gap={12} style={{ maxWidth: 600, minWidth: 320 }}>
+    <Flexbox gap={12} style={styles.style}>
       <Flexbox gap={4}>
-        <Text style={{ fontSize: 12 }} type="secondary">
+        <Text style={styles.style1} type="secondary">
           {t('localSystem.workingDirectory.agentLevel')}
         </Text>
         <Flexbox gap={8} horizontal>
@@ -101,7 +122,7 @@ const WorkingDirectoryContent = memo<WorkingDirectoryContentProps>(({ agentId, o
             onChange={(e) => setAgentDir(e.target.value)}
             placeholder={t('localSystem.workingDirectory.placeholder')}
             size="small"
-            style={{ flex: 1, fontSize: 12 }}
+            style={styles.flexContainer}
             value={agentDir}
             variant={'filled'}
           />
@@ -115,7 +136,7 @@ const WorkingDirectoryContent = memo<WorkingDirectoryContentProps>(({ agentId, o
 
       {activeTopicId && (
         <>
-          <Divider style={{ margin: 0 }} />
+          <Divider style={styles.spacing} />
 
           <Flexbox
             align="center"
@@ -124,15 +145,15 @@ const WorkingDirectoryContent = memo<WorkingDirectoryContentProps>(({ agentId, o
             onClick={() => {
               setUseTopicOverride(!useTopicOverride);
             }}
-            style={{ cursor: 'pointer' }}
+            style={styles.style2}
           >
             <Switch checked={useTopicOverride} onChange={setUseTopicOverride} size="small" />
-            <Text style={{ fontSize: 12 }}>{t('localSystem.workingDirectory.topicOverride')}</Text>
+            <Text style={styles.style1}>{t('localSystem.workingDirectory.topicOverride')}</Text>
           </Flexbox>
 
           {useTopicOverride && (
             <Flexbox gap={4}>
-              <Text style={{ fontSize: 12 }} type="secondary">
+              <Text style={styles.style1} type="secondary">
                 {t('localSystem.workingDirectory.topicLevel')}
               </Text>
               <Flexbox gap={8} horizontal>
@@ -140,7 +161,7 @@ const WorkingDirectoryContent = memo<WorkingDirectoryContentProps>(({ agentId, o
                   onChange={(e) => setTopicDir(e.target.value)}
                   placeholder={t('localSystem.workingDirectory.placeholder')}
                   size="small"
-                  style={{ flex: 1, fontSize: 12 }}
+                  style={styles.flexContainer}
                   value={topicDir}
                   variant={'filled'}
                 />

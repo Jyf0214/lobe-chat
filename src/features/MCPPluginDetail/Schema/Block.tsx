@@ -2,8 +2,16 @@ import { Flexbox, Segmented, Tag } from '@lobehub/ui';
 import { type ReactNode, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import Title from '../../../app/[variants]/(main)/community/features/Title';
 import { ModeType } from './types';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBottom: 24,
+  },
+});
 
 interface BlockProps {
   children?: ReactNode;
@@ -40,7 +48,7 @@ const Block = memo<BlockProps>(({ title, count, desc, children, mode, setMode, i
           variant={'outlined'}
         />
       </Flexbox>
-      <p style={{ marginBottom: 24 }}>{desc}</p>
+      <p style={styles.spacing}>{desc}</p>
       {children}
     </Flexbox>
   );

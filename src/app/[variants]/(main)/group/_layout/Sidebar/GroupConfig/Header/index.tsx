@@ -6,8 +6,15 @@ import { useTranslation } from 'react-i18next';
 
 import { useAgentGroupStore } from '@/store/agentGroup';
 import { agentGroupSelectors } from '@/store/agentGroup/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import Avatar from './Avatar';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 const HeaderInfo = memo(() => {
   const { t } = useTranslation('chat');
@@ -16,15 +23,7 @@ const HeaderInfo = memo(() => {
   const displayTitle = groupMeta.title || t('untitledGroup');
 
   return (
-    <Flexbox
-      align={'center'}
-      flex={1}
-      gap={8}
-      horizontal
-      style={{
-        overflow: 'hidden',
-      }}
-    >
+    <Flexbox align={'center'} flex={1} gap={8} horizontal style={styles.style}>
       <Avatar />
       <Text ellipsis weight={500}>
         {displayTitle}

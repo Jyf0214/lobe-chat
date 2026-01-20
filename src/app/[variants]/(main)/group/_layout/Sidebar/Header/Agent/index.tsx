@@ -9,8 +9,19 @@ import SupervisorAvatar from '@/app/[variants]/(main)/group/features/GroupAvatar
 import { SkeletonItem } from '@/features/NavPanel/components/SkeletonList';
 import { useAgentGroupStore } from '@/store/agentGroup';
 import { agentGroupSelectors } from '@/store/agentGroup/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import SwitchPanel from './SwitchPanel';
+
+const styles = StyleSheet.create({
+  style: {
+    minWidth: 32,
+    overflow: 'hidden',
+  },
+  style1: {
+    width: 24,
+  },
+});
 
 const Agent = memo<PropsWithChildren>(() => {
   const { t } = useTranslation(['chat', 'common']);
@@ -32,10 +43,7 @@ const Agent = memo<PropsWithChildren>(() => {
         gap={8}
         horizontal
         padding={2}
-        style={{
-          minWidth: 32,
-          overflow: 'hidden',
-        }}
+        style={styles.style}
         variant={'borderless'}
       >
         <SupervisorAvatar size={28} />
@@ -48,9 +56,7 @@ const Agent = memo<PropsWithChildren>(() => {
             blockSize: 28,
             size: 16,
           }}
-          style={{
-            width: 24,
-          }}
+          style={styles.style1}
         />
       </Block>
     </SwitchPanel>

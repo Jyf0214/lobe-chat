@@ -1,8 +1,15 @@
 import { memo } from 'react';
 
 import { type FileListItem } from '@/types/files';
+import { StyleSheet } from '@/utils/styles';
 
 import MasonryFileItem from '.';
+
+const styles = StyleSheet.create({
+  spacing: {
+    padding: '8px 4px',
+  },
+});
 
 interface MasonryItemWrapperProps {
   context: {
@@ -21,7 +28,7 @@ const MasonryItemWrapper = memo<MasonryItemWrapperProps>(({ data: item, context 
   }
 
   return (
-    <div style={{ padding: '8px 4px' }}>
+    <div style={styles.spacing}>
       <MasonryFileItem
         knowledgeBaseId={context.knowledgeBaseId}
         onSelectedChange={(id, checked) => {

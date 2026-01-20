@@ -2,6 +2,16 @@ import { type FC, memo } from 'react';
 
 import { useFileStore } from '@/store/file';
 import { type ChunkMetadata, type Coordinates, type FileChunk } from '@/types/chunk';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    left: 0,
+    position: 'absolute',
+    top: 0,
+    zIndex: 100,
+  },
+});
 
 interface HighlightRectProps {
   coordinates: Coordinates;
@@ -59,7 +69,7 @@ const HighlightLayer = memo<HighlightLayerProps>(({ dataSource, pageNumber, widt
   return (
     <svg
       height={height}
-      style={{ left: 0, position: 'absolute', top: 0, zIndex: 100 }}
+      style={styles.style}
       viewBox={`0 0 ${layout_width} ${layout_height}`}
       width={width}
     >

@@ -12,6 +12,27 @@ import { topicSelectors } from '@/store/chat/selectors';
 import { useGlobalStore } from '@/store/global';
 import { useSessionStore } from '@/store/session';
 import { sessionSelectors } from '@/store/session/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorFillSecondary,
+    color: cssVar.colorTextDescription,
+  },
+  spacing: {
+    marginRight: '8px',
+    maxWidth: '64vw',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  style: {
+    maxWidth: '60vw',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 const ChatHeaderTitle = memo(() => {
   const { t } = useTranslation(['chat', 'topic']);
@@ -29,38 +50,17 @@ const ChatHeaderTitle = memo(() => {
     <ChatHeader.Title
       desc={
         <Flexbox align={'center'} gap={4} horizontal onClick={() => toggleConfig()}>
-          <span
-            style={{
-              maxWidth: '60vw',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {topic?.title || t('title', { ns: 'topic' })}
-          </span>
+          <span style={styles.style}>{topic?.title || t('title', { ns: 'topic' })}</span>
           <ActionIcon
             active
             icon={ChevronDown}
             size={{ blockSize: 14, borderRadius: '50%', size: 12 }}
-            style={{
-              background: cssVar.colorFillSecondary,
-              color: cssVar.colorTextDescription,
-            }}
+            style={styles.colored}
           />
         </Flexbox>
       }
       title={
-        <div
-          onClick={() => toggleConfig()}
-          style={{
-            marginRight: '8px',
-            maxWidth: '64vw',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-        >
+        <div onClick={() => toggleConfig()} style={styles.spacing}>
           {displayTitle}
           {topicLength > 1 ? `(${topicLength + 1})` : ''}
         </div>

@@ -7,9 +7,21 @@ import { ChatInput, ChatList } from '@/features/Conversation';
 import { useAgentStore } from '@/store/agent';
 import { agentByIdSelectors } from '@/store/agent/selectors';
 import { useChatStore } from '@/store/chat';
+import { StyleSheet } from '@/utils/styles';
 
 import CopilotToolbar from './Toolbar';
 import Welcome from './Welcome';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+    height: '100%',
+    minWidth: 300,
+  },
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 interface ConversationProps {
   // Default agent id
@@ -45,10 +57,7 @@ const Conversation = memo<ConversationProps>(({ agentId }) => {
   const { handleUploadFiles } = useUploadFiles({ model, provider });
 
   return (
-    <DragUploadZone
-      onUploadFiles={handleUploadFiles}
-      style={{ flex: 1, height: '100%', minWidth: 300 }}
-    >
+    <DragUploadZone onUploadFiles={handleUploadFiles} style={styles.flexContainer}>
       <Flexbox
         flex={1}
         height={'100%'}
@@ -56,7 +65,7 @@ const Conversation = memo<ConversationProps>(({ agentId }) => {
         onMouseLeave={() => setIsHovered(false)}
       >
         <CopilotToolbar agentId={currentAgentId} isHovered={isHovered} />
-        <Flexbox flex={1} style={{ overflow: 'hidden' }}>
+        <Flexbox flex={1} style={styles.style}>
           <ChatList welcome={<Welcome />} />
         </Flexbox>
         <ChatInput leftActions={actions} />

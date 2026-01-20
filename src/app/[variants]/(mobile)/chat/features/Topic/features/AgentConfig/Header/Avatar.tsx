@@ -6,6 +6,13 @@ import { memo } from 'react';
 import { useOpenChatSettings } from '@/hooks/useInterceptingRoutes';
 import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 const HeaderAvatar = memo(() => {
   const [avatar, backgroundColor] = useAgentStore((s) => [
@@ -25,9 +32,7 @@ const HeaderAvatar = memo(() => {
         openChatSettings();
       }}
       padding={2}
-      style={{
-        overflow: 'hidden',
-      }}
+      style={styles.style}
       variant={'borderless'}
       width={32}
     >

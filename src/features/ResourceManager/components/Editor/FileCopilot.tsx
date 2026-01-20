@@ -10,6 +10,18 @@ import RightPanel from '@/features/RightPanel';
 import { useAgentStore } from '@/store/agent';
 import { agentByIdSelectors, builtinAgentSelectors } from '@/store/agent/selectors';
 import { useChatStore } from '@/store/chat';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+    height: '100%',
+    minWidth: 300,
+  },
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 const actions: ActionKeys[] = ['model', 'search'];
 
@@ -44,12 +56,9 @@ const FileCopilot = memo(() => {
 
   return (
     <RightPanel>
-      <DragUploadZone
-        onUploadFiles={handleUploadFiles}
-        style={{ flex: 1, height: '100%', minWidth: 300 }}
-      >
+      <DragUploadZone onUploadFiles={handleUploadFiles} style={styles.flexContainer}>
         <Flexbox flex={1} height={'100%'}>
-          <Flexbox flex={1} style={{ overflow: 'hidden' }}>
+          <Flexbox flex={1} style={styles.style}>
             <ChatList />
           </Flexbox>
           <ChatInput leftActions={actions} />

@@ -3,6 +3,14 @@ import { cssVar } from 'antd-style';
 import { type LucideIcon } from 'lucide-react';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+  },
+});
+
 export interface ItemCardProps {
   href: string;
   icon?: LucideIcon;
@@ -12,7 +20,7 @@ export interface ItemCardProps {
 
 const ItemCard = memo<ItemCardProps>(({ label, icon, href }) => {
   return (
-    <a href={href} rel="noreferrer" style={{ color: 'inherit' }} target="_blank">
+    <a href={href} rel="noreferrer" style={styles.colored} target="_blank">
       <Block clickable gap={12} horizontal paddingBlock={12} paddingInline={18}>
         {icon && <Icon fill={cssVar.colorText} icon={icon} size={18} />}
         {label}

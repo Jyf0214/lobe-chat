@@ -7,12 +7,38 @@ import { Virtuoso } from 'react-virtuoso';
 
 import { useAgentStore } from '@/store/agent';
 import { useGlobalStore } from '@/store/global';
+import { StyleSheet } from '@/utils/styles';
 
 import Item from './Item';
 import MasonryItemWrapper from './Item/MasonryItemWrapper';
 import Loading from './Loading';
 import MasonrySkeleton from './MasonrySkeleton';
 import ViewSwitcher, { type ViewMode } from './ViewSwitcher';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+    marginInline: -16,
+  },
+  spacing: {
+    paddingBlockEnd: 12,
+  },
+  style: {
+    maxWidth: 400,
+  },
+  style1: {
+    height: '100%',
+    position: 'relative',
+  },
+  style2: {
+    inset: 0,
+    position: 'absolute',
+  },
+  style3: {
+    gap: '16px',
+    height: '100%',
+  },
+});
 
 export const List = memo(() => {
   const { t } = useTranslation('file');
@@ -75,7 +101,7 @@ export const List = memo(() => {
 
   return (
     <Flexbox height={500}>
-      <Flexbox paddingInline={16} style={{ paddingBlockEnd: 12 }}>
+      <Flexbox paddingInline={16} style={styles.spacing}>
         <Flexbox align={'center'} horizontal justify={'flex-end'}>
           <ViewSwitcher onViewChange={setViewMode} view={viewMode} />
         </Flexbox>
@@ -98,7 +124,7 @@ export const List = memo(() => {
               description={t('empty')}
               descriptionProps={{ fontSize: 14 }}
               icon={BookOpen}
-              style={{ maxWidth: 400 }}
+              style={styles.style}
             />
           )}
         </Center>
@@ -110,21 +136,18 @@ export const List = memo(() => {
             return <Item key={item.id} {...item} />;
           }}
           overscan={24}
-          style={{ flex: 1, marginInline: -16 }}
+          style={styles.flexContainer}
           totalCount={data!.length}
         />
       ) : (
-        <div style={{ height: '100%', position: 'relative' }}>
-          <div style={{ inset: 0, position: 'absolute' }}>
+        <div style={styles.style1}>
+          <div style={styles.style2}>
             <VirtuosoMasonry
               ItemContent={MasonryItemWrapper}
               columnCount={columnCount}
               context={masonryContext}
               data={data || []}
-              style={{
-                gap: '16px',
-                height: '100%',
-              }}
+              style={styles.style3}
             />
           </div>
         </div>

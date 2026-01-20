@@ -4,10 +4,18 @@ import { MessageCircleHeartIcon, MessageCircleQuestionIcon } from 'lucide-react'
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import Title from '../../../../../features/Title';
 import MarkdownRender from '../../../../features/MakedownRender';
 import { useDetailContext } from '../../DetailProvider';
 import TagList from './TagList';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginTop: 4,
+  },
+});
 
 const SystemRole = memo(() => {
   const { t } = useTranslation('discover');
@@ -18,7 +26,15 @@ const SystemRole = memo(() => {
     <Flexbox gap={16}>
       {systemRole && (
         <>
-          <Title tag={tokenUsage && <Tag>{t('groupAgents.details.tokenUsage', { defaultValue: `${tokenUsage} tokens` })}</Tag>}>
+          <Title
+            tag={
+              tokenUsage && (
+                <Tag>
+                  {t('groupAgents.details.tokenUsage', { defaultValue: `${tokenUsage} tokens` })}
+                </Tag>
+              )
+            }
+          >
             {t('groupAgents.details.systemRole.title', { defaultValue: 'System Role' })}
           </Title>
           <Block gap={16} padding={16} variant={'outlined'}>
@@ -39,9 +55,7 @@ const SystemRole = memo(() => {
               color={cssVar.colorError}
               icon={MessageCircleHeartIcon}
               size={20}
-              style={{
-                marginTop: 4,
-              }}
+              style={styles.spacing}
             />
             <MarkdownRender>{openingMessage?.trimEnd()}</MarkdownRender>
           </Block>

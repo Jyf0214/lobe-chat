@@ -18,6 +18,26 @@ import { useFileStore } from '@/store/file';
 import { useGlobalStore } from '@/store/global';
 import { globalGeneralSelectors } from '@/store/global/selectors';
 import { useGroupProfileStore } from '@/store/groupProfile';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    fontSize: 36,
+    fontWeight: 600,
+    padding: 0,
+    width: '100%',
+  },
+  style: {
+    cursor: 'default',
+  },
+  style1: {
+    fontSize: 36,
+    fontWeight: 600,
+  },
+  style2: {
+    height: 38,
+  },
+});
 
 const MAX_AVATAR_SIZE = 1024 * 1024; // 1MB limit for server actions
 
@@ -108,21 +128,12 @@ const AgentHeader = memo<AgentHeaderProps>(({ readOnly }) => {
           e.preventDefault();
         }}
         paddingBlock={16}
-        style={{
-          cursor: 'default',
-        }}
+        style={styles.style}
       >
         <Block height={72} width={72}>
           <SupervisorAvatar size={72} />
         </Block>
-        <Flexbox
-          style={{
-            fontSize: 36,
-            fontWeight: 600,
-          }}
-        >
-          {t('group.profile.supervisor', { ns: 'chat' })}
-        </Flexbox>
+        <Flexbox style={styles.style1}>{t('group.profile.supervisor', { ns: 'chat' })}</Flexbox>
       </Flexbox>
     );
   }
@@ -135,9 +146,7 @@ const AgentHeader = memo<AgentHeaderProps>(({ readOnly }) => {
         e.preventDefault();
       }}
       paddingBlock={16}
-      style={{
-        cursor: 'default',
-      }}
+      style={styles.style}
     >
       <EmojiPicker
         allowDelete={!!agentMeta.avatar}
@@ -170,8 +179,8 @@ const AgentHeader = memo<AgentHeaderProps>(({ readOnly }) => {
                 <Suspense
                   fallback={
                     <Flexbox gap={8}>
-                      <Skeleton.Button block style={{ height: 38 }} />
-                      <Skeleton.Button block style={{ height: 38 }} />
+                      <Skeleton.Button block style={styles.style2} />
+                      <Skeleton.Button block style={styles.style2} />
                     </Flexbox>
                   }
                 >
@@ -206,12 +215,7 @@ const AgentHeader = memo<AgentHeaderProps>(({ readOnly }) => {
           debouncedSaveTitle(e.target.value);
         }}
         placeholder={t('settingAgent.name.placeholder', { ns: 'setting' })}
-        style={{
-          fontSize: 36,
-          fontWeight: 600,
-          padding: 0,
-          width: '100%',
-        }}
+        style={styles.fullWidth}
         value={localTitle}
         variant={'borderless'}
       />

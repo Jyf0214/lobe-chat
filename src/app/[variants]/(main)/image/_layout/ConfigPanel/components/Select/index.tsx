@@ -6,6 +6,21 @@ import { type ReactNode, memo } from 'react';
 import useMergeState from 'use-merge-value';
 
 import { useIsDark } from '@/hooks/useIsDark';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  coloredBase: {
+    borderRadius: 3,
+    height: 16,
+    width: 16,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  spacing: {
+    marginTop: 4,
+  },
+});
 
 export interface SizeSelectProps extends Omit<GridProps, 'children' | 'onChange'> {
   defaultValue?: 'auto' | string;
@@ -40,9 +55,7 @@ const SizeSelect = memo<SizeSelectProps>(({ options, onChange, value, defaultVal
 
   // If any option cannot be parsed as ratio, fallback to regular Select
   if (hasInvalidRatio) {
-    return (
-      <Select onChange={onChange} options={options} style={{ width: '100%' }} value={active} />
-    );
+    return <Select onChange={onChange} options={options} style={styles.fullWidth} value={active} />;
   }
   return (
     <Block padding={4} variant={'filled'} {...rest}>
@@ -52,31 +65,27 @@ const SizeSelect = memo<SizeSelectProps>(({ options, onChange, value, defaultVal
           let content: ReactNode;
 
           if (item.value === 'auto') {
-            content = (
-              <div
-                style={{
-                  border: `2px dashed ${isActive ? cssVar.colorText : cssVar.colorTextDescription}`,
-                  borderRadius: 3,
-                  height: 16,
-                  width: 16,
-                }}
-              />
-            );
+            const coloredStyle = {
+              ...styles.coloredBase,
+              border: `2px dashed ${isActive ? cssVar.colorText : cssVar.colorTextDescription}`,
+            };
+            content = <div style={coloredStyle} />;
           } else {
             const [width, height] = item.value.split('x').map(Number);
             const isWidthGreater = width > height;
-            content = (
-              <div
-                style={{
-                  aspectRatio: `${width} / ${height}`,
-                  border: `2px solid ${isActive ? cssVar.colorText : cssVar.colorTextDescription}`,
-                  borderRadius: 3,
-                  height: isWidthGreater ? undefined : 16,
-                  width: isWidthGreater ? 16 : undefined,
-                }}
-              />
-            );
+            const colored1Style = {
+              aspectRatio: `${width} / ${height}`,
+              border: `2px solid ${isActive ? cssVar.colorText : cssVar.colorTextDescription}`,
+              borderRadius: 3,
+              height: isWidthGreater ? undefined : 16,
+              width: isWidthGreater ? 16 : undefined,
+            };
+            content = <div style={colored1Style} />;
           }
+
+          const colored2Style = {
+            backgroundColor: isActive ? cssVar.colorBgElevated : 'transparent',
+          };
 
           return (
             <Block
@@ -91,12 +100,10 @@ const SizeSelect = memo<SizeSelectProps>(({ options, onChange, value, defaultVal
               }}
               padding={8}
               shadow={isActive && !isDarkMode}
-              style={{
-                backgroundColor: isActive ? cssVar.colorBgElevated : 'transparent',
-              }}
+              style={colored2Style}
               variant={'filled'}
             >
-              <Center height={16} style={{ marginTop: 4 }} width={16}>
+              <Center height={16} style={styles.spacing} width={16}>
                 {content}
               </Center>
               <Text fontSize={12} type={isActive ? undefined : 'secondary'}>

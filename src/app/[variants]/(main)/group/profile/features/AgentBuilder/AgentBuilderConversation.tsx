@@ -4,8 +4,15 @@ import { memo } from 'react';
 import AgentBuilderWelcome from '@/features/AgentBuilder/AgentBuilderWelcome';
 import type { ActionKeys } from '@/features/ChatInput';
 import { ChatInput, ChatList } from '@/features/Conversation';
+import { StyleSheet } from '@/utils/styles';
 
 import TopicSelector from './TopicSelector';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 interface AgentBuilderConversationProps {
   agentId: string;
@@ -20,7 +27,7 @@ const AgentBuilderConversation = memo<AgentBuilderConversationProps>(({ agentId 
   return (
     <Flexbox flex={1} height={'100%'}>
       <TopicSelector agentId={agentId} />
-      <Flexbox flex={1} style={{ overflow: 'hidden' }}>
+      <Flexbox flex={1} style={styles.style}>
         <ChatList welcome={<AgentBuilderWelcome />} />
       </Flexbox>
       <ChatInput leftActions={actions} />

@@ -4,6 +4,13 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useChatInputStore } from '@/features/ChatInput/store';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    zIndex: 10,
+  },
+});
 
 const ExpandButton = memo(() => {
   const { t } = useTranslation('editor');
@@ -17,9 +24,7 @@ const ExpandButton = memo(() => {
         editor?.focus();
       }}
       size={{ blockSize: 32, size: 16, strokeWidth: 2.3 }}
-      style={{
-        zIndex: 10,
-      }}
+      style={styles.style}
       title={t(expand ? 'actions.expand.off' : 'actions.expand.on')}
     />
   );

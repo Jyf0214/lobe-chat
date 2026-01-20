@@ -1,8 +1,15 @@
 import { memo } from 'react';
 
 import { type KnowledgeItem } from '@/types/knowledgeBase';
+import { StyleSheet } from '@/utils/styles';
 
 import MasonryItem from './MasonryItem';
+
+const styles = StyleSheet.create({
+  spacing: {
+    padding: '8px 4px',
+  },
+});
 
 interface MasonryItemWrapperProps {
   data: KnowledgeItem;
@@ -16,7 +23,7 @@ const MasonryItemWrapper = memo<MasonryItemWrapperProps>(({ data: item }) => {
   }
 
   return (
-    <div style={{ padding: '8px 4px' }}>
+    <div style={styles.spacing}>
       <MasonryItem {...item} />
     </div>
   );

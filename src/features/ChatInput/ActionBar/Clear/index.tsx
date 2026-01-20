@@ -9,8 +9,17 @@ import { useFileStore } from '@/store/file';
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/selectors';
 import { HotkeyEnum } from '@/types/hotkey';
+import { StyleSheet } from '@/utils/styles';
 
 import Action from '../components/Action';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBottom: '8px',
+    whiteSpace: 'pre-line',
+    wordBreak: 'break-word',
+  },
+});
 
 export const useClearCurrentMessages = () => {
   const clearMessage = useChatStore((s) => s.clearMessage);
@@ -42,11 +51,7 @@ const Clear = memo(() => {
       onOpenChange={updateConfirmOpened}
       open={confirmOpened}
       placement={popconfirmPlacement}
-      title={
-        <div style={{ marginBottom: '8px', whiteSpace: 'pre-line', wordBreak: 'break-word' }}>
-          {t('confirmClearCurrentMessages', { ns: 'chat' })}
-        </div>
-      }
+      title={<div style={styles.spacing}>{t('confirmClearCurrentMessages', { ns: 'chat' })}</div>}
     >
       <Action
         icon={Eraser}

@@ -5,9 +5,16 @@ import { useTranslation } from 'react-i18next';
 
 import SharePdf from '@/features/ShareModal/SharePdf';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { StyleSheet } from '@/utils/styles';
 
 import ShareImage from './ShareImage';
 import ShareText from './ShareText';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 enum Tab {
   PDF = 'pdf',
@@ -70,7 +77,7 @@ const ShareModal = memo<ShareModalProps>(({ onCancel, open, message }) => {
               value: item?.key,
             };
           })}
-          style={{ width: '100%' }}
+          style={styles.fullWidth}
           value={tab}
           variant={'filled'}
         />

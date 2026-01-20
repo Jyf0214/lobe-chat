@@ -4,6 +4,26 @@ import { Flexbox, type FlexboxProps, Skeleton } from '@lobehub/ui';
 import { cssVar } from 'antd-style';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    borderRadius: cssVar.borderRadius,
+    height: 16,
+    margin: 0,
+    maxHeight: 16,
+    opacity: 0.5,
+    padding: 0,
+  },
+  style: {
+    borderRadius: cssVar.borderRadius,
+    height: 28,
+    maxHeight: 28,
+    maxWidth: 28,
+    minWidth: 28,
+  },
+});
+
 export const SkeletonItem = memo<{ avatarSize?: number } & Omit<FlexboxProps, 'children'>>(
   ({ padding = 6, height = 36, style, avatarSize = 28, ...rest }) => {
     return (
@@ -20,7 +40,7 @@ export const SkeletonItem = memo<{ avatarSize?: number } & Omit<FlexboxProps, 'c
         <Skeleton.Button
           size={'small'}
           style={{
-            borderRadius: cssVar.borderRadius,
+            ...styles.style,
             height: avatarSize,
             maxHeight: avatarSize,
             maxWidth: avatarSize,
@@ -28,19 +48,7 @@ export const SkeletonItem = memo<{ avatarSize?: number } & Omit<FlexboxProps, 'c
           }}
         />
         <Flexbox flex={1} height={16}>
-          <Skeleton.Button
-            active
-            block
-            size={'small'}
-            style={{
-              borderRadius: cssVar.borderRadius,
-              height: 16,
-              margin: 0,
-              maxHeight: 16,
-              opacity: 0.5,
-              padding: 0,
-            }}
-          />
+          <Skeleton.Button active block size={'small'} style={styles.spacing} />
         </Flexbox>
       </Flexbox>
     );

@@ -2,9 +2,16 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import NavItem from '@/features/NavPanel/components/NavItem';
+import { StyleSheet } from '@/utils/styles';
 
 import Actions from './Actions';
 import { useDropdownMenu } from './useDropdownMenu';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flexShrink: 0,
+  },
+});
 
 interface TopicItemProps {
   active: boolean;
@@ -33,7 +40,7 @@ const TopicItem = memo<TopicItemProps>(
           onTopicChange(topicId);
           onClose();
         }}
-        style={{ flexShrink: 0 }}
+        style={styles.flexContainer}
         title={topicTitle || t('untitled', { defaultValue: 'Untitled' })}
       />
     );

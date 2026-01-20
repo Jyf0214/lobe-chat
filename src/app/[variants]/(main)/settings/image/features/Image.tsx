@@ -11,6 +11,13 @@ import { FORM_STYLE } from '@/const/layoutTokens';
 import { MAX_DEFAULT_IMAGE_NUM, MIN_DEFAULT_IMAGE_NUM } from '@/const/settings';
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/slices/settings/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    opacity: 0.6,
+  },
+});
 
 const ImageSettings = memo(() => {
   const { t } = useTranslation('setting');
@@ -42,7 +49,7 @@ const ImageSettings = memo(() => {
         },
       ],
       extra: isUpdating ? (
-        <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.6 }} />
+        <Icon icon={Loader2Icon} size={16} spin style={styles.style} />
       ) : undefined,
       title: t('settingImage.defaultCount.title'),
     },

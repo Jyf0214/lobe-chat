@@ -1,17 +1,30 @@
 'use client';
 
-import { App, Form, Input, Upload } from 'antd';
+import { MarketSDK } from '@lobehub/market-sdk';
 import { Button, Flexbox, Icon, Modal } from '@lobehub/ui';
+import { App, Form, Input, Upload } from 'antd';
 import { ImagePlus, Send } from 'lucide-react';
 import { memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { MarketSDK } from '@lobehub/market-sdk';
 
 import TextArea from '@/components/TextArea';
 import { useFileStore } from '@/store/file';
 import { userProfileSelectors } from '@/store/user/selectors';
 import { useUserStore } from '@/store/user/store';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    color: 'var(--colorTextSecondary)',
+    fontSize: 12,
+    marginTop: 8,
+  },
+  style: {
+    borderRadius: 8,
+    maxHeight: 200,
+    maxWidth: '100%',
+  },
+});
 
 interface FeedbackModalProps {
   onClose: () => void;
@@ -118,7 +131,12 @@ const FeedbackModal = memo<FeedbackModalProps>(({ onClose, open }) => {
       footer={
         <Flexbox gap={8} horizontal justify="flex-end">
           <Button onClick={handleCancel}>{t('cancel')}</Button>
-          <Button icon={<Icon icon={Send} />} loading={loading} onClick={handleSubmit} type="primary">
+          <Button
+            icon={<Icon icon={Send} />}
+            loading={loading}
+            onClick={handleSubmit}
+            type="primary"
+          >
             {t('feedback.submit')}
           </Button>
         </Flexbox>
@@ -160,11 +178,7 @@ const FeedbackModal = memo<FeedbackModalProps>(({ onClose, open }) => {
           <Flexbox gap={8}>
             {screenshotUrl ? (
               <Flexbox gap={8}>
-                <img
-                  alt="Screenshot"
-                  src={screenshotUrl}
-                  style={{ borderRadius: 8, maxHeight: 200, maxWidth: '100%' }}
-                />
+                <img alt="Screenshot" src={screenshotUrl} style={styles.style} />
                 <Button danger disabled={uploadingScreenshot} onClick={handleRemoveScreenshot}>
                   {t('feedback.fields.screenshot.remove')}
                 </Button>
@@ -186,9 +200,7 @@ const FeedbackModal = memo<FeedbackModalProps>(({ onClose, open }) => {
               </Upload>
             )}
           </Flexbox>
-          <p style={{ color: 'var(--colorTextSecondary)', fontSize: 12, marginTop: 8 }}>
-            {t('feedback.fields.screenshot.hint')}
-          </p>
+          <p style={styles.spacing}>{t('feedback.fields.screenshot.hint')}</p>
         </Form.Item>
       </Form>
     </Modal>

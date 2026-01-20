@@ -3,6 +3,14 @@ import { Save } from 'lucide-react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    width: 200,
+  },
+});
+
 interface CronJobSaveButtonProps {
   disabled?: boolean;
   loading?: boolean;
@@ -19,7 +27,7 @@ const CronJobSaveButton = memo<CronJobSaveButtonProps>(({ disabled, loading, onS
         icon={Save}
         loading={loading}
         onClick={onSave}
-        style={{ width: 200 }}
+        style={styles.style}
         type="primary"
       >
         {t('agentCronJobs.saveAsNew', { defaultValue: 'Save as New Scheduled Task' })}

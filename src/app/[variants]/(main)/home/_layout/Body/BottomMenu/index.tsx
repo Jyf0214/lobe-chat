@@ -7,6 +7,13 @@ import { getRouteById } from '@/config/routes';
 import NavItem from '@/features/NavPanel/components/NavItem';
 import { useActiveTabKey } from '@/hooks/useActiveTabKey';
 import { SidebarTabKey } from '@/store/global/initialState';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 interface Item {
   icon: any;
@@ -47,13 +54,7 @@ const BottomMenu = memo(() => {
   );
 
   return (
-    <Flexbox
-      gap={1}
-      paddingBlock={4}
-      style={{
-        overflow: 'hidden',
-      }}
-    >
+    <Flexbox gap={1} paddingBlock={4} style={styles.style}>
       {items.map((item) => (
         <Link
           key={item.key}

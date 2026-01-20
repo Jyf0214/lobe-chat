@@ -1,7 +1,42 @@
 import { Center, Checkbox, Flexbox, Skeleton } from '@lobehub/ui';
 import { cssVar } from 'antd-style';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { FILE_DATE_WIDTH, FILE_SIZE_WIDTH } from './ListItem';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: undefined,
+    borderBlockEnd: `1px solid ${cssVar.colorBorderSecondary}`,
+    opacity: undefined,
+  },
+  flexContainer: {
+    flexShrink: 0,
+    maxWidth: 400,
+    minWidth: 400,
+    paddingInline: 8,
+    width: 400,
+  },
+  flexContainer1: {
+    flexShrink: 0,
+    paddingInline: '0 24px',
+  },
+  spacing: {
+    paddingInline: 4,
+  },
+  spacing1: {
+    marginInline: 8,
+  },
+  style: {
+    height: 16,
+    width: '60%',
+  },
+  style1: {
+    height: 16,
+    width: '80%',
+  },
+});
 
 interface ListViewSkeletonProps {
   columnWidths?: {
@@ -29,33 +64,32 @@ const ListViewSkeleton = ({
           key={index}
           paddingInline={8}
           style={{
+            ...styles.colored,
             background: index % 2 === 0 ? cssVar.colorFillQuaternary : 'transparent',
-            borderBlockEnd: `1px solid ${cssVar.colorBorderSecondary}`,
             opacity: getOpacity(index),
           }}
         >
-          <Center height={40} style={{ paddingInline: 4 }}>
+          <Center height={40} style={styles.spacing}>
             <Checkbox disabled />
           </Center>
           <Flexbox
             align={'center'}
             horizontal
             style={{
-              flexShrink: 0,
+              ...styles.flexContainer,
               maxWidth: columnWidths.name,
               minWidth: columnWidths.name,
-              paddingInline: 8,
               width: columnWidths.name,
             }}
           >
-            <Skeleton.Avatar active shape={'square'} size={24} style={{ marginInline: 8 }} />
-            <Skeleton.Button active style={{ height: 16, width: '60%' }} />
+            <Skeleton.Avatar active shape={'square'} size={24} style={styles.spacing1} />
+            <Skeleton.Button active style={styles.style} />
           </Flexbox>
-          <Flexbox style={{ flexShrink: 0, paddingInline: '0 24px' }} width={columnWidths.date}>
-            <Skeleton.Button active style={{ height: 16, width: '80%' }} />
+          <Flexbox style={styles.flexContainer1} width={columnWidths.date}>
+            <Skeleton.Button active style={styles.style1} />
           </Flexbox>
-          <Flexbox style={{ flexShrink: 0, paddingInline: '0 24px' }} width={columnWidths.size}>
-            <Skeleton.Button active style={{ height: 16, width: '60%' }} />
+          <Flexbox style={styles.flexContainer1} width={columnWidths.size}>
+            <Skeleton.Button active style={styles.style} />
           </Flexbox>
         </Flexbox>
       ))}

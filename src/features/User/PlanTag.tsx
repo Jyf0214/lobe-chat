@@ -9,6 +9,18 @@ import urlJoin from 'url-join';
 import { OFFICIAL_URL } from '@/const/url';
 import { isDesktop } from '@/const/version';
 import PlanIcon from '@/features/PlanIcon';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorFill,
+    borderRadius: 12,
+    cursor: 'pointer',
+  },
+  style: {
+    cursor: 'pointer',
+  },
+});
 
 export enum PlanType {
   Preview = 'preview',
@@ -23,10 +35,7 @@ const PlanTag = memo<PlanTagProps>(({ type = PlanType.Preview }) => {
 
   if (type === PlanType.Preview) {
     return (
-      <Tag
-        style={{ background: cssVar.colorFill, borderRadius: 12, cursor: 'pointer' }}
-        variant={'filled'}
-      >
+      <Tag style={styles.colored} variant={'filled'}>
         {t('userPanel.community')}
       </Tag>
     );
@@ -36,7 +45,7 @@ const PlanTag = memo<PlanTagProps>(({ type = PlanType.Preview }) => {
 
   return (
     <Link
-      style={{ cursor: 'pointer' }}
+      style={styles.style}
       target={isDesktop ? '_blank' : undefined}
       to={urlJoin(isDesktop ? OFFICIAL_URL : '/', isFree ? '/settings/plans' : '/settings/usage')}
     >

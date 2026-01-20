@@ -3,8 +3,15 @@ import { memo } from 'react';
 
 import { useChatStore } from '@/store/chat';
 import { chatPortalSelectors } from '@/store/chat/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { createTemplateFiles } from './template';
+
+const styles = StyleSheet.create({
+  style: {
+    height: '100%',
+  },
+});
 
 interface ReactRendererProps {
   code: string;
@@ -38,12 +45,12 @@ const ReactRenderer = memo<ReactRendererProps>(({ code }) => {
         externalResources: ['https://cdn.tailwindcss.com'],
         visibleFiles: ['App.tsx'],
       }}
-      style={{ height: '100%' }}
+      style={styles.style}
       template="vite-react-ts"
       theme="auto"
     >
-      <SandpackLayout style={{ height: '100%' }}>
-        <SandpackPreview style={{ height: '100%' }} />
+      <SandpackLayout style={styles.style}>
+        <SandpackPreview style={styles.style} />
       </SandpackLayout>
     </SandpackProvider>
   );

@@ -8,6 +8,13 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { DiscoverTab } from '@/types/discover';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextSecondary,
+  },
+});
 
 const Breadcrumb = memo<{ identifier: string; tab: DiscoverTab }>(({ tab, identifier }) => {
   const { t } = useTranslation('discover');
@@ -27,14 +34,7 @@ const Breadcrumb = memo<{ identifier: string; tab: DiscoverTab }>(({ tab, identi
         },
         {
           title: (
-            <Flexbox
-              align="center"
-              gap={4}
-              horizontal
-              style={{
-                color: cssVar.colorTextSecondary,
-              }}
-            >
+            <Flexbox align="center" gap={4} horizontal style={styles.colored}>
               @{identifier}
             </Flexbox>
           ),
@@ -51,14 +51,7 @@ const Breadcrumb = memo<{ identifier: string; tab: DiscoverTab }>(({ tab, identi
       },
       {
         title: (
-          <Flexbox
-            align="center"
-            gap={4}
-            horizontal
-            style={{
-              color: cssVar.colorTextSecondary,
-            }}
-          >
+          <Flexbox align="center" gap={4} horizontal style={styles.colored}>
             {identifier}
             <CopyButton
               content={identifier}

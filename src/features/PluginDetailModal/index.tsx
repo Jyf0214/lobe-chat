@@ -5,9 +5,16 @@ import useMergeState from 'use-merge-value';
 
 import PluginSettingsConfig from '@/features/PluginSettings';
 import { pluginHelpers } from '@/store/tool';
+import { StyleSheet } from '@/utils/styles';
 
 import APIs from './APIs';
 import Meta from './Meta';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBlock: 16,
+  },
+});
 
 export interface PluginDetailModalProps {
   id: string;
@@ -61,9 +68,7 @@ const PluginDetailModal = memo<PluginDetailModalProps>(
               },
             ].filter(Boolean) as SegmentedProps['options']
           }
-          style={{
-            marginBlock: 16,
-          }}
+          style={styles.spacing}
           value={tabKey}
         />
         {tabKey === 'settings' ? (

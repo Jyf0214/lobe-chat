@@ -10,9 +10,19 @@ import PublishedTime from '@/components/PublishedTime';
 import Link from '@/libs/router/Link';
 import { usePathname, useQuery } from '@/libs/router/navigation';
 import { type AssistantMarketSource, AssistantNavKey } from '@/types/discover';
+import { StyleSheet } from '@/utils/styles';
 
 import Title from '../../../../../features/Title';
 import { useDetailContext } from '../../DetailProvider';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+  },
+  style: {
+    fontSize: 14,
+  },
+});
 
 const Versions = memo(() => {
   const { t } = useTranslation('discover');
@@ -69,7 +79,7 @@ const Versions = memo(() => {
                   const statusMeta = statusKey ? statusTagMap[statusKey] : undefined;
                   const content = (
                     <Flexbox align={'center'} gap={8} horizontal>
-                      <code style={{ fontSize: 14 }}>{record.version}</code>
+                      <code style={styles.style}>{record.version}</code>
                       {(record.isLatest || record.version === currentVersion) && (
                         <Tag color={'info'}>{t('assistants.details.version.table.isLatest')}</Tag>
                       )}
@@ -92,7 +102,7 @@ const Versions = memo(() => {
                         },
                         { skipNull: true },
                       )}
-                      style={{ color: 'inherit' }}
+                      style={styles.colored}
                     >
                       {content}
                     </Link>

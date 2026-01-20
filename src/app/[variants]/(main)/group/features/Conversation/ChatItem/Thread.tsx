@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useIsDark } from '@/hooks/useIsDark';
 import { useChatStore } from '@/store/chat';
 import { threadSelectors } from '@/store/chat/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import ThreadItem from './ThreadItem';
 
@@ -25,6 +26,13 @@ const styles = createStaticStyles(({ css, cssVar }) => ({
   `,
 }));
 
+const staticStyles = StyleSheet.create({
+  wrapper: {
+    marginTop: -12,
+    paddingBottom: 16,
+  },
+});
+
 interface ThreadProps {
   id: string;
   placement: 'start' | 'end';
@@ -42,7 +50,7 @@ const Thread = memo<ThreadProps>(({ id, placement, style }) => {
       direction={placement === 'end' ? 'horizontal-reverse' : 'horizontal'}
       gap={12}
       paddingInline={16}
-      style={{ marginTop: -12, paddingBottom: 16, ...style }}
+      style={StyleSheet.compose(staticStyles.wrapper, style)}
     >
       <div style={{ width: 40 }} />
       <Flexbox

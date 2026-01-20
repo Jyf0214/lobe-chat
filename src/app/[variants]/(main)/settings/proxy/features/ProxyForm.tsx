@@ -10,6 +10,26 @@ import { useTranslation } from 'react-i18next';
 import { FORM_STYLE } from '@/const/layoutTokens';
 import { desktopSettingsService } from '@/services/electron/settings';
 import { useElectronStore } from '@/store/electron';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  spacing: {
+    color: 'var(--ant-color-warning)',
+    marginBottom: 8,
+  },
+  style: {
+    opacity: 0.5,
+  },
+  style1: {
+    width: 120,
+  },
+});
 
 interface ProxyTestResult {
   message?: string;
@@ -117,7 +137,7 @@ const ProxyForm = () => {
         valuePropName: 'checked',
       },
     ],
-    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />,
+    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={styles.style} />,
     title: t('proxy.enable'),
   };
 
@@ -142,13 +162,13 @@ const ProxyForm = () => {
         name: 'proxyServer',
       },
       {
-        children: <Input disabled={!isEnableProxy} placeholder="7890" style={{ width: 120 }} />,
+        children: <Input disabled={!isEnableProxy} placeholder="7890" style={styles.style1} />,
         desc: t('proxy.validation.portRequired'),
         label: t('proxy.port'),
         name: 'proxyPort',
       },
     ],
-    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />,
+    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={styles.style} />,
     title: t('proxy.basicSettings'),
   };
 
@@ -178,7 +198,7 @@ const ProxyForm = () => {
           ]
         : []),
     ],
-    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />,
+    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={styles.style} />,
     title: t('proxy.authSettings'),
   };
 
@@ -187,11 +207,11 @@ const ProxyForm = () => {
       {
         children: (
           <Flexbox gap={8}>
-            <Space.Compact style={{ width: '100%' }}>
+            <Space.Compact style={styles.fullWidth}>
               <Input
                 onChange={(e) => setTestUrl(e.target.value)}
                 placeholder={t('proxy.testUrlPlaceholder')}
-                style={{ flex: 1 }}
+                style={styles.flexContainer}
                 value={testUrl}
               />
               <Button loading={isTesting} onClick={handleTest} type="default">
@@ -228,7 +248,7 @@ const ProxyForm = () => {
         minWidth: undefined,
       },
     ],
-    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />,
+    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={styles.style} />,
     title: t('proxy.connectionTest'),
   };
 
@@ -245,11 +265,7 @@ const ProxyForm = () => {
         {...FORM_STYLE}
       />
       <Flexbox align="end" justify="flex-end">
-        {hasUnsavedChanges && (
-          <span style={{ color: 'var(--ant-color-warning)', marginBottom: 8 }}>
-            {t('proxy.unsavedChanges')}
-          </span>
-        )}
+        {hasUnsavedChanges && <span style={styles.spacing}>{t('proxy.unsavedChanges')}</span>}
         <Flexbox gap={8} horizontal>
           <Button
             disabled={!hasUnsavedChanges}

@@ -4,11 +4,22 @@ import { memo, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { StyleSheet } from '@/utils/styles';
 
 import ShareImage from './ShareImage';
 import ShareJSON from './ShareJSON';
 import SharePdf from './SharePdf';
 import ShareText from './ShareText';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+  style: {
+    overflow: 'hidden',
+    position: 'relative',
+  },
+});
 
 enum Tab {
   JSON = 'json',
@@ -60,12 +71,12 @@ const ShareModal = memo<ModalProps>(({ onCancel, open }) => {
       title={t('share', { ns: 'common' })}
       width={'min(90vw, 1024px)'}
     >
-      <Flexbox gap={isMobile ? 8 : 24} style={{ overflow: 'hidden', position: 'relative' }}>
+      <Flexbox gap={isMobile ? 8 : 24} style={styles.style}>
         <Segmented
           block
           onChange={(value) => setTab(value as Tab)}
           options={tabItems}
-          style={{ width: '100%' }}
+          style={styles.fullWidth}
           value={tab}
           variant={'filled'}
         />

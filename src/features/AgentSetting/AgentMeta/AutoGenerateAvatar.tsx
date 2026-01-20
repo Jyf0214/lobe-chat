@@ -7,6 +7,20 @@ import { useTranslation } from 'react-i18next';
 import EmojiPicker from '@/components/EmojiPicker';
 import { useGlobalStore } from '@/store/global';
 import { globalGeneralSelectors } from '@/store/global/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorFillTertiary,
+  },
+  spacing: {
+    background: cssVar.colorBgContainer,
+    border: `1px solid ${cssVar.colorBorderSecondary}`,
+    borderRadius: 32,
+    paddingRight: 8,
+    width: 'fit-content',
+  },
+});
 
 export interface AutoGenerateAvatarProps {
   background?: string;
@@ -23,29 +37,14 @@ const AutoGenerateAvatar = memo<AutoGenerateAvatarProps>(
     const locale = useGlobalStore(globalGeneralSelectors.currentLanguage);
 
     return (
-      <Flexbox
-        align={'center'}
-        flex={'none'}
-        gap={2}
-        horizontal
-        padding={2}
-        style={{
-          background: cssVar.colorBgContainer,
-          border: `1px solid ${cssVar.colorBorderSecondary}`,
-          borderRadius: 32,
-          paddingRight: 8,
-          width: 'fit-content',
-        }}
-      >
+      <Flexbox align={'center'} flex={'none'} gap={2} horizontal padding={2} style={styles.spacing}>
         <EmojiPicker
           background={background || cssVar.colorFillTertiary}
           loading={loading}
           locale={locale}
           onChange={onChange}
           size={48}
-          style={{
-            background: cssVar.colorFillTertiary,
-          }}
+          style={styles.colored}
           value={value}
         />
         <ActionIcon

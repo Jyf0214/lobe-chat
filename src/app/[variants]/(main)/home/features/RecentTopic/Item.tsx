@@ -7,6 +7,30 @@ import { RECENT_BLOCK_SIZE } from '@/app/[variants]/(main)/home/features/const';
 import { DEFAULT_AVATAR } from '@/const/meta';
 import GroupAvatar from '@/features/GroupAvatar';
 import { type RecentTopic } from '@/types/topic';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorFillTertiary,
+    overflow: 'hidden',
+  },
+  colored1: {
+    background: cssVar.colorBgLayout,
+  },
+  spacing: {
+    marginTop: -28,
+  },
+  style: {
+    borderRadius: cssVar.borderRadiusLG,
+    overflow: 'hidden',
+  },
+  style1: {
+    filter: 'blur(100px)',
+  },
+  style2: {
+    lineHeight: 1.4,
+  },
+});
 
 const ReactTopicItem = memo<RecentTopic>(({ title, updatedAt, agent, group, type }) => {
   const isGroup = type === 'group';
@@ -32,21 +56,11 @@ const ReactTopicItem = memo<RecentTopic>(({ title, updatedAt, agent, group, type
       clickable
       flex={'none'}
       height={RECENT_BLOCK_SIZE.TOPIC.HEIGHT}
-      style={{
-        borderRadius: cssVar.borderRadiusLG,
-        overflow: 'hidden',
-      }}
+      style={styles.style}
       variant={'outlined'}
       width={RECENT_BLOCK_SIZE.TOPIC.WIDTH}
     >
-      <Center
-        flex={'none'}
-        height={44}
-        style={{
-          background: cssVar.colorFillTertiary,
-          overflow: 'hidden',
-        }}
-      >
+      <Center flex={'none'} height={44} style={styles.colored}>
         <Avatar
           avatar={
             isGroup
@@ -57,26 +71,13 @@ const ReactTopicItem = memo<RecentTopic>(({ title, updatedAt, agent, group, type
           emojiScaleWithBackground
           shape={'square'}
           size={200}
-          style={{
-            filter: 'blur(100px)',
-          }}
+          style={styles.style1}
         />
       </Center>
       <Flexbox flex={1} gap={6} justify={'space-between'} padding={12}>
-        <Flexbox
-          gap={6}
-          style={{
-            marginTop: -28,
-          }}
-        >
+        <Flexbox gap={6} style={styles.spacing}>
           {isGroup ? (
-            <GroupAvatar
-              avatars={groupAvatars}
-              size={30}
-              style={{
-                background: cssVar.colorBgLayout,
-              }}
-            />
+            <GroupAvatar avatars={groupAvatars} size={30} style={styles.colored1} />
           ) : (
             <Avatar
               avatar={agent?.avatar || DEFAULT_AVATAR}
@@ -87,7 +88,7 @@ const ReactTopicItem = memo<RecentTopic>(({ title, updatedAt, agent, group, type
               title={agent?.title || undefined}
             />
           )}
-          <Text ellipsis={{ rows: 2 }} style={{ lineHeight: 1.4 }} weight={500}>
+          <Text ellipsis={{ rows: 2 }} style={styles.style2} weight={500}>
             {title}
           </Text>
         </Flexbox>

@@ -6,6 +6,13 @@ import { memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { AgentCronJob } from '@/database/schemas/agentCronJob';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 // Form data interface - excludes server-managed fields
 interface CronJobFormData {
@@ -167,7 +174,7 @@ const CronJobForm = memo<CronJobFormProps>(({ editingJob, formRef, onSubmit }) =
         <InputNumber
           min={1}
           placeholder={t('agentCronJobs.form.maxExecutions.placeholder')}
-          style={{ width: '100%' }}
+          style={styles.fullWidth}
         />
       </Form.Item>
 
@@ -182,7 +189,7 @@ const CronJobForm = memo<CronJobFormProps>(({ editingJob, formRef, onSubmit }) =
             t('agentCronJobs.form.timeRange.start'),
             t('agentCronJobs.form.timeRange.end'),
           ]}
-          style={{ width: '100%' }}
+          style={styles.fullWidth}
         />
       </Form.Item>
 
@@ -194,7 +201,7 @@ const CronJobForm = memo<CronJobFormProps>(({ editingJob, formRef, onSubmit }) =
         <InputNumber
           min={1}
           placeholder="Leave empty for no daily limit"
-          style={{ width: '100%' }}
+          style={styles.fullWidth}
         />
       </Form.Item>
     </Form>

@@ -10,6 +10,32 @@ import { useTranslation } from 'react-i18next';
 
 import { autoUpdateService } from '@/services/electron/autoUpdate';
 import { formatSpeed } from '@/utils/format';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    borderRadius: 4,
+    marginTop: 8,
+    maxHeight: 300,
+    overflow: 'auto',
+    padding: '8px 12px',
+  },
+  spacing1: {
+    padding: '20px',
+    textAlign: 'center',
+  },
+  spacing2: {
+    padding: '20px 0',
+  },
+  spacing3: {
+    fontSize: 12,
+    marginTop: 8,
+    textAlign: 'center',
+  },
+  spacing4: {
+    padding: 16,
+  },
+});
 
 type UpdateStage = 'checking' | 'available' | 'latest' | 'downloading' | 'downloaded';
 
@@ -141,18 +167,7 @@ const UpdateModalContent = memo<UpdateModalContentProps>(({ onClose, setModalPro
 
   const renderReleaseNotes = (notes?: UpdateInfo['releaseNotes']) => {
     if (!notes) return null;
-    return (
-      <div
-        dangerouslySetInnerHTML={{ __html: notes as string }}
-        style={{
-          borderRadius: 4,
-          marginTop: 8,
-          maxHeight: 300,
-          overflow: 'auto',
-          padding: '8px 12px',
-        }}
-      />
-    );
+    return <div dangerouslySetInnerHTML={{ __html: notes as string }} style={styles.spacing} />;
   };
 
   const renderBody = () => {
@@ -160,9 +175,7 @@ const UpdateModalContent = memo<UpdateModalContentProps>(({ onClose, setModalPro
       case 'checking': {
         return (
           <Spin spinning>
-            <div style={{ padding: '20px', textAlign: 'center' }}>
-              {t('updater.checkingUpdateDesc')}
-            </div>
+            <div style={styles.spacing1}>{t('updater.checkingUpdateDesc')}</div>
           </Spin>
         );
       }
@@ -179,9 +192,9 @@ const UpdateModalContent = memo<UpdateModalContentProps>(({ onClose, setModalPro
       case 'downloading': {
         const percent = progress ? Math.round(progress.percent) : 0;
         return (
-          <div style={{ padding: '20px 0' }}>
+          <div style={styles.spacing2}>
             <Progress percent={percent} status="active" />
-            <div style={{ fontSize: 12, marginTop: 8, textAlign: 'center' }}>
+            <div style={styles.spacing3}>
               {t('updater.downloadingUpdateDesc', { percent })}
               {progress && progress.bytesPerSecond > 0 && (
                 <span>{formatSpeed(progress.bytesPerSecond)}</span>
@@ -260,7 +273,7 @@ const UpdateModalContent = memo<UpdateModalContentProps>(({ onClose, setModalPro
   };
 
   return (
-    <Flexbox gap={16} style={{ padding: 16 }}>
+    <Flexbox gap={16} style={styles.spacing4}>
       <div>{renderBody()}</div>
       {renderActions()}
     </Flexbox>

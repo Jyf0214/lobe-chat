@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import SettingHeader from '@/app/[variants]/(main)/settings/features/SettingHeader';
 import { useClientDataSWR } from '@/libs/swr';
 import { usageService } from '@/services/usage';
+import { StyleSheet } from '@/utils/styles';
 
 import {
   ShareButton,
@@ -24,6 +25,18 @@ import { AssistantsRank, ModelsRank, TopicsRank } from './features/rankings';
 import { UsageCards, UsageTable, UsageTrends } from './features/usage';
 import { AiHeatmaps } from './features/visualization';
 import { GroupBy } from './types';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBottom: 12,
+  },
+  spacing1: {
+    marginLeft: 8,
+  },
+  style: {
+    height: 24,
+  },
+});
 
 const StatsSetting = memo<{ mobile?: boolean }>(({ mobile }) => {
   const { t, i18n } = useTranslation('auth');
@@ -74,7 +87,7 @@ const StatsSetting = memo<{ mobile?: boolean }>(({ mobile }) => {
         <Divider dashed />
         <AiHeatmaps mobile={mobile} />
         <Divider dashed />
-        <Grid gap={16} rows={3} style={{ paddingBottom: 12 }}>
+        <Grid gap={16} rows={3} style={styles.spacing}>
           <ModelsRank />
           <AssistantsRank mobile={mobile} />
           <TopicsRank mobile={mobile} />
@@ -99,7 +112,7 @@ const StatsSetting = memo<{ mobile?: boolean }>(({ mobile }) => {
                   value: GroupBy.Provider,
                 },
               ]}
-              style={{ marginLeft: 8 }}
+              style={styles.spacing1}
               value={groupBy}
               variant={'outlined'}
             />
@@ -115,7 +128,7 @@ const StatsSetting = memo<{ mobile?: boolean }>(({ mobile }) => {
         <UsageCards data={data} groupBy={groupBy} isLoading={isLoading} />
         <Divider />
         <UsageTrends data={data} groupBy={groupBy} isLoading={isLoading} />
-        <div style={{ height: 24 }} />
+        <div style={styles.style} />
         <UsageTable dateStrings={dateStrings} />
       </FormGroup>
     </>

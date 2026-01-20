@@ -3,12 +3,19 @@ import { useResponsive } from 'antd-style';
 import { memo } from 'react';
 
 import { useQueryState } from '@/hooks/useQueryParam';
+import { StyleSheet } from '@/utils/styles';
 
 import Sidebar from '../Sidebar';
 import Nav, { GroupAgentNavKey } from './Nav';
 import Overview from './Overview';
 import SystemRole from './SystemRole';
 import Versions from './Versions';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 const Details = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
   const { mobile = isMobile } = useResponsive();
@@ -29,12 +36,9 @@ const Details = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
         horizontal={!mobile}
         style={mobile ? { flexDirection: 'column-reverse' } : undefined}
       >
-        <Flexbox
-          style={{
-            overflow: 'hidden',
-          }}
-          width={'100%'}
-        >
+        {/* Main Content */}
+        <Flexbox style={styles.style} width={'100%'}>
+          {/* Tab Content */}
           {activeTab === GroupAgentNavKey.Overview && <Overview />}
           {activeTab === GroupAgentNavKey.SystemRole && <SystemRole />}
           {activeTab === GroupAgentNavKey.Versions && <Versions />}

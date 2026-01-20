@@ -3,10 +3,24 @@ import { ChevronRight } from 'lucide-react';
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { useCommandMenuContext } from './CommandMenuContext';
 import { CommandItem } from './components';
 import { useCommandMenu } from './useCommandMenu';
 import { CONTEXT_COMMANDS, getContextCommands } from './utils/contextCommands';
+
+const styles = StyleSheet.create({
+  spacing: {
+    display: 'inline',
+    marginInline: '6px',
+    opacity: 0.5,
+    verticalAlign: 'middle',
+  },
+  style: {
+    opacity: 0.5,
+  },
+});
 
 const ContextCommands = memo(() => {
   const { t } = useTranslation('setting');
@@ -65,16 +79,8 @@ const ContextCommands = memo(() => {
                 onSelect={() => handleNavigate(cmd.path)}
                 value={searchValue}
               >
-                <span style={{ opacity: 0.5 }}>{contextName}</span>
-                <ChevronRight
-                  size={14}
-                  style={{
-                    display: 'inline',
-                    marginInline: '6px',
-                    opacity: 0.5,
-                    verticalAlign: 'middle',
-                  }}
-                />
+                <span style={styles.style}>{contextName}</span>
+                <ChevronRight size={14} style={styles.spacing} />
                 {label}
               </CommandItem>
             );
@@ -108,16 +114,8 @@ const ContextCommands = memo(() => {
                 unpinned={true}
                 value={searchValue}
               >
-                <span style={{ opacity: 0.5 }}>{settingsContextName}</span>
-                <ChevronRight
-                  size={14}
-                  style={{
-                    display: 'inline',
-                    marginInline: '6px',
-                    opacity: 0.5,
-                    verticalAlign: 'middle',
-                  }}
-                />
+                <span style={styles.style}>{settingsContextName}</span>
+                <ChevronRight size={14} style={styles.spacing} />
                 {label}
               </CommandItem>
             );

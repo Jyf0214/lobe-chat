@@ -6,6 +6,7 @@ import { useChatStore } from '@/store/chat';
 import { dbMessageSelectors } from '@/store/chat/selectors';
 import { useToolStore } from '@/store/tool';
 import { pluginSelectors } from '@/store/tool/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { useOnPluginReadyForInteraction } from '../utils/iframeOnReady';
 import {
@@ -25,6 +26,19 @@ import {
   sendPluginStateToPlugin,
 } from '../utils/postMessage';
 
+const styles = StyleSheet.create({
+  colored: {
+    border: 0,
+    // iframe 在 color-scheme:dark 模式下无法透明
+    // refs: https://www.jianshu.com/p/bc5a37bb6a7b
+    colorScheme: 'light',
+    maxWidth: '100%',
+  },
+  fullWidth: {
+    maxWidth: '100%',
+  },
+});
+
 // just to simplify code a little, don't use this pattern everywhere
 const getSettings = (identifier: string) =>
   pluginSelectors.getPluginSettingsById(identifier)(useToolStore.getState());
@@ -42,6 +56,11 @@ const IFrameRender = memo<IFrameRenderProps>(({ url, id, payload, width = 600, h
   const [loading, setLoading] = useState(true);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const fullWidthStyle = {
+    ...styles.fullWidth,
+    width,
+  };
 
   // when payload change，send content to plugin
   useOnPluginReadyForInteraction(() => {
@@ -137,7 +156,7 @@ const IFrameRender = memo<IFrameRenderProps>(({ url, id, payload, width = 600, h
 
   return (
     <>
-      {loading && <Skeleton active style={{ maxWidth: '100%', width }} />}
+      {loading && <Skeleton active style={fullWidthStyle} />}
       <iframe
         // @ts-ignore
         allowtransparency="true"
@@ -148,13 +167,7 @@ const IFrameRender = memo<IFrameRenderProps>(({ url, id, payload, width = 600, h
         }}
         ref={iframeRef}
         src={url}
-        style={{
-          border: 0,
-          // iframe 在 color-scheme:dark 模式下无法透明
-          // refs: https://www.jianshu.com/p/bc5a37bb6a7b
-          colorScheme: 'light',
-          maxWidth: '100%',
-        }}
+        style={styles.colored}
         width={width}
       />
     </>

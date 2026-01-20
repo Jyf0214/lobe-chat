@@ -1,6 +1,18 @@
 import { TextArea } from '@lobehub/ui';
 import { FC } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    cursor: 'text',
+    maxHeight: '80vh',
+    minHeight: '50vh',
+    overflowY: 'auto',
+    padding: 16,
+  },
+});
+
 interface EditorCanvasProps {
   defaultValue?: string;
   onChange?: (value: string) => void;
@@ -14,13 +26,7 @@ const EditorCanvas: FC<EditorCanvasProps> = ({ defaultValue, value, onChange }) 
       onChange={(e) => {
         onChange?.(e.target.value);
       }}
-      style={{
-        cursor: 'text',
-        maxHeight: '80vh',
-        minHeight: '50vh',
-        overflowY: 'auto',
-        padding: 16,
-      }}
+      style={styles.spacing}
       value={value}
       variant={'borderless'}
     />

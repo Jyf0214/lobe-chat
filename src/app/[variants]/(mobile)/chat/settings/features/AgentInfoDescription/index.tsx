@@ -3,11 +3,32 @@
 import { ProDescriptions } from '@ant-design/pro-components';
 import { type AgentItemDetail } from '@lobehub/market-sdk';
 import { Flexbox, Tag } from '@lobehub/ui';
-import Image from '@/libs/next/Image';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Tokens from '@/features/AgentSetting/AgentPrompt/TokenTag';
+import Image from '@/libs/next/Image';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginTop: 0,
+  },
+  style: {
+    borderRadius: '50%',
+  },
+  style1: {
+    fontSize: '24px',
+    height: 40,
+    lineHeight: '40px',
+    textAlign: 'center',
+    width: 40,
+  },
+  style2: {
+    height: '500px',
+    overflow: 'auto',
+  },
+});
 
 interface AgentConfig {
   params?: {
@@ -131,29 +152,15 @@ const AgentInfoDescription = memo<AgentInfoDescriptionProps>(
 
       // 如果是 http 或 https 链接，显示图片
       if (avatar.startsWith('http://') || avatar.startsWith('https://')) {
-        return (
-          <Image alt="avatar" height={40} src={avatar} style={{ borderRadius: '50%' }} width={40} />
-        );
+        return <Image alt="avatar" height={40} src={avatar} style={styles.style} width={40} />;
       }
 
       // 否则直接显示字符（emoji）
-      return (
-        <div
-          style={{
-            fontSize: '24px',
-            height: 40,
-            lineHeight: '40px',
-            textAlign: 'center',
-            width: 40,
-          }}
-        >
-          {avatar}
-        </div>
-      );
+      return <div style={styles.style1}>{avatar}</div>;
     };
 
     return (
-      <div style={{ height: '500px', overflow: 'auto' }}>
+      <div style={styles.style2}>
         <Flexbox gap={16}>
           {/* 基础信息 */}
           <ProDescriptions
@@ -226,7 +233,7 @@ const AgentInfoDescription = memo<AgentInfoDescriptionProps>(
             title={
               <Flexbox align={'center'} gap={8} horizontal>
                 <span>{t('agentInfoDescription.role.title')}</span>
-                <Tokens style={{ marginTop: 0 }} value={processedSystemRole || ''} />
+                <Tokens style={styles.spacing} value={processedSystemRole || ''} />
               </Flexbox>
             }
           />

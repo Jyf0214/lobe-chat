@@ -3,6 +3,14 @@
 import { Flexbox, Text } from '@lobehub/ui';
 import type { CSSProperties, ReactNode } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+});
+
 interface ProfileRowProps {
   action?: ReactNode;
   children: ReactNode;
@@ -35,9 +43,9 @@ const ProfileRow = ({ label, children, action, mobile }: ProfileRowProps) => {
 
   return (
     <Flexbox align="center" gap={24} horizontal justify="space-between" style={rowStyle}>
-      <Flexbox align="center" gap={24} horizontal style={{ flex: 1 }}>
+      <Flexbox align="center" gap={24} horizontal style={styles.flexContainer}>
         <Text style={labelStyle}>{label}</Text>
-        <Flexbox style={{ flex: 1 }}>{children}</Flexbox>
+        <Flexbox style={styles.flexContainer}>{children}</Flexbox>
       </Flexbox>
       {action && <Flexbox>{action}</Flexbox>}
     </Flexbox>

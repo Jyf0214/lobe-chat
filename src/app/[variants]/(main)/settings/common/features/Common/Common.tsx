@@ -18,6 +18,13 @@ import { systemStatusSelectors } from '@/store/global/selectors';
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/selectors';
 import { type LocaleMode } from '@/types/locale';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    opacity: 0.5,
+  },
+});
 
 const Common = memo(() => {
   const { t } = useTranslation('setting');
@@ -165,7 +172,7 @@ const Common = memo(() => {
         valuePropName: 'checked',
       },
     ],
-    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />,
+    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={styles.style} />,
     title: t('settingCommon.title'),
   };
 

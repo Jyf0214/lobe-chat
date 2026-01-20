@@ -6,11 +6,21 @@ import { useTranslation } from 'react-i18next';
 import { useServerConfigStore } from '@/store/serverConfig';
 import { useToolStore } from '@/store/tool';
 import { PluginStoreTabs } from '@/store/tool/slices/oldStore';
+import { StyleSheet } from '@/utils/styles';
 
 import AddPluginButton from './AddPluginButton';
 import InstalledList from './InstalledList';
 import McpList from './McpList';
 import Search from './Search';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  style: {
+    maxHeight: 'inherit',
+  },
+});
 
 export const Content = memo(() => {
   const { t } = useTranslation('plugin');
@@ -26,7 +36,7 @@ export const Content = memo(() => {
   return (
     <Flexbox
       gap={8}
-      style={{ maxHeight: mobile ? '-webkit-fill-available' : 'inherit' }}
+      style={{ ...styles.style, maxHeight: mobile ? '-webkit-fill-available' : 'inherit' }}
       width={'100%'}
     >
       <Flexbox gap={8} paddingInline={16}>
@@ -37,7 +47,7 @@ export const Content = memo(() => {
               useToolStore.setState({ listType: v as PluginStoreTabs });
             }}
             options={options}
-            style={{ flex: 1 }}
+            style={styles.flexContainer}
             value={listType}
             variant={'filled'}
           />

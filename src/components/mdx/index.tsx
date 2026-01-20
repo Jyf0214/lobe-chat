@@ -4,9 +4,17 @@ import { MDXRemote, type MDXRemoteProps } from 'next-mdx-remote/rsc';
 import { type FC } from 'react';
 import remarkGfm from 'remark-gfm';
 
+import { StyleSheet } from '@/utils/styles';
+
 import CodeBlock from './CodeBlock';
 import Image from './Image';
 import Link from './Link';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 export const Typography = ({
   children,
@@ -19,7 +27,7 @@ export const Typography = ({
     <Typo
       fontSize={14}
       headerMultiple={headerMultiple}
-      style={{ width: '100%', ...style }}
+      style={StyleSheet.compose(styles.fullWidth, style)}
       {...rest}
     >
       {children}

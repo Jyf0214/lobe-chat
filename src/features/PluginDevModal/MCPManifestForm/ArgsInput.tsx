@@ -4,6 +4,23 @@ import { Plus, X } from 'lucide-react';
 import React, { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  flexContainer1: {
+    flexShrink: 0,
+  },
+  flexContainer2: {
+    alignSelf: 'flex-start',
+  },
+  fullWidth: {
+    width: '100%',
+  },
+});
+
 interface ArgsInputProps extends Omit<InputProps, 'value' | 'onChange'> {
   onChange?: (value: string[]) => void;
   value?: string[];
@@ -49,7 +66,7 @@ const ArgsInput = memo<ArgsInputProps>(({ value = [], onChange, ...res }) => {
   );
 
   return (
-    <Flexbox gap={8} style={{ width: '100%' }}>
+    <Flexbox gap={8} style={styles.fullWidth}>
       {value.length === 0 ? (
         <Flexbox align="center" gap={8} horizontal>
           <Input
@@ -61,7 +78,7 @@ const ArgsInput = memo<ArgsInputProps>(({ value = [], onChange, ...res }) => {
               res.onBlur?.(e);
             }}
             placeholder={t('ArgsInput.enterFirstArgument')}
-            style={{ flex: 1 }}
+            style={styles.flexContainer}
           />
           <Button icon={Plus} onClick={handleAddArg} size="small" type="primary" />
         </Flexbox>
@@ -73,14 +90,14 @@ const ArgsInput = memo<ArgsInputProps>(({ value = [], onChange, ...res }) => {
                 onChange={(e) => handleArgChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
                 placeholder={t('ArgsInput.argumentPlaceholder', { index: index + 1 })}
-                style={{ flex: 1 }}
+                style={styles.flexContainer}
                 value={arg}
               />
               <ActionIcon
                 icon={X}
                 onClick={() => handleRemoveArg(index)}
                 size="small"
-                style={{ flexShrink: 0 }}
+                style={styles.flexContainer1}
               />
             </Flexbox>
           ))}
@@ -88,7 +105,7 @@ const ArgsInput = memo<ArgsInputProps>(({ value = [], onChange, ...res }) => {
             icon={Plus}
             onClick={handleAddArg}
             size="small"
-            style={{ alignSelf: 'flex-start' }}
+            style={styles.flexContainer2}
             type="dashed"
           >
             {t('ArgsInput.addArgument')}

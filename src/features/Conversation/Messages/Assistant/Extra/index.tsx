@@ -3,11 +3,19 @@ import { type ModelPerformance, type ModelUsage } from '@lobechat/types';
 import { Flexbox } from '@lobehub/ui';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { messageStateSelectors, useConversationStore } from '../../../store';
 import ExtraContainer from '../../components/Extras/ExtraContainer';
 import TTS from '../../components/Extras/TTS';
 import Translate from '../../components/Extras/Translate';
 import Usage from '../../components/Extras/Usage';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginTop: 4,
+  },
+});
 
 interface AssistantMessageExtraProps {
   content: string;
@@ -25,7 +33,7 @@ export const AssistantMessageExtra = memo<AssistantMessageExtraProps>(
     const loading = useConversationStore(messageStateSelectors.isMessageGenerating(id));
 
     return (
-      <Flexbox gap={8} style={{ marginTop: !!tools?.length ? 8 : 4 }}>
+      <Flexbox gap={8} style={{ ...styles.spacing, marginTop: !!tools?.length ? 8 : 4 }}>
         {content !== LOADING_FLAT && model && (
           <Usage model={model} performance={performance} provider={provider!} usage={usage} />
         )}

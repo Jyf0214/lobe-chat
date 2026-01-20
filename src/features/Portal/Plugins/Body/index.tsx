@@ -4,8 +4,15 @@ import isEqual from 'fast-deep-equal';
 import { useChatStore } from '@/store/chat';
 import { chatPortalSelectors, dbMessageSelectors } from '@/store/chat/selectors';
 import { safeParseJSON } from '@/utils/safeParseJSON';
+import { StyleSheet } from '@/utils/styles';
 
 import ToolRender from './ToolRender';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'auto',
+  },
+});
 
 const ToolUI = () => {
   const messageId = useChatStore(chatPortalSelectors.toolMessageId);
@@ -24,7 +31,7 @@ const ToolUI = () => {
   if (!args) return;
 
   return (
-    <Flexbox flex={1} height={'100%'} paddingInline={12} style={{ overflow: 'auto' }}>
+    <Flexbox flex={1} height={'100%'} paddingInline={12} style={styles.style}>
       <ToolRender />
     </Flexbox>
   );

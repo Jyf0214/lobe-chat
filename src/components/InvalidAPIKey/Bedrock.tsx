@@ -8,6 +8,13 @@ import { useTranslation } from 'react-i18next';
 
 import { FormAction } from '@/features/Conversation/Error/style';
 import { aiProviderSelectors, useAiInfraStore } from '@/store/aiInfra';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 const BedrockForm = memo<{ description: string }>(({ description }) => {
   const { t } = useTranslation('modelProvider');
@@ -74,7 +81,7 @@ const BedrockForm = memo<{ description: string }>(({ description }) => {
             value: i,
           }))}
           placeholder={'https://api.openai.com/v1'}
-          style={{ width: '100%' }}
+          style={styles.fullWidth}
           value={region}
         />
       ) : (

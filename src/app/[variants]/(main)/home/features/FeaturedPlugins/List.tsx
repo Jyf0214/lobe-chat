@@ -7,8 +7,16 @@ import urlJoin from 'url-join';
 import GroupSkeleton from '@/app/[variants]/(main)/home/features/components/GroupSkeleton';
 import { RECENT_BLOCK_SIZE } from '@/app/[variants]/(main)/home/features/const';
 import { useDiscoverStore } from '@/store/discover';
+import { StyleSheet } from '@/utils/styles';
 
 import FeaturedPluginItem from './Item';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+    textDecoration: 'none',
+  },
+});
 
 const FeaturedPluginsList = memo(() => {
   const useMcpList = useDiscoverStore((s) => s.useFetchMcpList);
@@ -34,14 +42,7 @@ const FeaturedPluginsList = memo(() => {
   }
 
   return mcpList.items.map((item, index) => (
-    <Link
-      key={index}
-      style={{
-        color: 'inherit',
-        textDecoration: 'none',
-      }}
-      to={urlJoin('/community/mcp', item.identifier)}
-    >
+    <Link key={index} style={styles.colored} to={urlJoin('/community/mcp', item.identifier)}>
       <FeaturedPluginItem {...item} />
     </Link>
   ));

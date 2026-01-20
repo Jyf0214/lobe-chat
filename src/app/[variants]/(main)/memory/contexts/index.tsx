@@ -9,6 +9,7 @@ import WideScreenContainer from '@/features/WideScreenContainer';
 import WideScreenButton from '@/features/WideScreenContainer/WideScreenButton';
 import { useQueryState } from '@/hooks/useQueryParam';
 import { useUserMemoryStore } from '@/store/userMemory';
+import { StyleSheet } from '@/utils/styles';
 
 import EditableModal from '../features/EditableModal';
 import FilterBar from '../features/FilterBar';
@@ -16,6 +17,13 @@ import Loading from '../features/Loading';
 import ViewModeSwitcher, { type ViewMode } from '../features/ViewModeSwitcher';
 import ContextRightPanel from './features/ContextRightPanel';
 import List from './features/List';
+
+const styles = StyleSheet.create({
+  spacing: {
+    overflowY: 'auto',
+    paddingBottom: '16vh',
+  },
+});
 
 const ContextsArea = memo(() => {
   const { t } = useTranslation('memory');
@@ -92,12 +100,7 @@ const ContextsArea = memo(() => {
           </>
         }
       />
-      <Flexbox
-        height={'100%'}
-        id={SCROLL_PARENT_ID}
-        style={{ overflowY: 'auto', paddingBottom: '16vh' }}
-        width={'100%'}
-      >
+      <Flexbox height={'100%'} id={SCROLL_PARENT_ID} style={styles.spacing} width={'100%'}>
         <WideScreenContainer gap={32} paddingBlock={48}>
           <FilterBar
             onSearch={handleSearch}

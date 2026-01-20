@@ -4,6 +4,28 @@ import { Avatar, Flexbox, Modal } from '@lobehub/ui';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+  },
+  spacing: {
+    marginTop: 16,
+  },
+  spacing1: {
+    lineHeight: 1.6,
+    margin: 0,
+  },
+  style: {
+    fontWeight: 500,
+  },
+  style1: {
+    fontSize: 12,
+    opacity: 0.6,
+  },
+});
+
 interface OriginalAgentInfo {
   author?: {
     avatar?: string;
@@ -44,18 +66,18 @@ const ForkConfirmModal = memo<ForkConfirmModalProps>(
         title={t('marketPublish.forkConfirm.title')}
         width={480}
       >
-        <Flexbox gap={16} style={{ marginTop: 16 }}>
+        <Flexbox gap={16} style={styles.spacing}>
           <Flexbox align="center" gap={12} horizontal>
-            <Avatar avatar={originalAgent.avatar} size={48} style={{ flex: 'none' }} />
+            <Avatar avatar={originalAgent.avatar} size={48} style={styles.flexContainer} />
             <Flexbox gap={4}>
-              <div style={{ fontWeight: 500 }}>{originalAgent.name}</div>
-              <div style={{ fontSize: 12, opacity: 0.6 }}>
+              <div style={styles.style}>{originalAgent.name}</div>
+              <div style={styles.style1}>
                 {t('marketPublish.forkConfirm.by', { author: authorName })}
               </div>
             </Flexbox>
           </Flexbox>
 
-          <p style={{ lineHeight: 1.6, margin: 0 }}>{t('marketPublish.forkConfirm.description')}</p>
+          <p style={styles.spacing1}>{t('marketPublish.forkConfirm.description')}</p>
         </Flexbox>
       </Modal>
     );

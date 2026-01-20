@@ -16,9 +16,29 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ensureElectronIpc } from '@/utils/electron/ipc';
+import { StyleSheet } from '@/utils/styles';
 
 import LobeMessage from '../components/LobeMessage';
 import OnboardingFooterActions from '../components/OnboardingFooterActions';
+
+const styles = StyleSheet.create({
+  colored1: {
+    color: cssVar.colorTextSecondary,
+  },
+  colored2: {
+    color: cssVar.colorTextDescription,
+  },
+  flexContainer: {
+    flex: 1,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  style: {
+    height: '100%',
+    minHeight: '100%',
+  },
+});
 
 type PermissionMeta = {
   descriptionKey: string;
@@ -155,67 +175,69 @@ const PermissionsStep = memo<PermissionsStepProps>(({ onBack, onNext }) => {
   };
 
   return (
-    <Flexbox gap={16} style={{ height: '100%', minHeight: '100%' }}>
+    <Flexbox gap={16} style={styles.style}>
       <Flexbox>
         <LobeMessage sentences={[t('screen3.title'), t('screen3.title2'), t('screen3.title3')]} />
         <Text as={'p'}>{t('screen3.description')}</Text>
       </Flexbox>
-      <Block gap={12} padding={4} style={{ width: '100%' }} variant={'outlined'}>
-        {permissions.map((permission) => (
-          <Block
-            align={'center'}
-            clickable={!permission.granted}
-            gap={16}
-            horizontal
-            key={permission.id}
-            onClick={() => !permission.granted && handlePermissionRequest(permission.id)}
-            paddingBlock={8}
-            paddingInline={'12px 12px'}
-            style={{
-              background: permission.granted ? cssVar.colorFillSecondary : undefined,
-              borderColor: permission.granted ? cssVar.colorSuccess : undefined,
-            }}
-            variant={'borderless'}
-          >
-            <Block align={'center'} height={40} justify={'center'} variant={'outlined'} width={40}>
-              <Icon color={cssVar.colorTextDescription} icon={permission.icon} size={20} />
-            </Block>
-            <Flexbox gap={2} style={{ flex: 1 }}>
-              <Text weight={500}>{t(permission.titleKey as any)}</Text>
-              <Text color={cssVar.colorTextSecondary} fontSize={12}>
-                {t(permission.descriptionKey as any)}
-              </Text>
-            </Flexbox>
-            {permission.granted ? (
-              <Icon color={cssVar.colorSuccess} icon={Check} size={20} />
-            ) : (
-              <Button
-                icon={SquareArrowOutUpRight}
-                iconPosition={'end'}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePermissionRequest(permission.id);
-                }}
-                size={'small'}
-                style={{
-                  color: cssVar.colorTextSecondary,
-                }}
-                type={'text'}
+      <Block gap={12} padding={4} style={styles.fullWidth} variant={'outlined'}>
+        {permissions.map((permission) => {
+          const dynamicColoredStyle = {
+            background: permission.granted ? cssVar.colorFillSecondary : undefined,
+            borderColor: permission.granted ? cssVar.colorSuccess : undefined,
+          };
+          return (
+            <Block
+              align={'center'}
+              clickable={!permission.granted}
+              gap={16}
+              horizontal
+              key={permission.id}
+              onClick={() => !permission.granted && handlePermissionRequest(permission.id)}
+              paddingBlock={8}
+              paddingInline={'12px 12px'}
+              style={dynamicColoredStyle}
+              variant={'borderless'}
+            >
+              <Block
+                align={'center'}
+                height={40}
+                justify={'center'}
+                variant={'outlined'}
+                width={40}
               >
-                {t(permission.buttonKey)}
-              </Button>
-            )}
-          </Block>
-        ))}
+                <Icon color={cssVar.colorTextDescription} icon={permission.icon} size={20} />
+              </Block>
+              <Flexbox gap={2} style={styles.flexContainer}>
+                <Text weight={500}>{t(permission.titleKey as any)}</Text>
+                <Text color={cssVar.colorTextSecondary} fontSize={12}>
+                  {t(permission.descriptionKey as any)}
+                </Text>
+              </Flexbox>
+              {permission.granted ? (
+                <Icon color={cssVar.colorSuccess} icon={Check} size={20} />
+              ) : (
+                <Button
+                  icon={SquareArrowOutUpRight}
+                  iconPosition={'end'}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePermissionRequest(permission.id);
+                  }}
+                  size={'small'}
+                  style={styles.colored1}
+                  type={'text'}
+                >
+                  {t(permission.buttonKey)}
+                </Button>
+              )}
+            </Block>
+          );
+        })}
       </Block>
       <OnboardingFooterActions
         left={
-          <Button
-            icon={Undo2Icon}
-            onClick={onBack}
-            style={{ color: cssVar.colorTextDescription }}
-            type={'text'}
-          >
+          <Button icon={Undo2Icon} onClick={onBack} style={styles.colored2} type={'text'}>
             {t('back')}
           </Button>
         }

@@ -6,6 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { modal } from '@/components/AntdStaticMethods';
 import { useToolStore } from '@/store/tool';
 import { type KlavisServer } from '@/store/tool/slices/klavisStore';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    opacity: 1,
+  },
+});
 
 interface KlavisAuthItemProps {
   server: KlavisServer;
@@ -51,9 +58,14 @@ const KlavisAuthItem = memo<KlavisAuthItemProps>(({ server }) => {
     return <IconComponent size={14} />;
   };
 
+  const styleWithOpacity = {
+    ...styles.style,
+    opacity: isRevoking ? 0.5 : 1,
+  };
+
   return (
     <Tag closable onClose={handleRevoke}>
-      <Flexbox align="center" gap={4} horizontal style={{ opacity: isRevoking ? 0.5 : 1 }}>
+      <Flexbox align="center" gap={4} horizontal style={styleWithOpacity}>
         {renderIcon()}
         {serverType?.label || server.serverName}
       </Flexbox>

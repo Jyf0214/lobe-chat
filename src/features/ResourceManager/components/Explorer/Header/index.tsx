@@ -11,12 +11,25 @@ import { useResourceManagerStore } from '@/app/[variants]/(main)/resource/featur
 import NavHeader from '@/features/NavHeader';
 import { useGlobalStore } from '@/store/global';
 import { FilesTabs } from '@/types/files';
+import { StyleSheet } from '@/utils/styles';
 
 import AddButton from '../../Header/AddButton';
 import BatchActionsDropdown from '../ToolBar/BatchActionsDropdown';
 import SortDropdown from '../ToolBar/SortDropdown';
 import ViewSwitcher from '../ToolBar/ViewSwitcher';
 import Breadcrumb from './Breadcrumb';
+
+const styles = StyleSheet.create({
+  colored: {
+    borderBottom: `1px solid ${cssVar.colorBorderSecondary}`,
+  },
+  spacing: {
+    marginLeft: 0,
+  },
+  spacing1: {
+    marginLeft: 8,
+  },
+});
 
 const Header = memo(() => {
   const { t } = useTranslation(['components', 'common', 'file', 'knowledgeBase']);
@@ -36,7 +49,7 @@ const Header = memo(() => {
 
   // If no libraryId, show category name or "Resource" for All
   const leftContent = isMultiSelected ? (
-    <Flexbox align={'center'} gap={8} horizontal style={{ marginLeft: 0 }}>
+    <Flexbox align={'center'} gap={8} horizontal style={styles.spacing}>
       {libraryId ? (
         <ActionIcon
           icon={BookMinusIcon}
@@ -84,13 +97,13 @@ const Header = memo(() => {
       />
     </Flexbox>
   ) : !libraryId ? (
-    <Flexbox style={{ marginLeft: 8 }}>
+    <Flexbox style={styles.spacing1}>
       {category === FilesTabs.All
         ? t('resource', { defaultValue: 'Resource' })
         : t(`tab.${category as FilesTabs}` as any)}
     </Flexbox>
   ) : (
-    <Flexbox style={{ marginLeft: 8 }}>
+    <Flexbox style={styles.spacing1}>
       <Breadcrumb category={category} knowledgeBaseId={libraryId} />
     </Flexbox>
   );
@@ -104,14 +117,12 @@ const Header = memo(() => {
           <SortDropdown />
           <BatchActionsDropdown onActionClick={onActionClick} selectCount={selectCount} />
           <ViewSwitcher />
-          <Flexbox style={{ marginLeft: 8 }}>
+          <Flexbox style={styles.spacing1}>
             <AddButton />
           </Flexbox>
         </>
       }
-      style={{
-        borderBottom: `1px solid ${cssVar.colorBorderSecondary}`,
-      }}
+      style={styles.colored}
     />
   );
 });

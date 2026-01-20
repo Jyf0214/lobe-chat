@@ -18,9 +18,18 @@ import { useOperationState } from '@/hooks/useOperationState';
 import { useChatStore } from '@/store/chat';
 import { threadSelectors } from '@/store/chat/selectors';
 import { type MessageMapKeyInput, messageMapKey } from '@/store/chat/utils/messageMapKey';
+import { StyleSheet } from '@/utils/styles';
 
 import ThreadDivider from './ThreadDivider';
 import { useThreadActionsBarConfig } from './useThreadActionsBarConfig';
+
+const styles = StyleSheet.create({
+  style: {
+    overflowX: 'hidden',
+    overflowY: 'auto',
+    position: 'relative',
+  },
+});
 
 /**
  * Inner component that uses ConversationStore for message rendering
@@ -81,15 +90,7 @@ const ThreadChatContent = memo(() => {
           </Flexbox>
         }
       >
-        <Flexbox
-          flex={1}
-          style={{
-            overflowX: 'hidden',
-            overflowY: 'auto',
-            position: 'relative',
-          }}
-          width={'100%'}
-        >
+        <Flexbox flex={1} style={styles.style} width={'100%'}>
           <ChatList itemContent={itemContent} />
         </Flexbox>
       </Suspense>

@@ -6,8 +6,16 @@ import PageTitle from '@/components/PageTitle';
 import NavHeader from '@/features/NavHeader';
 import WideScreenContainer from '@/features/WideScreenContainer';
 import WideScreenButton from '@/features/WideScreenContainer/WideScreenButton';
+import { StyleSheet } from '@/utils/styles';
 
 import HomeContent from './features';
+
+const styles = StyleSheet.create({
+  spacing: {
+    overflowY: 'auto',
+    paddingBottom: '16vh',
+  },
+});
 
 const Home: FC = () => {
   const { pathname } = useLocation();
@@ -17,7 +25,7 @@ const Home: FC = () => {
     <>
       {isHomeRoute && <PageTitle title="" />}
       <NavHeader right={<WideScreenButton />} />
-      <Flexbox height={'100%'} style={{ overflowY: 'auto', paddingBottom: '16vh' }} width={'100%'}>
+      <Flexbox height={'100%'} style={styles.spacing} width={'100%'}>
         <WideScreenContainer>
           <HomeContent />
         </WideScreenContainer>

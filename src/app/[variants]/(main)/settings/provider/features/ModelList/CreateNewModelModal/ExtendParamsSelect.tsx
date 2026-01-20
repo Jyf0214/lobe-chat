@@ -18,6 +18,31 @@ import ThinkingBudgetSlider from '@/features/ChatInput/ActionBar/Model/ThinkingB
 import ThinkingLevel2Slider from '@/features/ChatInput/ActionBar/Model/ThinkingLevel2Slider';
 import ThinkingLevelSlider from '@/features/ChatInput/ActionBar/Model/ThinkingLevelSlider';
 import ThinkingSlider from '@/features/ChatInput/ActionBar/Model/ThinkingSlider';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    pointerEvents: 'none',
+    width: '100%',
+  },
+  fullWidth1: {
+    width: '100%',
+  },
+  spacing: {
+    borderRadius: 10,
+    padding: 12,
+  },
+  style: {
+    whiteSpace: 'normal',
+  },
+  style1: {
+    fontSize: 12,
+    whiteSpace: 'normal',
+  },
+  style2: {
+    fontSize: 12,
+  },
+});
 
 type ExtendParamsOption = {
   hintKey: string;
@@ -167,34 +192,31 @@ const PreviewContent = ({
   const containerStyle = previewWidth
     ? { minWidth: previewWidth, width: previewWidth }
     : { minWidth: 240 };
+  const spacingStyle = {
+    ...styles.spacing,
+    background: token.colorBgElevated,
+    border: `1px solid ${token.colorBorderSecondary}`,
+    width: previewWidth,
+  };
 
   return (
     <Flexbox gap={12} style={containerStyle}>
-      <Typography.Text style={{ whiteSpace: 'normal' }} type={'secondary'}>
+      <Typography.Text style={styles.style} type={'secondary'}>
         {hint}
       </Typography.Text>
       <Flexbox gap={12}>
-        <Flexbox
-          gap={8}
-          style={{
-            background: token.colorBgElevated,
-            border: `1px solid ${token.colorBorderSecondary}`,
-            borderRadius: 10,
-            padding: 12,
-            width: previewWidth,
-          }}
-        >
+        <Flexbox gap={8} style={spacingStyle}>
           <Flexbox align={'center'} gap={8} horizontal>
             <Typography.Text strong>{label}</Typography.Text>
             {parameterTag ? <Tag color={'cyan'}>{parameterTag}</Tag> : null}
           </Flexbox>
           {desc ? (
-            <Typography.Text style={{ fontSize: 12, whiteSpace: 'normal' }} type={'secondary'}>
+            <Typography.Text style={styles.style1} type={'secondary'}>
               {desc}
             </Typography.Text>
           ) : null}
           {preview ? (
-            <div style={{ pointerEvents: 'none', width: '100%' }}>{preview}</div>
+            <div style={styles.fullWidth}>{preview}</div>
           ) : (
             <Typography.Text type={'secondary'}>{previewFallback}</Typography.Text>
           )}
@@ -349,7 +371,7 @@ const ExtendParamsSelect = memo<ExtendParamsSelectProps>(({ value, onChange }) =
             >
               <Flexbox gap={4}>
                 <Typography.Text>{def.label}</Typography.Text>
-                <Typography.Text style={{ fontSize: 12 }} type={'secondary'}>
+                <Typography.Text style={styles.style2} type={'secondary'}>
                   {def.hint}
                 </Typography.Text>
               </Flexbox>
@@ -359,7 +381,7 @@ const ExtendParamsSelect = memo<ExtendParamsSelectProps>(({ value, onChange }) =
         options={options}
         placeholder={placeholder}
         popupMatchSelectWidth={false}
-        style={{ width: '100%' }}
+        style={styles.fullWidth1}
         value={value}
       />
       {value && value.length > 0 && (

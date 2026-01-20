@@ -5,8 +5,16 @@ import GroupSkeleton from '@/app/[variants]/(main)/home/features/components/Grou
 import { RECENT_BLOCK_SIZE } from '@/app/[variants]/(main)/home/features/const';
 import { useHomeStore } from '@/store/home';
 import { homeRecentSelectors } from '@/store/home/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import ReactTopicItem from './Item';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+    textDecoration: 'none',
+  },
+});
 
 const RecentTopicList = memo(() => {
   const recentTopics = useHomeStore(homeRecentSelectors.recentTopics);
@@ -30,14 +38,7 @@ const RecentTopicList = memo(() => {
         : `/agent/${topic?.agent?.id}?topic=${topic.id}`;
 
     return (
-      <Link
-        key={topic.id}
-        style={{
-          color: 'inherit',
-          textDecoration: 'none',
-        }}
-        to={topicUrl}
-      >
+      <Link key={topic.id} style={styles.colored} to={topicUrl}>
         <ReactTopicItem {...topic} />
       </Link>
     );

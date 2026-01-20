@@ -6,6 +6,7 @@ import { memo } from 'react';
 
 import { useQueryState } from '@/hooks/useQueryParam';
 import { AssistantNavKey } from '@/types/discover';
+import { StyleSheet } from '@/utils/styles';
 
 import Sidebar from '../Sidebar';
 import Capabilities from './Capabilities';
@@ -14,6 +15,12 @@ import Overview from './Overview';
 import Related from './Related';
 import SystemRole from './SystemRole';
 import Versions from './Versions';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 const Details = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
   const { mobile = isMobile } = useResponsive();
@@ -30,12 +37,7 @@ const Details = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
         horizontal={!mobile}
         style={mobile ? { flexDirection: 'column-reverse' } : undefined}
       >
-        <Flexbox
-          style={{
-            overflow: 'hidden',
-          }}
-          width={'100%'}
-        >
+        <Flexbox style={styles.style} width={'100%'}>
           {activeTab === AssistantNavKey.Overview && <Overview />}
           {activeTab === AssistantNavKey.SystemRole && <SystemRole />}
           {activeTab === AssistantNavKey.Capabilities && <Capabilities />}

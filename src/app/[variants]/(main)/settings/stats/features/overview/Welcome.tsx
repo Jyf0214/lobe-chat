@@ -9,8 +9,24 @@ import { userService } from '@/services/user';
 import { useUserStore } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
 import { formatIntergerNumber } from '@/utils/format';
+import { StyleSheet } from '@/utils/styles';
 
 import TimeLabel from '../components/TimeLabel';
+
+const styles = StyleSheet.create({
+  style: {
+    fontSize: 16,
+    fontWeight: 500,
+  },
+  style1: {
+    height: 24,
+    minWidth: 40,
+    width: 40,
+  },
+  style2: {
+    fontWeight: 'bold',
+  },
+});
 
 const formatEnglishNumber = (number: number) => {
   if (number === 1) return '1st';
@@ -32,22 +48,14 @@ const Welcome = memo<{ mobile?: boolean }>(({ mobile }) => {
 
   return (
     <Flexbox padding={mobile ? 16 : 0}>
-      <Flexbox
-        align={'center'}
-        gap={8}
-        horizontal
-        style={{
-          fontSize: 16,
-          fontWeight: 500,
-        }}
-      >
+      <Flexbox align={'center'} gap={8} horizontal style={styles.style}>
         <Trans
           components={{
             span:
               isLoading || !data ? (
-                <Skeleton.Button active style={{ height: 24, minWidth: 40, width: 40 }} />
+                <Skeleton.Button active style={styles.style1} />
               ) : (
-                <span style={{ fontWeight: 'bold' }} />
+                <span style={styles.style2} />
               ),
           }}
           i18nKey="stats.welcome"

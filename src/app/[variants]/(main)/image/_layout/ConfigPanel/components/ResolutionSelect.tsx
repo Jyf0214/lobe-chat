@@ -3,6 +3,13 @@ import { memo, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGenerationConfigParam } from '@/store/image/slices/generationConfig/hooks';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 const ResolutionSelect = memo(() => {
   const { t } = useTranslation('image');
@@ -32,7 +39,7 @@ const ResolutionSelect = memo(() => {
       block
       onChange={handleChange}
       options={options}
-      style={{ width: '100%' }}
+      style={styles.fullWidth}
       value={value}
       variant="filled"
     />

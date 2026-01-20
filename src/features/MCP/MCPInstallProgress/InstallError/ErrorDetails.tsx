@@ -5,6 +5,28 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { type MCPErrorInfoMetadata } from '@/types/plugins';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    backgroundColor: cssVar.colorFillQuaternary,
+    borderRadius: 8,
+    fontFamily: 'monospace',
+    fontSize: '11px',
+    padding: '8px 12px',
+  },
+  spacing1: {
+    marginTop: 4,
+    wordBreak: 'break-all',
+  },
+  style: {
+    overflow: 'hidden',
+  },
+  style1: {
+    maxHeight: 200,
+    overflow: 'auto',
+  },
+});
 
 const ErrorDetails = memo<{
   errorInfo: MCPErrorInfoMetadata;
@@ -17,18 +39,9 @@ const ErrorDetails = memo<{
       <motion.div
         animate={{ height: 'auto', opacity: 1 }}
         initial={{ height: 0, opacity: 0 }}
-        style={{ overflow: 'hidden' }}
+        style={styles.style}
       >
-        <Flexbox
-          gap={8}
-          style={{
-            backgroundColor: cssVar.colorFillQuaternary,
-            borderRadius: 8,
-            fontFamily: 'monospace',
-            fontSize: '11px',
-            padding: '8px 12px',
-          }}
-        >
+        <Flexbox gap={8} style={styles.spacing}>
           {errorInfo.params && (
             <Flexbox gap={4}>
               <div>
@@ -36,7 +49,7 @@ const ErrorDetails = memo<{
                   {t('mcpInstall.errorDetails.connectionParams')}
                 </Tag>
               </div>
-              <div style={{ marginTop: 4, wordBreak: 'break-all' }}>
+              <div style={styles.spacing1}>
                 {errorInfo.params.command && (
                   <div>
                     {t('mcpInstall.errorDetails.command')}: {errorInfo.params.command}
@@ -58,13 +71,7 @@ const ErrorDetails = memo<{
                   {t('mcpInstall.errorDetails.errorOutput')}
                 </Tag>
               </div>
-              <Highlighter
-                language={'log'}
-                style={{
-                  maxHeight: 200,
-                  overflow: 'auto',
-                }}
-              >
+              <Highlighter language={'log'} style={styles.style1}>
                 {errorInfo.errorLog}
               </Highlighter>
             </Flexbox>
@@ -73,7 +80,7 @@ const ErrorDetails = memo<{
           {errorInfo.originalError && errorInfo.originalError !== errorMessage && (
             <div>
               <Tag color="orange">{t('mcpInstall.errorDetails.originalError')}</Tag>
-              <div style={{ marginTop: 4, wordBreak: 'break-all' }}>{errorInfo.originalError}</div>
+              <div style={styles.spacing1}>{errorInfo.originalError}</div>
             </div>
           )}
         </Flexbox>

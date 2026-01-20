@@ -17,12 +17,19 @@ import { aiProviderSelectors } from '@/store/aiInfra';
 import { useAiInfraStore } from '@/store/aiInfra/store';
 import { useGlobalStore } from '@/store/global';
 import { systemStatusSelectors } from '@/store/global/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import Actions from './Actions';
 import All from './All';
 import ProviderItem from './Item';
 import SortProviderModal from './SortProviderModal';
 import { SortType, useProviderDropdownMenu } from './useDropdownMenu';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBottom: 32,
+  },
+});
 
 const ProviderList = (props: {
   mobile?: boolean;
@@ -93,7 +100,7 @@ const ProviderList = (props: {
   }, [disabledModelProviderList, sortType]);
 
   return (
-    <Flexbox gap={4} paddingInline={4} style={{ paddingBottom: 32 }}>
+    <Flexbox gap={4} paddingInline={4} style={styles.spacing}>
       {!mobile && <All onClick={onProviderSelect} />}
       {open && (
         <SortProviderModal

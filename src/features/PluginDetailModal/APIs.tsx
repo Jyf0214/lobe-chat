@@ -7,6 +7,13 @@ import { useTranslation } from 'react-i18next';
 
 import { useToolStore } from '@/store/tool';
 import { pluginSelectors } from '@/store/tool/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    maxWidth: 400,
+  },
+});
 
 const APIs = memo<{
   id: string;
@@ -20,7 +27,7 @@ const APIs = memo<{
         description={t('detailModal.info.description')}
         descriptionProps={{ fontSize: 14 }}
         icon={Wrench}
-        style={{ maxWidth: 400 }}
+        style={styles.style}
       />
     );
 

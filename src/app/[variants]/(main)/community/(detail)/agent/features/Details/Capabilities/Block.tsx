@@ -1,7 +1,15 @@
 import { Flexbox, Tag } from '@lobehub/ui';
 import { type ReactNode, memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
 import Title from '../../../../../features/Title';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBottom: 24,
+  },
+});
 
 interface BlockProps {
   children?: ReactNode;
@@ -17,7 +25,7 @@ const Block = memo<BlockProps>(({ title, count, desc, children, id }) => {
       <Title id={id} tag={<Tag>{count}</Tag>}>
         {title}
       </Title>
-      <p style={{ marginBottom: 24 }}>{desc}</p>
+      <p style={styles.spacing}>{desc}</p>
       {children}
     </Flexbox>
   );

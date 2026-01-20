@@ -5,6 +5,14 @@ import { ChevronDownIcon } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingInline: 4,
+  },
+});
+
 interface ActionIconWithChevronProps extends ComponentProps<typeof Button> {
   icon: LucideIcon;
 }
@@ -16,7 +24,7 @@ const ActionIconWithChevron = memo<ActionIconWithChevronProps>(
         {...rest}
         className={className}
         disabled={disabled}
-        style={{ paddingInline: 4, ...style }}
+        style={{ ...styles.spacing, ...style }}
         title={title}
         type={'text'}
       >

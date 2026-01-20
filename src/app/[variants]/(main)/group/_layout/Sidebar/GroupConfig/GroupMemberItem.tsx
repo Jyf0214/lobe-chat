@@ -6,6 +6,21 @@ import { useTranslation } from 'react-i18next';
 
 import { DEFAULT_AVATAR } from '@/const/meta';
 import NavItem from '@/features/NavPanel/components/NavItem';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+  },
+  flexContainer1: {
+    flexShrink: 0,
+  },
+  style: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 interface GroupMemberItemProps {
   actions?: ReactNode;
@@ -29,16 +44,14 @@ const GroupMemberItem = memo<GroupMemberItemProps>(
             background={background}
             emojiScaleWithBackground
             size={24}
-            style={{ flex: 'none' }}
+            style={styles.flexContainer}
           />
         }
         title={
           <Flexbox align="center" gap={4} horizontal>
-            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {title}
-            </span>
+            <span style={styles.style}>{title}</span>
             {isExternal && (
-              <Tag size="small" style={{ flexShrink: 0 }}>
+              <Tag size="small" style={styles.flexContainer1}>
                 {t('group.profile.external')}
               </Tag>
             )}

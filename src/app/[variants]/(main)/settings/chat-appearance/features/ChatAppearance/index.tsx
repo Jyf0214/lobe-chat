@@ -18,11 +18,21 @@ import { useTranslation } from 'react-i18next';
 
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import ChatPreview from './ChatPreview';
 import ChatTransitionPreview from './ChatTransitionPreview';
 import HighlighterPreview from './HighlighterPreview';
 import MermaidPreview from './MermaidPreview';
+
+const styles = StyleSheet.create({
+  style: {
+    opacity: 0.5,
+  },
+  style1: {
+    width: 240,
+  },
+});
 
 const ChatAppearance = memo(() => {
   const { t } = useTranslation('setting');
@@ -46,7 +56,7 @@ const ChatAppearance = memo(() => {
         extra={
           <Flexbox align={'center'} gap={8} horizontal>
             {loadingStates.transitionMode && (
-              <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />
+              <Icon icon={Loader2Icon} size={16} spin style={styles.style} />
             )}
             <Segmented
               onChange={(value) => handleChange('transitionMode', value)}
@@ -82,7 +92,7 @@ const ChatAppearance = memo(() => {
         extra={
           <Flexbox align={'center'} gap={8} horizontal>
             {loadingStates.fontSize && (
-              <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />
+              <Icon icon={Loader2Icon} size={16} spin style={styles.style} />
             )}
             <SliderWithInput
               marks={{
@@ -112,9 +122,7 @@ const ChatAppearance = memo(() => {
               min={12}
               onChange={(value) => handleChange('fontSize', value)}
               step={1}
-              style={{
-                width: 240,
-              }}
+              style={styles.style1}
               value={general.fontSize}
             />
           </Flexbox>
@@ -131,7 +139,7 @@ const ChatAppearance = memo(() => {
         extra={
           <Flexbox align={'center'} gap={8} horizontal>
             {loadingStates.highlighterTheme && (
-              <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />
+              <Icon icon={Loader2Icon} size={16} spin style={styles.style} />
             )}
             <Select
               onChange={(value) => handleChange('highlighterTheme', value)}
@@ -139,9 +147,7 @@ const ChatAppearance = memo(() => {
                 label: item.displayName,
                 value: item.id,
               }))}
-              style={{
-                width: 240,
-              }}
+              style={styles.style1}
               value={general.highlighterTheme}
             />
           </Flexbox>
@@ -157,7 +163,7 @@ const ChatAppearance = memo(() => {
         extra={
           <Flexbox align={'center'} gap={8} horizontal>
             {loadingStates.mermaidTheme && (
-              <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />
+              <Icon icon={Loader2Icon} size={16} spin style={styles.style} />
             )}
             <Select
               onChange={(value) => handleChange('mermaidTheme', value)}
@@ -165,9 +171,7 @@ const ChatAppearance = memo(() => {
                 label: item.displayName,
                 value: item.id,
               }))}
-              style={{
-                width: 240,
-              }}
+              style={styles.style1}
               value={general.mermaidTheme}
             />
           </Flexbox>

@@ -7,10 +7,17 @@ import { useAgentStore } from '@/store/agent';
 import { agentByIdSelectors } from '@/store/agent/selectors';
 import { useChatStore } from '@/store/chat';
 import { useHomeStore } from '@/store/home';
+import { StyleSheet } from '@/utils/styles';
 
 import ModeHeader from './ModeHeader';
 import StarterList from './StarterList';
 import { useSend } from './useSend';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBottom: 16,
+  },
+});
 
 const leftActions: ActionKeys[] = ['model', 'search', 'fileUpload', 'tools'];
 
@@ -40,7 +47,7 @@ const InputArea = () => {
   );
 
   return (
-    <Flexbox gap={16} style={{ marginBottom: 16 }}>
+    <Flexbox gap={16} style={styles.spacing}>
       <DragUploadZone onUploadFiles={handleUploadFiles}>
         <ChatInputProvider
           agentId={inboxAgentId}

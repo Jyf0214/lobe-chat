@@ -17,8 +17,61 @@ import { useServerConfigStore } from '@/store/serverConfig';
 import { serverConfigSelectors } from '@/store/serverConfig/selectors';
 import { useUserStore } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { type MarketUserProfile } from './types';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextSecondary,
+  },
+  colored1: {
+    color: cssVar.colorTextSecondary,
+    fontSize: 12,
+  },
+  colored2: {
+    color: cssVar.colorError,
+    cursor: 'pointer',
+    fontSize: 12,
+  },
+  fullWidth: {
+    display: 'block',
+    width: '100%',
+  },
+  fullWidth1: {
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    borderRadius: cssVar.borderRadiusLG,
+    cursor: 'pointer',
+    height: 120,
+    overflow: 'hidden',
+    position: 'relative',
+    width: '100%',
+  },
+  fullWidth2: {
+    height: '100%',
+    transition: 'opacity 0.2s',
+    width: '100%',
+  },
+  spacing: {
+    marginTop: 16,
+  },
+  spacing1: {
+    display: 'block',
+    marginBottom: 24,
+  },
+  spacing2: {
+    display: 'block',
+    marginBottom: 12,
+  },
+  spacing3: {
+    marginRight: 8,
+  },
+  style: {
+    cursor: 'help',
+    opacity: 0.5,
+  },
+});
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB limit
 
@@ -87,6 +140,29 @@ const ProfileSetupModal = memo<ProfileSetupModalProps>(
 
     // File upload
     const uploadWithProgress = useFileStore((s) => s.uploadWithProgress);
+
+    // Dynamic styles based on bannerUrl
+    const fullWidth1Style = {
+      ...styles.fullWidth1,
+      backgroundColor: bannerUrl ? undefined : cssVar.colorFillTertiary,
+      backgroundImage: bannerUrl ? `url(${bannerUrl})` : undefined,
+    };
+
+    const fullWidth2Style = {
+      ...styles.fullWidth2,
+      background: bannerUrl ? 'rgba(0,0,0,0.4)' : 'transparent',
+      opacity: bannerUrl ? 0 : 1,
+    };
+
+    const coloredStyle = {
+      ...styles.colored,
+      color: bannerUrl ? '#fff' : cssVar.colorTextSecondary,
+    };
+
+    const colored1Style = {
+      ...styles.colored1,
+      color: bannerUrl ? '#fff' : cssVar.colorTextSecondary,
+    };
 
     // Reset form when modal opens
     useEffect(() => {
@@ -285,10 +361,10 @@ const ProfileSetupModal = memo<ProfileSetupModalProps>(
         title={false}
         width={640}
       >
-        <Text fontSize={20} strong style={{ marginTop: 16 }}>
+        <Text fontSize={20} strong style={styles.spacing}>
           {isFirstTimeSetup ? t('profileSetup.titleFirstTime') : t('profileSetup.titleEdit')}
         </Text>
-        <Text style={{ display: 'block', marginBottom: 24 }} type="secondary">
+        <Text style={styles.spacing1} type="secondary">
           {isFirstTimeSetup
             ? t('profileSetup.descriptionFirstTime')
             : t('profileSetup.descriptionEdit')}
@@ -319,7 +395,7 @@ const ProfileSetupModal = memo<ProfileSetupModalProps>(
                   <Flexbox align="center" gap={4} horizontal>
                     {t('profileSetup.fields.userName.label')}
                     <Tooltip title={t('profileSetup.fields.userName.tooltip')}>
-                      <CircleHelp size={14} style={{ cursor: 'help', opacity: 0.5 }} />
+                      <CircleHelp size={14} style={styles.style} />
                     </Tooltip>
                   </Flexbox>
                 }
@@ -393,7 +469,7 @@ const ProfileSetupModal = memo<ProfileSetupModalProps>(
                   <Flexbox align="center" gap={4} horizontal>
                     {t('profileSetup.fields.bannerUrl.label')}
                     <Tooltip title={t('profileSetup.fields.bannerUrl.tooltip')}>
-                      <CircleHelp size={14} style={{ cursor: 'help', opacity: 0.5 }} />
+                      <CircleHelp size={14} style={styles.style} />
                     </Tooltip>
                   </Flexbox>
                 }
@@ -404,22 +480,9 @@ const ProfileSetupModal = memo<ProfileSetupModalProps>(
                     customRequest={handleBannerUpload}
                     maxCount={1}
                     showUploadList={false}
-                    style={{ display: 'block', width: '100%' }}
+                    style={styles.fullWidth}
                   >
-                    <div
-                      style={{
-                        backgroundColor: bannerUrl ? undefined : cssVar.colorFillTertiary,
-                        backgroundImage: bannerUrl ? `url(${bannerUrl})` : undefined,
-                        backgroundPosition: 'center',
-                        backgroundSize: 'cover',
-                        borderRadius: cssVar.borderRadiusLG,
-                        cursor: 'pointer',
-                        height: 120,
-                        overflow: 'hidden',
-                        position: 'relative',
-                        width: '100%',
-                      }}
-                    >
+                    <div style={fullWidth1Style}>
                       <Center
                         onMouseEnter={(e) => {
                           e.currentTarget.style.opacity = '1';
@@ -427,25 +490,11 @@ const ProfileSetupModal = memo<ProfileSetupModalProps>(
                         onMouseLeave={(e) => {
                           if (bannerUrl) e.currentTarget.style.opacity = '0';
                         }}
-                        style={{
-                          background: bannerUrl ? 'rgba(0,0,0,0.4)' : 'transparent',
-                          height: '100%',
-                          opacity: bannerUrl ? 0 : 1,
-                          transition: 'opacity 0.2s',
-                          width: '100%',
-                        }}
+                        style={fullWidth2Style}
                       >
                         <Flexbox align="center" gap={8}>
-                          <ImagePlus
-                            size={24}
-                            style={{ color: bannerUrl ? '#fff' : cssVar.colorTextSecondary }}
-                          />
-                          <Text
-                            style={{
-                              color: bannerUrl ? '#fff' : cssVar.colorTextSecondary,
-                              fontSize: 12,
-                            }}
-                          >
+                          <ImagePlus size={24} style={coloredStyle} />
+                          <Text style={colored1Style}>
                             {bannerUploading
                               ? t('profileSetup.fields.bannerUrl.uploading')
                               : t('profileSetup.fields.bannerUrl.clickToUpload')}
@@ -461,11 +510,7 @@ const ProfileSetupModal = memo<ProfileSetupModalProps>(
                           e.stopPropagation();
                           handleBannerDelete();
                         }}
-                        style={{
-                          color: cssVar.colorError,
-                          cursor: 'pointer',
-                          fontSize: 12,
-                        }}
+                        style={styles.colored2}
                       >
                         <Flexbox align="center" gap={4} horizontal>
                           <Trash2 size={12} />
@@ -477,7 +522,7 @@ const ProfileSetupModal = memo<ProfileSetupModalProps>(
                 </Flexbox>
               </Form.Item>
 
-              <Text style={{ display: 'block', marginBottom: 12 }} type="secondary">
+              <Text style={styles.spacing2} type="secondary">
                 {t('profileSetup.socialLinks.title')}
               </Text>
 
@@ -488,7 +533,7 @@ const ProfileSetupModal = memo<ProfileSetupModalProps>(
                     <Icon
                       fill={cssVar.colorTextSecondary}
                       icon={SiGithub}
-                      style={{ marginRight: 8 }}
+                      style={styles.spacing3}
                     />
                   }
                 />
@@ -498,7 +543,7 @@ const ProfileSetupModal = memo<ProfileSetupModalProps>(
                 <Input
                   placeholder={t('profileSetup.fields.twitter.placeholder')}
                   prefix={
-                    <Icon fill={cssVar.colorTextSecondary} icon={SiX} style={{ marginRight: 8 }} />
+                    <Icon fill={cssVar.colorTextSecondary} icon={SiX} style={styles.spacing3} />
                   }
                 />
               </Form.Item>
@@ -515,11 +560,7 @@ const ProfileSetupModal = memo<ProfileSetupModalProps>(
                 <Input
                   placeholder={t('profileSetup.fields.website.placeholder')}
                   prefix={
-                    <Icon
-                      color={cssVar.colorTextSecondary}
-                      icon={Globe}
-                      style={{ marginRight: 8 }}
-                    />
+                    <Icon color={cssVar.colorTextSecondary} icon={Globe} style={styles.spacing3} />
                   }
                 />
               </Form.Item>

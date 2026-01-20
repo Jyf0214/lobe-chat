@@ -12,13 +12,28 @@ import { useTranslation } from 'react-i18next';
 import { useProviderName } from '@/hooks/useProviderName';
 import { chatService } from '@/services/chat';
 import { aiModelSelectors, aiProviderSelectors, useAiInfraStore } from '@/store/aiInfra';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorSuccess,
+  },
+  flexContainer: {
+    flex: 1,
+    overflow: 'hidden',
+  },
+  fullWidth: {
+    maxWidth: 600,
+    width: '100%',
+  },
+});
 
 const Error = memo<{ error: ChatMessageError }>(({ error }) => {
   const { t } = useTranslation('error');
   const providerName = useProviderName(error.body?.provider);
 
   return (
-    <Flexbox gap={8} style={{ maxWidth: 600, width: '100%' }}>
+    <Flexbox gap={8} style={styles.fullWidth}>
       <Alert
         extra={
           <Flexbox paddingBlock={8} paddingInline={16}>
@@ -155,25 +170,14 @@ const Checker = memo<ConnectionCheckerProps>(
               );
             }}
             options={totalModels.map((id) => ({ label: id, value: id }))}
-            style={{
-              flex: 1,
-              overflow: 'hidden',
-            }}
+            style={styles.flexContainer}
             suffixIcon={isProviderConfigUpdating && <Icon icon={Loader2Icon} spin />}
             value={checkModel}
             virtual
           />
           <Button
             disabled={isProviderConfigUpdating}
-            icon={
-              pass ? (
-                <CheckCircleFilled
-                  style={{
-                    color: cssVar.colorSuccess,
-                  }}
-                />
-              ) : undefined
-            }
+            icon={pass ? <CheckCircleFilled style={styles.colored} /> : undefined}
             loading={loading}
             onClick={async () => {
               await onBeforeCheck();

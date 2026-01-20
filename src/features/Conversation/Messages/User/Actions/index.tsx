@@ -4,6 +4,7 @@ import type { ActionIconGroupEvent, ActionIconGroupItemType } from '@lobehub/ui'
 import { memo, useCallback, useMemo } from 'react';
 
 import { MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES } from '@/const/messageActionPortal';
+import { StyleSheet } from '@/utils/styles';
 
 import type {
   MessageActionItem,
@@ -12,6 +13,12 @@ import type {
 } from '../../../types';
 import MessageBranch from '../../components/MessageBranch';
 import { useUserActions } from './useUserActions';
+
+const styles = StyleSheet.create({
+  style: {
+    height: '28px',
+  },
+});
 
 // Helper to strip handleClick from action items before passing to ActionIconGroup
 const stripHandleClick = (item: MessageActionItemOrDivider): ActionIconGroupItemType => {
@@ -157,7 +164,7 @@ interface ActionsProps {
 }
 
 const actionBarHolder = (
-  <div {...{ [MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES.user]: '' }} style={{ height: '28px' }} />
+  <div {...{ [MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES.user]: '' }} style={styles.style} />
 );
 const Actions = memo<ActionsProps>(({ id, data, disableEditing }) => {
   const { branch } = data;

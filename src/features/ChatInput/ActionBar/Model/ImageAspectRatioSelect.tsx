@@ -3,9 +3,18 @@ import { memo, useMemo } from 'react';
 
 import { useAgentStore } from '@/store/agent';
 import { chatConfigByIdSelectors } from '@/store/agent/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { useAgentId } from '../../hooks/useAgentId';
 import { useUpdateAgentConfig } from '../../hooks/useUpdateAgentConfig';
+
+const styles = StyleSheet.create({
+  spacing: {
+    height: 32,
+    marginRight: 10,
+    width: 75,
+  },
+});
 
 const NANO_BANANA_ASPECT_RATIOS = [
   '1:1', // 1024x1024 / 2048x2048 / 4096x4096
@@ -46,7 +55,7 @@ const ImageAspectRatioSelectInner = memo<{
     <Select
       onChange={(v: string) => onChange(v as AspectRatio)}
       options={options}
-      style={{ height: 32, marginRight: 10, width: 75 }}
+      style={styles.spacing}
       value={value}
     />
   );

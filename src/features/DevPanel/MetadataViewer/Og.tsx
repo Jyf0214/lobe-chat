@@ -1,8 +1,32 @@
 import { Flexbox, Form, Input, TextArea } from '@lobehub/ui';
-import Image from '@/libs/next/Image';
 import { memo } from 'react';
 
+import Image from '@/libs/next/Image';
+import { StyleSheet } from '@/utils/styles';
+
 import { useHead } from './useHead';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: 'rgba(0, 0, 0, .5)',
+    borderRadius: 14,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  spacing: {
+    background: 'rgba(0, 0, 0, .5)',
+    borderRadius: 4,
+    bottom: 10,
+    left: 10,
+    lineHeight: 1.3,
+    padding: '2px 6px',
+    position: 'absolute',
+    zIndex: 10,
+  },
+  style: {
+    objectFit: 'cover',
+  },
+});
 
 const MetaData = memo(() => {
   const ogTitle = useHead('property', 'og:title');
@@ -23,37 +47,9 @@ const MetaData = memo(() => {
         },
         {
           children: (
-            <Flexbox
-              height={186}
-              style={{
-                background: 'rgba(0, 0, 0, .5)',
-                borderRadius: 14,
-                overflow: 'hidden',
-                position: 'relative',
-              }}
-              width={358}
-            >
-              <div
-                style={{
-                  background: 'rgba(0, 0, 0, .5)',
-                  borderRadius: 4,
-                  bottom: 10,
-                  left: 10,
-                  lineHeight: 1.3,
-                  padding: '2px 6px',
-                  position: 'absolute',
-                  zIndex: 10,
-                }}
-              >
-                lobehub.com
-              </div>
-              <Image
-                alt={'og'}
-                fill
-                src={ogImage}
-                style={{ objectFit: 'cover' }}
-                unoptimized={true}
-              />
+            <Flexbox height={186} style={styles.colored} width={358}>
+              <div style={styles.spacing}>lobehub.com</div>
+              <Image alt={'og'} fill src={ogImage} style={styles.style} unoptimized={true} />
             </Flexbox>
           ),
           label: 'Og Image',

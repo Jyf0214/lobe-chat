@@ -6,14 +6,21 @@ import { Suspense, memo } from 'react';
 
 import NavHeader from '@/features/NavHeader';
 import WideScreenButton from '@/features/WideScreenContainer/WideScreenButton';
+import { StyleSheet } from '@/utils/styles';
 
 import ShareButton from './ShareButton';
+
+const styles = StyleSheet.create({
+  colored: {
+    backgroundColor: cssVar.colorBgContainer,
+  },
+});
 
 const Header = memo(() => {
   return (
     <NavHeader
       right={
-        <Flexbox horizontal style={{ backgroundColor: cssVar.colorBgContainer }}>
+        <Flexbox horizontal style={styles.colored}>
           <WideScreenButton />
           <Suspense>
             <ShareButton />

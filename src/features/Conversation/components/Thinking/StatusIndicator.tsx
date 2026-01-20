@@ -3,6 +3,14 @@ import { cssVar } from 'antd-style';
 import { AtomIcon, Loader2Icon } from 'lucide-react';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    fontSize: 12,
+  },
+});
+
 interface StatusIndicatorProps {
   showDetail?: boolean;
   thinking?: boolean;
@@ -27,9 +35,7 @@ const StatusIndicator = memo<StatusIndicatorProps>(({ thinking, showDetail }) =>
       height={24}
       horizontal
       justify={'center'}
-      style={{
-        fontSize: 12,
-      }}
+      style={styles.style}
       variant={'outlined'}
       width={24}
     >

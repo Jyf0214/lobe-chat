@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 
 import { type AiProviderSourceType } from '@/types/aiProvider';
 import { formatTokenNumber } from '@/utils/format';
+import { StyleSheet } from '@/utils/styles';
 
 import NewModelBadgeI18n, { NewModelBadge as NewModelBadgeCore } from './NewModelBadge';
 
@@ -221,7 +222,7 @@ export const ModelInfoTags = memo<ModelInfoTagsProps>(
         className={TAG_CLASSNAME}
         direction={directionReverse ? 'horizontal-reverse' : 'horizontal'}
         gap={2}
-        style={{ marginLeft: 'auto', ...style }}
+        style={StyleSheet.compose({ marginLeft: 'auto' }, style)}
         width={'fit-content'}
       >
         <FeatureTags

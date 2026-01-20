@@ -3,8 +3,15 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useServerConfigStore } from '@/store/serverConfig';
+import { StyleSheet } from '@/utils/styles';
 
 import List from './List';
+
+const styles = StyleSheet.create({
+  style: {
+    maxHeight: 'inherit',
+  },
+});
 
 interface AttachKnowledgeModalProps {
   open?: boolean;
@@ -29,7 +36,7 @@ export const AttachKnowledgeModal = memo<AttachKnowledgeModalProps>(({ setOpen, 
     >
       <Flexbox
         gap={mobile ? 8 : 16}
-        style={{ maxHeight: mobile ? '-webkit-fill-available' : 'inherit' }}
+        style={{ ...styles.style, maxHeight: mobile ? '-webkit-fill-available' : 'inherit' }}
         width={'100%'}
       >
         <List />

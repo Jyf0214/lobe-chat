@@ -7,8 +7,16 @@ import urlJoin from 'url-join';
 import GroupSkeleton from '@/app/[variants]/(main)/home/features/components/GroupSkeleton';
 import { RECENT_BLOCK_SIZE } from '@/app/[variants]/(main)/home/features/const';
 import { useDiscoverStore } from '@/store/discover';
+import { StyleSheet } from '@/utils/styles';
 
 import CommunityAgentItem from './Item';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+    textDecoration: 'none',
+  },
+});
 
 const CommunityAgentsList = memo(() => {
   const useAssistantList = useDiscoverStore((s) => s.useAssistantList);
@@ -35,14 +43,7 @@ const CommunityAgentsList = memo(() => {
   return (
     <>
       {assistantList.items.map((item, index) => (
-        <Link
-          key={index}
-          style={{
-            color: 'inherit',
-            textDecoration: 'none',
-          }}
-          to={urlJoin('/community/agent', item.identifier)}
-        >
+        <Link key={index} style={styles.colored} to={urlJoin('/community/agent', item.identifier)}>
           <CommunityAgentItem {...item} />
         </Link>
       ))}

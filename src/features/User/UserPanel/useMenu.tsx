@@ -16,8 +16,16 @@ import { usePWAInstall } from '@/hooks/usePWAInstall';
 import { featureFlagsSelectors, useServerConfigStore } from '@/store/serverConfig';
 import { useUserStore } from '@/store/user';
 import { authSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { useNewVersion } from './useNewVersion';
+
+const styles = StyleSheet.create({
+  spacing: {
+    borderRadius: 16,
+    paddingInline: 8,
+  },
+});
 
 const NewVersionBadge = memo(
   ({
@@ -35,7 +43,7 @@ const NewVersionBadge = memo(
     return (
       <Flexbox align={'center'} flex={1} gap={8} horizontal onClick={onClick} width={'100%'}>
         {children}
-        <Tag color={'info'} size={'small'} style={{ borderRadius: 16, paddingInline: 8 }}>
+        <Tag color={'info'} size={'small'} style={styles.spacing}>
           {t('upgradeVersion.hasNew')}
         </Tag>
       </Flexbox>

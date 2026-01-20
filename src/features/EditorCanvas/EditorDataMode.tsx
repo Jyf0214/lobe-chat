@@ -4,8 +4,16 @@ import { type IEditor } from '@lobehub/editor';
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import type { EditorCanvasProps } from './EditorCanvas';
 import InternalEditor from './InternalEditor';
+
+const styles = StyleSheet.create({
+  spacing: {
+    position: 'relative',
+  },
+});
 
 export interface EditorDataModeProps extends EditorCanvasProps {
   editor: IEditor | undefined;
@@ -80,7 +88,7 @@ const EditorDataMode = memo<EditorDataModeProps>(
     if (!editor) return null;
 
     return (
-      <div style={{ position: 'relative', ...style }}>
+      <div style={{ ...styles.spacing, ...style }}>
         <InternalEditor
           editor={editor}
           onContentChange={onContentChange}

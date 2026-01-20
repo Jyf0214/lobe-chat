@@ -11,8 +11,18 @@ import { useChatStore } from '@/store/chat';
 import { chatSelectors } from '@/store/chat/selectors';
 import { useSessionStore } from '@/store/session';
 import { sessionSelectors } from '@/store/session/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import ThreadChatItem from './ThreadChatItem';
+
+const styles = StyleSheet.create({
+  spacing: {
+    color: '#999',
+    fontSize: '14px',
+    padding: '32px 16px',
+    textAlign: 'center',
+  },
+});
 
 const ThreadChatList = memo(() => {
   const { t } = useTranslation('chat');
@@ -35,18 +45,7 @@ const ThreadChatList = memo(() => {
   if (!isCurrentChatLoaded) return <SkeletonList />;
 
   if (data.length === 0) {
-    return (
-      <div
-        style={{
-          color: '#999',
-          fontSize: '14px',
-          padding: '32px 16px',
-          textAlign: 'center',
-        }}
-      >
-        {t('dm.placeholder', { agentTitle })}
-      </div>
-    );
+    return <div style={styles.spacing}>{t('dm.placeholder', { agentTitle })}</div>;
   }
 
   return (

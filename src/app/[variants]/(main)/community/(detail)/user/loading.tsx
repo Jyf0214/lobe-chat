@@ -5,8 +5,16 @@ import { cssVar } from 'antd-style';
 import { memo } from 'react';
 
 import ListLoading from '@/app/[variants]/(main)/community/components/ListLoading';
+import { StyleSheet } from '@/utils/styles';
 
 import Banner from './features/Header/Banner';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    boxShadow: `0 0 0 4px ${cssVar.colorBgContainer}`,
+    flexShrink: 0,
+  },
+});
 
 const Loading = memo(() => {
   return (
@@ -14,11 +22,7 @@ const Loading = memo(() => {
       {/* User Header Skeleton */}
       <Banner />
       <Flexbox gap={16}>
-        <Skeleton.Avatar
-          shape={'square'}
-          size={64}
-          style={{ boxShadow: `0 0 0 4px ${cssVar.colorBgContainer}`, flexShrink: 0 }}
-        />
+        <Skeleton.Avatar shape={'square'} size={64} style={styles.flexContainer} />
         <Skeleton paragraph={{ rows: 1 }} />
       </Flexbox>
 

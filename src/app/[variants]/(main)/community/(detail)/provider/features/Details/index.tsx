@@ -6,12 +6,19 @@ import { memo } from 'react';
 
 import { useQueryState } from '@/hooks/useQueryParam';
 import { ProviderNavKey } from '@/types/discover';
+import { StyleSheet } from '@/utils/styles';
 
 import Sidebar from '../Sidebar';
 import Guide from './Guide';
 import Nav from './Nav';
 import Overview from './Overview';
 import Related from './Related';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 const Details = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
   const { mobile = isMobile } = useResponsive();
@@ -28,12 +35,7 @@ const Details = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
         horizontal={!mobile}
         style={mobile ? { flexDirection: 'column-reverse' } : undefined}
       >
-        <Flexbox
-          style={{
-            overflow: 'hidden',
-          }}
-          width={'100%'}
-        >
+        <Flexbox style={styles.style} width={'100%'}>
           {activeTab === ProviderNavKey.Overview && <Overview />}
           {activeTab === ProviderNavKey.Guide && <Guide />}
           {activeTab === ProviderNavKey.Related && <Related />}

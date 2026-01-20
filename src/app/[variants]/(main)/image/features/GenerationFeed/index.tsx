@@ -7,8 +7,24 @@ import { Fragment, memo, useEffect, useRef } from 'react';
 
 import { useImageStore } from '@/store/image';
 import { generationBatchSelectors } from '@/store/image/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { GenerationBatchItem } from './BatchItem';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBottom: 48,
+  },
+  spacing1: {
+    margin: 0,
+  },
+  style: {
+    overflowY: 'auto',
+  },
+  style1: {
+    height: 1,
+  },
+});
 
 const GenerationFeed = memo(() => {
   const [parent, enableAnimations] = useAutoAnimate();
@@ -77,17 +93,17 @@ const GenerationFeed = memo(() => {
   }
 
   return (
-    <Flexbox flex={1} style={{ overflowY: 'auto' }}>
-      <Flexbox gap={16} ref={parent} style={{ paddingBottom: 48 }} width="100%">
+    <Flexbox flex={1} style={styles.style}>
+      <Flexbox gap={16} ref={parent} style={styles.spacing} width="100%">
         {currentGenerationBatches.map((batch, index) => (
           <Fragment key={batch.id}>
-            {Boolean(index !== 0) && <Divider dashed style={{ margin: 0 }} />}
+            {Boolean(index !== 0) && <Divider dashed style={styles.spacing1} />}
             <GenerationBatchItem batch={batch} key={batch.id} />
           </Fragment>
         ))}
       </Flexbox>
       {/* Invisible element for scroll target */}
-      <div ref={containerRef} style={{ height: 1 }} />
+      <div ref={containerRef} style={styles.style1} />
     </Flexbox>
   );
 });

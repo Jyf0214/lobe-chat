@@ -8,8 +8,17 @@ import Balancer from 'react-wrap-balancer';
 import SkeletonLoading from '@/components/Loading/SkeletonLoading';
 import { useChatStore } from '@/store/chat';
 import { chatSelectors } from '@/store/chat/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import FileItem from './Item';
+
+const styles = StyleSheet.create({
+  spacing: {
+    border: `1px dashed ${cssVar.colorSplit}`,
+    borderRadius: 8,
+    marginInline: 12,
+  },
+});
 
 const FileList = () => {
   const { t } = useTranslation('portal');
@@ -21,11 +30,7 @@ const FileList = () => {
       <SkeletonLoading />
     </Flexbox>
   ) : files.length === 0 ? (
-    <Center
-      gap={8}
-      paddingBlock={24}
-      style={{ border: `1px dashed ${cssVar.colorSplit}`, borderRadius: 8, marginInline: 12 }}
-    >
+    <Center gap={8} paddingBlock={24} style={styles.spacing}>
       <Avatar
         avatar={<Icon icon={InboxIcon} size={'large'} />}
         background={cssVar.colorFillTertiary}

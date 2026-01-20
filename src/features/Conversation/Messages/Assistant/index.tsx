@@ -7,6 +7,7 @@ import { type MouseEventHandler, memo, useCallback } from 'react';
 import { MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES } from '@/const/messageActionPortal';
 import { ChatItem } from '@/features/Conversation/ChatItem';
 import { useNewScreen } from '@/features/Conversation/Messages/components/useNewScreen';
+import { StyleSheet } from '@/utils/styles';
 
 import ErrorMessageExtra, { useErrorContent } from '../../Error';
 import { useAgentMeta, useDoubleClickEdit } from '../../hooks';
@@ -20,8 +21,14 @@ import MessageBranch from '../components/MessageBranch';
 import { AssistantMessageExtra } from './Extra';
 import MessageContent from './components/MessageContent';
 
+const styles = StyleSheet.create({
+  style: {
+    height: '28px',
+  },
+});
+
 const actionBarHolder = (
-  <div {...{ [MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES.assistant]: '' }} style={{ height: '28px' }} />
+  <div {...{ [MESSAGE_ACTION_BAR_PORTAL_ATTRIBUTES.assistant]: '' }} style={styles.style} />
 );
 
 interface AssistantMessageProps {

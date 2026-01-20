@@ -9,8 +9,25 @@ import FormAction from '@/components/FormAction';
 import { useActionSWR } from '@/libs/swr';
 import { type ModelProgressInfo, modelsService } from '@/services/models';
 import { formatSize } from '@/utils/format';
+import { StyleSheet } from '@/utils/styles';
 
 import { useDownloadMonitor } from './useDownloadMonitor';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextDescription,
+    fontSize: 12,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  spacing: {
+    marginTop: 8,
+  },
+  style: {
+    maxWidth: 300,
+  },
+});
 
 interface OllamaModelDownloaderProps {
   extraAction?: ReactNode;
@@ -56,7 +73,7 @@ const OllamaModelDownloader = memo<OllamaModelDownloaderProps>(
     );
 
     return (
-      <Center gap={16} paddingBlock={32} style={{ width: '100%' }}>
+      <Center gap={16} paddingBlock={32} style={styles.fullWidth}>
         <FormAction
           avatar={<Ollama color={cssVar.colorPrimary} size={64} />}
           description={isDownloading ? t('ollama.download.desc') : t('ollama.unlock.description')}
@@ -76,18 +93,14 @@ const OllamaModelDownloader = memo<OllamaModelDownloaderProps>(
           )}
         </FormAction>
         {isDownloading && (
-          <Flexbox flex={1} gap={8} style={{ maxWidth: 300 }} width={'100%'}>
+          <Flexbox flex={1} gap={8} style={styles.style} width={'100%'}>
             <Progress
               percent={percent}
               showInfo
               strokeColor={cssVar.colorSuccess}
               trailColor={cssVar.colorSuccessBg}
             />
-            <Flexbox
-              distribution={'space-between'}
-              horizontal
-              style={{ color: cssVar.colorTextDescription, fontSize: 12 }}
-            >
+            <Flexbox distribution={'space-between'} horizontal style={styles.colored}>
               <span>
                 {t('ollama.download.remainingTime')}: {remainingTime}
               </span>
@@ -97,7 +110,7 @@ const OllamaModelDownloader = memo<OllamaModelDownloaderProps>(
             </Flexbox>
           </Flexbox>
         )}
-        <Flexbox gap={12} style={{ maxWidth: 300 }} width={'100%'}>
+        <Flexbox gap={12} style={styles.style} width={'100%'}>
           {error?.message && (
             <Alert
               closable
@@ -113,7 +126,7 @@ const OllamaModelDownloader = memo<OllamaModelDownloaderProps>(
             onClick={() => {
               mutate();
             }}
-            style={{ marginTop: 8 }}
+            style={styles.spacing}
             type={'primary'}
           >
             {!isDownloading

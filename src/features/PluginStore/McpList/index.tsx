@@ -1,13 +1,27 @@
 import { DraggablePanel, Flexbox } from '@lobehub/ui';
 import { cssVar, useTheme } from 'antd-style';
-import dynamic from '@/libs/next/dynamic';
 import { memo, useRef } from 'react';
 
+import dynamic from '@/libs/next/dynamic';
 import { useServerConfigStore } from '@/store/serverConfig';
 import { useToolStore } from '@/store/tool';
+import { StyleSheet } from '@/utils/styles';
 
 import DetailLoading from './Detail/Loading';
 import List from './List';
+
+const styles = StyleSheet.create({
+  colored: {
+    borderTop: `1px solid ${cssVar.colorBorderSecondary}`,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  colored1: {
+    background: undefined,
+    overflowX: 'hidden',
+    overflowY: 'auto',
+  },
+});
 
 const Detail = dynamic(() => import('./Detail'), { loading: DetailLoading, ssr: false });
 
@@ -18,16 +32,7 @@ export const MCPPluginList = memo(() => {
   const mobile = useServerConfigStore((s) => s.isMobile);
 
   return (
-    <Flexbox
-      height={'75vh'}
-      horizontal
-      style={{
-        borderTop: `1px solid ${cssVar.colorBorderSecondary}`,
-        overflow: 'hidden',
-        position: 'relative',
-      }}
-      width={'100%'}
-    >
+    <Flexbox height={'75vh'} horizontal style={styles.colored} width={'100%'}>
       {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
       {/* @ts-ignore */}
       <DraggablePanel maxWidth={1024} minWidth={mobile ? '100vw' : 420} placement={'left'}>
@@ -42,11 +47,7 @@ export const MCPPluginList = memo(() => {
         height={'100%'}
         padding={16}
         ref={ref}
-        style={{
-          background: theme.colorBgContainerSecondary,
-          overflowX: 'hidden',
-          overflowY: 'auto',
-        }}
+        style={{ ...styles.colored1, background: theme.colorBgContainerSecondary }}
         width={'100%'}
       >
         <Detail />

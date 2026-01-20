@@ -2,6 +2,13 @@ import { SafeArea, type SafeAreaProps } from '@lobehub/ui/mobile';
 import { memo } from 'react';
 
 import { HEADER_HEIGHT, MOBILE_NABBAR_HEIGHT, MOBILE_TABBAR_HEIGHT } from '@/const/layoutTokens';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+  },
+});
 
 interface SafeSpacingProps {
   height?: number;
@@ -16,9 +23,15 @@ const SafeSpacing = memo<SafeSpacingProps>(({ height, position = 'top', mobile }
   } else {
     h = HEADER_HEIGHT;
   }
+
+  const flexContainerStyle = {
+    ...styles.flexContainer,
+    height: height || h,
+  };
+
   return (
     <>
-      <div style={{ flex: 'none', height: height || h }} />
+      <div style={flexContainerStyle} />
       {mobile && <SafeArea position={position} />}
     </>
   );

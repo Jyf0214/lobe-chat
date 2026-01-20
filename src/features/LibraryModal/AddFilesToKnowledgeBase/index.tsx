@@ -3,7 +3,21 @@ import { BookUp2Icon } from 'lucide-react';
 import { Suspense, memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import SelectForm from './SelectForm';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBottom: 0,
+  },
+  spacing1: {
+    paddingTop: 0,
+  },
+  style: {
+    minHeight: 200,
+  },
+});
 
 interface AddFilesToKnowledgeBaseModalProps {
   fileIds: string[];
@@ -21,11 +35,11 @@ const ModalContent = memo<ModalContentProps>(({ fileIds, knowledgeBaseId }) => {
   const { close } = useModalContext();
   return (
     <>
-      <Flexbox gap={8} horizontal paddingBlock={16} paddingInline={16} style={{ paddingBottom: 0 }}>
+      <Flexbox gap={8} horizontal paddingBlock={16} paddingInline={16} style={styles.spacing}>
         <Icon icon={BookUp2Icon} />
         {t('addToKnowledgeBase.title')}
       </Flexbox>
-      <Flexbox padding={16} style={{ paddingTop: 0 }}>
+      <Flexbox padding={16} style={styles.spacing1}>
         <SelectForm fileIds={fileIds} knowledgeBaseId={knowledgeBaseId} onClose={close} />
       </Flexbox>
     </>
@@ -39,7 +53,7 @@ export const useAddFilesToKnowledgeBaseModal = () => {
     createModal({
       afterClose: params?.onClose,
       children: (
-        <Suspense fallback={<div style={{ minHeight: 200 }} />}>
+        <Suspense fallback={<div style={styles.style} />}>
           <ModalContent fileIds={params?.fileIds || []} knowledgeBaseId={params?.knowledgeBaseId} />
         </Suspense>
       ),

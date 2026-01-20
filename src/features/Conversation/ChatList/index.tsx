@@ -6,6 +6,7 @@ import { useFetchTopicMemories } from '@/hooks/useFetchMemoryForTopic';
 import { useFetchNotebookDocuments } from '@/hooks/useFetchNotebookDocuments';
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import WideScreenContainer from '../../WideScreenContainer';
 import MessageItem from '../Messages';
@@ -13,6 +14,12 @@ import { MessageActionProvider } from '../Messages/Contexts/MessageActionProvide
 import SkeletonList from '../components/SkeletonList';
 import { dataSelectors, useConversationStore } from '../store';
 import VirtualizedList from './components/VirtualizedList';
+
+const styles = StyleSheet.create({
+  style: {
+    height: '100%',
+  },
+});
 
 export interface ChatListProps {
   /**
@@ -74,9 +81,7 @@ const ChatList = memo<ChatListProps>(({ disableActionsBar, welcome, itemContent 
   if (displayMessageIds.length === 0) {
     return (
       <WideScreenContainer
-        style={{
-          height: '100%',
-        }}
+        style={styles.style}
         wrapperStyle={{
           minHeight: '100%',
           overflowY: 'auto',

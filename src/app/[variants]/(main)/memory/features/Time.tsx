@@ -3,6 +3,15 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    display: 'block',
+    flex: 'none',
+  },
+});
+
 dayjs.extend(relativeTime);
 
 interface TimeProps {
@@ -18,7 +27,7 @@ const Time = memo<TimeProps>(({ capturedAt }) => {
     <Text
       as={'time'}
       fontSize={12}
-      style={{ display: 'block', flex: 'none' }}
+      style={styles.flexContainer}
       title={datetime.format('YYYY-MM-DD HH:mm')}
       type={'secondary'}
     >

@@ -6,8 +6,15 @@ import React, { memo, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DESKTOP_HEADER_ICON_SIZE } from '@/const/layoutTokens';
+import { StyleSheet } from '@/utils/styles';
 
 import { useCreateMenuItems } from '../../hooks';
+
+const styles = StyleSheet.create({
+  style: {
+    width: 16,
+  },
+});
 
 const AddButton = memo(() => {
   const { t: tChat } = useTranslation('chat');
@@ -49,9 +56,7 @@ const AddButton = memo(() => {
           color={cssVar.colorTextQuaternary}
           icon={ChevronDownIcon}
           size={{ blockSize: 32, size: 14 }}
-          style={{
-            width: 16,
-          }}
+          style={styles.style}
         />
       </DropdownMenu>
     </Flexbox>

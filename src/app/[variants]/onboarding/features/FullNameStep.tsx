@@ -9,8 +9,24 @@ import { useTranslation } from 'react-i18next';
 
 import { useUserStore } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import LobeMessage from '../components/LobeMessage';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextDescription,
+  },
+  spacing: {
+    marginInline: 8,
+  },
+  spacing1: {
+    marginTop: 32,
+  },
+  style: {
+    zoom: 1.5,
+  },
+});
 
 interface FullNameStepProps {
   onBack: () => void;
@@ -57,9 +73,7 @@ const FullNameStep = memo<FullNameStepProps>(({ onBack, onNext }) => {
               color={cssVar.colorTextDescription}
               icon={SignatureIcon}
               size={32}
-              style={{
-                marginInline: 8,
-              }}
+              style={styles.spacing}
             />
           }
           size="large"
@@ -73,9 +87,7 @@ const FullNameStep = memo<FullNameStepProps>(({ onBack, onNext }) => {
             <SendButton
               disabled={!value?.trim() || isNavigating}
               onClick={handleNext}
-              style={{
-                zoom: 1.5,
-              }}
+              style={styles.style}
               type="primary"
             />
           }
@@ -83,14 +95,12 @@ const FullNameStep = memo<FullNameStepProps>(({ onBack, onNext }) => {
           value={value}
         />
       </Flexbox>
-      <Flexbox horizontal justify={'flex-start'} style={{ marginTop: 32 }}>
+      <Flexbox horizontal justify={'flex-start'} style={styles.spacing1}>
         <Button
           disabled={isNavigating}
           icon={Undo2Icon}
           onClick={handleBack}
-          style={{
-            color: cssVar.colorTextDescription,
-          }}
+          style={styles.colored}
           type={'text'}
         >
           {t('back')}

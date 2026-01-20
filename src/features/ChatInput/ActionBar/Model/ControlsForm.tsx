@@ -8,6 +8,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useAgentStore } from '@/store/agent';
 import { agentByIdSelectors, chatConfigByIdSelectors } from '@/store/agent/selectors';
 import { aiModelSelectors, useAiInfraStore } from '@/store/aiInfra';
+import { StyleSheet } from '@/utils/styles';
 
 import { useAgentId } from '../../hooks/useAgentId';
 import { useUpdateAgentConfig } from '../../hooks/useUpdateAgentConfig';
@@ -25,6 +26,12 @@ import ThinkingBudgetSlider from './ThinkingBudgetSlider';
 import ThinkingLevel2Slider from './ThinkingLevel2Slider';
 import ThinkingLevelSlider from './ThinkingLevelSlider';
 import ThinkingSlider from './ThinkingSlider';
+
+const styles = StyleSheet.create({
+  style: {
+    fontSize: 12,
+  },
+});
 
 const ControlsForm = memo(() => {
   const { t } = useTranslation('chat');
@@ -274,7 +281,7 @@ const ControlsForm = memo(() => {
         await updateAgentChatConfig(values);
       }}
       size={'small'}
-      style={{ fontSize: 12 }}
+      style={styles.style}
       variant={'borderless'}
     />
   );

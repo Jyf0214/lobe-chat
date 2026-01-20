@@ -2,6 +2,16 @@ import { Flexbox, Input, Popover } from '@lobehub/ui';
 import { memo, useCallback, useState } from 'react';
 
 import { useHomeStore } from '@/store/home';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  style: {
+    width: 280,
+  },
+});
 
 interface EditingProps {
   id: string;
@@ -31,7 +41,7 @@ const Editing = memo<EditingProps>(({ id, title, toggleEditing }) => {
   return (
     <Popover
       content={
-        <Flexbox gap={4} horizontal onClick={(e) => e.stopPropagation()} style={{ width: 280 }}>
+        <Flexbox gap={4} horizontal onClick={(e) => e.stopPropagation()} style={styles.style}>
           <Input
             autoFocus
             defaultValue={title}
@@ -40,7 +50,7 @@ const Editing = memo<EditingProps>(({ id, title, toggleEditing }) => {
               handleUpdate();
               toggleEditing(false);
             }}
-            style={{ flex: 1 }}
+            style={styles.flexContainer}
           />
         </Flexbox>
       }

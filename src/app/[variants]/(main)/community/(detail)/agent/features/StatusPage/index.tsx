@@ -7,6 +7,42 @@ import { memo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: '#8c8c8c',
+  },
+  colored1: {
+    color: '#ff4d4f',
+  },
+  colored2: {
+    color: '#666',
+    lineHeight: 1.6,
+  },
+  flexContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: '60vh',
+    padding: '20px',
+  },
+  flexContainer1: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: '60vh',
+    padding: '20px',
+  },
+  spacing: {
+    margin: '16px 0',
+    paddingLeft: '20px',
+    textAlign: 'left',
+  },
+});
+
 interface StatusPageProps {
   status: 'unpublished' | 'archived' | 'deprecated';
 }
@@ -22,16 +58,7 @@ const StatusPage = memo<StatusPageProps>(({ status }) => {
   // 审核中状态
   if (status === 'unpublished') {
     return (
-      <div
-        style={{
-          alignItems: 'center',
-          display: 'flex',
-          flex: 1,
-          justifyContent: 'center',
-          minHeight: '60vh',
-          padding: '20px',
-        }}
-      >
+      <div style={styles.flexContainer}>
         <Result
           extra={
             <Button onClick={handleBackToMarket} size={'large'} type="primary">
@@ -64,22 +91,13 @@ const StatusPage = memo<StatusPageProps>(({ status }) => {
   const isArchived = status === 'archived';
   const statusKey = isArchived ? 'archived' : 'deprecated';
   const statusIcon = isArchived ? (
-    <FolderOpenOutlined style={{ color: '#8c8c8c' }} />
+    <FolderOpenOutlined style={styles.colored} />
   ) : (
-    <ExclamationCircleOutlined style={{ color: '#ff4d4f' }} />
+    <ExclamationCircleOutlined style={styles.colored1} />
   );
 
   return (
-    <div
-      style={{
-        alignItems: 'center',
-        display: 'flex',
-        flex: 1,
-        justifyContent: 'center',
-        minHeight: '60vh',
-        padding: '20px',
-      }}
-    >
+    <div style={styles.flexContainer1}>
       <Result
         extra={
           <Button onClick={handleBackToMarket} type="primary">
@@ -88,9 +106,9 @@ const StatusPage = memo<StatusPageProps>(({ status }) => {
         }
         icon={statusIcon}
         subTitle={
-          <div style={{ color: '#666', lineHeight: 1.6 }}>
+          <div style={styles.colored2}>
             <p>{t(`assistants.status.${statusKey}.subtitle`)}</p>
-            <ul style={{ margin: '16px 0', paddingLeft: '20px', textAlign: 'left' }}>
+            <ul style={styles.spacing}>
               <li>{t(`assistants.status.${statusKey}.reasons.owner`)}</li>
               <li>{t(`assistants.status.${statusKey}.reasons.official`)}</li>
             </ul>

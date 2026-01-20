@@ -5,9 +5,19 @@ import React, { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import AuthCard from '@/features/AuthCard';
+import { StyleSheet } from '@/utils/styles';
 
 import OAuthApplicationLogo from '../components/OAuthApplicationLogo';
 import BuiltinConsent from './BuiltinConsent';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+  spacing: {
+    marginTop: 8,
+  },
+});
 
 interface ClientProps {
   clientId: string;
@@ -51,7 +61,7 @@ const ConsentClient = memo<ClientProps>(({ uid, clientId, scopes, clientMetadata
       />
       <AuthCard
         footer={
-          <form action="/oidc/consent" method="post" style={{ width: '100%' }}>
+          <form action="/oidc/consent" method="post" style={styles.fullWidth}>
             <input name="uid" type="hidden" value={uid} />
             <Flexbox gap={12}>
               <Button
@@ -79,7 +89,7 @@ const ConsentClient = memo<ClientProps>(({ uid, clientId, scopes, clientMetadata
         <Text fontSize={16} type={'secondary'}>
           {t('consent.permissionsTitle')}
         </Text>
-        <Flexbox gap={4} style={{ marginTop: 8 }} width={'100%'}>
+        <Flexbox gap={4} style={styles.spacing} width={'100%'}>
           {scopes.map((scope) => (
             <Block key={scope} padding={16} variant={'filled'}>
               <Text>{getScopeDescription(scope, t)}</Text>

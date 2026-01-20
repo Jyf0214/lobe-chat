@@ -10,6 +10,13 @@ import { FORM_STYLE } from '@/const/layoutTokens';
 import ModelSelect from '@/features/ModelSelect';
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    opacity: 0.5,
+  },
+});
 
 const DefaultAgentForm = memo(() => {
   const { t } = useTranslation('setting');
@@ -45,7 +52,7 @@ const DefaultAgentForm = memo(() => {
         name: 'defaultAgentConfig',
       },
     ],
-    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />,
+    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={styles.style} />,
     title: t('defaultAgent.title'),
   };
 

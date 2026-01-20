@@ -14,9 +14,16 @@ import { useAgentStore } from '@/store/agent';
 import { pluginHelpers, useToolStore } from '@/store/tool';
 import { toolSelectors } from '@/store/tool/selectors';
 import { hydrationPrompt } from '@/utils/promptTemplate';
+import { StyleSheet } from '@/utils/styles';
 
 import MentionDropdown from './MentionDropdown';
 import { type MentionListOption, type MentionMetadata } from './types';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+  },
+});
 
 // 根据 identifier 获取 Klavis 服务器类型配置
 const getKlavisServerType = (identifier: string) =>
@@ -29,7 +36,7 @@ const getKlavisServerType = (identifier: string) =>
  */
 const KlavisIcon = memo<Pick<KlavisServerType, 'icon' | 'label'>>(({ icon, label }) => {
   if (typeof icon === 'string') {
-    return <Image alt={label} height={20} src={icon} style={{ flex: 'none' }} width={20} />;
+    return <Image alt={label} height={20} src={icon} style={styles.flexContainer} width={20} />;
   }
 
   // 使用主题色填充，在深色模式下自动适应

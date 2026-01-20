@@ -8,6 +8,21 @@ import FileViewer from '@/features/FileViewer';
 import { useChatStore } from '@/store/chat';
 import { chatPortalSelectors } from '@/store/chat/selectors';
 import { useFileStore } from '@/store/file';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    overflow: 'scroll',
+    paddingInline: 8,
+  },
+  style: {
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  style1: {
+    overflow: 'scroll',
+  },
+});
 
 enum FilePreviewTab {
   Chunk = 'chunk',
@@ -28,12 +43,7 @@ const FilePreview = () => {
 
   const showChunk = tab === FilePreviewTab.Chunk && !!chunkText;
   return (
-    <Flexbox
-      height={'100%'}
-      paddingBlock={'0 4px'}
-      paddingInline={4}
-      style={{ borderRadius: 4, overflow: 'hidden' }}
-    >
+    <Flexbox height={'100%'} paddingBlock={'0 4px'} paddingInline={4} style={styles.style}>
       {chunkText && (
         <Segmented
           block
@@ -56,9 +66,9 @@ const FilePreview = () => {
       )}
 
       {showChunk ? (
-        <Markdown style={{ overflow: 'scroll', paddingInline: 8 }}>{chunkText}</Markdown>
+        <Markdown style={styles.spacing}>{chunkText}</Markdown>
       ) : (
-        <Flexbox flex={1} paddingBlock={8} style={{ overflow: 'scroll' }}>
+        <Flexbox flex={1} paddingBlock={8} style={styles.style1}>
           <FileViewer {...data} />
         </Flexbox>
       )}

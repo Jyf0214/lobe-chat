@@ -5,6 +5,14 @@ import { Plus } from 'lucide-react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBottom: 12,
+  },
+});
+
 interface NewTopicButtonProps {
   count?: number;
   onClick?: () => void;
@@ -21,9 +29,7 @@ const NewTopicButton = memo<NewTopicButtonProps>(({ count, onClick, showMoreInfo
         gap={8}
         horizontal
         justify="space-between"
-        style={{
-          marginBottom: 12,
-        }}
+        style={styles.spacing}
         width={'100%'}
       >
         <div>

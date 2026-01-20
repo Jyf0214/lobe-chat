@@ -7,6 +7,19 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useImageStore } from '@/store/image';
 import { imageGenerationConfigSelectors } from '@/store/image/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  style: {
+    verticalAlign: 'middle',
+  },
+});
 
 const DEFAULT_IMAGE_NUM_MAX = ENABLE_BUSINESS_FEATURES ? 8 : 50;
 const CUSTOM_VALUE = '__custom__';
@@ -43,7 +56,7 @@ const ImageNum = memo<ImageNumSelectorProps>(
         });
       } else {
         items.push({
-          label: <Plus size={16} style={{ verticalAlign: 'middle' }} />,
+          label: <Plus size={16} style={styles.style} />,
           value: CUSTOM_VALUE,
         } as any);
       }
@@ -121,7 +134,7 @@ const ImageNum = memo<ImageNumSelectorProps>(
 
     if (isEditing) {
       return (
-        <Flexbox gap={8} horizontal style={{ width: '100%' }}>
+        <Flexbox gap={8} horizontal style={styles.fullWidth}>
           <InputNumber
             max={max}
             min={min}
@@ -136,7 +149,7 @@ const ImageNum = memo<ImageNumSelectorProps>(
             placeholder={`${min}-${max}`}
             ref={inputRef}
             size="small"
-            style={{ flex: 1 }}
+            style={styles.flexContainer}
             value={customCount}
           />
           <ActionIcon
@@ -158,7 +171,7 @@ const ImageNum = memo<ImageNumSelectorProps>(
         disabled={disabled}
         onChange={handleChange}
         options={options}
-        style={{ width: '100%' }}
+        style={styles.fullWidth}
         value={isCustomValue ? imageNum : imageNum}
         variant="filled"
       />

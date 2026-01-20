@@ -7,10 +7,17 @@ import { Navigate } from 'react-router-dom';
 import SettingHeader from '@/app/[variants]/(main)/settings/features/SettingHeader';
 import { enableClerk } from '@/envs/auth';
 import dynamic from '@/libs/next/dynamic';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+});
 
 const ClerkProfile = dynamic(() => import('./features/ClerkProfile'), {
   loading: () => (
-    <div style={{ flex: 1 }}>
+    <div style={styles.flexContainer}>
       <Skeleton paragraph={{ rows: 8 }} title={false} />
     </div>
   ),

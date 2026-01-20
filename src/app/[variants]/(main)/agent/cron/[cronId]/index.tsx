@@ -26,12 +26,19 @@ import { useChatStore } from '@/store/chat';
 import { serverConfigSelectors, useServerConfigStore } from '@/store/serverConfig';
 import { useUserStore } from '@/store/user';
 import { labPreferSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { type ScheduleType, buildCronPattern, parseCronPattern } from './CronConfig';
 import CronJobContentEditor from './features/CronJobContentEditor';
 import CronJobHeader from './features/CronJobHeader';
 import CronJobSaveButton from './features/CronJobSaveButton';
 import CronJobScheduleConfig from './features/CronJobScheduleConfig';
+
+const styles = StyleSheet.create({
+  style: {
+    overflowY: 'auto',
+  },
+});
 
 interface CronJobDraft {
   content: string;
@@ -458,7 +465,7 @@ const CronJobDetailPage = memo(() => {
           ) : undefined
         }
       />
-      <Flexbox flex={1} style={{ overflowY: 'auto' }}>
+      <Flexbox flex={1} style={styles.style}>
         <WideScreenContainer paddingBlock={16}>
           {isLoading && <Loading debugId="CronJobDetailPage" />}
           {!isLoading && !cronJob && !isNewJob && (

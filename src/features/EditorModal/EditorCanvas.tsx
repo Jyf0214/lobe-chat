@@ -12,7 +12,21 @@ import { Editor } from '@lobehub/editor/react';
 import { Flexbox } from '@lobehub/ui';
 import { FC } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
 import TypoBar from './Typobar';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBottom: 120,
+  },
+  style: {
+    cursor: 'text',
+    maxHeight: '80vh',
+    minHeight: '50vh',
+    overflowY: 'auto',
+  },
+});
 
 interface EditorCanvasProps {
   defaultValue?: string;
@@ -23,10 +37,7 @@ const EditorCanvas: FC<EditorCanvasProps> = ({ defaultValue, editor }) => {
   return (
     <>
       <TypoBar editor={editor} />
-      <Flexbox
-        padding={16}
-        style={{ cursor: 'text', maxHeight: '80vh', minHeight: '50vh', overflowY: 'auto' }}
-      >
+      <Flexbox padding={16} style={styles.style}>
         <Editor
           autoFocus
           content={''}
@@ -48,9 +59,7 @@ const EditorCanvas: FC<EditorCanvasProps> = ({ defaultValue, editor }) => {
             ReactTablePlugin,
             ReactMathPlugin,
           ]}
-          style={{
-            paddingBottom: 120,
-          }}
+          style={styles.spacing}
           type={'text'}
           variant={'chat'}
         />

@@ -5,10 +5,17 @@ import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useUserStore } from '@/store/user';
+import { StyleSheet } from '@/utils/styles';
 
 import { useConversationStore } from '../../../../../store';
 import { useMessageAggregationContext } from '../../../../Contexts/MessageAggregationContext';
 import { type ApprovalMode } from './index';
+
+const styles = StyleSheet.create({
+  style: {
+    width: 400,
+  },
+});
 
 interface ApprovalActionsProps {
   apiName: string;
@@ -81,7 +88,7 @@ const ApprovalActions = memo<ApprovalActionsProps>(
       <Flexbox gap={8} horizontal>
         <Popover
           content={
-            <Flexbox gap={12} style={{ width: 400 }}>
+            <Flexbox gap={12} style={styles.style}>
               <Flexbox align={'center'} horizontal justify={'space-between'}>
                 <div>{t('tool.intervention.rejectTitle')}</div>
 

@@ -13,6 +13,13 @@ import { useTranslation } from 'react-i18next';
 import { localeOptions } from '@/locales/resources';
 import { useGlobalStore } from '@/store/global';
 import { globalGeneralSelectors } from '@/store/global/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    lineHeight: 1.2,
+  },
+});
 
 const LangButton = memo<{ placement?: DropdownMenuProps['placement']; size?: number }>(
   ({ placement, size }) => {
@@ -30,8 +37,8 @@ const LangButton = memo<{ placement?: DropdownMenuProps['placement']; size?: num
         key: 'auto',
         label: (
           <Flexbox gap={4}>
-            <Text style={{ lineHeight: 1.2 }}>{t('settingCommon.lang.autoMode')}</Text>
-            <Text fontSize={12} style={{ lineHeight: 1.2 }} type={'secondary'}>
+            <Text style={styles.style}>{t('settingCommon.lang.autoMode')}</Text>
+            <Text fontSize={12} style={styles.style} type={'secondary'}>
               {t(`lang.auto` as any, { ns: 'common' })}
             </Text>
           </Flexbox>
@@ -50,8 +57,8 @@ const LangButton = memo<{ placement?: DropdownMenuProps['placement']; size?: num
         key: item.value,
         label: (
           <Flexbox gap={4} key={item.value}>
-            <Text style={{ lineHeight: 1.2 }}>{item.label}</Text>
-            <Text fontSize={12} style={{ lineHeight: 1.2 }} type={'secondary'}>
+            <Text style={styles.style}>{item.label}</Text>
+            <Text fontSize={12} style={styles.style} type={'secondary'}>
               {t(`lang.${item.value}` as any, { ns: 'common' })}
             </Text>
           </Flexbox>

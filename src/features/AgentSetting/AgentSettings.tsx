@@ -3,10 +3,15 @@ import { Suspense, memo } from 'react';
 
 import { ChatSettingsTabs } from '@/store/global/initialState';
 import { useServerConfigStore } from '@/store/serverConfig';
+import { StyleSheet } from '@/utils/styles';
 
 import AgentSettingsContent from './AgentSettingsContent';
 import { AgentSettingsProvider } from './AgentSettingsProvider';
 import { type StoreUpdaterProps } from './StoreUpdater';
+
+const styles = StyleSheet.create({
+  spacing: {},
+});
 
 export interface AgentSettingsProps extends StoreUpdaterProps {
   tab: ChatSettingsTabs;
@@ -14,8 +19,12 @@ export interface AgentSettingsProps extends StoreUpdaterProps {
 
 const AgentSettings = memo<AgentSettingsProps>(({ tab = ChatSettingsTabs.Meta, ...rest }) => {
   const isMobile = useServerConfigStore((s) => s.isMobile);
+  const spacingStyle = {
+    ...styles.spacing,
+    padding: isMobile ? 16 : 0,
+  };
   const loadingSkeleton = (
-    <Skeleton active paragraph={{ rows: 6 }} style={{ padding: isMobile ? 16 : 0 }} title={false} />
+    <Skeleton active paragraph={{ rows: 6 }} style={spacingStyle} title={false} />
   );
 
   return (

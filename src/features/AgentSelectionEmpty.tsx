@@ -3,6 +3,17 @@ import { Users } from 'lucide-react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    minHeight: '30vh',
+  },
+  style1: {
+    maxWidth: 400,
+  },
+});
+
 interface AgentSelectionEmptyProps extends Omit<EmptyProps, 'icon'> {
   search?: boolean;
   variant?: 'noAvailable' | 'noSelected' | 'empty';
@@ -22,16 +33,14 @@ const AgentSelectionEmpty = memo<AgentSelectionEmptyProps>(
     }
 
     return (
-      <Center height="100%" style={{ minHeight: '30vh' }} width="100%">
+      <Center height="100%" style={styles.style} width="100%">
         <Empty
           description={description}
           descriptionProps={{
             fontSize: 14,
           }}
           icon={Users}
-          style={{
-            maxWidth: 400,
-          }}
+          style={styles.style1}
           {...rest}
         />
       </Center>

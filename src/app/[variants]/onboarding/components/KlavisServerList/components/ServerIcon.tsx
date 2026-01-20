@@ -3,6 +3,14 @@ import { cssVar } from 'antd-style';
 import { type LucideIcon } from 'lucide-react';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+  },
+});
+
 interface ServerIconProps {
   icon: string | LucideIcon;
   label: string;
@@ -10,7 +18,9 @@ interface ServerIconProps {
 
 const ServerIcon = memo<ServerIconProps>(({ icon, label }) => {
   if (typeof icon === 'string') {
-    return <Avatar alt={label} avatar={icon} shape={'square'} size={24} style={{ flex: 'none' }} />;
+    return (
+      <Avatar alt={label} avatar={icon} shape={'square'} size={24} style={styles.flexContainer} />
+    );
   }
 
   return <Icon fill={cssVar.colorText} icon={icon} size={24} />;

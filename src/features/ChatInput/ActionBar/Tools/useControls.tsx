@@ -24,11 +24,22 @@ import {
   lobehubSkillStoreSelectors,
   pluginSelectors,
 } from '@/store/tool/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { useAgentId } from '../../hooks/useAgentId';
 import KlavisServerItem from './KlavisServerItem';
 import LobehubSkillServerItem from './LobehubSkillServerItem';
 import ToolItem from './ToolItem';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+  },
+  spacing: {
+    fontSize: 12,
+    marginInlineEnd: 4,
+  },
+});
 
 /**
  * Klavis 服务器图标组件
@@ -37,7 +48,7 @@ import ToolItem from './ToolItem';
  */
 const KlavisIcon = memo<Pick<KlavisServerType, 'icon' | 'label'>>(({ icon, label }) => {
   if (typeof icon === 'string') {
-    return <Image alt={label} height={18} src={icon} style={{ flex: 'none' }} width={18} />;
+    return <Image alt={label} height={18} src={icon} style={styles.flexContainer} width={18} />;
   }
 
   // 使用主题色填充，在深色模式下自动适应
@@ -52,7 +63,7 @@ KlavisIcon.displayName = 'KlavisIcon';
 const LobehubSkillIcon = memo<Pick<LobehubSkillProviderType, 'icon' | 'label'>>(
   ({ icon, label }) => {
     if (typeof icon === 'string') {
-      return <Image alt={label} height={18} src={icon} style={{ flex: 'none' }} width={18} />;
+      return <Image alt={label} height={18} src={icon} style={styles.flexContainer} width={18} />;
     }
 
     return <Icon fill={cssVar.colorText} icon={icon} size={18} />;
@@ -162,7 +173,12 @@ export const useControls = ({ setUpdating }: { setUpdating: (updating: boolean) 
       // 原有的 builtin 工具
       ...filteredBuiltinList.map((item) => ({
         icon: (
-          <Avatar avatar={item.meta.avatar} shape={'square'} size={20} style={{ flex: 'none' }} />
+          <Avatar
+            avatar={item.meta.avatar}
+            shape={'square'}
+            size={20}
+            style={styles.flexContainer}
+          />
         ),
         key: item.identifier,
         label: (
@@ -220,7 +236,7 @@ export const useControls = ({ setUpdating }: { setUpdating: (updating: boolean) 
         <Flexbox align={'center'} gap={40} horizontal justify={'space-between'}>
           {t('tools.plugins.groupName')}
           {enablePluginCount === 0 ? null : (
-            <div style={{ fontSize: 12, marginInlineEnd: 4 }}>
+            <div style={styles.spacing}>
               {t('tools.plugins.enabled', { num: enablePluginCount })}
             </div>
           )}
@@ -239,7 +255,12 @@ export const useControls = ({ setUpdating }: { setUpdating: (updating: boolean) 
       .filter((item) => checked.includes(item.identifier))
       .map((item) => ({
         icon: (
-          <Avatar avatar={item.meta.avatar} shape={'square'} size={20} style={{ flex: 'none' }} />
+          <Avatar
+            avatar={item.meta.avatar}
+            shape={'square'}
+            size={20}
+            style={styles.flexContainer}
+          />
         ),
         key: item.identifier,
         label: (

@@ -11,8 +11,18 @@ import CollapseLayout from '@/features/MCPPluginDetail/CollapseLayout';
 import { ModeType } from '@/features/MCPPluginDetail/Schema/types';
 import { useToolStore } from '@/store/tool';
 import { pluginSelectors } from '@/store/tool/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import Title from '../../../../../app/[variants]/(main)/community/features/Title';
+
+const styles = StyleSheet.create({
+  style: {
+    maxWidth: 400,
+  },
+  style1: {
+    fontSize: 12,
+  },
+});
 
 interface ToolProps {
   mode?: ModeType;
@@ -32,7 +42,7 @@ const Tools = memo<ToolProps>(({ mode }) => {
           description={t('mcp.details.schema.tools.empty')}
           descriptionProps={{ fontSize: 14 }}
           icon={Wrench}
-          style={{ maxWidth: 400 }}
+          style={styles.style}
         />
       </Block>
     );
@@ -85,7 +95,7 @@ const Tools = memo<ToolProps>(({ mode }) => {
                 ]}
               />
             ) : (
-              <Highlighter language={'json'} style={{ fontSize: 12 }} variant={'borderless'}>
+              <Highlighter language={'json'} style={styles.style1} variant={'borderless'}>
                 {JSON.stringify(item, null, 2)}
               </Highlighter>
             ),

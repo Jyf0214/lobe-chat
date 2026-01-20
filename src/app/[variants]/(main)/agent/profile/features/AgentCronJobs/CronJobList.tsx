@@ -8,8 +8,23 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { AgentCronJob } from '@/database/schemas/agentCronJob';
+import { StyleSheet } from '@/utils/styles';
 
 import { useAgentCronJobs } from './hooks/useAgentCronJobs';
+
+const styles = StyleSheet.create({
+  spacing: {
+    color: '#666',
+    fontSize: '12px',
+    margin: 0,
+  },
+  spacing1: {
+    marginTop: 4,
+  },
+  style: {
+    fontSize: '11px',
+  },
+});
 
 const { Text, Paragraph } = Typography;
 
@@ -91,21 +106,18 @@ const CronJobList = memo<CronJobListProps>(({ cronJobs, loading, onEdit, onDelet
               }
               description={
                 <Flexbox gap={4}>
-                  <Paragraph
-                    ellipsis={{ rows: 2, tooltip: job.content }}
-                    style={{ color: '#666', fontSize: '12px', margin: 0 }}
-                  >
+                  <Paragraph ellipsis={{ rows: 2, tooltip: job.content }} style={styles.spacing}>
                     {job.content}
                   </Paragraph>
 
-                  <Flexbox gap={8} horizontal style={{ marginTop: 4 }}>
+                  <Flexbox gap={8} horizontal style={styles.spacing1}>
                     <Flexbox align="center" gap={4} horizontal>
                       <Icon icon={Clock} size={12} />
-                      <Text style={{ fontSize: '11px' }}>{t(intervalText as any)}</Text>
+                      <Text style={styles.style}>{t(intervalText as any)}</Text>
                     </Flexbox>
 
                     {job.remainingExecutions !== null && (
-                      <Text style={{ fontSize: '11px' }}>
+                      <Text style={styles.style}>
                         {t('agentCronJobs.remainingExecutions', { count: job.remainingExecutions })}
                       </Text>
                     )}
@@ -113,7 +125,7 @@ const CronJobList = memo<CronJobListProps>(({ cronJobs, loading, onEdit, onDelet
                     {job.lastExecutedAt && (
                       <Flexbox align="center" gap={4} horizontal>
                         <Icon icon={Calendar} size={12} />
-                        <Text style={{ fontSize: '11px' }}>
+                        <Text style={styles.style}>
                           {dayjs(job.lastExecutedAt).format('MM/DD HH:mm')}
                         </Text>
                       </Flexbox>

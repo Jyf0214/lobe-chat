@@ -17,12 +17,22 @@ import { useFetchInstalledPlugins } from '@/hooks/useFetchInstalledPlugins';
 import { featureFlagsSelectors, useServerConfigStore } from '@/store/serverConfig';
 import { pluginHelpers, useToolStore } from '@/store/tool';
 import { toolSelectors } from '@/store/tool/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { useStore } from '../store';
 import AddPluginButton from './AddPluginButton';
 import LoadingList from './LoadingList';
 import LocalPluginItem from './LocalPluginItem';
 import PluginAction from './PluginAction';
+
+const styles = StyleSheet.create({
+  style: {
+    width: 'auto',
+  },
+  style1: {
+    maxWidth: 400,
+  },
+});
 
 const AgentPlugin = memo(() => {
   const { t } = useTranslation('setting');
@@ -98,7 +108,7 @@ const AgentPlugin = memo(() => {
   const loadingSkeleton = LoadingList();
 
   const extra = (
-    <Space.Compact style={{ width: 'auto' }}>
+    <Space.Compact style={styles.style}>
       <AddPluginButton />
       {hasDeprecated ? (
         <Tooltip title={t('plugin.clearDeprecated')}>
@@ -151,7 +161,7 @@ const AgentPlugin = memo(() => {
         }
         descriptionProps={{ fontSize: 14 }}
         icon={Plug2}
-        style={{ maxWidth: 400 }}
+        style={styles.style1}
       />
     </Center>
   );

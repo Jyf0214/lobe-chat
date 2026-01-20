@@ -6,6 +6,13 @@ import { memo, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import BrandLoading from '@/components/Loading/BrandTextLoading';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  display: {
+    display: 'none',
+  },
+});
 
 interface BuiltinConsentProps {
   uid: string;
@@ -27,7 +34,7 @@ const BuiltinConsent = memo<BuiltinConsentProps>(({ uid }) => {
         status="success"
         title={<Text fontSize={14}>{t('consent.redirecting')}</Text>}
       />
-      <form action="/oidc/consent" method="post" ref={formRef} style={{ display: 'none' }}>
+      <form action="/oidc/consent" method="post" ref={formRef} style={styles.display}>
         <input name="uid" type="hidden" value={uid} />
         <input name="consent" type="hidden" value="accept" />
       </form>

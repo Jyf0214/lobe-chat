@@ -6,6 +6,13 @@ import * as THREE from 'three';
 
 import { type QueryTagsResult } from '@/database/models/userMemory';
 import UserAvatar from '@/features/User/UserAvatar';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    pointerEvents: 'none',
+  },
+});
 
 // 配置常量
 const CONFIG = {
@@ -269,13 +276,7 @@ const ConnectionLine = memo<ConnectionLineProps>(
 // 中心头像组件
 const CenterAvatar = memo(() => {
   return (
-    <Html
-      center
-      position={[0, 0, 0]}
-      style={{
-        pointerEvents: 'none',
-      }}
-    >
+    <Html center position={[0, 0, 0]} style={styles.style}>
       <UserAvatar shape={'circle'} size={80} />
     </Html>
   );

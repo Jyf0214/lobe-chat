@@ -3,9 +3,17 @@
 import { Flexbox, Skeleton } from '@lobehub/ui';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
 import NewTopicButton from './NewTopicButton';
 
 const borderRadius = 6;
+
+const styles = StyleSheet.create({
+  style: {
+    borderRadius,
+  },
+});
 
 const SkeletonList = memo(() => {
   return (
@@ -15,13 +23,7 @@ const SkeletonList = memo(() => {
       {/* Topic items skeleton */}
       {Array.from({ length: 5 }).map((_, index) => (
         <div key={index}>
-          <Skeleton.Avatar
-            active
-            size={48}
-            style={{
-              borderRadius,
-            }}
-          />
+          <Skeleton.Avatar active size={48} style={styles.style} />
         </div>
       ))}
     </Flexbox>

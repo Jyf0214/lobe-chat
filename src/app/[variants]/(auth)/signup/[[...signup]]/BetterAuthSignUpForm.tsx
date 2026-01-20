@@ -3,13 +3,21 @@
 import { Button, Icon, Text } from '@lobehub/ui';
 import { Form, Input } from 'antd';
 import { Lock, Mail } from 'lucide-react';
-import Link from '@/libs/next/Link';
-import { useSearchParams } from '@/libs/next/navigation';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Link from '@/libs/next/Link';
+import { useSearchParams } from '@/libs/next/navigation';
+import { StyleSheet } from '@/utils/styles';
+
 import { AuthCard } from '../../../../../features/AuthCard';
 import { type SignUpFormValues, useSignUp } from './useSignUp';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginInline: 6,
+  },
+});
 
 const BetterAuthSignUpForm = () => {
   const [form] = Form.useForm<SignUpFormValues>();
@@ -46,14 +54,7 @@ const BetterAuthSignUpForm = () => {
         >
           <Input
             placeholder={t('betterAuth.signup.emailPlaceholder')}
-            prefix={
-              <Icon
-                icon={Mail}
-                style={{
-                  marginInline: 6,
-                }}
-              />
-            }
+            prefix={<Icon icon={Mail} style={styles.spacing} />}
             size="large"
           />
         </Form.Item>
@@ -76,14 +77,7 @@ const BetterAuthSignUpForm = () => {
         >
           <Input.Password
             placeholder={t('betterAuth.signup.passwordPlaceholder')}
-            prefix={
-              <Icon
-                icon={Lock}
-                style={{
-                  marginInline: 6,
-                }}
-              />
-            }
+            prefix={<Icon icon={Lock} style={styles.spacing} />}
             size="large"
           />
         </Form.Item>
@@ -104,14 +98,7 @@ const BetterAuthSignUpForm = () => {
         >
           <Input.Password
             placeholder={t('betterAuth.signup.confirmPasswordPlaceholder')}
-            prefix={
-              <Icon
-                icon={Lock}
-                style={{
-                  marginInline: 6,
-                }}
-              />
-            }
+            prefix={<Icon icon={Lock} style={styles.spacing} />}
             size="large"
           />
         </Form.Item>

@@ -4,6 +4,16 @@ import { Flexbox } from '@lobehub/ui';
 import { css, cx } from 'antd-style';
 import { type PropsWithChildren } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+    height: 0,
+    position: 'relative',
+  },
+});
+
 const body = css`
   :has(.portal-artifact) {
     overflow: hidden;
@@ -16,7 +26,7 @@ const Body = ({ children }: PropsWithChildren) => {
     <Flexbox
       className={cx(body, 'portal-body')}
       height={'100%'}
-      style={{ flex: 1, height: 0, position: 'relative' }}
+      style={styles.flexContainer}
       width={'100%'}
     >
       {children}

@@ -8,7 +8,19 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import urlJoin from 'url-join';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { useDetailContext } from './DetailProvider';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextSecondary,
+  },
+  style: {
+    overflow: 'hidden',
+    position: 'relative',
+  },
+});
 
 const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
   const { t } = useTranslation('providers');
@@ -22,10 +34,7 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
         gap={8}
         horizontal
         justify={'space-between'}
-        style={{
-          overflow: 'hidden',
-          position: 'relative',
-        }}
+        style={styles.style}
       >
         <Flexbox align={'flex-start'} width={'100%'}>
           <ProviderCombine provider={identifier} size={mobile ? 32 : 48} />
@@ -65,14 +74,7 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
         </Flexbox>
       </Flexbox>
 
-      <Flexbox
-        align={'center'}
-        gap={mobile ? 12 : 24}
-        horizontal
-        style={{
-          color: cssVar.colorTextSecondary,
-        }}
-      >
+      <Flexbox align={'center'} gap={mobile ? 12 : 24} horizontal style={styles.colored}>
         {t(`${identifier}.description`)}
       </Flexbox>
     </Flexbox>

@@ -7,8 +7,15 @@ import { useTranslation } from 'react-i18next';
 import AuthCard from '@/features/AuthCard';
 import { useUserStore } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import OAuthApplicationLogo from './components/OAuthApplicationLogo';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 interface LoginConfirmProps {
   clientMetadata: {
@@ -47,7 +54,7 @@ const LoginConfirmClient = memo<LoginConfirmProps>(({ uid, clientMetadata }) => 
             action="/oidc/consent"
             method="post"
             onSubmit={() => setIsLoading(true)}
-            style={{ width: '100%' }}
+            style={styles.fullWidth}
           >
             {/* Adjust action URL */}
             <input name="uid" type="hidden" value={uid} />

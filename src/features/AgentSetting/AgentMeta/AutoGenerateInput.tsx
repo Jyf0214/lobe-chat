@@ -3,6 +3,14 @@ import { Wand2 } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginRight: -4,
+  },
+});
+
 export interface AutoGenerateInputProps extends Omit<InputProps, 'onChange'> {
   canAutoGenerate?: boolean;
   loading?: boolean;
@@ -38,9 +46,7 @@ const AutoGenerateInput = memo<AutoGenerateInputProps>(
               loading={loading}
               onClick={onGenerate}
               size="small"
-              style={{
-                marginRight: -4,
-              }}
+              style={styles.spacing}
               title={!canAutoGenerate ? t('autoGenerateTooltipDisabled') : t('autoGenerate')}
             />
           )

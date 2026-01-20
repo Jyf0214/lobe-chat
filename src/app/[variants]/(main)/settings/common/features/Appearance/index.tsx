@@ -10,9 +10,16 @@ import { useTranslation } from 'react-i18next';
 import { FORM_STYLE } from '@/const/layoutTokens';
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/slices/settings/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import Preview from './Preview';
 import { ThemeSwatchesNeutral, ThemeSwatchesPrimary } from './ThemeSwatches';
+
+const styles = StyleSheet.create({
+  style: {
+    opacity: 0.5,
+  },
+});
 
 const Appearance = memo(() => {
   const { t } = useTranslation('setting');
@@ -44,7 +51,7 @@ const Appearance = memo(() => {
         name: 'neutralColor',
       },
     ],
-    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />,
+    extra: loading && <Icon icon={Loader2Icon} size={16} spin style={styles.style} />,
     title: t('settingAppearance.title'),
   };
 

@@ -5,13 +5,23 @@ import qs from 'query-string';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import InlineTable from '@/components/InlineTable';
 import Link from '@/libs/router/Link';
 import { usePathname } from '@/libs/router/navigation';
-import InlineTable from '@/components/InlineTable';
+import { StyleSheet } from '@/utils/styles';
 
 import PublishedTime from '../../../../../../../../../components/PublishedTime';
 import { useDetailContext } from '../../../../../../../../../features/MCPPluginDetail/DetailProvider';
 import Title from '../../../../../features/Title';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+  },
+  style: {
+    fontSize: 14,
+  },
+});
 
 const Versions = memo(() => {
   const { t } = useTranslation('discover');
@@ -33,10 +43,10 @@ const Versions = memo(() => {
                     },
                     url: pathname,
                   })}
-                  style={{ color: 'inherit' }}
+                  style={styles.colored}
                 >
                   <Flexbox align={'center'} gap={8} horizontal>
-                    <code style={{ fontSize: 14 }}>{record.version}</code>
+                    <code style={styles.style}>{record.version}</code>
                     {record.isLatest && (
                       <Tag color={'info'}>{t('mcp.details.versions.table.isLatest')}</Tag>
                     )}

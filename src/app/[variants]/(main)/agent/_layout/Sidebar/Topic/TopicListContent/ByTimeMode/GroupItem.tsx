@@ -5,8 +5,21 @@ import React, { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { type GroupedTopic } from '@/types/topic';
+import { StyleSheet } from '@/utils/styles';
 
 import TopicItem from '../../List/Item';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  style: {
+    overflow: 'hidden',
+  },
+  style1: {
+    opacity: 0.5,
+  },
+});
 
 const preformat = (id: string) =>
   id.startsWith('20') ? (id.includes('-') ? dayjs(id).format('MMMM') : id) : undefined;
@@ -29,9 +42,9 @@ const GroupItem = memo<GroupItemProps>(({ group, activeTopicId, activeThreadId }
       paddingBlock={4}
       paddingInline={'8px 4px'}
       title={
-        <Flexbox align="center" gap={6} height={24} horizontal style={{ overflow: 'hidden' }}>
-          <Icon icon={HashIcon} style={{ opacity: 0.5 }} />
-          <Text ellipsis fontSize={12} style={{ flex: 1 }} type={'secondary'} weight={500}>
+        <Flexbox align="center" gap={6} height={24} horizontal style={styles.style}>
+          <Icon icon={HashIcon} style={styles.style1} />
+          <Text ellipsis fontSize={12} style={styles.flexContainer} type={'secondary'} weight={500}>
             {title || timeTitle}
           </Text>
         </Flexbox>

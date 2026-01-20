@@ -8,8 +8,31 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import AuthIcons from '@/components/NextAuth/AuthIcons';
 import { PRIVACY_URL, TERMS_URL } from '@/const/url';
+import { StyleSheet } from '@/utils/styles';
 
 import AuthCard from '../../../../features/AuthCard';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+  },
+  spacing: {
+    marginBottom: 0,
+  },
+  spacing1: {
+    marginInline: 6,
+  },
+  spacing2: {
+    padding: 6,
+  },
+  style: {
+    left: 12,
+    position: 'absolute',
+    top: 13,
+  },
+});
 
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const USERNAME_REGEX = /^\w+$/;
@@ -62,18 +85,12 @@ export const SignInEmailStep = ({
       <Trans
         components={{
           privacy: (
-            <a
-              href={PRIVACY_URL}
-              style={{ color: 'inherit', cursor: 'pointer', textDecoration: 'underline' }}
-            >
+            <a href={PRIVACY_URL} style={styles.colored}>
               {t('footer.terms')}
             </a>
           ),
           terms: (
-            <a
-              href={TERMS_URL}
-              style={{ color: 'inherit', cursor: 'pointer', textDecoration: 'underline' }}
-            >
+            <a href={TERMS_URL} style={styles.colored}>
               {t('footer.privacy')}
             </a>
           ),
@@ -102,16 +119,7 @@ export const SignInEmailStep = ({
           {oAuthSSOProviders.map((provider) => (
             <Button
               block
-              icon={
-                <Icon
-                  icon={AuthIcons(provider, 18)}
-                  style={{
-                    left: 12,
-                    position: 'absolute',
-                    top: 13,
-                  }}
-                />
-              }
+              icon={<Icon icon={AuthIcons(provider, 18)} style={styles.style} />}
               key={provider}
               loading={socialLoading === provider}
               onClick={() => onSocialSignIn(provider)}
@@ -143,23 +151,14 @@ export const SignInEmailStep = ({
               },
             },
           ]}
-          style={{ marginBottom: 0 }}
+          style={styles.spacing}
         >
           <Input
             placeholder={t('betterAuth.signin.emailPlaceholder')}
-            prefix={
-              <Icon
-                icon={Mail}
-                style={{
-                  marginInline: 6,
-                }}
-              />
-            }
+            prefix={<Icon icon={Mail} style={styles.spacing1} />}
             ref={emailInputRef}
             size="large"
-            style={{
-              padding: 6,
-            }}
+            style={styles.spacing2}
             suffix={
               <Button
                 icon={ChevronRight}

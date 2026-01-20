@@ -11,8 +11,17 @@ import { editorSelectors } from '@/store/document/slices/editor';
 import { useFileStore } from '@/store/file';
 import { useGlobalStore } from '@/store/global';
 import { systemStatusSelectors } from '@/store/global/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { usePageEditorStore, useStoreApi } from '../store';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextTertiary,
+    fontSize: 12,
+    lineHeight: 1.6,
+  },
+});
 
 /**
  * Action menu for the page editor.
@@ -142,7 +151,7 @@ export const useMenu = (): { menuItems: any[] } => {
           disabled: true,
           key: 'page-info',
           label: (
-            <div style={{ color: cssVar.colorTextTertiary, fontSize: 12, lineHeight: 1.6 }}>
+            <div style={styles.colored}>
               <div>
                 {lastUpdatedTime
                   ? t('pageEditor.editedAt', {

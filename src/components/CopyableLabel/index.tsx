@@ -1,6 +1,23 @@
 import { CopyButton, Flexbox, Text } from '@lobehub/ui';
 import { type CSSProperties, memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    color: 'inherit',
+    fontFamily: 'inherit',
+    fontSize: 'inherit',
+    margin: 0,
+    overflow: 'hidden',
+    width: '100%',
+  },
+  style: {
+    overflow: 'hidden',
+    position: 'relative',
+  },
+});
+
 interface CopyableLabelProps {
   className?: string;
   style?: CSSProperties;
@@ -14,23 +31,9 @@ const CopyableLabel = memo<CopyableLabelProps>(({ className, style, value = '--'
       className={className}
       gap={4}
       horizontal
-      style={{
-        overflow: 'hidden',
-        position: 'relative',
-        ...style,
-      }}
+      style={StyleSheet.compose(styles.style, style)}
     >
-      <Text
-        ellipsis
-        style={{
-          color: 'inherit',
-          fontFamily: 'inherit',
-          fontSize: 'inherit',
-          margin: 0,
-          overflow: 'hidden',
-          width: '100%',
-        }}
-      >
+      <Text ellipsis style={styles.fullWidth}>
         {value || '--'}
       </Text>
       <CopyButton content={value || '--'} size={'small'} />

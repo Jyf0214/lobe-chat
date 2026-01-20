@@ -5,9 +5,18 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import urlJoin from 'url-join';
 
+import { StyleSheet } from '@/utils/styles';
+
 import Title from '../../../../../features/Title';
 import { useDetailContext } from '../../DetailProvider';
 import Item from './Item';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+    overflow: 'hidden',
+  },
+});
 
 const Related = memo(() => {
   const { t } = useTranslation('discover');
@@ -30,7 +39,7 @@ const Related = memo(() => {
         {models?.slice(0, 6)?.map((item, index) => {
           const link = urlJoin('/community/model', item.id);
           return (
-            <Link key={index} style={{ color: 'inherit', overflow: 'hidden' }} to={link}>
+            <Link key={index} style={styles.colored} to={link}>
               <Item {...item} />
             </Link>
           );

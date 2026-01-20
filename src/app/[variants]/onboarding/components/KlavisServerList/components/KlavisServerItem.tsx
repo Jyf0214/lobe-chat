@@ -6,11 +6,18 @@ import { memo } from 'react';
 
 import { type KlavisServerType } from '@/const/index';
 import { type KlavisServer, KlavisServerStatus } from '@/store/tool/slices/klavisStore';
+import { StyleSheet } from '@/utils/styles';
 
 import { useKlavisOAuth } from '../hooks/useKlavisOAuth';
 import { useKlavisServerActions } from '../hooks/useKlavisServerActions';
 import ServerIcon from './ServerIcon';
 import ServerStatusControl from './ServerStatusControl';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 interface KlavisServerItemProps {
   icon: KlavisServerType['icon'];
@@ -66,15 +73,7 @@ const KlavisServerItem = memo<KlavisServerItemProps>(
         }
         variant={'outlined'}
       >
-        <Flexbox
-          align="center"
-          flex={1}
-          gap={12}
-          horizontal
-          style={{
-            overflow: 'hidden',
-          }}
-        >
+        <Flexbox align="center" flex={1} gap={12} horizontal style={styles.style}>
           <ServerIcon icon={icon} label={label} />
           <Text ellipsis>{label}</Text>
         </Flexbox>

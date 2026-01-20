@@ -6,10 +6,35 @@ import { RECENT_BLOCK_SIZE } from '@/app/[variants]/(main)/home/features/const';
 import { DEFAULT_AVATAR } from '@/const/meta';
 import { useIsDark } from '@/hooks/useIsDark';
 import { type DiscoverAssistantItem } from '@/types/discover';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    backgroundColor: cssVar.colorFillQuaternary,
+    borderRadius: cssVar.borderRadiusLG,
+    overflow: 'hidden',
+  },
+  colored1Base: {
+    borderRadius: cssVar.borderRadiusLG,
+    boxShadow: '0 4px 8px -2px rgba(0,0,0,.02)',
+    overflow: 'hidden',
+  },
+  flexContainer: {
+    flex: 'none',
+  },
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 const CommunityAgentItem = memo<DiscoverAssistantItem>(
   ({ title, avatar, backgroundColor, author, description }) => {
     const isDarkMode = useIsDark();
+
+    const colored1Style = {
+      ...styles.colored1Base,
+      backgroundColor: isDarkMode ? cssVar.colorFillQuaternary : cssVar.colorBgContainer,
+    };
 
     return (
       <Block
@@ -17,37 +42,17 @@ const CommunityAgentItem = memo<DiscoverAssistantItem>(
         flex={'none'}
         height={RECENT_BLOCK_SIZE.AGENT.HEIGHT}
         justify={'space-between'}
-        style={{
-          backgroundColor: cssVar.colorFillQuaternary,
-          borderRadius: cssVar.borderRadiusLG,
-          overflow: 'hidden',
-        }}
+        style={styles.colored}
         variant={'filled'}
         width={RECENT_BLOCK_SIZE.AGENT.WIDTH}
       >
-        <Block
-          flex={1}
-          padding={12}
-          style={{
-            backgroundColor: isDarkMode ? cssVar.colorFillQuaternary : cssVar.colorBgContainer,
-            borderRadius: cssVar.borderRadiusLG,
-            boxShadow: '0 4px 8px -2px rgba(0,0,0,.02)',
-            overflow: 'hidden',
-          }}
-          variant={'outlined'}
-        >
+        <Block flex={1} padding={12} style={colored1Style} variant={'outlined'}>
           <Text color={cssVar.colorTextSecondary} ellipsis={{ rows: 3 }} fontSize={13}>
             {description}
           </Text>
         </Block>
         <Flexbox align={'center'} gap={8} horizontal paddingBlock={8} paddingInline={12}>
-          <Flexbox
-            flex={1}
-            gap={1}
-            style={{
-              overflow: 'hidden',
-            }}
-          >
+          <Flexbox flex={1} gap={1} style={styles.style}>
             <Text ellipsis fontSize={13} weight={500}>
               {title}
             </Text>
@@ -61,9 +66,7 @@ const CommunityAgentItem = memo<DiscoverAssistantItem>(
             emojiScaleWithBackground
             shape={'square'}
             size={30}
-            style={{
-              flex: 'none',
-            }}
+            style={styles.flexContainer}
           />
         </Flexbox>
       </Block>

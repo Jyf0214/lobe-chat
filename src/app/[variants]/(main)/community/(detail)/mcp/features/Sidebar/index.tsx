@@ -4,12 +4,22 @@ import { memo } from 'react';
 import { isDesktop } from '@/const/version';
 import { useQuery } from '@/hooks/useQuery';
 import { McpNavKey } from '@/types/discover';
+import { StyleSheet } from '@/utils/styles';
 
 import ActionButton from './ActionButton';
 import ConnectionTypeAlert from './ConnectionTypeAlert';
 import Related from './Related';
 import ServerConfig from './ServerConfig';
 import TocList from './TocList';
+
+const styles = StyleSheet.create({
+  spacing: {
+    maxHeight: 'calc(100vh - 76px)',
+    paddingBottom: 24,
+    position: 'sticky',
+    top: 16,
+  },
+});
 
 const Sidebar = memo<{ mobile?: boolean }>(({ mobile }) => {
   const { activeTab = McpNavKey.Overview } = useQuery() as { activeTab: McpNavKey };
@@ -25,19 +35,7 @@ const Sidebar = memo<{ mobile?: boolean }>(({ mobile }) => {
   }
 
   return (
-    <ScrollShadow
-      flex={'none'}
-      gap={32}
-      hideScrollBar
-      size={4}
-      style={{
-        maxHeight: 'calc(100vh - 76px)',
-        paddingBottom: 24,
-        position: 'sticky',
-        top: 16,
-      }}
-      width={360}
-    >
+    <ScrollShadow flex={'none'} gap={32} hideScrollBar size={4} style={styles.spacing} width={360}>
       {isDesktop ? (
         <Flexbox>
           <ActionButton />

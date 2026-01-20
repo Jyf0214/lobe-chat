@@ -8,8 +8,19 @@ import NavHeader from '@/features/NavHeader';
 import WideScreenContainer from '@/features/WideScreenContainer';
 import WideScreenButton from '@/features/WideScreenContainer/WideScreenButton';
 import { useUserMemoryStore } from '@/store/userMemory';
+import { StyleSheet } from '@/utils/styles';
 
 import RoleTagCloud from './features/RoleTagCloud';
+
+const styles = StyleSheet.create({
+  spacing: {
+    overflowY: 'auto',
+    paddingBottom: '16vh',
+  },
+  style: {
+    zIndex: 1,
+  },
+});
 
 const Home: FC = () => {
   const useFetchTags = useUserMemoryStore((s) => s.useFetchTags);
@@ -24,18 +35,8 @@ const Home: FC = () => {
 
   return (
     <Flexbox flex={1} height={'100%'}>
-      <NavHeader
-        right={<WideScreenButton />}
-        style={{
-          zIndex: 1,
-        }}
-      />
-      <Flexbox
-        height={'100%'}
-        id={SCROLL_PARENT_ID}
-        style={{ overflowY: 'auto', paddingBottom: '16vh' }}
-        width={'100%'}
-      >
+      <NavHeader right={<WideScreenButton />} style={styles.style} />
+      <Flexbox height={'100%'} id={SCROLL_PARENT_ID} style={styles.spacing} width={'100%'}>
         <WideScreenContainer gap={32} paddingBlock={48}>
           <RoleTagCloud tags={roles} />
         </WideScreenContainer>

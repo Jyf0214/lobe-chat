@@ -8,9 +8,25 @@ import { useParams } from 'react-router-dom';
 
 import type { AgentCronJob } from '@/database/schemas/agentCronJob';
 import { useRouter } from '@/libs/router/navigation';
+import { StyleSheet } from '@/utils/styles';
 
 import Actions from './Actions';
 import CronTopicItem from './CronTopicItem';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  spacing: {
+    padding: '8px 12px',
+  },
+  style: {
+    overflow: 'hidden',
+  },
+  style1: {
+    opacity: 0.5,
+  },
+});
 
 interface CronTopicGroupProps {
   cronJob: AgentCronJob | null;
@@ -58,9 +74,9 @@ const CronTopicGroup = memo<CronTopicGroupProps>(({ cronJob, cronJobId, topics }
       paddingBlock={4}
       paddingInline={'8px 4px'}
       title={
-        <Flexbox align="center" gap={6} height={24} horizontal style={{ overflow: 'hidden' }}>
-          <Icon icon={isEnabled ? TimerIcon : TimerOffIcon} style={{ opacity: 0.5 }} />
-          <Text ellipsis style={{ flex: 1 }} type={isActive ? undefined : 'secondary'}>
+        <Flexbox align="center" gap={6} height={24} horizontal style={styles.style}>
+          <Icon icon={isEnabled ? TimerIcon : TimerOffIcon} style={styles.style1} />
+          <Text ellipsis style={styles.flexContainer} type={isActive ? undefined : 'secondary'}>
             {cronJobName}
           </Text>
           {topics.length > 0 && (
@@ -76,7 +92,7 @@ const CronTopicGroup = memo<CronTopicGroupProps>(({ cronJob, cronJobId, topics }
         {topics.length > 0 ? (
           topics.map((topic) => <CronTopicItem key={topic.id} topic={topic} />)
         ) : (
-          <Text fontSize={12} style={{ padding: '8px 12px' }} type="secondary">
+          <Text fontSize={12} style={styles.spacing} type="secondary">
             {t('agentCronJobs.noExecutionResults')}
           </Text>
         )}

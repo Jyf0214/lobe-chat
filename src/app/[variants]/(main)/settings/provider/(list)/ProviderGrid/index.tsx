@@ -6,8 +6,18 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { aiProviderSelectors, useAiInfraStore } from '@/store/aiInfra';
+import { StyleSheet } from '@/utils/styles';
 
 import Card from './Card';
+
+const styles = StyleSheet.create({
+  style: {
+    fontSize: 16,
+  },
+  style1: {
+    fontSize: 18,
+  },
+});
 
 const loadingArr = Array.from({ length: 12 })
   .fill('-')
@@ -32,7 +42,7 @@ const List = memo((props: ListProps) => {
     return (
       <Flexbox gap={24} paddingBlock={'0 16px'}>
         <Flexbox align={'center'} gap={4} horizontal>
-          <Text strong style={{ fontSize: 16 }}>
+          <Text strong style={styles.style}>
             {t('list.title.enabled')}
           </Text>
         </Flexbox>
@@ -55,7 +65,7 @@ const List = memo((props: ListProps) => {
     <>
       <Flexbox gap={24}>
         <Flexbox align={'center'} gap={8} horizontal>
-          <Text strong style={{ fontSize: 18 }}>
+          <Text strong style={styles.style1}>
             {t('list.title.enabled')}
           </Text>
           <Tag>{enabledList.length}</Tag>
@@ -69,7 +79,7 @@ const List = memo((props: ListProps) => {
       {disabledCustomList.length > 0 && (
         <Flexbox gap={24}>
           <Flexbox align={'center'} gap={8} horizontal>
-            <Text strong style={{ fontSize: 18 }}>
+            <Text strong style={styles.style1}>
               {t('list.title.custom')}
             </Text>
             <Tag>{disabledCustomList.length}</Tag>
@@ -83,7 +93,7 @@ const List = memo((props: ListProps) => {
       )}
       <Flexbox gap={24}>
         <Flexbox align={'center'} gap={8} horizontal>
-          <Text strong style={{ fontSize: 18 }}>
+          <Text strong style={styles.style1}>
             {t('list.title.disabled')}
           </Text>
           <Tag>{disabledList.length}</Tag>

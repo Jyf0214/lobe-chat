@@ -8,8 +8,22 @@ import { useTranslation } from 'react-i18next';
 
 import { useUserStore } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { labelStyle, rowStyle } from './ProfileRow';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  style: {
+    fontSize: 12,
+  },
+  style1: {
+    cursor: 'pointer',
+    fontSize: 13,
+  },
+});
 
 interface UsernameRowProps {
   mobile?: boolean;
@@ -106,7 +120,7 @@ const UsernameRow = ({ mobile }: UsernameRowProps) => {
           value={editValue}
         />
         {error && (
-          <Text style={{ fontSize: 12 }} type="danger">
+          <Text style={styles.style} type="danger">
             {error}
           </Text>
         )}
@@ -135,7 +149,7 @@ const UsernameRow = ({ mobile }: UsernameRowProps) => {
       ) : (
         <Flexbox align="center" horizontal justify="space-between">
           <Text>{username || '--'}</Text>
-          <Text onClick={handleStartEdit} style={{ cursor: 'pointer', fontSize: 13 }}>
+          <Text onClick={handleStartEdit} style={styles.style1}>
             {t('profile.updateUsername')}
           </Text>
         </Flexbox>
@@ -149,7 +163,7 @@ const UsernameRow = ({ mobile }: UsernameRowProps) => {
         <Flexbox align="center" horizontal justify="space-between">
           <Text strong>{t('profile.username')}</Text>
           {!isEditing && (
-            <Text onClick={handleStartEdit} style={{ cursor: 'pointer', fontSize: 13 }}>
+            <Text onClick={handleStartEdit} style={styles.style1}>
               {t('profile.updateUsername')}
             </Text>
           )}
@@ -162,7 +176,7 @@ const UsernameRow = ({ mobile }: UsernameRowProps) => {
   return (
     <Flexbox gap={24} horizontal style={rowStyle}>
       <Text style={labelStyle}>{t('profile.username')}</Text>
-      <Flexbox style={{ flex: 1 }}>
+      <Flexbox style={styles.flexContainer}>
         <AnimatePresence mode="wait">{isEditing ? editingContent : displayContent}</AnimatePresence>
       </Flexbox>
     </Flexbox>

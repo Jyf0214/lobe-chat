@@ -8,9 +8,34 @@ import { useTranslation } from 'react-i18next';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useAiInfraStore } from '@/store/aiInfra';
 import { aiModelSelectors } from '@/store/aiInfra/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import CreateNewModelModal from '../CreateNewModelModal';
 import Search from './Search';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    display: 'flex',
+    lineHeight: '24px',
+  },
+  spacing: {
+    background: cssVar.colorBgContainer,
+    position: 'sticky',
+    zIndex: 15,
+  },
+  style: {
+    fontSize: 16,
+  },
+  style1: {
+    height: 22,
+  },
+  style2: {
+    fontSize: 12,
+  },
+  style3: {
+    width: 120,
+  },
+});
 
 interface ModelFetcherProps {
   provider: string;
@@ -49,31 +74,26 @@ const ModelTitle = memo<ModelFetcherProps>(
     const [showModal, setShowModal] = useState(false);
 
     const mobile = useIsMobile();
+    const spacingStyle = {
+      ...styles.spacing,
+      marginTop: mobile ? 0 : -12,
+      paddingTop: mobile ? 0 : 20,
+      top: mobile ? -2 : -32,
+    };
 
     return (
-      <Flexbox
-        gap={12}
-        paddingBlock={8}
-        style={{
-          background: cssVar.colorBgContainer,
-          marginTop: mobile ? 0 : -12,
-          paddingTop: mobile ? 0 : 20,
-          position: 'sticky',
-          top: mobile ? -2 : -32,
-          zIndex: 15,
-        }}
-      >
+      <Flexbox gap={12} paddingBlock={8} style={spacingStyle}>
         <Flexbox align={'center'} gap={0} horizontal justify={'space-between'}>
           <Flexbox align={'center'} gap={8} horizontal>
-            <Text strong style={{ fontSize: 16 }}>
+            <Text strong style={styles.style}>
               {t('providerModels.list.title')}
             </Text>
 
             {isLoading ? (
-              <Skeleton.Button active style={{ height: 22 }} />
+              <Skeleton.Button active style={styles.style1} />
             ) : (
-              <Text style={{ fontSize: 12 }} type={'secondary'}>
-                <div style={{ display: 'flex', lineHeight: '24px' }}>
+              <Text style={styles.style2} type={'secondary'}>
+                <div style={styles.flexContainer}>
                   {t('providerModels.list.total', { count: totalModels })}
                   {hasRemoteModels && (
                     <ActionIcon
@@ -93,7 +113,7 @@ const ModelTitle = memo<ModelFetcherProps>(
             )}
           </Flexbox>
           {isLoading ? (
-            <Skeleton.Button active size={'small'} style={{ width: 120 }} />
+            <Skeleton.Button active size={'small'} style={styles.style3} />
           ) : isEmpty ? null : (
             <Flexbox gap={8} horizontal>
               {!mobile && (

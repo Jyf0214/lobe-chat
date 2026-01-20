@@ -12,9 +12,19 @@ import UserAvatar from '@/features/User/UserAvatar';
 import { useUserStore } from '@/store/user';
 import { authSelectors } from '@/store/user/selectors';
 import { imageToBase64 } from '@/utils/imageToBase64';
+import { StyleSheet } from '@/utils/styles';
 import { createUploadImageHandler } from '@/utils/uploadFIle';
 
 import { labelStyle, rowStyle } from './ProfileRow';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  style: {
+    cursor: 'pointer',
+  },
+});
 
 interface AvatarRowProps {
   mobile?: boolean;
@@ -68,7 +78,7 @@ const AvatarRow = ({ mobile }: AvatarRowProps) => {
 
   const updateAction = canUpload ? (
     <Upload beforeUpload={handleUploadAvatar} itemRender={() => void 0} maxCount={1}>
-      <Text fontSize={13} style={{ cursor: 'pointer' }}>
+      <Text fontSize={13} style={styles.style}>
         {t('profile.updateAvatar')}
       </Text>
     </Upload>
@@ -88,9 +98,9 @@ const AvatarRow = ({ mobile }: AvatarRowProps) => {
 
   return (
     <Flexbox align="center" gap={24} horizontal justify="space-between" style={rowStyle}>
-      <Flexbox align="center" gap={24} horizontal style={{ flex: 1 }}>
+      <Flexbox align="center" gap={24} horizontal style={styles.flexContainer}>
         <Text style={labelStyle}>{t('profile.avatar')}</Text>
-        <Flexbox style={{ flex: 1 }}>{avatarContent}</Flexbox>
+        <Flexbox style={styles.flexContainer}>{avatarContent}</Flexbox>
       </Flexbox>
       {updateAction}
     </Flexbox>

@@ -14,12 +14,25 @@ import { enableBetterAuth, enableNextAuth } from '@/envs/auth';
 import { useRouter } from '@/libs/next/navigation';
 import { useUserStore } from '@/store/user';
 import { authSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import DataStatistics from '../DataStatistics';
 import UserInfo from '../UserInfo';
 import UserLoginOrSignup from '../UserLoginOrSignup';
 import LangButton from './LangButton';
 import { useMenu } from './useMenu';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+  },
+  spacing: {
+    padding: '6px 8px 6px 16px',
+  },
+  style: {
+    minWidth: 300,
+  },
+});
 
 const PanelContent = memo<{ closePopover: () => void }>(({ closePopover }) => {
   const router = useRouter();
@@ -59,11 +72,11 @@ const PanelContent = memo<{ closePopover: () => void }>(({ closePopover }) => {
   };
 
   return (
-    <Flexbox gap={2} style={{ minWidth: 300 }}>
+    <Flexbox gap={2} style={styles.style}>
       {isDesktop || isLoginWithAuth ? (
         <>
           <UserInfo avatarProps={{ clickable: false }} />
-          <Link style={{ color: 'inherit' }} to={'/settings/stats'}>
+          <Link style={styles.colored} to={'/settings/stats'}>
             <DataStatistics />
           </Link>
           {ENABLE_BUSINESS_FEATURES && <BusinessPanelContent />}
@@ -74,7 +87,7 @@ const PanelContent = memo<{ closePopover: () => void }>(({ closePopover }) => {
 
       <Menu items={mainItems} onClick={closePopover} />
       <Menu items={logoutItems} onClick={handleSignOut} />
-      <Flexbox gap={4} horizontal justify={'space-between'} style={{ padding: '6px 8px 6px 16px' }}>
+      <Flexbox gap={4} horizontal justify={'space-between'} style={styles.spacing}>
         <BrandWatermark />
         <LangButton placement={'right' as any} />
       </Flexbox>

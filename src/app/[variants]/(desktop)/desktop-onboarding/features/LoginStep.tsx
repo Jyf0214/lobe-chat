@@ -17,8 +17,35 @@ import UserInfo from '@/features/User/UserInfo';
 import { remoteServerService } from '@/services/electron/remoteServer';
 import { useElectronStore } from '@/store/electron';
 import { setDesktopAutoOidcFirstOpenHandled } from '@/utils/electron/autoOidc';
+import { StyleSheet } from '@/utils/styles';
 
 import LobeMessage from '../components/LobeMessage';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorFillSecondary,
+    borderRadius: 8,
+  },
+  colored1: {
+    color: cssVar.colorTextDescription,
+  },
+  colored2: {
+    color: cssVar.colorTextSecondary,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  spacing: {
+    marginRight: 4,
+  },
+  spacing1: {
+    marginTop: 32,
+  },
+  style: {
+    height: '100%',
+    minHeight: '100%',
+  },
+});
 
 // 登录方式类型
 type LoginMethod = 'cloud' | 'selfhost';
@@ -212,19 +239,14 @@ const LoginStep = memo<LoginStepProps>(({ onBack, onNext }) => {
   const renderCloudContent = () => {
     if (cloudLoginStatus === 'success') {
       return (
-        <Flexbox gap={16} style={{ width: '100%' }}>
+        <Flexbox gap={16} style={styles.fullWidth}>
           <Alert
             description={t('authResult.success.desc')}
-            style={{ width: '100%' }}
+            style={styles.fullWidth}
             title={t('authResult.success.title')}
             type={'success'}
           />
-          <UserInfo
-            style={{
-              background: cssVar.colorFillSecondary,
-              borderRadius: 8,
-            }}
-          />
+          <UserInfo style={styles.colored} />
           <Button
             block
             disabled={isSigningOut || isConnectingServer}
@@ -241,7 +263,7 @@ const LoginStep = memo<LoginStepProps>(({ onBack, onNext }) => {
 
     if (cloudLoginStatus === 'error') {
       return (
-        <Flexbox style={{ width: '100%' }}>
+        <Flexbox style={styles.fullWidth}>
           <Alert
             description={remoteError || t('authResult.failed.desc')}
             title={t('authResult.failed.title')}
@@ -269,16 +291,16 @@ const LoginStep = memo<LoginStepProps>(({ onBack, onNext }) => {
         : null;
 
       return (
-        <Flexbox gap={8} style={{ width: '100%' }}>
+        <Flexbox gap={8} style={styles.fullWidth}>
           <Button block disabled={true} icon={Cloud} loading={true} size={'large'} type={'primary'}>
             {t('screen5.actions.signingIn')}
           </Button>
-          <Text style={{ color: cssVar.colorTextDescription }} type={'secondary'}>
+          <Text style={styles.colored1} type={'secondary'}>
             {phaseText}
           </Text>
           <Flexbox align={'center'} horizontal justify={'space-between'}>
             {remainingSeconds !== null ? (
-              <Text style={{ color: cssVar.colorTextDescription }} type={'secondary'}>
+              <Text style={styles.colored1} type={'secondary'}>
                 {t('screen5.auth.remaining', {
                   time: remainingSeconds,
                 })}
@@ -313,19 +335,14 @@ const LoginStep = memo<LoginStepProps>(({ onBack, onNext }) => {
   const renderSelfhostContent = () => {
     if (selfhostLoginStatus === 'success') {
       return (
-        <Flexbox gap={16} style={{ width: '100%' }}>
+        <Flexbox gap={16} style={styles.fullWidth}>
           <Alert
             description={t('authResult.success.desc')}
-            style={{ width: '100%' }}
+            style={styles.fullWidth}
             title={t('authResult.success.title')}
             type={'success'}
           />
-          <UserInfo
-            style={{
-              background: cssVar.colorFillSecondary,
-              borderRadius: 8,
-            }}
-          />
+          <UserInfo style={styles.colored} />
           <Button
             block
             disabled={isSigningOut || isConnectingServer}
@@ -342,7 +359,7 @@ const LoginStep = memo<LoginStepProps>(({ onBack, onNext }) => {
 
     if (selfhostLoginStatus === 'error') {
       return (
-        <Flexbox gap={16} style={{ width: '100%' }}>
+        <Flexbox gap={16} style={styles.fullWidth}>
           <Alert
             description={remoteError || t('authResult.failed.desc')}
             title={t('authResult.failed.title')}
@@ -364,7 +381,7 @@ const LoginStep = memo<LoginStepProps>(({ onBack, onNext }) => {
         : null;
 
       return (
-        <Flexbox gap={8} style={{ width: '100%' }}>
+        <Flexbox gap={8} style={styles.fullWidth}>
           <Button
             block
             disabled={true}
@@ -375,12 +392,12 @@ const LoginStep = memo<LoginStepProps>(({ onBack, onNext }) => {
           >
             {t('screen5.actions.connecting')}
           </Button>
-          <Text style={{ color: cssVar.colorTextDescription }} type={'secondary'}>
+          <Text style={styles.colored1} type={'secondary'}>
             {phaseText}
           </Text>
           <Flexbox align={'center'} horizontal justify={'space-between'}>
             {remainingSeconds !== null ? (
-              <Text style={{ color: cssVar.colorTextDescription }} type={'secondary'}>
+              <Text style={styles.colored1} type={'secondary'}>
                 {t('screen5.auth.remaining', {
                   time: remainingSeconds,
                 })}
@@ -397,7 +414,7 @@ const LoginStep = memo<LoginStepProps>(({ onBack, onNext }) => {
     }
 
     return (
-      <Flexbox gap={16} style={{ width: '100%' }}>
+      <Flexbox gap={16} style={styles.fullWidth}>
         <Text color={cssVar.colorTextSecondary}>{t(loginMethodMetas.selfhost.descriptionKey)}</Text>
         <Input
           onChange={(e) => setEndpoint(e.target.value)}
@@ -413,9 +430,9 @@ const LoginStep = memo<LoginStepProps>(({ onBack, onNext }) => {
             }
           }}
           placeholder={t('screen5.selfhost.endpointPlaceholder')}
-          prefix={<Icon icon={Server} style={{ marginRight: 4 }} />}
+          prefix={<Icon icon={Server} style={styles.spacing} />}
           size={'large'}
-          style={{ width: '100%' }}
+          style={styles.fullWidth}
           value={endpoint}
         />
         <Button
@@ -423,7 +440,7 @@ const LoginStep = memo<LoginStepProps>(({ onBack, onNext }) => {
           loading={false}
           onClick={handleSelfhostConnect}
           size={'large'}
-          style={{ width: '100%' }}
+          style={styles.fullWidth}
           type={'primary'}
         >
           {t('screen5.actions.connectToServer')}
@@ -433,23 +450,17 @@ const LoginStep = memo<LoginStepProps>(({ onBack, onNext }) => {
   };
 
   return (
-    <Center gap={32} style={{ height: '100%', minHeight: '100%' }}>
-      <Flexbox align={'flex-start'} justify={'flex-start'} style={{ width: '100%' }}>
+    <Center gap={32} style={styles.style}>
+      <Flexbox align={'flex-start'} justify={'flex-start'} style={styles.fullWidth}>
         <LobeMessage sentences={[t('screen5.title'), t('screen5.title2'), t('screen5.title3')]} />
         <Text as={'p'}>{t('screen5.description')}</Text>
       </Flexbox>
 
-      <Flexbox align={'flex-start'} gap={16} style={{ width: '100%' }} width={'100%'}>
+      <Flexbox align={'flex-start'} gap={16} style={styles.fullWidth} width={'100%'}>
         {renderCloudContent()}
         {!showEndpoint ? (
           <Center width={'100%'}>
-            <Button
-              onClick={() => setShowEndpoint(true)}
-              style={{
-                color: cssVar.colorTextSecondary,
-              }}
-              type={'text'}
-            >
+            <Button onClick={() => setShowEndpoint(true)} style={styles.colored2} type={'text'}>
               {t(loginMethodMetas.selfhost.descriptionKey)}
             </Button>
           </Center>
@@ -466,13 +477,8 @@ const LoginStep = memo<LoginStepProps>(({ onBack, onNext }) => {
         )}
       </Flexbox>
       {canStart() && (
-        <Flexbox horizontal justify={'space-between'} style={{ marginTop: 32 }}>
-          <Button
-            icon={Undo2Icon}
-            onClick={onBack}
-            style={{ color: cssVar.colorTextDescription }}
-            type={'text'}
-          >
+        <Flexbox horizontal justify={'space-between'} style={styles.spacing1}>
+          <Button icon={Undo2Icon} onClick={onBack} style={styles.colored1} type={'text'}>
             {t('back')}
           </Button>
           <Button onClick={onNext} type={'primary'}>

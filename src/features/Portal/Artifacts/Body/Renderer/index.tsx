@@ -1,9 +1,17 @@
 import { Markdown, Mermaid } from '@lobehub/ui';
-import dynamic from '@/libs/next/dynamic';
 import { memo } from 'react';
+
+import dynamic from '@/libs/next/dynamic';
+import { StyleSheet } from '@/utils/styles';
 
 import HTMLRenderer from './HTML';
 import SVGRender from './SVG';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'auto',
+  },
+});
 
 const ReactRenderer = dynamic(() => import('./React'), { ssr: false });
 
@@ -22,7 +30,7 @@ const Renderer = memo<{ content: string; type?: string }>(({ content, type }) =>
     }
 
     case 'text/markdown': {
-      return <Markdown style={{ overflow: 'auto' }}>{content}</Markdown>;
+      return <Markdown style={styles.style}>{content}</Markdown>;
     }
 
     default: {

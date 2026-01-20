@@ -5,8 +5,16 @@ import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { formatSpeed, formatTime } from '@/utils/format';
+import { StyleSheet } from '@/utils/styles';
 
 import DataLoading from './Loading';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextDescription,
+    fontSize: 12,
+  },
+});
 
 interface FileUploadingProps {
   progress?: number;
@@ -29,11 +37,7 @@ export const FileUploading = memo<FileUploadingProps>(({ progress = 0, speed = 0
             strokeColor={cssVar.colorSuccess}
             trailColor={cssVar.colorSuccessBg}
           />
-          <Flexbox
-            distribution={'space-between'}
-            horizontal
-            style={{ color: cssVar.colorTextDescription, fontSize: 12 }}
-          >
+          <Flexbox distribution={'space-between'} horizontal style={styles.colored}>
             <span>
               {t('importModal.uploading.restTime')}: {restTime ? formatTime(restTime) : '-'}
             </span>

@@ -9,10 +9,20 @@ import { DESKTOP_HEADER_ICON_SIZE } from '@/const/layoutTokens';
 import { AutoSaveHint } from '@/features/EditorCanvas';
 import NavHeader from '@/features/NavHeader';
 import ToggleRightPanelButton from '@/features/RightPanel/ToggleRightPanelButton';
+import { StyleSheet } from '@/utils/styles';
 
 import { usePageEditorStore } from '../store';
 import Breadcrumb from './Breadcrumb';
 import { useMenu } from './useMenu';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginLeft: 4,
+  },
+  spacing1: {
+    marginLeft: 6,
+  },
+});
 
 const Header = memo(() => {
   const { t } = useTranslation('file');
@@ -38,13 +48,13 @@ const Header = memo(() => {
               {/* Icon */}
               {emoji && <Avatar avatar={emoji} shape={'square'} size={28} />}
               {/* Title */}
-              <Text ellipsis style={{ marginLeft: 4 }} weight={500}>
+              <Text ellipsis style={styles.spacing} weight={500}>
                 {title || t('pageEditor.titlePlaceholder')}
               </Text>
             </>
           )}
           {/* Auto Save Status */}
-          {documentId && <AutoSaveHint documentId={documentId} style={{ marginLeft: 6 }} />}
+          {documentId && <AutoSaveHint documentId={documentId} style={styles.spacing1} />}
         </>
       }
       right={

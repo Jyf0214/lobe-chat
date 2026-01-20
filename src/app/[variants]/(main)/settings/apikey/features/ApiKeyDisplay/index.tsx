@@ -4,6 +4,14 @@ import { App, Flex } from 'antd';
 import { type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    fontSize: '14px',
+  },
+});
+
 interface ApiKeyDisplayProps {
   apiKey?: string;
 }
@@ -36,7 +44,7 @@ const ApiKeyDisplay: FC<ApiKeyDisplayProps> = ({ apiKey }) => {
 
   return (
     <Flex align="center" gap={8}>
-      <span style={{ fontSize: '14px' }}>{displayValue}</span>
+      <span style={styles.style}>{displayValue}</span>
       <Flex>
         <Button
           icon={isVisible ? <EyeInvisibleOutlined /> : <EyeOutlined />}

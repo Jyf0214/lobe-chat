@@ -14,6 +14,19 @@ import ModelSelect from '@/features/ModelSelect';
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/selectors';
 import { type UserSystemAgentConfigKey } from '@/types/user/settings';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    minHeight: 160,
+  },
+  style1: {
+    opacity: 0.5,
+  },
+  style2: {
+    opacity: 1,
+  },
+});
 
 interface SystemAgentFormProps {
   allowCustomPrompt?: boolean;
@@ -64,7 +77,7 @@ const SystemAgentForm = memo(
                 setLoading(false);
               }}
               placeholder={t('systemAgent.customPrompt.placeholder')}
-              style={{ minHeight: 160 }}
+              style={styles.style}
               value={value.customPrompt}
             />
           ) : (
@@ -87,7 +100,7 @@ const SystemAgentForm = memo(
       ].filter(Boolean),
       extra: (
         <Flexbox direction="horizontal" gap={8}>
-          {loading && <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />}
+          {loading && <Icon icon={Loader2Icon} size={16} spin style={styles.style1} />}
           {allowDisable && (
             <Switch
               onChange={async (enabled) => {
@@ -103,6 +116,7 @@ const SystemAgentForm = memo(
       title: (
         <span
           style={{
+            ...styles.style2,
             opacity: typeof value.enabled === 'boolean' && !value.enabled ? 0.45 : 1,
           }}
         >

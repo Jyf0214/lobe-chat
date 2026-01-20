@@ -7,8 +7,16 @@ import GroupSkeleton from '@/app/[variants]/(main)/home/features/components/Grou
 import { RECENT_BLOCK_SIZE } from '@/app/[variants]/(main)/home/features/const';
 import { useHomeStore } from '@/store/home';
 import { homeRecentSelectors } from '@/store/home/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import RecentResourceItem from './Item';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+    textDecoration: 'none',
+  },
+});
 
 const RecentResourceList = memo(() => {
   const files = useHomeStore(homeRecentSelectors.recentResources);
@@ -29,14 +37,7 @@ const RecentResourceList = memo(() => {
     const fileUrl = isPage ? `/resource/${file.id}` : `/resource?file=${file.id}`;
 
     return (
-      <Link
-        key={file.id}
-        style={{
-          color: 'inherit',
-          textDecoration: 'none',
-        }}
-        to={fileUrl}
-      >
+      <Link key={file.id} style={styles.colored} to={fileUrl}>
         <RecentResourceItem file={file} />
       </Link>
     );

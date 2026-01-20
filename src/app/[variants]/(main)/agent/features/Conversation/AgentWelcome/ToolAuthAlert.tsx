@@ -20,6 +20,25 @@ import {
 } from '@/store/tool/slices/klavisStore';
 import { useUserStore } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  spacing: {
+    marginBlock: 12,
+  },
+  spacing1: {
+    marginTop: 8,
+  },
+  style: {
+    cursor: 'pointer',
+  },
+});
 
 // Tools that require Market authentication
 const MARKET_AUTH_TOOLS = [
@@ -192,7 +211,7 @@ const KlavisToolAuthItem = memo<KlavisToolAuthItemProps>(({ tool, onAuthComplete
 
   const renderIcon = () => {
     if (typeof tool.icon === 'string') {
-      return <Avatar alt={tool.label} avatar={tool.icon} size={20} style={{ flex: 'none' }} />;
+      return <Avatar alt={tool.label} avatar={tool.icon} size={20} style={styles.flexContainer} />;
     }
     return <Icon fill={cssVar.colorText} icon={tool.icon} size={20} />;
   };
@@ -206,9 +225,7 @@ const KlavisToolAuthItem = memo<KlavisToolAuthItemProps>(({ tool, onAuthComplete
       horizontal
       justify="space-between"
       onClick={handleAuthorize}
-      style={{
-        cursor: 'pointer',
-      }}
+      style={styles.style}
     >
       <Flexbox align="center" gap={8} horizontal>
         {renderIcon()}
@@ -253,12 +270,10 @@ const MarketToolAuthItem = memo<MarketToolAuthItemProps>(({ tool }) => {
       horizontal
       justify="space-between"
       onClick={handleSignIn}
-      style={{
-        cursor: 'pointer',
-      }}
+      style={styles.style}
     >
       <Flexbox align="center" gap={8} horizontal>
-        <Avatar alt={tool.label} avatar={tool.avatar} size={20} style={{ flex: 'none' }} />
+        <Avatar alt={tool.label} avatar={tool.avatar} size={20} style={styles.flexContainer} />
         <Text>{tool.label}</Text>
       </Flexbox>
       <Button
@@ -320,8 +335,8 @@ const ToolAuthAlert = memo(() => {
       description={
         <>
           {t('toolAuth.hint')}
-          <Divider dashed style={{ marginBlock: 12 }} />
-          <Flexbox gap={12} style={{ marginTop: 8 }}>
+          <Divider dashed style={styles.spacing} />
+          <Flexbox gap={12} style={styles.spacing1}>
             {pendingAuthTools.map((tool) =>
               tool.authType === 'klavis' ? (
                 <KlavisToolAuthItem
@@ -339,7 +354,7 @@ const ToolAuthAlert = memo(() => {
         </>
       }
       showIcon={false}
-      style={{ width: '100%' }}
+      style={styles.fullWidth}
       title={
         <Flexbox align="center" gap={6} horizontal>
           {t('toolAuth.title')}

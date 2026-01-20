@@ -4,8 +4,15 @@ import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { type CreateApiKeyParams } from '@/types/apiKey';
+import { StyleSheet } from '@/utils/styles';
 
 import ApiKeyDatePicker from '../ApiKeyDatePicker';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 interface ApiKeyModalProps {
   onCancel: () => void;
@@ -34,7 +41,7 @@ const ApiKeyModal: FC<ApiKeyModalProps> = ({ open, onCancel, onOk, submitLoading
           rules: [{ required: true }],
         },
         {
-          children: <ApiKeyDatePicker style={{ width: '100%' }} />,
+          children: <ApiKeyDatePicker style={styles.fullWidth} />,
           label: t('apikey.form.fields.expiresAt.label'),
           name: 'expiresAt',
         },

@@ -5,6 +5,14 @@ import { Result } from 'antd';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    minWidth: 240,
+  },
+});
+
 type CallbackStatus = 'loading' | 'success' | 'error';
 
 /**
@@ -146,7 +154,7 @@ const MarketAuthCallbackPage = () => {
   const getExtra = () => {
     if (status === 'error') {
       return (
-        <Button block onClick={() => window.close()} size={'large'} style={{ minWidth: 240 }}>
+        <Button block onClick={() => window.close()} size={'large'} style={styles.style}>
           {t('callback.buttons.close')}
         </Button>
       );

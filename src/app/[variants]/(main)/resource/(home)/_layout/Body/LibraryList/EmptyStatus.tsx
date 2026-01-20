@@ -4,6 +4,8 @@ import { createStaticStyles } from 'antd-style';
 import { forwardRef, memo } from 'react';
 import { Trans } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 const styles = createStaticStyles(({ css, cssVar }) => ({
   container: css`
     font-size: 12px;
@@ -28,7 +30,7 @@ const LineIcon: IconType = forwardRef(({ size = 130, style, ...rest }, ref) => (
     fill="currentColor"
     fillRule="evenodd"
     ref={ref}
-    style={{ flex: 'none', lineHeight: 1, ...style }}
+    style={StyleSheet.compose({ flex: 'none', lineHeight: 1 }, style)}
     viewBox="0 0 126 64"
     width={size}
     xmlns="http://www.w3.org/2000/svg"

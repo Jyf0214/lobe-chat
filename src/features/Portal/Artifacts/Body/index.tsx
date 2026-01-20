@@ -5,8 +5,20 @@ import { useChatStore } from '@/store/chat';
 import { chatPortalSelectors, messageStateSelectors } from '@/store/chat/selectors';
 import { ArtifactDisplayMode } from '@/store/chat/slices/portal/initialState';
 import { ArtifactType } from '@/types/artifact';
+import { StyleSheet } from '@/utils/styles';
 
 import Renderer from './Renderer';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'hidden',
+  },
+  style1: {
+    fontSize: 12,
+    height: '100%',
+    overflow: 'auto',
+  },
+});
 
 const ArtifactsUI = memo(() => {
   const [
@@ -75,13 +87,10 @@ const ArtifactsUI = memo(() => {
       gap={8}
       height={'100%'}
       paddingInline={12}
-      style={{ overflow: 'hidden' }}
+      style={styles.style}
     >
       {showCode ? (
-        <Highlighter
-          language={language || 'txt'}
-          style={{ fontSize: 12, height: '100%', overflow: 'auto' }}
-        >
+        <Highlighter language={language || 'txt'} style={styles.style1}>
           {artifactContent}
         </Highlighter>
       ) : (

@@ -5,6 +5,13 @@ import { memo } from 'react';
 import PluginAvatar from '@/features/PluginAvatar';
 import { pluginHelpers, useToolStore } from '@/store/tool';
 import { pluginSelectors } from '@/store/tool/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    fontSize: 12,
+  },
+});
 
 const Meta = memo<{
   id: string;
@@ -16,7 +23,7 @@ const Meta = memo<{
       <PluginAvatar identifier={id} size={40} />
       <Flexbox gap={2}>
         <div>{pluginHelpers.getPluginTitle(pluginMeta)}</div>
-        <Text style={{ fontSize: 12 }} type={'secondary'}>
+        <Text style={styles.style} type={'secondary'}>
           {pluginHelpers.getPluginDesc(pluginMeta)}
         </Text>
       </Flexbox>

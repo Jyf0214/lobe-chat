@@ -6,8 +6,15 @@ import { memo, useState } from 'react';
 import ShareButton from '@/app/[variants]/(main)/agent/features/Conversation/Header/ShareButton';
 import { INBOX_SESSION_ID } from '@/const/session';
 import { useQueryRoute } from '@/hooks/useQueryRoute';
+import { StyleSheet } from '@/utils/styles';
 
 import ChatHeaderTitle from './ChatHeaderTitle';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 const MobileHeader = memo(() => {
   const router = useQueryRoute();
@@ -21,7 +28,7 @@ const MobileHeader = memo(() => {
       }
       right={<ShareButton mobile open={open} setOpen={setOpen} />}
       showBackButton
-      style={{ width: '100%' }}
+      style={styles.fullWidth}
     />
   );
 });

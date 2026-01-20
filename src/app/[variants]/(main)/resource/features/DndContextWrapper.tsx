@@ -19,8 +19,62 @@ import { useTranslation } from 'react-i18next';
 import FileIcon from '@/components/FileIcon';
 import { clearTreeFolderCache } from '@/features/ResourceManager/components/LibraryHierarchy';
 import { useFileStore } from '@/store/file';
+import { StyleSheet } from '@/utils/styles';
 
 import { useResourceManagerStore } from './store';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    alignItems: 'center',
+    background: cssVar.colorBgElevated,
+    border: `1px solid ${cssVar.colorPrimaryBorder}`,
+    borderRadius: cssVar.borderRadiusLG,
+    boxShadow: cssVar.boxShadow,
+    display: 'flex',
+    gap: 12,
+    height: 44,
+    left: '-999px',
+    maxWidth: 320,
+    minWidth: 200,
+    padding: '0 12px',
+    pointerEvents: 'none',
+    position: 'fixed',
+    top: '-999px',
+    transform: 'translate3d(0, 0, 0)',
+    willChange: 'transform',
+    zIndex: 9999,
+  },
+  flexContainer1: {
+    alignItems: 'center',
+    color: cssVar.colorPrimary,
+    display: 'flex',
+    flexShrink: 0,
+    justifyContent: 'center',
+  },
+  flexContainer2: {
+    color: cssVar.colorText,
+    flex: 1,
+    fontSize: cssVar.fontSize,
+    fontWeight: 500,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  flexContainer3: {
+    alignItems: 'center',
+    background: cssVar.colorPrimary,
+    borderRadius: cssVar.borderRadiusSM,
+    color: cssVar.colorTextLightSolid,
+    display: 'flex',
+    flexShrink: 0,
+    fontSize: 12,
+    fontWeight: 600,
+    height: 22,
+    justifyContent: 'center',
+    minWidth: 22,
+    padding: '0 6px',
+  },
+});
 
 /**
  * Pre-create a transparent 1x1 pixel image for drag operations
@@ -249,38 +303,8 @@ export const DndContextWrapper = memo<PropsWithChildren>(({ children }) => {
         {typeof document !== 'undefined' &&
           createPortal(
             currentDrag ? (
-              <div
-                ref={overlayRef}
-                style={{
-                  alignItems: 'center',
-                  background: cssVar.colorBgElevated,
-                  border: `1px solid ${cssVar.colorPrimaryBorder}`,
-                  borderRadius: cssVar.borderRadiusLG,
-                  boxShadow: cssVar.boxShadow,
-                  display: 'flex',
-                  gap: 12,
-                  height: 44,
-                  left: '-999px',
-                  maxWidth: 320,
-                  minWidth: 200,
-                  padding: '0 12px',
-                  pointerEvents: 'none',
-                  position: 'fixed',
-                  top: '-999px',
-                  transform: 'translate3d(0, 0, 0)',
-                  willChange: 'transform',
-                  zIndex: 9999,
-                }}
-              >
-                <div
-                  style={{
-                    alignItems: 'center',
-                    color: cssVar.colorPrimary,
-                    display: 'flex',
-                    flexShrink: 0,
-                    justifyContent: 'center',
-                  }}
-                >
+              <div ref={overlayRef} style={styles.flexContainer}>
+                <div style={styles.flexContainer1}>
                   {currentDrag.data.fileType === 'custom/folder' ? (
                     <Icon icon={FolderIcon} size={20} />
                   ) : currentDrag.data.fileType === 'custom/document' ? (
@@ -293,38 +317,9 @@ export const DndContextWrapper = memo<PropsWithChildren>(({ children }) => {
                     />
                   )}
                 </div>
-                <span
-                  style={{
-                    color: cssVar.colorText,
-                    flex: 1,
-                    fontSize: cssVar.fontSize,
-                    fontWeight: 500,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {currentDrag.data.name}
-                </span>
+                <span style={styles.flexContainer2}>{currentDrag.data.name}</span>
                 {selectedFileIds.includes(currentDrag.id) && selectedFileIds.length > 1 && (
-                  <div
-                    style={{
-                      alignItems: 'center',
-                      background: cssVar.colorPrimary,
-                      borderRadius: cssVar.borderRadiusSM,
-                      color: cssVar.colorTextLightSolid,
-                      display: 'flex',
-                      flexShrink: 0,
-                      fontSize: 12,
-                      fontWeight: 600,
-                      height: 22,
-                      justifyContent: 'center',
-                      minWidth: 22,
-                      padding: '0 6px',
-                    }}
-                  >
-                    {selectedFileIds.length}
-                  </div>
+                  <div style={styles.flexContainer3}>{selectedFileIds.length}</div>
                 )}
               </div>
             ) : null,

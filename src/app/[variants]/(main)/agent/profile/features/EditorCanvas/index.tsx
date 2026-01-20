@@ -18,12 +18,19 @@ import { useTranslation } from 'react-i18next';
 
 import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { useMentionOptions } from '../ProfileEditor/MentionList';
 import { EMPTY_EDITOR_STATE } from '../constants';
 import { useProfileStore } from '../store';
 import TypoBar from './TypoBar';
 import { useSlashItems } from './useSlashItems';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBottom: 64,
+  },
+});
 
 const EditorCanvas = memo(() => {
   const { t } = useTranslation('setting');
@@ -133,9 +140,7 @@ const EditorCanvas = memo(() => {
         slashOption={{
           items: slashItems,
         }}
-        style={{
-          paddingBottom: 64,
-        }}
+        style={styles.spacing}
       />
     </div>
   );

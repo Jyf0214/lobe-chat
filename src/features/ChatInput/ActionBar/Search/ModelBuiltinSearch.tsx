@@ -8,9 +8,17 @@ import { useTranslation } from 'react-i18next';
 import { useAgentStore } from '@/store/agent';
 import { agentByIdSelectors, chatConfigByIdSelectors } from '@/store/agent/selectors';
 import { aiModelSelectors, useAiInfraStore } from '@/store/aiInfra';
+import { StyleSheet } from '@/utils/styles';
 
 import { useAgentId } from '../../hooks/useAgentId';
 import { useUpdateAgentConfig } from '../../hooks/useUpdateAgentConfig';
+
+const styles = StyleSheet.create({
+  style: {
+    cursor: 'pointer',
+    userSelect: 'none',
+  },
+});
 
 interface SearchEngineIconProps {
   icon?: string;
@@ -56,7 +64,7 @@ const ModelBuiltinSearch = memo(() => {
         setLoading(false);
       }}
       padding={'8px 12px'}
-      style={{ cursor: 'pointer', userSelect: 'none' }}
+      style={styles.style}
     >
       <Flexbox align={'center'} gap={8} horizontal>
         <SearchEngineIcon icon={modelCard?.settings?.searchProvider} />

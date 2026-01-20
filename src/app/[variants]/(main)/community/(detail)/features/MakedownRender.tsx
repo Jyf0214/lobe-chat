@@ -5,7 +5,15 @@ import { FileText } from 'lucide-react';
 import { type ReactNode, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { H1, H2, H3, H4, H5 } from './Toc/Heading';
+
+const styles = StyleSheet.create({
+  style: {
+    maxWidth: 400,
+  },
+});
 
 const MarkdownRender = memo<{ children?: string }>(({ children }) => {
   const { t } = useTranslation('common');
@@ -16,7 +24,7 @@ const MarkdownRender = memo<{ children?: string }>(({ children }) => {
           description={t('noContent')}
           descriptionProps={{ fontSize: 14 }}
           icon={FileText}
-          style={{ maxWidth: 400 }}
+          style={styles.style}
         />
       </Center>
     );

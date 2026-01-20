@@ -9,8 +9,19 @@ import { DEFAULT_AVATAR, DEFAULT_INBOX_AVATAR } from '@/const/meta';
 import { SkeletonItem } from '@/features/NavPanel/components/SkeletonList';
 import { useAgentStore } from '@/store/agent';
 import { agentSelectors, builtinAgentSelectors } from '@/store/agent/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import SwitchPanel from './SwitchPanel';
+
+const styles = StyleSheet.create({
+  style: {
+    minWidth: 32,
+    overflow: 'hidden',
+  },
+  style1: {
+    width: 24,
+  },
+});
 
 const Agent = memo<PropsWithChildren>(() => {
   const { t } = useTranslation(['chat', 'common']);
@@ -35,10 +46,7 @@ const Agent = memo<PropsWithChildren>(() => {
         gap={8}
         horizontal
         padding={2}
-        style={{
-          minWidth: 32,
-          overflow: 'hidden',
-        }}
+        style={styles.style}
         variant={'borderless'}
       >
         <Avatar
@@ -56,9 +64,7 @@ const Agent = memo<PropsWithChildren>(() => {
             blockSize: 28,
             size: 16,
           }}
-          style={{
-            width: 24,
-          }}
+          style={styles.style1}
         />
       </Block>
     </SwitchPanel>

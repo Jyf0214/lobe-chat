@@ -13,10 +13,17 @@ import { useSessionStore } from '@/store/session';
 import { sessionSelectors } from '@/store/session/selectors';
 import { useUserStore } from '@/store/user';
 import { authSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import KnowledgeTag from './KnowledgeTag';
 import MemberCountTag from './MemberCountTag';
 import SearchTags from './SearchTags';
+
+const styles = StyleSheet.create({
+  style: {
+    height: 20,
+  },
+});
 
 const TitleTags = memo(() => {
   const [model, provider, hasKnowledge, isLoading] = useAgentStore((s) => [
@@ -44,7 +51,7 @@ const TitleTags = memo(() => {
   }
 
   return isLoading && isLogin ? (
-    <Skeleton.Button active size={'small'} style={{ height: 20 }} />
+    <Skeleton.Button active size={'small'} style={styles.style} />
   ) : (
     <Flexbox align={'center'} gap={4} horizontal>
       <ModelSwitchPanel>

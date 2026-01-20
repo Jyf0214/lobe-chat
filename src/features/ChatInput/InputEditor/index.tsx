@@ -25,10 +25,17 @@ import { useAgentStore } from '@/store/agent';
 import { agentByIdSelectors } from '@/store/agent/selectors';
 import { useUserStore } from '@/store/user';
 import { labPreferSelectors, preferenceSelectors, settingsSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { useAgentId } from '../hooks/useAgentId';
 import { useChatInputStore, useStoreApi } from '../store';
 import Placeholder from './Placeholder';
+
+const styles = StyleSheet.create({
+  style: {
+    minHeight: 46,
+  },
+});
 
 const className = cx(css`
   p {
@@ -37,6 +44,10 @@ const className = cx(css`
 `);
 
 const InputEditor = memo<{ defaultRows?: number }>(({ defaultRows = 2 }) => {
+  const styleObject = {
+    ...styles.style,
+    minHeight: defaultRows > 1 ? defaultRows * 23 : styles.style.minHeight,
+  };
   const [editor, slashMenuRef, send, updateMarkdownContent, expand, mentionItems] =
     useChatInputStore((s) => [
       s.editor,
@@ -216,9 +227,7 @@ const InputEditor = memo<{ defaultRows?: number }>(({ defaultRows = 2 }) => {
               );
             },
       }}
-      style={{
-        minHeight: defaultRows > 1 ? defaultRows * 23 : undefined,
-      }}
+      style={styleObject}
       type={'text'}
       variant={'chat'}
     />

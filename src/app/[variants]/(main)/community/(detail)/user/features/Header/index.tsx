@@ -7,10 +7,25 @@ import { Globe } from 'lucide-react';
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { useUserDetailContext } from '../DetailProvider';
 import FollowButton from '../FollowButton';
 import FollowStats from '../FollowStats';
 import Banner from './Banner';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    boxShadow: `0 0 0 4px ${cssVar.colorBgContainer}`,
+    flexShrink: 0,
+  },
+  spacing: {
+    margin: 0,
+  },
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 const UserHeader = memo(() => {
   const { t } = useTranslation('discover');
@@ -42,20 +57,10 @@ const UserHeader = memo(() => {
     <>
       <Banner avatar={avatarUrl} bannerUrl={bannerUrl} />
       <Flexbox gap={16}>
-        <Avatar
-          avatar={avatarUrl}
-          shape={'square'}
-          size={64}
-          style={{ boxShadow: `0 0 0 4px ${cssVar.colorBgContainer}`, flexShrink: 0 }}
-        />
+        <Avatar avatar={avatarUrl} shape={'square'} size={64} style={styles.flexContainer} />
         <Flexbox align={'flex-start'} gap={16} horizontal justify={'space-between'}>
-          <Flexbox
-            gap={4}
-            style={{
-              overflow: 'hidden',
-            }}
-          >
-            <Text as={'h1'} ellipsis fontSize={24} style={{ margin: 0 }} weight={'bold'}>
+          <Flexbox gap={4} style={styles.style}>
+            <Text as={'h1'} ellipsis fontSize={24} style={styles.spacing} weight={'bold'}>
               {displayName}
             </Text>
             <Text ellipsis fontSize={12} type={'secondary'}>

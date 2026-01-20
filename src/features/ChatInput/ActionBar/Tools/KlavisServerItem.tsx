@@ -9,6 +9,22 @@ import { useToolStore } from '@/store/tool';
 import { type KlavisServer, KlavisServerStatus } from '@/store/tool/slices/klavisStore';
 import { useUserStore } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'red',
+    fontSize: 12,
+  },
+  style: {
+    cursor: 'pointer',
+    opacity: 0.65,
+  },
+  style1: {
+    cursor: 'pointer',
+    opacity: 0.5,
+  },
+});
 
 // 轮询配置
 const POLL_INTERVAL_MS = 1000; // 每秒轮询一次
@@ -246,7 +262,7 @@ const KlavisServerItem = memo<KlavisServerItemProps>(
               e.stopPropagation();
               handleConnect();
             }}
-            style={{ cursor: 'pointer', opacity: 0.65 }}
+            style={styles.style}
           >
             {t('tools.klavis.connect', { defaultValue: 'Connect' })}
             <Icon icon={SquareArrowOutUpRight} size="small" />
@@ -270,7 +286,7 @@ const KlavisServerItem = memo<KlavisServerItemProps>(
                   handleDisconnect();
                 }}
                 size="small"
-                style={{ cursor: 'pointer', opacity: 0.5 }}
+                style={styles.style1}
               />
               <Checkbox
                 checked={checked}
@@ -303,7 +319,7 @@ const KlavisServerItem = memo<KlavisServerItemProps>(
                   openOAuthWindow(server.oauthUrl, server.identifier);
                 }
               }}
-              style={{ cursor: 'pointer', opacity: 0.65 }}
+              style={styles.style}
             >
               {t('tools.klavis.pendingAuth', { defaultValue: 'Authorize' })}
               <Icon icon={SquareArrowOutUpRight} size="small" />
@@ -312,9 +328,7 @@ const KlavisServerItem = memo<KlavisServerItemProps>(
         }
         case KlavisServerStatus.ERROR: {
           return (
-            <span style={{ color: 'red', fontSize: 12 }}>
-              {t('tools.klavis.error', { defaultValue: 'Error' })}
-            </span>
+            <span style={styles.colored}>{t('tools.klavis.error', { defaultValue: 'Error' })}</span>
           );
         }
         default: {

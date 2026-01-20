@@ -10,8 +10,17 @@ import { parseAsInteger, useQueryParam } from '@/hooks/useQueryParam';
 import { useClientDataSWR } from '@/libs/swr';
 import { usageService } from '@/services/usage';
 import { formatDate, formatNumber } from '@/utils/format';
+import { StyleSheet } from '@/utils/styles';
 
 import { type UsageChartProps } from '../../types';
+
+const styles = StyleSheet.create({
+  spacing: {
+    border: `2px solid ${cssVar.colorBgContainer}`,
+    boxSizing: 'content-box',
+    marginRight: -8,
+  },
+});
 
 const UsageTable = memo<UsageChartProps>(({ dateStrings }) => {
   const { t } = useTranslation('auth');
@@ -44,15 +53,7 @@ const UsageTable = memo<UsageChartProps>(({ dateStrings }) => {
       key: 'model',
       render: (value, record) => (
         <Flexbox align={'start'} gap={16} horizontal>
-          <ProviderIcon
-            provider={record.provider}
-            size={18}
-            style={{
-              border: `2px solid ${cssVar.colorBgContainer}`,
-              boxSizing: 'content-box',
-              marginRight: -8,
-            }}
-          />
+          <ProviderIcon provider={record.provider} size={18} style={styles.spacing} />
           <Text>{value?.length > 12 ? `${value.slice(0, 12)}...` : value}</Text>
         </Flexbox>
       ),

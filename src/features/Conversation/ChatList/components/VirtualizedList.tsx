@@ -4,9 +4,28 @@ import isEqual from 'fast-deep-equal';
 import { type ReactElement, type ReactNode, memo, useCallback, useEffect, useRef } from 'react';
 import { VList, type VListHandle } from 'virtua';
 
+import { StyleSheet } from '@/utils/styles';
+
 import WideScreenContainer from '../../../WideScreenContainer';
 import { useConversationStore, virtuaListSelectors } from '../../store';
 import AutoScroll from './AutoScroll';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    position: 'relative',
+    width: '100%',
+  },
+  spacing: {
+    height: '100%',
+    paddingBottom: 24,
+  },
+  style: {
+    position: 'relative',
+  },
+  style1: {
+    position: 'relative',
+  },
+});
 
 interface VirtualizedListProps {
   dataSource: string[];
@@ -137,7 +156,7 @@ const VirtualizedList = memo<VirtualizedListProps>(({ dataSource, itemContent })
         onScroll={handleScroll}
         onScrollEnd={handleScrollEnd}
         ref={virtuaRef}
-        style={{ height: '100%', paddingBottom: 24 }}
+        style={styles.spacing}
       >
         {(messageId, index): ReactElement => {
           const isAgentCouncil = messageId.includes('agentCouncil');
@@ -146,14 +165,14 @@ const VirtualizedList = memo<VirtualizedListProps>(({ dataSource, itemContent })
           if (isAgentCouncil) {
             // AgentCouncil needs full width for horizontal scroll
             return (
-              <div key={messageId} style={{ position: 'relative', width: '100%' }}>
+              <div key={messageId} style={styles.fullWidth}>
                 {content}
               </div>
             );
           }
 
           return (
-            <WideScreenContainer key={messageId} style={{ position: 'relative' }}>
+            <WideScreenContainer key={messageId} style={styles.style}>
               {content}
             </WideScreenContainer>
           );
@@ -164,9 +183,7 @@ const VirtualizedList = memo<VirtualizedListProps>(({ dataSource, itemContent })
           if (!atBottom) return;
           setTimeout(() => scrollToBottom(true), 100);
         }}
-        style={{
-          position: 'relative',
-        }}
+        style={styles.style1}
       >
         <AutoScroll />
       </WideScreenContainer>

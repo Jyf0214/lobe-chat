@@ -17,10 +17,27 @@ import { useChatStore } from '@/store/chat';
 import { dbMessageSelectors, topicSelectors } from '@/store/chat/selectors';
 import { useToolStore } from '@/store/tool';
 import { pluginHelpers } from '@/store/tool/helpers';
+import { StyleSheet } from '@/utils/styles';
 
 import { useAgentId } from '../../hooks/useAgentId';
 import ActionPopover from '../components/ActionPopover';
 import TokenProgress from './TokenProgress';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextDescription,
+  },
+  colored1: {
+    background: cssVar.colorFillTertiary,
+    borderRadius: 4,
+    color: cssVar.colorTextSecondary,
+    fontFamily: cssVar.fontFamilyCode,
+    fontSize: 11,
+  },
+  style: {
+    minWidth: 200,
+  },
+});
 
 const toolNameResolver = new ToolNameResolver();
 
@@ -110,9 +127,9 @@ const Token = memo<TokenTagProps>(({ total: messageString }) => {
   const totalToken = systemRoleToken + historySummaryToken + toolsToken + chatsToken;
 
   const content = (
-    <Flexbox gap={12} style={{ minWidth: 200 }}>
+    <Flexbox gap={12} style={styles.style}>
       <Flexbox align={'center'} gap={4} horizontal justify={'space-between'} width={'100%'}>
-        <div style={{ color: cssVar.colorTextDescription }}>{t('tokenDetails.title')}</div>
+        <div style={styles.colored}>{t('tokenDetails.title')}</div>
         <Tooltip
           styles={{ root: { maxWidth: 'unset', pointerEvents: 'none' } }}
           title={t('ModelSelect.featureTag.tokens', {
@@ -120,17 +137,7 @@ const Token = memo<TokenTagProps>(({ total: messageString }) => {
             tokens: numeral(maxTokens).format('0,0'),
           })}
         >
-          <Center
-            height={20}
-            paddingInline={4}
-            style={{
-              background: cssVar.colorFillTertiary,
-              borderRadius: 4,
-              color: cssVar.colorTextSecondary,
-              fontFamily: cssVar.fontFamilyCode,
-              fontSize: 11,
-            }}
-          >
+          <Center height={20} paddingInline={4} style={styles.colored1}>
             TOKEN
           </Center>
         </Tooltip>

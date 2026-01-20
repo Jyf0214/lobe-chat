@@ -15,10 +15,17 @@ import { sessionMetaSelectors, sessionSelectors } from '@/store/session/selector
 import { useUserStore } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
 import { type LobeGroupSession } from '@/types/session';
+import { StyleSheet } from '@/utils/styles';
 
 import ListItem from '../../ListItem';
 import CreateGroupModal from '../../Modals/CreateGroupModal';
 import Actions from './Actions';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flexWrap: 'wrap',
+  },
+});
 
 interface SessionItemProps {
   id: string;
@@ -90,7 +97,7 @@ const SessionItem = memo<SessionItemProps>(({ id }) => {
   const addon = useMemo(
     () =>
       !showModel ? undefined : (
-        <Flexbox gap={4} horizontal style={{ flexWrap: 'wrap' }}>
+        <Flexbox gap={4} horizontal style={styles.flexContainer}>
           <ModelTag model={model} />
         </Flexbox>
       ),

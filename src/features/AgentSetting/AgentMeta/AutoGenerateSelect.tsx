@@ -4,6 +4,17 @@ import { Wand2 } from 'lucide-react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+  spacing: {
+    marginRight: -4,
+  },
+});
+
 export interface AutoGenerateInputProps extends SelectProps {
   canAutoGenerate?: boolean;
   loading?: boolean;
@@ -21,7 +32,7 @@ const AutoGenerateSelect = memo<AutoGenerateInputProps>(
           onChange?.(isString(v) ? v.split(',') : v);
         }}
         open={false}
-        style={{ width: '100%' }}
+        style={styles.fullWidth}
         suffixIcon={
           onGenerate && (
             <ActionIcon
@@ -30,9 +41,7 @@ const AutoGenerateSelect = memo<AutoGenerateInputProps>(
               loading={loading}
               onClick={onGenerate}
               size={'small'}
-              style={{
-                marginRight: -4,
-              }}
+              style={styles.spacing}
               title={!canAutoGenerate ? t('autoGenerateTooltipDisabled') : t('autoGenerate')}
             />
           )

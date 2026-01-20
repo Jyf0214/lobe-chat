@@ -9,17 +9,15 @@ interface CateTagProps {
 
 const CateTag = memo<CateTagProps>(({ cate }) => {
   const cateColor = useCateColor(cate);
+  const flexContainerStyle = {
+    background: cateColor?.backgroundColor,
+    borderRadius: 16,
+    color: cateColor?.color,
+    flex: 'none',
+    fontWeight: 500,
+  };
   return (
-    <Tag
-      size={'large'}
-      style={{
-        background: cateColor?.backgroundColor,
-        borderRadius: 16,
-        color: cateColor?.color,
-        flex: 'none',
-        fontWeight: 500,
-      }}
-    >
+    <Tag size={'large'} style={flexContainerStyle}>
       {cate?.toUpperCase() || 'CHORE'}
     </Tag>
   );

@@ -3,6 +3,14 @@ import { cssVar } from 'antd-style';
 import { type LucideIcon, SquareArrowOutUpRight } from 'lucide-react';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+  },
+});
+
 export interface ItemLinkProps {
   href: string;
   icon?: LucideIcon;
@@ -12,7 +20,7 @@ export interface ItemLinkProps {
 
 const ItemLink = memo<ItemLinkProps>(({ label, href }) => {
   return (
-    <a href={href} rel="noreferrer" style={{ color: 'inherit' }} target="_blank">
+    <a href={href} rel="noreferrer" style={styles.colored} target="_blank">
       <Flexbox align={'center'} gap={8} horizontal>
         {label}
         <Icon color={cssVar.colorTextDescription} icon={SquareArrowOutUpRight} size={14} />

@@ -4,6 +4,34 @@ import { cssVar } from 'antd-style';
 import numeral from 'numeral';
 import { memo } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    borderRadius: 3,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  colored1: {
+    color: cssVar.colorTextSecondary,
+  },
+  flexContainer1: {
+    borderRadius: '50%',
+    flex: 'none',
+    height: 6,
+    width: 6,
+  },
+  spacing: {
+    marginBlock: 8,
+  },
+  style: {
+    position: 'relative',
+  },
+  style1: {
+    fontWeight: 500,
+  },
+});
+
 interface TokenProgressItem {
   color: string;
   id: string;
@@ -21,24 +49,23 @@ const format = (number: number) => numeral(number).format('0,0');
 
 const TokenProgress = memo<TokenProgressProps>(({ data, showIcon, showTotal }) => {
   const total = data.reduce((acc, item) => acc + item.value, 0);
+
+  const coloredStyle = {
+    ...styles.colored,
+    background: total === 0 ? cssVar.colorFill : undefined,
+  };
+
   return (
-    <Flexbox gap={8} style={{ position: 'relative' }} width={'100%'}>
-      <Flexbox
-        height={6}
-        horizontal
-        style={{
-          background: total === 0 ? cssVar.colorFill : undefined,
-          borderRadius: 3,
-          overflow: 'hidden',
-          position: 'relative',
-        }}
-        width={'100%'}
-      >
+    <Flexbox gap={8} style={styles.style} width={'100%'}>
+      <Flexbox height={6} horizontal style={coloredStyle} width={'100%'}>
         {data.map((item) => (
           <Flexbox
             height={'100%'}
             key={item.id}
-            style={{ background: item.color, flex: item.value }}
+            style={{
+              background: item.color,
+              flex: item.value,
+            }}
           />
         ))}
       </Flexbox>
@@ -49,25 +76,22 @@ const TokenProgress = memo<TokenProgressProps>(({ data, showIcon, showTotal }) =
               {showIcon && (
                 <div
                   style={{
+                    ...styles.flexContainer1,
                     background: item.color,
-                    borderRadius: '50%',
-                    flex: 'none',
-                    height: 6,
-                    width: 6,
                   }}
                 />
               )}
-              <div style={{ color: cssVar.colorTextSecondary }}>{item.title}</div>
+              <div style={styles.colored1}>{item.title}</div>
             </Flexbox>
-            <div style={{ fontWeight: 500 }}>{format(item.value)}</div>
+            <div style={styles.style1}>{format(item.value)}</div>
           </Flexbox>
         ))}
         {showTotal && (
           <>
-            <Divider style={{ marginBlock: 8 }} />
+            <Divider style={styles.spacing} />
             <Flexbox align={'center'} gap={4} horizontal justify={'space-between'}>
-              <div style={{ color: cssVar.colorTextSecondary }}>{showTotal}</div>
-              <div style={{ fontWeight: 500 }}>{format(total)}</div>
+              <div style={styles.colored1}>{showTotal}</div>
+              <div style={styles.style1}>{format(total)}</div>
             </Flexbox>
           </>
         )}

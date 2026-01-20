@@ -31,6 +31,20 @@ import {
 import { type CSSProperties, memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    background: cssVar.colorBgElevated,
+    borderRadius: 8,
+    marginBottom: 16,
+    marginTop: 16,
+    position: 'sticky',
+    top: 12,
+    zIndex: 10,
+  },
+});
+
 export interface InlineToolbarProps {
   className?: string;
   editor?: IEditor;
@@ -217,16 +231,7 @@ const InlineToolbar = memo<InlineToolbarProps>(
         className={className}
         padding={4}
         shadow
-        style={{
-          background: cssVar.colorBgElevated,
-          borderRadius: 8,
-          marginBottom: 16,
-          marginTop: 16,
-          position: 'sticky',
-          top: 12,
-          zIndex: 10,
-          ...style,
-        }}
+        style={{ ...styles.spacing, ...style }}
         variant={'outlined'}
       >
         <ChatInputActions items={items} />

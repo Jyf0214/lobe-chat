@@ -6,6 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { useActionSWR } from '@/libs/swr';
 import { useServerConfigStore } from '@/store/serverConfig';
 import { useSessionStore } from '@/store/session';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginTop: 8,
+  },
+});
 
 const AddButton = memo<{ groupId?: string }>(({ groupId }) => {
   const { t } = useTranslation('chat');
@@ -22,9 +29,7 @@ const AddButton = memo<{ groupId?: string }>(({ groupId }) => {
         icon={Plus}
         loading={isValidating}
         onClick={() => mutate()}
-        style={{
-          marginTop: 8,
-        }}
+        style={styles.spacing}
         variant={'filled'}
       >
         {t('newAgent')}

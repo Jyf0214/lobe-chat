@@ -3,6 +3,16 @@ import { Switch } from 'antd';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    fontSize: 28,
+    fontWeight: 600,
+    padding: 0,
+  },
+});
+
 interface CronJobHeaderProps {
   enabled?: boolean;
   isNewJob?: boolean;
@@ -21,11 +31,7 @@ const CronJobHeader = memo<CronJobHeaderProps>(
         <Input
           onChange={(e) => onNameChange(e.target.value)}
           placeholder={t('agentCronJobs.form.name.placeholder')}
-          style={{
-            fontSize: 28,
-            fontWeight: 600,
-            padding: 0,
-          }}
+          style={styles.spacing}
           value={name}
           variant={'borderless'}
         />

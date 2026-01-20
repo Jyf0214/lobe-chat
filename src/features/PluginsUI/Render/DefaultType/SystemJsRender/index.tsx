@@ -2,7 +2,15 @@ import { type PluginRender, type PluginRenderProps } from '@lobehub/chat-plugin-
 import { Skeleton } from '@lobehub/ui';
 import { memo, useEffect, useState } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { system } from './utils';
+
+const styles = StyleSheet.create({
+  style: {
+    width: 300,
+  },
+});
 
 interface SystemJsRenderProps extends PluginRenderProps {
   url: string;
@@ -30,7 +38,7 @@ const SystemJsRender = memo<SystemJsRenderProps>(({ url, ...props }) => {
   }, [url]);
 
   if (!component) {
-    return <Skeleton active style={{ width: 300 }} />;
+    return <Skeleton active style={styles.style} />;
   }
 
   const Render = component;

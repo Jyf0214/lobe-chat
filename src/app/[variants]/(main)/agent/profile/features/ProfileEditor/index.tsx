@@ -14,12 +14,26 @@ import { useQueryRoute } from '@/hooks/useQueryRoute';
 import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
 import { useChatStore } from '@/store/chat';
+import { StyleSheet } from '@/utils/styles';
 
 import AgentCronJobs from '../AgentCronJobs';
 import EditorCanvas from '../EditorCanvas';
 import AgentPublishButton from '../Header/AgentPublishButton';
 import AgentHeader from './AgentHeader';
 import AgentTool from './AgentTool';
+
+const styles = StyleSheet.create({
+  spacing: {
+    cursor: 'default',
+    marginBottom: 12,
+  },
+  spacing1: {
+    marginBottom: 12,
+  },
+  spacing2: {
+    marginTop: 16,
+  },
+});
 
 const ProfileEditor = memo(() => {
   const { t } = useTranslation('setting');
@@ -40,18 +54,12 @@ const ProfileEditor = memo(() => {
         onClick={(e) => {
           e.stopPropagation();
         }}
-        style={{ cursor: 'default', marginBottom: 12 }}
+        style={styles.spacing}
       >
         {/* Header: Avatar + Name + Description */}
         <AgentHeader />
         {/* Config Bar: Model Selector */}
-        <Flexbox
-          align={'center'}
-          gap={8}
-          horizontal
-          justify={'flex-start'}
-          style={{ marginBottom: 12 }}
-        >
+        <Flexbox align={'center'} gap={8} horizontal justify={'flex-start'} style={styles.spacing1}>
           <ModelSelect
             onChange={updateConfig}
             value={{
@@ -61,13 +69,7 @@ const ProfileEditor = memo(() => {
           />
         </Flexbox>
         <AgentTool />
-        <Flexbox
-          align={'center'}
-          gap={8}
-          horizontal
-          justify={'flex-start'}
-          style={{ marginTop: 16 }}
-        >
+        <Flexbox align={'center'} gap={8} horizontal justify={'flex-start'} style={styles.spacing2}>
           <Button
             icon={PlayIcon}
             onClick={() => {

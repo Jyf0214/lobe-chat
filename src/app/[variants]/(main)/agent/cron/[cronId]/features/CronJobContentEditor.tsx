@@ -14,6 +14,24 @@ import { Clock } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBottom: 48,
+  },
+  style: {
+    fontWeight: 600,
+  },
+  style1: {
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  style2: {
+    minHeight: 220,
+  },
+});
+
 interface CronJobContentEditorProps {
   enableRichRender: boolean;
   initialValue: string;
@@ -70,14 +88,10 @@ const CronJobContentEditor = memo<CronJobContentEditorProps>(
       <Flexbox gap={12}>
         <Flexbox align="center" gap={6} horizontal>
           <Icon icon={Clock} size={16} />
-          <Text style={{ fontWeight: 600 }}>{t('agentCronJobs.content')}</Text>
+          <Text style={styles.style}>{t('agentCronJobs.content')}</Text>
         </Flexbox>
-        <Card
-          size="small"
-          style={{ borderRadius: 12, overflow: 'hidden' }}
-          styles={{ body: { padding: 0 } }}
-        >
-          <Flexbox padding={16} style={{ minHeight: 220 }}>
+        <Card size="small" style={styles.style1} styles={{ body: { padding: 0 } }}>
+          <Flexbox padding={16} style={styles.style2}>
             <Editor
               content={''}
               editor={editor}
@@ -97,7 +111,7 @@ const CronJobContentEditor = memo<CronJobContentEditorProps>(
                     ]
                   : undefined
               }
-              style={{ paddingBottom: 48 }}
+              style={styles.spacing}
               type={'text'}
               variant={'chat'}
             />

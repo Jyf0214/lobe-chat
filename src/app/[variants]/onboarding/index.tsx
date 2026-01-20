@@ -7,6 +7,7 @@ import { memo } from 'react';
 import Loading from '@/components/Loading/BrandTextLoading';
 import { useUserStore } from '@/store/user';
 import { onboardingSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import OnboardingContainer from './_layout';
 import FullNameStep from './features/FullNameStep';
@@ -14,6 +15,13 @@ import InterestsStep from './features/InterestsStep';
 import ProSettingsStep from './features/ProSettingsStep';
 import ResponseLanguageStep from './features/ResponseLanguageStep';
 import TelemetryStep from './features/TelemetryStep';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    maxWidth: 480,
+    width: '100%',
+  },
+});
 
 const OnboardingPage = memo(() => {
   const [isUserStateInit, currentStep, goToNextStep, goToPreviousStep] = useUserStore((s) => [
@@ -52,7 +60,7 @@ const OnboardingPage = memo(() => {
 
   return (
     <OnboardingContainer>
-      <Flexbox gap={24} style={{ maxWidth: 480, width: '100%' }}>
+      <Flexbox gap={24} style={styles.fullWidth}>
         {renderStep()}
       </Flexbox>
     </OnboardingContainer>

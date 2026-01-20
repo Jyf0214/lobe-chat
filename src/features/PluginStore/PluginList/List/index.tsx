@@ -5,11 +5,19 @@ import { useTranslation } from 'react-i18next';
 import { Virtuoso } from 'react-virtuoso';
 
 import { useToolStore } from '@/store/tool';
+import { StyleSheet } from '@/utils/styles';
 
 import SearchLoading from '../../Loading';
 import PluginEmpty from '../../PluginEmpty';
 import VirtuosoLoading from '../../VirtuosoLoading';
 import Item from './Item';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    height: '100%',
+    width: '100%',
+  },
+});
 
 export const List = memo(() => {
   const { t } = useTranslation('plugin');
@@ -85,7 +93,7 @@ export const List = memo(() => {
         </Flexbox>
       )}
       overscan={24}
-      style={{ height: '100%', width: '100%' }}
+      style={styles.fullWidth}
       totalCount={totalCount || 0}
     />
   );

@@ -2,10 +2,20 @@ import { Flexbox, ScrollShadow } from '@lobehub/ui';
 import { memo } from 'react';
 
 import { useQuery } from '@/hooks/useQuery';
+import { StyleSheet } from '@/utils/styles';
 
 import { GroupAgentNavKey } from '../Details/Nav';
 import ActionButton from './ActionButton';
 import Summary from './Summary';
+
+const styles = StyleSheet.create({
+  spacing: {
+    maxHeight: 'calc(100vh - 76px)',
+    paddingBottom: 24,
+    position: 'sticky',
+    top: 16,
+  },
+});
 
 const Sidebar = memo<{ mobile?: boolean }>(({ mobile }) => {
   const { activeTab = GroupAgentNavKey.Overview } = useQuery() as { activeTab: GroupAgentNavKey };
@@ -19,19 +29,7 @@ const Sidebar = memo<{ mobile?: boolean }>(({ mobile }) => {
   }
 
   return (
-    <ScrollShadow
-      flex={'none'}
-      gap={32}
-      hideScrollBar
-      size={4}
-      style={{
-        maxHeight: 'calc(100vh - 76px)',
-        paddingBottom: 24,
-        position: 'sticky',
-        top: 16,
-      }}
-      width={360}
-    >
+    <ScrollShadow flex={'none'} gap={32} hideScrollBar size={4} style={styles.spacing} width={360}>
       <ActionButton />
       {activeTab !== GroupAgentNavKey.Overview && <Summary />}
     </ScrollShadow>

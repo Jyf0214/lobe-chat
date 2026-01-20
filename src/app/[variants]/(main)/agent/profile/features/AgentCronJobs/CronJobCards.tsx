@@ -8,8 +8,36 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { AgentCronJob } from '@/database/schemas/agentCronJob';
+import { StyleSheet } from '@/utils/styles';
 
 import { useAgentCronJobs } from './hooks/useAgentCronJobs';
+
+const styles = StyleSheet.create({
+  display: {
+    WebkitBoxOrient: 'vertical',
+    WebkitLineClamp: 2,
+    color: '#666',
+    display: '-webkit-box',
+    fontSize: '12px',
+    overflow: 'hidden',
+  },
+  flexContainer: {
+    flex: 1,
+  },
+  style: {
+    height: '100%',
+  },
+  style1: {
+    fontSize: '13px',
+    fontWeight: 500,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  style2: {
+    fontSize: '11px',
+  },
+});
 
 const { Text } = Typography;
 
@@ -81,7 +109,7 @@ const CronJobCards = memo<CronJobCardsProps>(({ cronJobs, loading, onDelete, onE
               }
               loading={loading}
               size="small"
-              style={{ height: '100%' }}
+              style={styles.style}
               styles={{
                 actions: { marginTop: 0 },
                 body: { paddingBottom: 12, paddingTop: 8 },
@@ -89,18 +117,8 @@ const CronJobCards = memo<CronJobCardsProps>(({ cronJobs, loading, onDelete, onE
               }}
               title={
                 <Flexbox align="center" horizontal justify="space-between">
-                  <Flexbox align="center" gap={8} horizontal style={{ flex: 1 }}>
-                    <span
-                      style={{
-                        fontSize: '13px',
-                        fontWeight: 500,
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {job.name || t('agentCronJobs.unnamedTask')}
-                    </span>
+                  <Flexbox align="center" gap={8} horizontal style={styles.flexContainer}>
+                    <span style={styles.style1}>{job.name || t('agentCronJobs.unnamedTask')}</span>
                     <Badge status={statusInfo.status} />
                   </Flexbox>
                   <Switch
@@ -112,29 +130,19 @@ const CronJobCards = memo<CronJobCardsProps>(({ cronJobs, loading, onDelete, onE
               }
             >
               <Flexbox gap={8}>
-                <Text
-                  ellipsis={{ tooltip: job.content }}
-                  style={{
-                    WebkitBoxOrient: 'vertical',
-                    WebkitLineClamp: 2,
-                    color: '#666',
-                    display: '-webkit-box',
-                    fontSize: '12px',
-                    overflow: 'hidden',
-                  }}
-                >
+                <Text ellipsis={{ tooltip: job.content }} style={styles.display}>
                   {job.content}
                 </Text>
 
                 <Flexbox gap={8}>
                   <Flexbox align="center" gap={6} horizontal>
                     <Icon icon={Clock} size={12} />
-                    <Text style={{ fontSize: '11px' }}>{t(intervalText as any)}</Text>
+                    <Text style={styles.style2}>{t(intervalText as any)}</Text>
                   </Flexbox>
 
                   {job.remainingExecutions !== null && (
                     <Flexbox align="center" gap={6} horizontal>
-                      <Text style={{ fontSize: '11px' }}>
+                      <Text style={styles.style2}>
                         {t('agentCronJobs.remainingExecutions', { count: job.remainingExecutions })}
                       </Text>
                     </Flexbox>
@@ -143,7 +151,7 @@ const CronJobCards = memo<CronJobCardsProps>(({ cronJobs, loading, onDelete, onE
                   {job.lastExecutedAt && (
                     <Flexbox align="center" gap={6} horizontal>
                       <Icon icon={Calendar} size={12} />
-                      <Text style={{ fontSize: '11px' }}>
+                      <Text style={styles.style2}>
                         {dayjs(job.lastExecutedAt).format('MM/DD HH:mm')}
                       </Text>
                     </Flexbox>

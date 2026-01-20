@@ -7,8 +7,15 @@ import { useTranslation } from 'react-i18next';
 import MaxTokenSlider from '@/components/MaxTokenSlider';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { type ChatModelCard } from '@/types/llm';
+import { StyleSheet } from '@/utils/styles';
 
 import ExtendParamsSelect from './ExtendParamsSelect';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginTop: 16,
+  },
+});
 
 interface ModelConfigFormProps {
   idEditable?: boolean;
@@ -68,7 +75,7 @@ const ModelConfigForm = memo<ModelConfigFormProps>(
           form={formInstance}
           initialValues={initialValues}
           labelCol={{ span: 4 }}
-          style={{ marginTop: 16 }}
+          style={styles.spacing}
           wrapperCol={isMobile ? { span: 18 } : { offset: 1, span: 18 }}
         >
           <Form.Item

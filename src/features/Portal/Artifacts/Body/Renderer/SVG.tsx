@@ -10,6 +10,13 @@ import { useTranslation } from 'react-i18next';
 
 import { useChatStore } from '@/store/chat';
 import { chatPortalSelectors } from '@/store/chat/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    position: 'relative',
+  },
+});
 
 const svgContainer = css`
   width: 100%;
@@ -85,12 +92,7 @@ const SVGRenderer = ({ content }: SVGRendererProps) => {
   };
 
   return (
-    <Flexbox
-      align={'center'}
-      className="svg-renderer"
-      height={'100%'}
-      style={{ position: 'relative' }}
-    >
+    <Flexbox align={'center'} className="svg-renderer" height={'100%'} style={styles.style}>
       <Center
         className={cx(svgContainer)}
         dangerouslySetInnerHTML={{ __html: sanitizedContent }}

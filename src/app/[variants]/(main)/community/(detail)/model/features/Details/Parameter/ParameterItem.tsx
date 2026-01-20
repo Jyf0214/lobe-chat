@@ -4,7 +4,22 @@ import { cssVar } from 'antd-style';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import Statistic from '../../../../../components/Statistic';
+
+const styles = StyleSheet.create({
+  spacing: {
+    color: cssVar.colorTextSecondary,
+    margin: 0,
+  },
+  spacing1: {
+    margin: 0,
+  },
+  spacing2: {
+    paddingBottom: 8,
+  },
+});
 
 const DEFAULT_DOC_URL = 'https://lobehub.com/docs/usage/agents/model';
 
@@ -26,14 +41,14 @@ const ParameterItem = memo<ParameterItemProps>(
 
     return (
       <Flexbox align={'flex-start'} gap={16}>
-        <p style={{ color: cssVar.colorTextSecondary, margin: 0 }}>
+        <p style={styles.spacing}>
           {desc}{' '}
           <a href={docUrl} rel="noreferrer" target="_blank">
             {t('models.parameterList.docs')}
           </a>
         </p>
-        <Divider dashed style={{ margin: 0 }} />
-        <Flexbox align={'center'} gap={16} horizontal style={{ paddingBottom: 8 }} wrap={'wrap'}>
+        <Divider dashed style={styles.spacing1} />
+        <Flexbox align={'center'} gap={16} horizontal style={styles.spacing2} wrap={'wrap'}>
           <Statistic
             gap={4}
             title={t('models.parameterList.type')}

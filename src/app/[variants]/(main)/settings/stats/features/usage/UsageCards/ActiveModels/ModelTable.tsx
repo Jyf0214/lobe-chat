@@ -8,8 +8,15 @@ import { useTranslation } from 'react-i18next';
 import InlineTable from '@/components/InlineTable';
 import { type UsageLog } from '@/types/usage/usageRecord';
 import { formatPrice } from '@/utils/format';
+import { StyleSheet } from '@/utils/styles';
 
 import { GroupBy, type UsageChartProps } from '../../../../types';
+
+const styles = StyleSheet.create({
+  colored: {
+    boxSizing: 'content-box',
+  },
+});
 
 interface WeightGroup {
   id: string;
@@ -102,25 +109,17 @@ const ModelTable = memo<UsageChartProps>(({ data, isLoading, groupBy }) => {
                   {
                     dataIndex: 'id',
                     key: 'id',
-                    render: (value, record, index) => {
+                    render: (value, record, idx) => {
+                      const iconStyle = {
+                        ...styles.colored,
+                        boxShadow: `0 0 0 2px ${cssVar.colorBgContainer}, 0 0 0 4px ${themeColorRange[idx]}`,
+                      };
                       return (
                         <Flexbox align={'center'} gap={12} horizontal key={value}>
                           {groupBy === GroupBy.Provider ? (
-                            <ProviderIcon
-                              provider={record.id}
-                              style={{
-                                boxShadow: `0 0 0 2px ${cssVar.colorBgContainer}, 0 0 0 4px ${themeColorRange[index]}`,
-                                boxSizing: 'content-box',
-                              }}
-                            />
+                            <ProviderIcon provider={record.id} style={iconStyle} />
                           ) : (
-                            <ModelIcon
-                              model={record.id}
-                              style={{
-                                boxShadow: `0 0 0 2px ${cssVar.colorBgContainer}, 0 0 0 4px ${themeColorRange[index]}`,
-                                boxSizing: 'content-box',
-                              }}
-                            />
+                            <ModelIcon model={record.id} style={iconStyle} />
                           )}
                           {value}
                         </Flexbox>

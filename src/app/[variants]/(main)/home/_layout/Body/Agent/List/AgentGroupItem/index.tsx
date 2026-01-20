@@ -11,10 +11,18 @@ import GroupAvatar from '@/features/GroupAvatar';
 import NavItem from '@/features/NavPanel/components/NavItem';
 import { useGlobalStore } from '@/store/global';
 import { useHomeStore } from '@/store/home';
+import { StyleSheet } from '@/utils/styles';
 
 import Actions from '../Item/Actions';
 import Editing from './Editing';
 import { useGroupDropdownMenu } from './useDropdownMenu';
+
+const styles = StyleSheet.create({
+  style: {
+    opacity: 0.5,
+    pointerEvents: 'none',
+  },
+});
 
 interface GroupItemProps {
   className?: string;
@@ -70,10 +78,7 @@ const GroupItem = memo<GroupItemProps>(({ item, style, className }) => {
 
   // Memoize pin icon
   const pinIcon = useMemo(
-    () =>
-      pinned ? (
-        <ActionIcon icon={PinIcon} size={12} style={{ opacity: 0.5, pointerEvents: 'none' }} />
-      ) : undefined,
+    () => (pinned ? <ActionIcon icon={PinIcon} size={12} style={styles.style} /> : undefined),
     [pinned],
   );
 

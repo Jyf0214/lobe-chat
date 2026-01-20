@@ -8,6 +8,17 @@ import { useTranslation } from 'react-i18next';
 
 import { type FileUploadState, type FileUploadStatus } from '@/types/files/upload';
 import { formatSize } from '@/utils/format';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorSuccess,
+    fontSize: 12,
+  },
+  style: {
+    fontSize: 12,
+  },
+});
 
 interface UploadStateProps {
   size: number;
@@ -24,7 +35,7 @@ const UploadStatus = memo<UploadStateProps>(({ status, size, uploadState }) => {
       return (
         <Flexbox align={'center'} gap={4} horizontal>
           <Icon icon={Loader2Icon} size={12} spin />
-          <Text style={{ fontSize: 12 }} type={'secondary'}>
+          <Text style={styles.style} type={'secondary'}>
             {t('upload.preview.status.pending')}
           </Text>
         </Flexbox>
@@ -35,7 +46,7 @@ const UploadStatus = memo<UploadStateProps>(({ status, size, uploadState }) => {
       return (
         <Flexbox align={'center'} gap={4} horizontal>
           <Progress percent={uploadState?.progress} size={14} type="circle" />
-          <Text style={{ fontSize: 12 }} type={'secondary'}>
+          <Text style={styles.style} type={'secondary'}>
             {formatSize(size * ((uploadState?.progress || 0) / 100), 0)}
           </Text>
         </Flexbox>
@@ -46,7 +57,7 @@ const UploadStatus = memo<UploadStateProps>(({ status, size, uploadState }) => {
       return (
         <Flexbox align={'center'} gap={4} horizontal>
           <Progress percent={uploadState?.progress} size={14} type="circle" />
-          <Text style={{ fontSize: 12 }} type={'secondary'}>
+          <Text style={styles.style} type={'secondary'}>
             {formatSize(size)}
           </Text>
         </Flexbox>
@@ -56,8 +67,8 @@ const UploadStatus = memo<UploadStateProps>(({ status, size, uploadState }) => {
     case 'success': {
       return (
         <Flexbox align={'center'} gap={4} horizontal>
-          <CheckCircleFilled style={{ color: cssVar.colorSuccess, fontSize: 12 }} />
-          <Text style={{ fontSize: 12 }} type={'secondary'}>
+          <CheckCircleFilled style={styles.colored} />
+          <Text style={styles.style} type={'secondary'}>
             {formatSize(size)}
           </Text>
         </Flexbox>

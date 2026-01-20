@@ -3,7 +3,16 @@ import { cssVar } from 'antd-style';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { useDetailContext } from '../../DetailProvider';
+
+const styles = StyleSheet.create({
+  spacing: {
+    color: cssVar.colorTextSecondary,
+    margin: 0,
+  },
+});
 
 const Summary = memo(() => {
   const { description, summary } = useDetailContext();
@@ -14,16 +23,7 @@ const Summary = memo(() => {
       expandIconPlacement={'end'}
       items={[
         {
-          children: (
-            <p
-              style={{
-                color: cssVar.colorTextSecondary,
-                margin: 0,
-              }}
-            >
-              {summary || description}
-            </p>
-          ),
+          children: <p style={styles.spacing}>{summary || description}</p>,
           key: 'summary',
           label: t('assistants.details.summary.title'),
         },

@@ -6,6 +6,13 @@ import { useTranslation } from 'react-i18next';
 
 import { MANUAL_UPGRADE_URL } from '@/const/url';
 import { useGlobalStore } from '@/store/global';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBottom: 6,
+  },
+});
 
 const UpgradeAlert = memo(() => {
   const [hasNewVersion, latestVersion] = useGlobalStore((s) => [s.hasNewVersion, s.latestVersion]);
@@ -23,7 +30,7 @@ const UpgradeAlert = memo(() => {
             aria-label={t('upgradeVersion.action')}
             href={MANUAL_UPGRADE_URL}
             rel="noreferrer"
-            style={{ marginBottom: 6 }}
+            style={styles.spacing}
             target="_blank"
           >
             <Button block size={'small'} type={'primary'}>

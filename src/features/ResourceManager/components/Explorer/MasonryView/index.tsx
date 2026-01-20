@@ -11,10 +11,36 @@ import { sortFileList } from '@/app/[variants]/(main)/resource/features/store/se
 import { useFileStore } from '@/store/file';
 import { useFetchResources } from '@/store/file/slices/resource/hooks';
 import { type FileListItem } from '@/types/files';
+import { StyleSheet } from '@/utils/styles';
 
 import { useMasonryColumnCount } from '../useMasonryColumnCount';
 import MasonryItemWrapper from './MasonryFileItem/MasonryItemWrapper';
 import MasonryViewSkeleton from './Skeleton';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+    height: '100%',
+    opacity: 0,
+    overflowY: 'auto',
+    transition: 'opacity 0.2s ease-in-out',
+  },
+  spacing: {
+    paddingBlockEnd: 24,
+    paddingBlockStart: 12,
+    paddingInline: 24,
+  },
+  spacing1: {
+    color: cssVar.colorTextDescription,
+    fontSize: 14,
+    marginBlockStart: 16,
+    minHeight: 40,
+  },
+  style: {
+    gap: '16px',
+    overflow: 'hidden',
+  },
+});
 
 const MasonryView = memo(function MasonryView() {
   // Access all state from Resource Manager store
@@ -161,36 +187,18 @@ const MasonryView = memo(function MasonryView() {
   ) : (
     <div
       onScroll={handleScroll}
-      style={{
-        flex: 1,
-        height: '100%',
-        opacity: effectiveIsMasonryReady ? 1 : 0,
-        overflowY: 'auto',
-        transition: 'opacity 0.2s ease-in-out',
-      }}
+      style={{ ...styles.flexContainer, opacity: effectiveIsMasonryReady ? 1 : 0 }}
     >
-      <div style={{ paddingBlockEnd: 24, paddingBlockStart: 12, paddingInline: 24 }}>
+      <div style={styles.spacing}>
         <VirtuosoMasonry
           ItemContent={MasonryItemWrapper}
           columnCount={columnCount}
           context={masonryContext}
           data={data}
-          style={{
-            gap: '16px',
-            overflow: 'hidden',
-          }}
+          style={styles.style}
         />
         {isLoadingMore && (
-          <Center
-            style={{
-              color: cssVar.colorTextDescription,
-              fontSize: 14,
-              marginBlockStart: 16,
-              minHeight: 40,
-            }}
-          >
-            {t('loading', { defaultValue: 'Loading...' })}
-          </Center>
+          <Center style={styles.spacing1}>{t('loading', { defaultValue: 'Loading...' })}</Center>
         )}
       </div>
     </div>

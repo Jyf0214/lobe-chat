@@ -9,6 +9,7 @@ import ZenModeToast from '@/features/ZenModeToast';
 import { useOperationState } from '@/hooks/useOperationState';
 import { useChatStore } from '@/store/chat';
 import { messageMapKey } from '@/store/chat/utils/messageMapKey';
+import { StyleSheet } from '@/utils/styles';
 
 import WelcomeChatItem from './AgentWelcome';
 import ChatHydration from './ChatHydration';
@@ -17,6 +18,14 @@ import MessageFromUrl from './MainChatInput/MessageFromUrl';
 import ThreadHydration from './ThreadHydration';
 import { useActionsBarConfig } from './useActionsBarConfig';
 import { useAgentContext } from './useAgentContext';
+
+const styles = StyleSheet.create({
+  style: {
+    overflowX: 'hidden',
+    overflowY: 'auto',
+    position: 'relative',
+  },
+});
 
 /**
  * ConversationArea
@@ -54,15 +63,7 @@ const Conversation = memo(() => {
       operationState={operationState}
     >
       <ZenModeToast />
-      <Flexbox
-        flex={1}
-        style={{
-          overflowX: 'hidden',
-          overflowY: 'auto',
-          position: 'relative',
-        }}
-        width={'100%'}
-      >
+      <Flexbox flex={1} style={styles.style} width={'100%'}>
         <ChatList welcome={<WelcomeChatItem />} />
       </Flexbox>
       <TodoProgress />

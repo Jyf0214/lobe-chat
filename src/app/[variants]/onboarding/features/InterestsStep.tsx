@@ -8,9 +8,22 @@ import { useTranslation } from 'react-i18next';
 
 import { useUserStore } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import LobeMessage from '../components/LobeMessage';
 import { INTEREST_AREAS } from '../config';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextDescription,
+  },
+  spacing: {
+    marginInline: 8,
+  },
+  spacing1: {
+    marginTop: 32,
+  },
+});
 
 interface InterestsStepProps {
   onBack: () => void;
@@ -136,23 +149,19 @@ const InterestsStep = memo<InterestsStepProps>(({ onBack, onNext }) => {
           onPressEnter={handleAddCustom}
           placeholder={t('interests.placeholder')}
           prefix={
-            <Icon
-              color={cssVar.colorTextDescription}
-              icon={BriefcaseIcon}
-              style={{ marginInline: 8 }}
-            />
+            <Icon color={cssVar.colorTextDescription} icon={BriefcaseIcon} style={styles.spacing} />
           }
           size="large"
           title={t('interests.hint')}
           value={customInput}
         />
       )}
-      <Flexbox horizontal justify={'space-between'} style={{ marginTop: 32 }}>
+      <Flexbox horizontal justify={'space-between'} style={styles.spacing1}>
         <Button
           disabled={isNavigating}
           icon={Undo2Icon}
           onClick={handleBack}
-          style={{ color: cssVar.colorTextDescription }}
+          style={styles.colored}
           type={'text'}
         >
           {t('back')}

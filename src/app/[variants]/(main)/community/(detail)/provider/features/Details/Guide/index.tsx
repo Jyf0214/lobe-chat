@@ -4,7 +4,15 @@ import { BookOpen } from 'lucide-react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { useDetailContext } from '../../DetailProvider';
+
+const styles = StyleSheet.create({
+  style: {
+    maxWidth: 400,
+  },
+});
 
 const Guide = memo(() => {
   const { t } = useTranslation('discover');
@@ -17,7 +25,7 @@ const Guide = memo(() => {
           description={t('providers.details.guide.title')}
           descriptionProps={{ fontSize: 14 }}
           icon={BookOpen}
-          style={{ maxWidth: 400 }}
+          style={styles.style}
         />
       </Block>
     );

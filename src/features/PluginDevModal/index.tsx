@@ -9,10 +9,20 @@ import { Trans, useTranslation } from 'react-i18next';
 import { WIKI_PLUGIN_GUIDE } from '@/const/url';
 import { isDesktop } from '@/const/version';
 import { type LobeToolCustomPlugin } from '@/types/tool/plugin';
+import { StyleSheet } from '@/utils/styles';
 
 import MCPManifestForm from './MCPManifestForm';
 import PluginPreview from './PluginPreview';
 import UrlManifestForm from './UrlManifestForm';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingInline: 8,
+  },
+  style: {
+    overflowY: 'auto',
+  },
+});
 
 interface DevModalProps {
   mode?: 'edit' | 'create';
@@ -140,7 +150,7 @@ const DevModal = memo<DevModalProps>(
               e.stopPropagation();
             }}
           >
-            <Flexbox flex={3} gap={16} padding={24} style={{ overflowY: 'auto' }}>
+            <Flexbox flex={3} gap={16} padding={24} style={styles.style}>
               <Segmented
                 block
                 onChange={(e) => {
@@ -179,7 +189,7 @@ const DevModal = memo<DevModalProps>(
                         <a
                           href={WIKI_PLUGIN_GUIDE}
                           rel="noreferrer"
-                          style={{ paddingInline: 8 }}
+                          style={styles.spacing}
                           target={'_blank'}
                         >
                           文档

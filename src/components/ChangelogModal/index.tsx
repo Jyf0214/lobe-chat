@@ -6,8 +6,19 @@ import { memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ChangelogService } from '@/server/services/changelog';
+import { StyleSheet } from '@/utils/styles';
 
 import ChangelogContent from './ChangelogContent';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    width: '100%',
+  },
+  spacing: {
+    padding: '24px',
+    textAlign: 'center',
+  },
+});
 
 interface ChangelogModalProps {
   onClose: () => void;
@@ -64,9 +75,9 @@ const ChangelogModal = memo<ChangelogModalProps>(({ open, onClose, shouldLoad })
       }
       width={800}
     >
-      <Flexbox gap={16} padding={16} style={{ width: '100%' }}>
+      <Flexbox gap={16} padding={16} style={styles.fullWidth}>
         {isLoading || data.length === 0 ? (
-          <div style={{ padding: '24px', textAlign: 'center' }}>{t('loading')}</div>
+          <div style={styles.spacing}>{t('loading')}</div>
         ) : (
           <ChangelogContent data={data} />
         )}

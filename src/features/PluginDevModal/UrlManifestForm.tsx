@@ -1,6 +1,6 @@
 import { BRANDING_NAME } from '@lobechat/business-const';
 import { type LobeChatPluginManifest } from '@lobehub/chat-plugin-sdk';
-import { ActionIcon, Flexbox, FormItem, Input , Checkbox } from '@lobehub/ui';
+import { ActionIcon, Checkbox, Flexbox, FormItem, Input } from '@lobehub/ui';
 import { Form, type FormInstance } from 'antd';
 import { FileCode, RotateCwIcon } from 'lucide-react';
 import { memo, useState } from 'react';
@@ -11,6 +11,19 @@ import { toolService } from '@/services/tool';
 import { useToolStore } from '@/store/tool';
 import { pluginSelectors } from '@/store/tool/selectors';
 import { type PluginInstallError } from '@/types/tool/plugin';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginTop: 8,
+  },
+  spacing1: {
+    marginBottom: 0,
+  },
+  style: {
+    cursor: 'pointer',
+  },
+});
 
 interface ProxyCheckerProps {
   onChange?: (value: boolean) => void;
@@ -27,7 +40,7 @@ const ProxyChecker = memo<ProxyCheckerProps>(({ value, onChange }) => {
       onClick={() => {
         onChange?.(!value);
       }}
-      style={{ cursor: 'pointer' }}
+      style={styles.style}
     >
       <Checkbox checked={value} /> {t('dev.customParams.useProxy.label')}
     </Flexbox>
@@ -48,7 +61,7 @@ const UrlManifestForm = memo<{ form: FormInstance; isEditMode: boolean }>(
       <Form form={form} layout={'vertical'}>
         <FormItem
           desc={
-            <Flexbox horizontal justify={'space-between'} style={{ marginTop: 8 }}>
+            <Flexbox horizontal justify={'space-between'} style={styles.spacing}>
               {t('dev.meta.manifest.desc', { appName: BRANDING_NAME })}
               {manifest && (
                 <ManifestPreviewer manifest={manifest}>
@@ -102,7 +115,7 @@ const UrlManifestForm = memo<{ form: FormInstance; isEditMode: boolean }>(
                   },
                 },
           ]}
-          style={{ marginBottom: 0 }}
+          style={styles.spacing1}
         >
           <Input
             placeholder={'http://localhost:3400/manifest-dev.json'}

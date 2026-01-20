@@ -7,6 +7,19 @@ import { useIsDark } from '@/hooks/useIsDark';
 import { useGlobalStore } from '@/store/global';
 import { globalGeneralSelectors } from '@/store/global/selectors';
 import { usePageStore } from '@/store/page';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  style: {
+    width: 320,
+  },
+  style1: {
+    fontSize: 20,
+  },
+});
 
 interface EditingProps {
   currentEmoji?: string;
@@ -46,7 +59,7 @@ const Editing = memo<EditingProps>(({ documentId, title, currentEmoji, toggleEdi
   return (
     <Popover
       content={
-        <Flexbox gap={4} horizontal onClick={(e) => e.stopPropagation()} style={{ width: 320 }}>
+        <Flexbox gap={4} horizontal onClick={(e) => e.stopPropagation()} style={styles.style}>
           <EmojiPicker
             allowDelete
             customRender={(emoji) => (
@@ -60,9 +73,9 @@ const Editing = memo<EditingProps>(({ documentId, title, currentEmoji, toggleEdi
                 width={36}
               >
                 {emoji ? (
-                  <span style={{ fontSize: 20 }}>{emoji}</span>
+                  <span style={styles.style1}>{emoji}</span>
                 ) : (
-                  <span style={{ fontSize: 20 }}>📄</span>
+                  <span style={styles.style1}>📄</span>
                 )}
               </Block>
             )}
@@ -82,7 +95,7 @@ const Editing = memo<EditingProps>(({ documentId, title, currentEmoji, toggleEdi
               toggleEditing(false);
             }}
             placeholder={t('pageEditor.titlePlaceholder')}
-            style={{ flex: 1 }}
+            style={styles.flexContainer}
           />
         </Flexbox>
       }

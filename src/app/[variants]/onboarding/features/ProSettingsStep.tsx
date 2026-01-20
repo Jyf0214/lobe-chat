@@ -12,8 +12,24 @@ import ModelSelect from '@/features/ModelSelect';
 import { serverConfigSelectors, useServerConfigStore } from '@/store/serverConfig';
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import KlavisServerList from '../components/KlavisServerList';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: cssVar.colorTextDescription,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  spacing: {
+    marginTop: 16,
+  },
+  style: {
+    minWidth: 120,
+  },
+});
 
 interface ProSettingsStepProps {
   onBack: () => void;
@@ -71,7 +87,7 @@ const ProSettingsStep = memo<ProSettingsStepProps>(({ onBack }) => {
           onChange={handleModelChange}
           showAbility={false}
           size="large"
-          style={{ width: '100%' }}
+          style={styles.fullWidth}
           value={defaultAgentConfig}
         />
       </Flexbox>
@@ -84,24 +100,17 @@ const ProSettingsStep = memo<ProSettingsStepProps>(({ onBack }) => {
         </Flexbox>
       )}
 
-      <Flexbox align={'center'} horizontal justify={'space-between'} style={{ marginTop: 16 }}>
+      <Flexbox align={'center'} horizontal justify={'space-between'} style={styles.spacing}>
         <Button
           disabled={isNavigating}
           icon={Undo2Icon}
           onClick={handleBack}
-          style={{
-            color: cssVar.colorTextDescription,
-          }}
+          style={styles.colored}
           type={'text'}
         >
           {t('back')}
         </Button>
-        <Button
-          disabled={isNavigating}
-          onClick={handleFinish}
-          style={{ minWidth: 120 }}
-          type="primary"
-        >
+        <Button disabled={isNavigating} onClick={handleFinish} style={styles.style} type="primary">
           {t('finish')}
         </Button>
       </Flexbox>

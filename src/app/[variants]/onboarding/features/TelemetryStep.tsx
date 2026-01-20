@@ -13,6 +13,26 @@ import { Trans, useTranslation } from 'react-i18next';
 import { ProductLogo } from '@/components/Branding';
 import { PRIVACY_URL, TERMS_URL } from '@/const/url';
 import { useUserStore } from '@/store/user';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+  },
+  flexContainer: {
+    color: cssVar.colorSuccess,
+    flexShrink: 0,
+  },
+  spacing: {
+    marginBottom: 16,
+  },
+  spacing1: {
+    marginBlock: 8,
+    maxWidth: 240,
+  },
+});
 
 interface TelemetryStepProps {
   onNext: () => void;
@@ -56,7 +76,7 @@ const TelemetryStep = memo<TelemetryStepProps>(({ onNext }) => {
   return (
     <Flexbox gap={16}>
       <ProductLogo size={64} />
-      <Flexbox style={{ marginBottom: 16 }}>
+      <Flexbox style={styles.spacing}>
         <Text as={'h1'} fontSize={28} weight={'bold'}>
           <TypewriterEffect
             cursorCharacter={<LoadingDots size={28} variant={'pulse'} />}
@@ -82,7 +102,7 @@ const TelemetryStep = memo<TelemetryStepProps>(({ onNext }) => {
         items={[
           {
             description: (
-              <Text as={'p'} color={cssVar.colorTextSecondary} style={{ marginBottom: 16 }}>
+              <Text as={'p'} color={cssVar.colorTextSecondary} style={styles.spacing}>
                 {t('telemetry.rows.create.desc')}
               </Text>
             ),
@@ -95,7 +115,7 @@ const TelemetryStep = memo<TelemetryStepProps>(({ onNext }) => {
           },
           {
             description: (
-              <Text as={'p'} color={cssVar.colorTextSecondary} style={{ marginBottom: 16 }}>
+              <Text as={'p'} color={cssVar.colorTextSecondary} style={styles.spacing}>
                 {t('telemetry.rows.collaborate.desc')}
               </Text>
             ),
@@ -136,37 +156,24 @@ const TelemetryStep = memo<TelemetryStepProps>(({ onNext }) => {
         disabled={isNavigating}
         onClick={() => handleChoice(check)}
         size={'large'}
-        style={{
-          marginBlock: 8,
-          maxWidth: 240,
-        }}
+        style={styles.spacing1}
         type="primary"
       >
         {t('telemetry.next')}
       </Button>
       {check && (
         <Block align="flex-start" gap={8} horizontal variant={'borderless'}>
-          <Icon
-            icon={ShieldCheck}
-            size={16}
-            style={{ color: cssVar.colorSuccess, flexShrink: 0 }}
-          />
+          <Icon icon={ShieldCheck} size={16} style={styles.flexContainer} />
           <Text fontSize={12} type="secondary">
             <Trans
               components={{
                 privacy: (
-                  <a
-                    href={PRIVACY_URL}
-                    style={{ color: 'inherit', cursor: 'pointer', textDecoration: 'underline' }}
-                  >
+                  <a href={PRIVACY_URL} style={styles.colored}>
                     {t('telemetry.terms')}
                   </a>
                 ),
                 terms: (
-                  <a
-                    href={TERMS_URL}
-                    style={{ color: 'inherit', cursor: 'pointer', textDecoration: 'underline' }}
-                  >
+                  <a href={TERMS_URL} style={styles.colored}>
                     {t('telemetry.privacy')}
                   </a>
                 ),

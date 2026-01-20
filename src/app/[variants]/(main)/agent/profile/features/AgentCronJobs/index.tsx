@@ -10,9 +10,20 @@ import urlJoin from 'url-join';
 
 import { useQueryRoute } from '@/hooks/useQueryRoute';
 import { useAgentStore } from '@/store/agent';
+import { StyleSheet } from '@/utils/styles';
 
 import CronJobCards from './CronJobCards';
 import { useAgentCronJobs } from './hooks/useAgentCronJobs';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBottom: 16,
+    marginTop: 16,
+  },
+  spacing1: {
+    margin: 0,
+  },
+});
 
 const { Title } = Typography;
 
@@ -54,8 +65,8 @@ const AgentCronJobs = memo(() => {
   }
 
   return (
-    <Flexbox gap={12} style={{ marginBottom: 16, marginTop: 16 }}>
-      <Title level={5} style={{ margin: 0 }}>
+    <Flexbox gap={12} style={styles.spacing}>
+      <Title level={5} style={styles.spacing1}>
         <Flexbox align="center" gap={8} horizontal>
           <Clock size={16} />
           {t('agentCronJobs.title')}

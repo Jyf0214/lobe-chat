@@ -7,8 +7,21 @@ import Balancer from 'react-wrap-balancer';
 
 import { useChatStore } from '@/store/chat';
 import { dbMessageSelectors, displayMessageSelectors } from '@/store/chat/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import ArtifactItem from './Item';
+
+const styles = StyleSheet.create({
+  spacing: {
+    border: `1px dashed ${cssVar.colorSplit}`,
+    borderRadius: 8,
+    marginInline: 12,
+  },
+  style: {
+    borderRadius: 8,
+    height: 68,
+  },
+});
 
 const ArtifactList = () => {
   const { t } = useTranslation('portal');
@@ -18,20 +31,11 @@ const ArtifactList = () => {
   return !isCurrentChatLoaded ? (
     <Flexbox gap={12} paddingInline={12}>
       {[1, 1, 1, 1, 1, 1].map((key, index) => (
-        <Skeleton.Button
-          active
-          block
-          key={`${key}-${index}`}
-          style={{ borderRadius: 8, height: 68 }}
-        />
+        <Skeleton.Button active block key={`${key}-${index}`} style={styles.style} />
       ))}
     </Flexbox>
   ) : messages.length === 0 ? (
-    <Center
-      gap={8}
-      paddingBlock={24}
-      style={{ border: `1px dashed ${cssVar.colorSplit}`, borderRadius: 8, marginInline: 12 }}
-    >
+    <Center gap={8} paddingBlock={24} style={styles.spacing}>
       <Avatar
         avatar={<Icon icon={Origami} size={'large'} />}
         background={cssVar.colorFillTertiary}

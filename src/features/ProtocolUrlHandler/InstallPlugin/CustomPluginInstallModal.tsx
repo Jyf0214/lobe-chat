@@ -12,9 +12,16 @@ import { useToolStore } from '@/store/tool';
 import { mcpStoreSelectors } from '@/store/tool/selectors';
 import { type McpConnectionParams } from '@/types/plugins';
 import { type LobeToolCustomPlugin } from '@/types/tool/plugin';
+import { StyleSheet } from '@/utils/styles';
 
 import ConfigDisplay from './ConfigDisplay';
 import { type McpInstallRequest, TRUSTED_MARKETPLACES, type TrustedMarketplaceId } from './types';
+
+const styles = StyleSheet.create({
+  style: {
+    fontSize: 12,
+  },
+});
 
 interface CustomPluginInstallModalProps {
   installRequest: McpInstallRequest | null;
@@ -195,7 +202,7 @@ const CustomPluginInstallModal = memo<CustomPluginInstallModalProps>(
                   {schema.name}
                   <PluginTag type={'customPlugin'} />
                 </Flexbox>
-                <Text style={{ fontSize: 12 }} type={'secondary'}>
+                <Text style={styles.style} type={'secondary'}>
                   {schema.description}
                 </Text>
               </Flexbox>

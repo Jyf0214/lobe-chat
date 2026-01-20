@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { aiModelSelectors, useAiInfraStore } from '@/store/aiInfra';
+import { StyleSheet } from '@/utils/styles';
 
 import DisabledModels from './DisabledModels';
 import EmptyModels from './EmptyModels';
@@ -27,6 +28,17 @@ import {
 } from './ProviderSettingsContext';
 import SearchResult from './SearchResult';
 import SkeletonList from './SkeletonList';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBottom: 12,
+    marginLeft: -6,
+  },
+  spacing1: {
+    paddingBottom: 16,
+    paddingTop: 8,
+  },
+});
 
 interface ContentProps {
   id: string;
@@ -133,7 +145,7 @@ const Content = memo<ContentProps>(({ id }) => {
         items={tabs}
         onChange={setActiveTab}
         size="small"
-        style={{ marginBottom: 12, marginLeft: -6 }}
+        style={styles.spacing}
       />
       <EnabledModelList activeTab={currentActiveTab} />
       <DisabledModels activeTab={currentActiveTab} providerId={id} />
@@ -148,20 +160,16 @@ interface ModelListProps extends ProviderSettingsContextValue {
 const ModelList = memo<ModelListProps>(
   ({ id, showModelFetcher, sdkType, showAddNewModel, showDeployName, modelEditable = true }) => {
     const mobile = useIsMobile();
+    const spacing1Style = {
+      ...styles.spacing1,
+      background: mobile ? cssVar.colorBgContainer : undefined,
+    };
 
     return (
       <ProviderSettingsContext
         value={{ modelEditable, sdkType, showAddNewModel, showDeployName, showModelFetcher }}
       >
-        <Flexbox
-          gap={16}
-          paddingInline={mobile ? 12 : 0}
-          style={{
-            background: mobile ? cssVar.colorBgContainer : undefined,
-            paddingBottom: 16,
-            paddingTop: 8,
-          }}
-        >
+        <Flexbox gap={16} paddingInline={mobile ? 12 : 0} style={spacing1Style}>
           <ModelTitle
             provider={id}
             showAddNewModel={showAddNewModel}

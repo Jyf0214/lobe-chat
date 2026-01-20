@@ -7,10 +7,18 @@ import urlJoin from 'url-join';
 
 import { useQuery } from '@/hooks/useQuery';
 import { type AssistantMarketSource } from '@/types/discover';
+import { StyleSheet } from '@/utils/styles';
 
 import Title from '../../../../../features/Title';
 import { useDetailContext } from '../../DetailProvider';
 import Item from './Item';
+
+const styles = StyleSheet.create({
+  colored: {
+    color: 'inherit',
+    overflow: 'hidden',
+  },
+});
 
 const Related = memo(() => {
   const { t } = useTranslation('discover');
@@ -45,7 +53,7 @@ const Related = memo(() => {
             { skipNull: true },
           );
           return (
-            <Link key={index} style={{ color: 'inherit', overflow: 'hidden' }} to={link}>
+            <Link key={index} style={styles.colored} to={link}>
               <Item {...item} />
             </Link>
           );

@@ -17,8 +17,16 @@ import { Editor, useEditorState } from '@lobehub/editor/react';
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import type { EditorCanvasProps } from './EditorCanvas';
 import InlineToolbar from './InlineToolbar';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBottom: 64,
+  },
+});
 
 /**
  * Base plugins for the editor (without toolbar)
@@ -151,10 +159,7 @@ const InternalEditor = memo<InternalEditorProps>(
           placeholder={finalPlaceholder}
           plugins={plugins}
           slashOption={slashItems ? { items: slashItems } : undefined}
-          style={{
-            paddingBottom: 64,
-            ...style,
-          }}
+          style={{ ...styles.spacing, ...style }}
           type={'text'}
         />
       </div>

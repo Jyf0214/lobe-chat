@@ -5,8 +5,16 @@ import { useResponsive } from 'antd-style';
 import { type ReactNode, memo } from 'react';
 
 import Footer from '@/features/Setting/Footer';
+import { StyleSheet } from '@/utils/styles';
 
 import SidebarContainer from './SidebarContainer';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'hidden',
+    position: 'relative',
+  },
+});
 
 interface DetailLayoutProps {
   actions?: ReactNode;
@@ -39,7 +47,7 @@ const DetailLayout = memo<DetailLayoutProps>(
       <>
         {header}
         <Flexbox gap={32} horizontal width={'100%'}>
-          <Flexbox flex={1} gap={48} style={{ overflow: 'hidden', position: 'relative' }}>
+          <Flexbox flex={1} gap={48} style={styles.style}>
             {children}
           </Flexbox>
           <SidebarContainer>

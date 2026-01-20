@@ -9,9 +9,16 @@ import AgentSelectionEmpty from '@/features/AgentSelectionEmpty';
 import SkeletonList from '@/features/NavPanel/components/SkeletonList';
 import { useHomeStore } from '@/store/home';
 import { homeAgentListSelectors } from '@/store/home/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import GroupItem from '../List/AgentGroupItem';
 import AgentItem from '../List/AgentItem';
+
+const styles = StyleSheet.create({
+  style: {
+    height: '100%',
+  },
+});
 
 interface ContentProps {
   open: boolean;
@@ -52,10 +59,7 @@ const Content = memo<ContentProps>(({ searchKeyword }) => {
   }
 
   return (
-    <VList
-      bufferSize={typeof window !== 'undefined' ? window.innerHeight : 0}
-      style={{ height: '100%' }}
-    >
+    <VList bufferSize={typeof window !== 'undefined' ? window.innerHeight : 0} style={styles.style}>
       {displayItems.map((item) => (
         <Flexbox key={item.id} paddingBlock={1} paddingInline={4}>
           {item.type === 'group' ? <GroupItem item={item} /> : <AgentItem item={item} />}

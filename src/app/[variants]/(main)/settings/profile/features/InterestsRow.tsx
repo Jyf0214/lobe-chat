@@ -11,8 +11,29 @@ import { INTEREST_AREAS } from '@/app/[variants]/onboarding/config';
 import { fetchErrorNotification } from '@/components/Error/fetchErrorNotification';
 import { useUserStore } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import { labelStyle, rowStyle } from './ProfileRow';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorFillSecondary,
+    borderColor: cssVar.colorFillSecondary,
+  },
+  flexContainer: {
+    flexWrap: 'wrap',
+  },
+  flexContainer1: {
+    flex: 1,
+  },
+  style: {
+    width: 200,
+  },
+  style1: {
+    cursor: 'pointer',
+    fontSize: 13,
+  },
+});
 
 interface InterestsRowProps {
   mobile?: boolean;
@@ -139,10 +160,7 @@ const InterestsRow = ({ mobile }: InterestsRowProps) => {
                 key={interest}
                 onClick={() => toggleInterest(interest)}
                 padding={8}
-                style={{
-                  background: cssVar.colorFillSecondary,
-                  borderColor: cssVar.colorFillSecondary,
-                }}
+                style={styles.colored}
                 variant="outlined"
               >
                 <Text fontSize={13} weight={500}>
@@ -175,7 +193,7 @@ const InterestsRow = ({ mobile }: InterestsRowProps) => {
             onPressEnter={handleAddCustom}
             placeholder={tOnboarding('interests.placeholder')}
             size="small"
-            style={{ width: 200 }}
+            style={styles.style}
             value={customInput}
           />
         )}
@@ -201,7 +219,7 @@ const InterestsRow = ({ mobile }: InterestsRowProps) => {
     >
       {mobile ? (
         interests.length > 0 ? (
-          <Flexbox gap={8} horizontal style={{ flexWrap: 'wrap' }}>
+          <Flexbox gap={8} horizontal style={styles.flexContainer}>
             {interests.map((interest) => (
               <Tag key={interest}>{interest}</Tag>
             ))}
@@ -212,7 +230,7 @@ const InterestsRow = ({ mobile }: InterestsRowProps) => {
       ) : (
         <Flexbox align="center" horizontal justify="space-between">
           {interests.length > 0 ? (
-            <Flexbox gap={8} horizontal style={{ flexWrap: 'wrap' }}>
+            <Flexbox gap={8} horizontal style={styles.flexContainer}>
               {interests.map((interest) => (
                 <Tag key={interest}>{interest}</Tag>
               ))}
@@ -220,7 +238,7 @@ const InterestsRow = ({ mobile }: InterestsRowProps) => {
           ) : (
             <Text>--</Text>
           )}
-          <Text onClick={handleStartEdit} style={{ cursor: 'pointer', fontSize: 13 }}>
+          <Text onClick={handleStartEdit} style={styles.style1}>
             {t('profile.updateInterests')}
           </Text>
         </Flexbox>
@@ -234,7 +252,7 @@ const InterestsRow = ({ mobile }: InterestsRowProps) => {
         <Flexbox align="center" horizontal justify="space-between">
           <Text strong>{t('profile.interests')}</Text>
           {!isEditing && (
-            <Text onClick={handleStartEdit} style={{ cursor: 'pointer', fontSize: 13 }}>
+            <Text onClick={handleStartEdit} style={styles.style1}>
               {t('profile.updateInterests')}
             </Text>
           )}
@@ -247,7 +265,7 @@ const InterestsRow = ({ mobile }: InterestsRowProps) => {
   return (
     <Flexbox gap={24} horizontal style={rowStyle}>
       <Text style={labelStyle}>{t('profile.interests')}</Text>
-      <Flexbox style={{ flex: 1 }}>
+      <Flexbox style={styles.flexContainer1}>
         <AnimatePresence mode="wait">{isEditing ? editingContent : displayContent}</AnimatePresence>
       </Flexbox>
     </Flexbox>

@@ -10,6 +10,18 @@ import { useChatStore } from '@/store/chat';
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/selectors';
 import { HotkeyEnum } from '@/types/hotkey';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBottom: 8,
+  },
+  spacing1: {
+    marginRight: '16px',
+    whiteSpace: 'pre-line',
+    wordBreak: 'break-word',
+  },
+});
 
 const SaveTopic = memo(() => {
   const { t } = useTranslation('chat');
@@ -38,8 +50,8 @@ const SaveTopic = memo(() => {
         open={confirmOpened}
         placement={'top'}
         title={
-          <Flexbox align={'center'} horizontal style={{ marginBottom: 8 }}>
-            <div style={{ marginRight: '16px', whiteSpace: 'pre-line', wordBreak: 'break-word' }}>
+          <Flexbox align={'center'} horizontal style={styles.spacing}>
+            <div style={styles.spacing1}>
               {t(hasTopic ? 'topic.checkOpenNewTopic' : 'topic.checkSaveCurrentMessages')}
             </div>
             <Hotkey keys={hotkey} />

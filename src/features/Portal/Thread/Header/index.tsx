@@ -5,8 +5,15 @@ import { memo } from 'react';
 
 import NavHeader from '@/features/NavHeader';
 import { useChatStore } from '@/store/chat';
+import { StyleSheet } from '@/utils/styles';
 
 import Title from './Title';
+
+const styles = StyleSheet.create({
+  colored: {
+    borderBottom: `1px solid ${cssVar.colorBorderSecondary}`,
+  },
+});
 
 const Header = memo(() => {
   const [hasPortal, portalThreadId, closeThreadPortal, switchThread] = useChatStore((s) => [
@@ -39,9 +46,7 @@ const Header = memo(() => {
         </Flexbox>
       }
       showTogglePanelButton={false}
-      style={{
-        borderBottom: `1px solid ${cssVar.colorBorderSecondary}`,
-      }}
+      style={styles.colored}
     />
   );
 });

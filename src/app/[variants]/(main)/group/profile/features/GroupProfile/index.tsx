@@ -12,10 +12,21 @@ import { useQueryRoute } from '@/hooks/useQueryRoute';
 import { useAgentGroupStore } from '@/store/agentGroup';
 import { agentGroupSelectors } from '@/store/agentGroup/selectors';
 import { useGroupProfileStore } from '@/store/groupProfile';
+import { StyleSheet } from '@/utils/styles';
 
 import AutoSaveHint from '../Header/AutoSaveHint';
 import GroupPublishButton from '../Header/GroupPublishButton';
 import GroupHeader from './GroupHeader';
+
+const styles = StyleSheet.create({
+  spacing: {
+    cursor: 'default',
+    marginBottom: 12,
+  },
+  spacing1: {
+    marginTop: 16,
+  },
+});
 
 const GroupProfile = memo(() => {
   const { t } = useTranslation(['setting', 'chat']);
@@ -49,7 +60,7 @@ const GroupProfile = memo(() => {
         onClick={(e) => {
           e.stopPropagation();
         }}
-        style={{ cursor: 'default', marginBottom: 12 }}
+        style={styles.spacing}
       >
         <Flexbox height={66} width={'100%'}>
           <Flexbox paddingBlock={12}>
@@ -59,13 +70,7 @@ const GroupProfile = memo(() => {
         {/* Header: Group Avatar + Title */}
         <GroupHeader />
         {/* Start Conversation Button */}
-        <Flexbox
-          align={'center'}
-          gap={8}
-          horizontal
-          justify={'flex-start'}
-          style={{ marginTop: 16 }}
-        >
+        <Flexbox align={'center'} gap={8} horizontal justify={'flex-start'} style={styles.spacing1}>
           <Button
             icon={PlayIcon}
             onClick={() => {

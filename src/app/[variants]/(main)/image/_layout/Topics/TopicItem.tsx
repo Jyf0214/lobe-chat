@@ -12,6 +12,19 @@ import { globalGeneralSelectors } from '@/store/global/selectors';
 import { useImageStore } from '@/store/image';
 import { generationTopicSelectors } from '@/store/image/slices/generationTopic/selectors';
 import { type ImageGenerationTopic } from '@/types/generation';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 'none',
+  },
+  style: {
+    overflow: 'hidden',
+  },
+  style1Base: {
+    cursor: 'pointer',
+  },
+});
 
 const formatTime = (date: Date, locale: string) => {
   return new Intl.DateTimeFormat(locale, {
@@ -38,6 +51,11 @@ const TopicItem = memo<TopicItemProps>(({ topic, showMoreInfo, style }) => {
   const activeTopicId = useImageStore(generationTopicSelectors.activeGenerationTopicId);
 
   const isActive = activeTopicId === topic.id;
+
+  const style1 = {
+    ...styles.style1Base,
+    ...style,
+  };
 
   const handleClick = () => {
     switchGenerationTopic(topic.id);
@@ -69,16 +87,9 @@ const TopicItem = memo<TopicItemProps>(({ topic, showMoreInfo, style }) => {
       gap={16}
       horizontal
       justify={'space-between'}
-      style={{
-        overflow: 'hidden',
-      }}
+      style={styles.style}
     >
-      <Flexbox
-        flex={1}
-        style={{
-          overflow: 'hidden',
-        }}
-      >
+      <Flexbox flex={1} style={styles.style}>
         <Text ellipsis fontSize={14} weight={500}>
           {topic.title || t('topic.untitled')}
         </Text>
@@ -107,10 +118,7 @@ const TopicItem = memo<TopicItemProps>(({ topic, showMoreInfo, style }) => {
         horizontal
         justify={'center'}
         onClick={handleClick}
-        style={{
-          cursor: 'pointer',
-          ...style,
-        }}
+        style={style1}
         width={'100%'}
       >
         <Avatar
@@ -120,9 +128,7 @@ const TopicItem = memo<TopicItemProps>(({ topic, showMoreInfo, style }) => {
           loading={isLoading}
           shape="square"
           size={48}
-          style={{
-            flex: 'none',
-          }}
+          style={styles.flexContainer}
         />
         {showMoreInfo && tooltipContent}
       </Flexbox>

@@ -8,6 +8,20 @@ import Balancer from 'react-wrap-balancer';
 import { GITHUB_ISSUES } from '@/const/url';
 import { githubService } from '@/services/github';
 import { type ErrorShape } from '@/types/importer';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  spacing: {
+    paddingBlock: 24,
+    width: 450,
+  },
+  style: {
+    textAlign: 'start',
+  },
+});
 
 interface ErrorProps {
   error?: ErrorShape;
@@ -19,14 +33,14 @@ const Error = memo<ErrorProps>(({ error, onClick }) => {
   return (
     <Result
       extra={
-        <Flexbox gap={12} style={{ textAlign: 'start' }}>
+        <Flexbox gap={12} style={styles.style}>
           <Alert
             extra={
               <Highlighter actionIconSize={'small'} language={'json'}>
                 {JSON.stringify(error, null, 2)}
               </Highlighter>
             }
-            style={{ flex: 1 }}
+            style={styles.flexContainer}
             title={error?.message}
             type={'error'}
           />
@@ -35,7 +49,7 @@ const Error = memo<ErrorProps>(({ error, onClick }) => {
       }
       icon={<Icon icon={ShieldAlert} />}
       status={'error'}
-      style={{ paddingBlock: 24, width: 450 }}
+      style={styles.spacing}
       subTitle={
         <Balancer>
           <Trans i18nKey="importModal.error.desc" ns={'common'}>

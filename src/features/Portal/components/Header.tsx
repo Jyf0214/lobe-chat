@@ -8,6 +8,14 @@ import { type ReactNode, memo } from 'react';
 import NavHeader from '@/features/NavHeader';
 import { useChatStore } from '@/store/chat';
 import { chatPortalSelectors } from '@/store/chat/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    paddingBlock: 8,
+    paddingInline: 8,
+  },
+});
 
 const Header = memo<{ title: ReactNode }>(({ title }) => {
   const [canGoBack, goBack, clearPortalStack] = useChatStore((s) => [
@@ -36,7 +44,7 @@ const Header = memo<{ title: ReactNode }>(({ title }) => {
         />
       }
       showTogglePanelButton={false}
-      style={{ paddingBlock: 8, paddingInline: 8 }}
+      style={styles.spacing}
       styles={{
         left: {
           marginLeft: canGoBack ? 0 : 6,

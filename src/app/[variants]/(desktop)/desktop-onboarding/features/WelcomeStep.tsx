@@ -11,6 +11,17 @@ import { useTranslation } from 'react-i18next';
 
 import { ProductLogo } from '@/components/Branding';
 import { useUserStore } from '@/store/user';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  spacing: {
+    marginBottom: 16,
+  },
+  spacing1: {
+    marginBlock: 8,
+    maxWidth: 240,
+  },
+});
 
 interface WelcomeStepProps {
   onNext: () => void;
@@ -46,7 +57,7 @@ const WelcomeStep = memo<WelcomeStepProps>(({ onNext }) => {
   return (
     <Flexbox gap={16}>
       <ProductLogo size={64} />
-      <Flexbox style={{ marginBottom: 16 }}>
+      <Flexbox style={styles.spacing}>
         <Text as={'h1'} fontSize={28} weight={'bold'}>
           <TypewriterEffect
             cursorCharacter={<LoadingDots size={28} variant={'pulse'} />}
@@ -72,7 +83,7 @@ const WelcomeStep = memo<WelcomeStepProps>(({ onNext }) => {
         items={[
           {
             description: (
-              <Text as={'p'} color={cssVar.colorTextSecondary} style={{ marginBottom: 16 }}>
+              <Text as={'p'} color={cssVar.colorTextSecondary} style={styles.spacing}>
                 {t('telemetry.rows.create.desc')}
               </Text>
             ),
@@ -85,7 +96,7 @@ const WelcomeStep = memo<WelcomeStepProps>(({ onNext }) => {
           },
           {
             description: (
-              <Text as={'p'} color={cssVar.colorTextSecondary} style={{ marginBottom: 16 }}>
+              <Text as={'p'} color={cssVar.colorTextSecondary} style={styles.spacing}>
                 {t('telemetry.rows.collaborate.desc')}
               </Text>
             ),
@@ -111,15 +122,7 @@ const WelcomeStep = memo<WelcomeStepProps>(({ onNext }) => {
           },
         ]}
       />
-      <Button
-        onClick={handleNext}
-        size={'large'}
-        style={{
-          marginBlock: 8,
-          maxWidth: 240,
-        }}
-        type="primary"
-      >
+      <Button onClick={handleNext} size={'large'} style={styles.spacing1} type="primary">
         {t('telemetry.next')}
       </Button>
     </Flexbox>

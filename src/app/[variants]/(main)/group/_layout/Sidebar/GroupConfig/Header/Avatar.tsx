@@ -5,6 +5,13 @@ import { memo } from 'react';
 
 import SupervisorAvatar from '@/app/[variants]/(main)/group/features/GroupAvatar';
 import { useOpenChatSettings } from '@/hooks/useInterceptingRoutes';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    overflow: 'hidden',
+  },
+});
 
 const HeaderAvatar = memo<{ size?: number }>(() => {
   const openChatSettings = useOpenChatSettings();
@@ -19,9 +26,7 @@ const HeaderAvatar = memo<{ size?: number }>(() => {
         openChatSettings();
       }}
       padding={2}
-      style={{
-        overflow: 'hidden',
-      }}
+      style={styles.style}
       variant={'borderless'}
       width={32}
     >

@@ -3,7 +3,16 @@ import { cssVar } from 'antd-style';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StyleSheet } from '@/utils/styles';
+
 import { useDetailContext } from '../../DetailProvider';
+
+const styles = StyleSheet.create({
+  spacing: {
+    color: cssVar.colorTextSecondary,
+    margin: 0,
+  },
+});
 
 const Summary = memo(() => {
   const { description, summary } = useDetailContext();
@@ -17,16 +26,7 @@ const Summary = memo(() => {
       expandIconPlacement={'end'}
       items={[
         {
-          children: (
-            <p
-              style={{
-                color: cssVar.colorTextSecondary,
-                margin: 0,
-              }}
-            >
-              {displayDescription}
-            </p>
-          ),
+          children: <p style={styles.spacing}>{displayDescription}</p>,
           key: 'summary',
           label: t('groupAgents.details.summary.title', {
             defaultValue: 'What can you use this group for?',

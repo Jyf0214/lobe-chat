@@ -7,6 +7,16 @@ import { useAgentStore } from '@/store/agent';
 import { useGlobalStore } from '@/store/global';
 import { globalGeneralSelectors } from '@/store/global/selectors';
 import { useHomeStore } from '@/store/home';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  style: {
+    width: 320,
+  },
+});
 
 interface EditingProps {
   avatar?: string;
@@ -55,7 +65,7 @@ const Editing = memo<EditingProps>(({ id, title, avatar, toggleEditing }) => {
   return (
     <Popover
       content={
-        <Flexbox gap={4} horizontal onClick={(e) => e.stopPropagation()} style={{ width: 320 }}>
+        <Flexbox gap={4} horizontal onClick={(e) => e.stopPropagation()} style={styles.style}>
           <EmojiPicker
             customRender={(avatarValue) => (
               <Block
@@ -83,7 +93,7 @@ const Editing = memo<EditingProps>(({ id, title, avatar, toggleEditing }) => {
               handleUpdate();
               toggleEditing(false);
             }}
-            style={{ flex: 1 }}
+            style={styles.flexContainer}
           />
         </Flexbox>
       }

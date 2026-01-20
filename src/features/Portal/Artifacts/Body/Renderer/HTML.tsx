@@ -1,5 +1,13 @@
 import { memo, useEffect, useRef } from 'react';
 
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    border: 'none',
+  },
+});
+
 interface HTMLRendererProps {
   height?: string;
   htmlContent: string;
@@ -7,6 +15,12 @@ interface HTMLRendererProps {
 }
 const HTMLRenderer = memo<HTMLRendererProps>(({ htmlContent, width = '100%', height = '100%' }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const styleObject = {
+    ...styles.style,
+    height,
+    width,
+  };
 
   useEffect(() => {
     if (!iframeRef.current) return;
@@ -19,7 +33,7 @@ const HTMLRenderer = memo<HTMLRendererProps>(({ htmlContent, width = '100%', hei
     doc.close();
   }, [htmlContent]);
 
-  return <iframe ref={iframeRef} style={{ border: 'none', height, width }} title="html-renderer" />;
+  return <iframe ref={iframeRef} style={styleObject} title="html-renderer" />;
 });
 
 export default HTMLRenderer;

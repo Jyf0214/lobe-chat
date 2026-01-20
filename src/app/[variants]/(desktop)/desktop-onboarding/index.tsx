@@ -7,6 +7,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import Loading from '@/components/Loading/BrandTextLoading';
 import { electronSystemService } from '@/services/electron/system';
+import { StyleSheet } from '@/utils/styles';
 
 import OnboardingContainer from './_layout';
 import DataModeStep from './features/DataModeStep';
@@ -20,6 +21,14 @@ import {
   setDesktopOnboardingScreen,
 } from './storage';
 import { DesktopOnboardingScreen, isDesktopOnboardingScreen } from './types';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    maxWidth: 560,
+    minHeight: '100%',
+    width: '100%',
+  },
+});
 
 const DesktopOnboardingPage = memo(() => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -206,7 +215,7 @@ const DesktopOnboardingPage = memo(() => {
 
   return (
     <OnboardingContainer>
-      <Flexbox gap={24} style={{ maxWidth: 560, minHeight: '100%', width: '100%' }}>
+      <Flexbox gap={24} style={styles.fullWidth}>
         <Suspense
           fallback={
             <Flexbox gap={8}>

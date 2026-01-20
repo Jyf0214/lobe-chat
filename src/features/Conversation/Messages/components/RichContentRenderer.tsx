@@ -2,6 +2,14 @@ import { Flexbox, Image, Markdown } from '@lobehub/ui';
 import { memo } from 'react';
 
 import { type MessageContentPart } from '@/types/index';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    borderRadius: 8,
+    maxWidth: '100%',
+  },
+});
 
 interface RichContentRendererProps {
   parts: MessageContentPart[];
@@ -20,9 +28,7 @@ export const RichContentRenderer = memo<RichContentRendererProps>(({ parts }) =>
         }
 
         if (part.type === 'image') {
-          return (
-            <Image key={index} src={part.image} style={{ borderRadius: 8, maxWidth: '100%' }} />
-          );
+          return <Image key={index} src={part.image} style={styles.style} />;
         }
 
         return null;

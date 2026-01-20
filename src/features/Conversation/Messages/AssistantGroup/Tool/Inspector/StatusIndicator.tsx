@@ -7,6 +7,13 @@ import { useTranslation } from 'react-i18next';
 
 import NeuralNetworkLoading from '@/components/NeuralNetworkLoading';
 import { LOADING_FLAT } from '@/const/message';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    fontSize: 12,
+  },
+});
 
 interface StatusIndicatorProps {
   intervention?: ToolIntervention;
@@ -55,9 +62,7 @@ const StatusIndicator = memo<StatusIndicatorProps>(({ intervention, result }) =>
       height={24}
       horizontal
       justify={'center'}
-      style={{
-        fontSize: 12,
-      }}
+      style={styles.style}
       variant={'outlined'}
       width={24}
     >

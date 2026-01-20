@@ -9,9 +9,18 @@ import StatisticCard from '@/components/StatisticCard';
 import TitleWithPercentage from '@/components/StatisticCard/TitleWithPercentage';
 import { type UsageLog } from '@/types/usage/usageRecord';
 import { formatNumber } from '@/utils/format';
+import { StyleSheet } from '@/utils/styles';
 
 import { GroupBy, type UsageChartProps } from '../../../../types';
 import ModelTable from './ModelTable';
+
+const styles = StyleSheet.create({
+  spacing: {
+    border: `2px solid ${cssVar.colorBgContainer}`,
+    boxSizing: 'content-box',
+    marginRight: -8,
+  },
+});
 
 const computeList = (data: UsageLog[], groupBy: GroupBy): string[] => {
   if (!data || data?.length === 0) return [];
@@ -65,30 +74,14 @@ const ActiveModels = memo<UsageChartProps>(({ data, isLoading, groupBy }) => {
             <Flexbox horizontal wrap={'wrap'}>
               {iconList.map((item, i) => {
                 if (!item) return null;
+                const iconStyle = {
+                  ...styles.spacing,
+                  zIndex: i + 1,
+                };
                 return groupBy === GroupBy.Model ? (
-                  <ModelIcon
-                    key={item}
-                    model={item}
-                    size={18}
-                    style={{
-                      border: `2px solid ${cssVar.colorBgContainer}`,
-                      boxSizing: 'content-box',
-                      marginRight: -8,
-                      zIndex: i + 1,
-                    }}
-                  />
+                  <ModelIcon key={item} model={item} size={18} style={iconStyle} />
                 ) : (
-                  <ProviderIcon
-                    key={item}
-                    provider={item}
-                    size={18}
-                    style={{
-                      border: `2px solid ${cssVar.colorBgContainer}`,
-                      boxSizing: 'content-box',
-                      marginRight: -8,
-                      zIndex: i + 1,
-                    }}
-                  />
+                  <ProviderIcon key={item} provider={item} size={18} style={iconStyle} />
                 );
               })}
             </Flexbox>

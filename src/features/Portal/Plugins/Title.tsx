@@ -9,6 +9,13 @@ import { useChatStore } from '@/store/chat';
 import { chatPortalSelectors } from '@/store/chat/selectors';
 import { pluginHelpers, useToolStore } from '@/store/tool';
 import { toolSelectors } from '@/store/tool/selectors';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  style: {
+    fontSize: 16,
+  },
+});
 
 const Title = () => {
   const [closeToolUI, toolUIIdentifier = ''] = useChatStore((s) => [
@@ -25,7 +32,7 @@ const Title = () => {
       <Flexbox align={'center'} gap={8} horizontal>
         <ActionIcon icon={ArrowLeft} onClick={() => closeToolUI()} size={'small'} />
         <Icon icon={Globe} size={16} />
-        <Text style={{ fontSize: 16 }} type={'secondary'}>
+        <Text style={styles.style} type={'secondary'}>
           {t('search.title')}
         </Text>
       </Flexbox>
@@ -35,7 +42,7 @@ const Title = () => {
     <Flexbox align={'center'} gap={4} horizontal>
       <ActionIcon icon={ArrowLeft} onClick={() => closeToolUI()} size={'small'} />
       <PluginAvatar identifier={toolUIIdentifier} size={28} />
-      <Text style={{ fontSize: 16 }} type={'secondary'}>
+      <Text style={styles.style} type={'secondary'}>
         {pluginTitle}
       </Text>
     </Flexbox>

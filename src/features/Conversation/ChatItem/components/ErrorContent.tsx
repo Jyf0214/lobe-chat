@@ -5,8 +5,17 @@ import { Suspense, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useConversationStore } from '@/features/Conversation';
+import { StyleSheet } from '@/utils/styles';
 
 import { type ChatItemProps } from '../type';
+
+const styles = StyleSheet.create({
+  fullWidth: {
+    overflow: 'hidden',
+    position: 'relative',
+    width: '100%',
+  },
+});
 
 export interface ErrorContentProps {
   customErrorRender?: ChatItemProps['customErrorRender'];
@@ -26,6 +35,11 @@ const ErrorContent = memo<ErrorContentProps>(({ customErrorRender, error, id, on
       <Suspense fallback={<Skeleton.Button active block />}>{customErrorRender(error)}</Suspense>
     );
   }
+
+  const fullWidthStyle = {
+    ...styles.fullWidth,
+    ...error?.style,
+  };
 
   return (
     <Alert
@@ -54,12 +68,7 @@ const ErrorContent = memo<ErrorContentProps>(({ customErrorRender, error, id, on
           deleteMessage(id);
         }
       }}
-      style={{
-        overflow: 'hidden',
-        position: 'relative',
-        width: '100%',
-        ...error.style,
-      }}
+      style={fullWidthStyle}
       title={error.message}
     />
   );

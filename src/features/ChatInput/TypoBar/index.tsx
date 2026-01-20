@@ -23,6 +23,15 @@ import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useChatInputStore } from '@/features/ChatInput/store';
+import { StyleSheet } from '@/utils/styles';
+
+const styles = StyleSheet.create({
+  colored: {
+    background: cssVar.colorFillQuaternary,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+  },
+});
 
 const TypoBar = memo(() => {
   const { t } = useTranslation('editor');
@@ -125,16 +134,7 @@ const TypoBar = memo(() => {
     [editorState],
   );
 
-  return (
-    <ChatInputActionBar
-      left={<ChatInputActions items={items} />}
-      style={{
-        background: cssVar.colorFillQuaternary,
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
-      }}
-    />
-  );
+  return <ChatInputActionBar left={<ChatInputActions items={items} />} style={styles.colored} />;
 });
 
 TypoBar.displayName = 'TypoBar';

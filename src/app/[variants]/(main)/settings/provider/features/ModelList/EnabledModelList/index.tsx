@@ -6,9 +6,20 @@ import { useTranslation } from 'react-i18next';
 
 import { useAiInfraStore } from '@/store/aiInfra';
 import { aiModelSelectors } from '@/store/aiInfra/selectors';
+import { StyleSheet } from '@/utils/styles';
 
 import ModelItem from '../ModelItem';
 import SortModelModal from '../SortModelModal';
+
+const styles = StyleSheet.create({
+  spacing: {
+    fontSize: 12,
+    marginTop: 8,
+  },
+  style: {
+    fontSize: 12,
+  },
+});
 
 interface EnabledModelListProps {
   activeTab: string;
@@ -34,7 +45,7 @@ const EnabledModelList = ({ activeTab }: EnabledModelListProps) => {
   return (
     <>
       <Flexbox horizontal justify={'space-between'}>
-        <Text style={{ fontSize: 12, marginTop: 8 }} type={'secondary'}>
+        <Text style={styles.spacing} type={'secondary'}>
           {t('providerModels.list.enabled')}
         </Text>
         {!isEmpty && (
@@ -79,13 +90,13 @@ const EnabledModelList = ({ activeTab }: EnabledModelListProps) => {
 
       {isEmpty ? (
         <Center padding={12}>
-          <Text style={{ fontSize: 12 }} type={'secondary'}>
+          <Text style={styles.style} type={'secondary'}>
             {t('providerModels.list.enabledEmpty')}
           </Text>
         </Center>
       ) : isCurrentTabEmpty ? (
         <Center padding={12}>
-          <Text style={{ fontSize: 12 }} type={'secondary'}>
+          <Text style={styles.style} type={'secondary'}>
             {t('providerModels.list.noModelsInCategory')}
           </Text>
         </Center>

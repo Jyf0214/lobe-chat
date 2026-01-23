@@ -4,12 +4,13 @@ import { ActionIcon, Block, DropdownMenu, Flexbox, Icon, Modal } from '@lobehub/
 import { App, Button } from 'antd';
 import isEqual from 'fast-deep-equal';
 import { MoreVerticalIcon, Plus, Trash2 } from 'lucide-react';
-import React, { memo, useState } from 'react';
+import React, { Suspense, memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import PluginAvatar from '@/components/Plugins/PluginAvatar';
-import MCPInstallProgress from '@/features/MCP/MCPInstallProgress';
 import McpDetail from '@/features/MCP/MCPDetail';
+import McpDetailLoading from '@/features/MCP/MCPDetail/Loading';
+import MCPInstallProgress from '@/features/MCP/MCPInstallProgress';
 import { useMarketAuth } from '@/layout/AuthProvider/MarketAuth';
 import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
@@ -17,10 +18,9 @@ import { useToolStore } from '@/store/tool';
 import { mcpStoreSelectors, pluginSelectors } from '@/store/tool/selectors';
 import { type DiscoverMcpItem } from '@/types/discover';
 
-import { useItemStyles } from '../style';
+import { itemStyles } from '../style';
 
 const Item = memo<DiscoverMcpItem>(({ name, description, icon, identifier }) => {
-  const { styles } = useItemStyles();
   const { t } = useTranslation('plugin');
   const { modal } = App.useApp();
   const [detailOpen, setDetailOpen] = useState(false);
@@ -114,7 +114,7 @@ const Item = memo<DiscoverMcpItem>(({ name, description, icon, identifier }) => 
 
   return (
     <>
-      <Flexbox className={styles.container} gap={0}>
+      <Flexbox className={itemStyles.container} gap={0}>
         <Block
           align={'center'}
           gap={12}
@@ -127,8 +127,8 @@ const Item = memo<DiscoverMcpItem>(({ name, description, icon, identifier }) => 
         >
           <PluginAvatar avatar={icon} size={40} />
           <Flexbox flex={1} gap={4} style={{ minWidth: 0, overflow: 'hidden' }}>
-            <span className={styles.title}>{name}</span>
-            {description && <span className={styles.description}>{description}</span>}
+            <span className={itemStyles.title}>{name}</span>
+            {description && <span className={itemStyles.description}>{description}</span>}
           </Flexbox>
           <div onClick={(e) => e.stopPropagation()}>{renderAction()}</div>
         </Block>
@@ -147,7 +147,9 @@ const Item = memo<DiscoverMcpItem>(({ name, description, icon, identifier }) => 
         title={t('dev.title.skillDetails')}
         width={800}
       >
-        <McpDetail identifier={identifier} noSettings />
+        <Suspense fallback={<McpDetailLoading />}>
+          <McpDetail identifier={identifier} noSettings />
+        </Suspense>
       </Modal>
     </>
   );

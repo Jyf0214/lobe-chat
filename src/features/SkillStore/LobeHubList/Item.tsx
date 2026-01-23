@@ -8,7 +8,7 @@ import { Loader2, MoreVerticalIcon, Plus, Unplug } from 'lucide-react';
 import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useItemStyles } from '../style';
+import { itemStyles } from '../style';
 import { useSkillConnect } from './useSkillConnect';
 
 interface ItemProps {
@@ -25,7 +25,6 @@ interface ItemProps {
 const Item = memo<ItemProps>(
   ({ description, icon, identifier, label, onOpenDetail, serverName, type }) => {
     const { t } = useTranslation('setting');
-    const { styles } = useItemStyles();
     const { modal } = App.useApp();
 
     const { handleConnect, handleDisconnect, isConnected, isConnecting } = useSkillConnect({
@@ -91,7 +90,7 @@ const Item = memo<ItemProps>(
     return (
       <Block
         align={'center'}
-        className={styles.container}
+        className={itemStyles.container}
         gap={12}
         horizontal
         onClick={onOpenDetail}
@@ -102,9 +101,9 @@ const Item = memo<ItemProps>(
       >
         {renderIcon()}
         <Flexbox flex={1} gap={4} style={{ minWidth: 0, overflow: 'hidden' }}>
-          <span className={styles.title}>{label}</span>
+          <span className={itemStyles.title}>{label}</span>
           {localizedDescription && (
-            <span className={styles.description}>{localizedDescription}</span>
+            <span className={itemStyles.description}>{localizedDescription}</span>
           )}
         </Flexbox>
         <div onClick={(e) => e.stopPropagation()}>{renderAction()}</div>

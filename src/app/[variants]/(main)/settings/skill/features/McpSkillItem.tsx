@@ -1,20 +1,22 @@
 'use client';
 
 import { Flexbox, Modal } from '@lobehub/ui';
-import { createStyles } from 'antd-style';
-import { memo, useState } from 'react';
+import { createStaticStyles, cssVar } from 'antd-style';
+import { Suspense, memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import PluginAvatar from '@/components/Plugins/PluginAvatar';
 import PluginTag from '@/components/Plugins/PluginTag';
-import PluginDetailModal from '@/features/PluginDetailModal';
-import Actions from './Actions';
 import McpDetail from '@/features/MCP/MCPDetail';
+import McpDetailLoading from '@/features/MCP/MCPDetail/Loading';
+import PluginDetailModal from '@/features/PluginDetailModal';
 import { useToolStore } from '@/store/tool';
 import { pluginSelectors } from '@/store/tool/selectors';
 import { type LobeToolType } from '@/types/tool/tool';
 
-const useStyles = createStyles(({ css, token }) => ({
+import Actions from './Actions';
+
+const styles = createStaticStyles(({ css }) => ({
   container: css`
     padding-block: 12px;
     padding-inline: 0;
@@ -29,16 +31,16 @@ const useStyles = createStyles(({ css, token }) => ({
     height: 48px;
     border-radius: 12px;
 
-    background: ${token.colorFillTertiary};
+    background: ${cssVar.colorFillTertiary};
   `,
   title: css`
     cursor: pointer;
     font-size: 15px;
     font-weight: 500;
-    color: ${token.colorText};
+    color: ${cssVar.colorText};
 
     &:hover {
-      color: ${token.colorPrimary};
+      color: ${cssVar.colorPrimary};
     }
   `,
 }));
@@ -54,7 +56,6 @@ interface McpSkillItemProps {
 
 const McpSkillItem = memo<McpSkillItemProps>(
   ({ identifier, title, avatar, type, runtimeType, author }) => {
-    const { styles } = useStyles();
     const { t } = useTranslation('plugin');
     const isMCP = runtimeType === 'mcp';
     const isCustomPlugin = type === 'customPlugin';
@@ -94,7 +95,9 @@ const McpSkillItem = memo<McpSkillItemProps>(
             title={t('dev.title.skillDetails')}
             width={800}
           >
-            <McpDetail identifier={identifier} noSettings />
+            <Suspense fallback={<McpDetailLoading />}>
+              <McpDetail identifier={identifier} noSettings />
+            </Suspense>
           </Modal>
         )}
         {isCustomPlugin && (

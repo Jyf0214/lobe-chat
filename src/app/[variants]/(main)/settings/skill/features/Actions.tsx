@@ -6,13 +6,14 @@ import { useTranslation } from 'react-i18next';
 
 import McpSettingsModal from '@/features/MCP/MCPSettings/McpSettingsModal';
 import PluginDetailModal from '@/features/PluginDetailModal';
-import EditCustomPlugin from './EditCustomPlugin';
 import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
 import { useServerConfigStore } from '@/store/serverConfig';
 import { pluginHelpers, useToolStore } from '@/store/tool';
 import { pluginSelectors, pluginStoreSelectors } from '@/store/tool/selectors';
 import { type LobeToolType } from '@/types/tool/tool';
+
+import EditCustomPlugin from './EditCustomPlugin';
 
 interface ActionsProps {
   identifier: string;
@@ -46,9 +47,6 @@ const Actions = memo<ActionsProps>(({ identifier, type, isMCP }) => {
   const [showModal, setModal] = useState(false);
   const [mcpSettingsOpen, setMcpSettingsOpen] = useState(false);
 
-  // 自定义插件（包括自定义 MCP）使用 EditCustomPlugin
-  // 社区 MCP 使用 McpSettingsModal
-  // 传统插件使用 PluginDetailModal
   const isCommunityMCP = !isCustomPlugin && isMCP;
   const showConfigureButton = isCustomPlugin || isMCP || hasSettings;
 

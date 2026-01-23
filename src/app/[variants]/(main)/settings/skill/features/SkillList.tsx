@@ -11,7 +11,7 @@ import {
   getLobehubSkillProviderById,
 } from '@lobechat/const';
 import { Divider } from 'antd';
-import { createStyles } from 'antd-style';
+import { createStaticStyles, cssVar } from 'antd-style';
 import isEqual from 'fast-deep-equal';
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -29,11 +29,11 @@ import { KlavisServerStatus } from '@/store/tool/slices/klavisStore';
 import { LobehubSkillStatus } from '@/store/tool/slices/lobehubSkillStore/types';
 import { type LobeToolType } from '@/types/tool/tool';
 
-import McpSkillItem from './McpSkillItem';
 import KlavisSkillItem from './KlavisSkillItem';
 import LobehubSkillItem from './LobehubSkillItem';
+import McpSkillItem from './McpSkillItem';
 
-const useStyles = createStyles(({ css, token }) => ({
+const styles = createStaticStyles(({ css }) => ({
   container: css`
     display: flex;
     flex-direction: column;
@@ -41,18 +41,17 @@ const useStyles = createStyles(({ css, token }) => ({
   `,
   description: css`
     margin-block-end: 8px;
-    color: ${token.colorTextSecondary};
+    color: ${cssVar.colorTextSecondary};
   `,
   empty: css`
     padding: 24px;
-    color: ${token.colorTextTertiary};
+    color: ${cssVar.colorTextTertiary};
     text-align: center;
   `,
 }));
 
 const SkillList = memo(() => {
   const { t } = useTranslation('setting');
-  const { styles } = useStyles();
 
   const isLobehubSkillEnabled = useServerConfigStore(serverConfigSelectors.enableLobehubSkill);
   const isKlavisEnabled = useServerConfigStore(serverConfigSelectors.enableKlavis);
@@ -90,16 +89,51 @@ const SkillList = memo(() => {
 
     // If RECOMMENDED_SKILLS is configured, use it to build the list
     if (RECOMMENDED_SKILLS.length > 0) {
+      const addedLobehubIds = new Set<string>();
+      const addedKlavisIds = new Set<string>();
+
       for (const skill of RECOMMENDED_SKILLS) {
         if (skill.type === RecommendedSkillType.Lobehub && isLobehubSkillEnabled) {
           const provider = getLobehubSkillProviderById(skill.id);
           if (provider) {
             integrationItems.push({ provider, type: 'lobehub' });
+            addedLobehubIds.add(skill.id);
           }
         } else if (skill.type === RecommendedSkillType.Klavis && isKlavisEnabled) {
           const serverType = getKlavisServerByServerIdentifier(skill.id);
           if (serverType) {
             integrationItems.push({ serverType, type: 'klavis' });
+            addedKlavisIds.add(skill.id);
+          }
+        }
+      }
+
+      // Also add connected Lobehub skills that are not in RECOMMENDED_SKILLS
+      if (isLobehubSkillEnabled) {
+        for (const server of allLobehubSkillServers) {
+          if (
+            server.status === LobehubSkillStatus.CONNECTED &&
+            !addedLobehubIds.has(server.identifier)
+          ) {
+            const provider = getLobehubSkillProviderById(server.identifier);
+            if (provider) {
+              integrationItems.push({ provider, type: 'lobehub' });
+            }
+          }
+        }
+      }
+
+      // Also add connected Klavis skills that are not in RECOMMENDED_SKILLS
+      if (isKlavisEnabled) {
+        for (const server of allKlavisServers) {
+          if (
+            server.status === KlavisServerStatus.CONNECTED &&
+            !addedKlavisIds.has(server.identifier)
+          ) {
+            const serverType = getKlavisServerByServerIdentifier(server.identifier);
+            if (serverType) {
+              integrationItems.push({ serverType, type: 'klavis' });
+            }
           }
         }
       }

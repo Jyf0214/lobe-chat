@@ -53,6 +53,7 @@ const ProfileEditor = memo(() => {
           style={{ marginBottom: 12 }}
         >
           <ModelSelect
+            listHeight={400}
             onChange={updateConfig}
             value={{
               model: config.model,

@@ -25,7 +25,7 @@ export const SkillStore = memo<SkillStoreProps>(({ open, setOpen }) => {
         body: { overflow: 'hidden', padding: 0 },
       }}
       title={t('skillStore.title')}
-      width={'min(80%, 800px)'}
+      width={'min(90%, 900px)'}
     >
       <Content />
     </Modal>

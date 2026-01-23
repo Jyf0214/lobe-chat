@@ -551,6 +551,7 @@ const AgentTool = memo<AgentToolProps>(
                 },
               }}
               minWidth={400}
+              modal={false}
               placement={'bottomLeft'}
               popupRender={(menu) => (
                 <Flexbox className={styles.dropdown} style={{ maxHeight: 500 }}>

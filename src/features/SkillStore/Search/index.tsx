@@ -30,13 +30,14 @@ export const Search = memo<SearchProps>(({ activeTab, onLobeHubSearch }) => {
           onSearch={(keywords: string) => {
             if (activeTab === SkillStoreTab.Community) {
               useToolStore.setState({ mcpSearchKeywords: keywords, searchLoading: true });
-            }else if (isCustomTab) {
+            } else if (isCustomTab) {
               useToolStore.setState({ customPluginSearchKeywords: keywords });
             } else {
               onLobeHubSearch(keywords);
             }
           }}
           placeholder={t('skillStore.search')}
+          variant="filled"
         />
       </Flexbox>
     </Flexbox>

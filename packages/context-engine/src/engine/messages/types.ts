@@ -57,8 +57,8 @@ export type VariableGenerators = Record<string, () => string>;
 export interface FileContextConfig {
   /** Whether to enable file context injection */
   enabled: boolean;
-  /** Whether to include file URLs (desktop typically uses false) */
-  includeFileUrl: boolean;
+  /** Whether to include file URLs in file context prompts (default: true) */
+  includeFileUrl?: boolean;
 }
 
 /**

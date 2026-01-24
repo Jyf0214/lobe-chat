@@ -67,8 +67,8 @@ export const serverMessagesEngine = async ({
     // Agent configuration
     enableHistoryCount,
 
-    // File context configuration (server always includes file URLs)
-    fileContext: { enabled: true, includeFileUrl: true },
+    // File context configuration
+    fileContext: { enabled: true },
 
     formatHistorySummary,
 

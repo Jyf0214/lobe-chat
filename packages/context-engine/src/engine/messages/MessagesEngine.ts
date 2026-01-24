@@ -298,7 +298,7 @@ export class MessagesEngine {
 
       // 22. Message content processing (image encoding, etc.)
       new MessageContentProcessor({
-        fileContext: fileContext || { enabled: true, includeFileUrl: true },
+        fileContext: fileContext || { enabled: true },
         isCanUseVideo: capabilities?.isCanUseVideo || (() => false),
         isCanUseVision: capabilities?.isCanUseVision || (() => true),
         model,

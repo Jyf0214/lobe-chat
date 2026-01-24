@@ -1,7 +1,7 @@
 import { AgentBuilderIdentifier } from '@lobechat/builtin-tool-agent-builder';
 import { GroupAgentBuilderIdentifier } from '@lobechat/builtin-tool-group-agent-builder';
 import { GTDIdentifier } from '@lobechat/builtin-tool-gtd';
-import { KLAVIS_SERVER_TYPES, LOBEHUB_SKILL_PROVIDERS, isDesktop } from '@lobechat/const';
+import { KLAVIS_SERVER_TYPES, LOBEHUB_SKILL_PROVIDERS } from '@lobechat/const';
 import {
   type AgentBuilderContext,
   type AgentGroupConfig,
@@ -350,7 +350,7 @@ export const contextEngineering = async ({
     },
 
     // File context configuration
-    fileContext: { enabled: true, includeFileUrl: !isDesktop },
+    fileContext: { enabled: true },
 
     // Knowledge injection
     knowledge: {

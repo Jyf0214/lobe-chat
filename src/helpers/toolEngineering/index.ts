@@ -16,6 +16,7 @@ import {
   lobehubSkillStoreSelectors,
   pluginSelectors,
 } from '@/store/tool/selectors';
+import { defaultToolIds } from '@/tools';
 
 import { getSearchConfig } from '../getSearchConfig';
 import { isCanUseFC } from '../isCanUseFC';
@@ -81,7 +82,7 @@ export const createToolsEngine = (config: ToolsEngineConfig = {}): ToolsEngine =
 export const createAgentToolsEngine = (workingModel: WorkingModel) =>
   createToolsEngine({
     // Add default tools based on configuration
-    defaultToolIds: [WebBrowsingManifest.identifier, KnowledgeBaseManifest.identifier],
+    defaultToolIds,
     // Create search-aware enableChecker for this request
     enableChecker: ({ pluginId }) => {
       // Check platform-specific constraints (e.g., LocalSystem desktop-only)

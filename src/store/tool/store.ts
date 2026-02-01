@@ -4,6 +4,7 @@ import { type StateCreator } from 'zustand/vanilla';
 
 import { createDevtools } from '../middleware/createDevtools';
 import { type ToolStoreState, initialState } from './initialState';
+import { type AgentSkillsAction, createAgentSkillsSlice } from './slices/agentSkills';
 import { type BuiltinToolAction, createBuiltinToolSlice } from './slices/builtin';
 import { type CustomPluginAction, createCustomPluginSlice } from './slices/customPlugin';
 import { type KlavisStoreAction, createKlavisStoreSlice } from './slices/klavisStore';
@@ -24,7 +25,8 @@ export type ToolStore = ToolStoreState &
   BuiltinToolAction &
   PluginMCPStoreAction &
   KlavisStoreAction &
-  LobehubSkillStoreAction;
+  LobehubSkillStoreAction &
+  AgentSkillsAction;
 
 const createStore: StateCreator<ToolStore, [['zustand/devtools', never]]> = (...parameters) => ({
   ...initialState,
@@ -35,6 +37,7 @@ const createStore: StateCreator<ToolStore, [['zustand/devtools', never]]> = (...
   ...createMCPPluginStoreSlice(...parameters),
   ...createKlavisStoreSlice(...parameters),
   ...createLobehubSkillStoreSlice(...parameters),
+  ...createAgentSkillsSlice(...parameters),
 });
 
 //  ===============  Implement useStore ============ //

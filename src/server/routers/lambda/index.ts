@@ -11,6 +11,7 @@ import { publicProcedure, router } from '@/libs/trpc/lambda';
 import { agentRouter } from './agent';
 import { agentCronJobRouter } from './agentCronJob';
 import { agentGroupRouter } from './agentGroup';
+import { agentSkillsRouter } from './agentSkills';
 import { aiAgentRouter } from './aiAgent';
 import { aiChatRouter } from './aiChat';
 import { aiModelRouter } from './aiModel';
@@ -50,6 +51,7 @@ import { userMemoryRouter } from './userMemory';
 export const lambdaRouter = router({
   agent: agentRouter,
   agentCronJob: agentCronJobRouter,
+  agentSkills: agentSkillsRouter,
   aiAgent: aiAgentRouter,
   aiChat: aiChatRouter,
   aiModel: aiModelRouter,

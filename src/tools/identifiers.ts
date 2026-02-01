@@ -10,11 +10,8 @@ import { NotebookManifest } from '@lobechat/builtin-tool-notebook';
 import { PageAgentManifest } from '@lobechat/builtin-tool-page-agent';
 import { WebBrowsingManifest } from '@lobechat/builtin-tool-web-browsing';
 
-import { ArtifactsManifest } from './artifacts';
-
 export const builtinToolIdentifiers: string[] = [
   AgentBuilderManifest.identifier,
-  ArtifactsManifest.identifier,
   LocalSystemManifest.identifier,
   WebBrowsingManifest.identifier,
   KnowledgeBaseManifest.identifier,

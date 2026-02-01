@@ -189,6 +189,7 @@
   "builtins.lobe-web-browsing.title": "联网搜索",
   "confirm": "确认",
   "debug.arguments": "调用参数",
+  "debug.error": "错误信息",
   "debug.function_call": "函数调用",
   "debug.intervention": "技能干预",
   "debug.off": "关闭调试",

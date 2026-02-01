@@ -190,6 +190,7 @@ export default {
   'builtins.lobe-web-browsing.title': 'Web Search',
   'confirm': 'Confirm',
   'debug.arguments': 'Arguments',
+  'debug.error': 'Error',
   'debug.function_call': 'Function call',
   'debug.intervention': 'Skill intervention',
   'debug.off': 'Debug off',

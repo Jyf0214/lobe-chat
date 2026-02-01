@@ -1,6 +1,7 @@
 import { type ToolIntervention } from '@lobechat/types';
 import { Block, Highlighter, Icon, Tabs, type TabsProps } from '@lobehub/ui';
 import {
+  AlertTriangleIcon,
   BracesIcon,
   FunctionSquareIcon,
   HandIcon,
@@ -117,8 +118,31 @@ const Debug = memo<DebugProps>(
           key: 'intervention',
           label: t('debug.intervention'),
         },
+        {
+          children: (
+            <Highlighter
+              language={'json'}
+              style={{ background: 'transparent', borderRadius: 0, height: '100%' }}
+              variant={'filled'}
+            >
+              {JSON.stringify(result?.error, null, 2)}
+            </Highlighter>
+          ),
+          icon: <Icon icon={AlertTriangleIcon} />,
+          key: 'error',
+          label: t('debug.error'),
+        },
       ],
-      [functionCall, isJsonResult, params, result?.content, result?.state, intervention, t],
+      [
+        functionCall,
+        isJsonResult,
+        params,
+        result?.content,
+        result?.state,
+        result?.error,
+        intervention,
+        t,
+      ],
     );
 
     return (

@@ -97,8 +97,9 @@ const Render = memo<RenderProps>(
       return null;
     }
 
-    // Handle error state
-    if (result.error) {
+    // Handle PluginSettingsInvalid error - guide user to configure plugin
+    // Other errors are shown in Debug tab, no special render needed
+    if (result.error?.type === 'PluginSettingsInvalid') {
       return (
         <ErrorResponse
           {...result.error}

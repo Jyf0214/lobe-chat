@@ -1,7 +1,7 @@
 'use client';
 
 import type { BuiltinRenderProps } from '@lobechat/types';
-import { Block, Markdown } from '@lobehub/ui';
+import { Block, Markdown, Tag , Flexbox } from '@lobehub/ui';
 import { createStaticStyles } from 'antd-style';
 import { memo } from 'react';
 
@@ -32,9 +32,9 @@ const styles = createStaticStyles(({ css, cssVar }) => ({
 }));
 
 export const CreateAgentRender = memo<BuiltinRenderProps<CreateAgentParams>>(({ args }) => {
-  const { title, description, systemRole } = args || {};
+  const { title, description, systemRole, plugins, model, provider } = args || {};
 
-  if (!title && !description && !systemRole) return null;
+  if (!title && !description && !systemRole && !plugins?.length) return null;
 
   return (
     <div className={styles.container}>
@@ -48,6 +48,25 @@ export const CreateAgentRender = memo<BuiltinRenderProps<CreateAgentParams>>(({ 
         <div className={styles.field}>
           <div className={styles.label}>Description</div>
           <div className={styles.value}>{description}</div>
+        </div>
+      )}
+      {(model || provider) && (
+        <div className={styles.field}>
+          <div className={styles.label}>Model</div>
+          <div className={styles.value}>
+            {provider && `${provider}/`}
+            {model}
+          </div>
+        </div>
+      )}
+      {plugins && plugins.length > 0 && (
+        <div className={styles.field}>
+          <div className={styles.label}>Plugins</div>
+          <Flexbox gap={4} horizontal wrap={'wrap'}>
+            {plugins.map((plugin) => (
+              <Tag key={plugin}>{plugin}</Tag>
+            ))}
+          </Flexbox>
         </div>
       )}
       {systemRole && (

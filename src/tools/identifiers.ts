@@ -1,4 +1,5 @@
 import { AgentBuilderManifest } from '@lobechat/builtin-tool-agent-builder';
+import { AgentManagementManifest } from '@lobechat/builtin-tool-agent-management';
 import { CloudSandboxManifest } from '@lobechat/builtin-tool-cloud-sandbox';
 import { GroupAgentBuilderManifest } from '@lobechat/builtin-tool-group-agent-builder';
 import { GroupManagementManifest } from '@lobechat/builtin-tool-group-management';
@@ -14,6 +15,7 @@ import { ArtifactsManifest } from './artifacts';
 
 export const builtinToolIdentifiers: string[] = [
   AgentBuilderManifest.identifier,
+  AgentManagementManifest.identifier,
   ArtifactsManifest.identifier,
   LocalSystemManifest.identifier,
   WebBrowsingManifest.identifier,

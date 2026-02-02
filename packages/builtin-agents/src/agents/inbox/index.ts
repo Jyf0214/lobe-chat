@@ -1,3 +1,4 @@
+import { AgentManagementIdentifier } from '@lobechat/builtin-tool-agent-management';
 import { GTDIdentifier } from '@lobechat/builtin-tool-gtd';
 import { NotebookIdentifier } from '@lobechat/builtin-tool-notebook';
 
@@ -13,7 +14,7 @@ import { systemRole } from './systemRole';
 export const INBOX: BuiltinAgentDefinition = {
   avatar: '/avatars/lobe-ai.png',
   runtime: (ctx) => ({
-    plugins: [GTDIdentifier, NotebookIdentifier, ...(ctx.plugins || [])],
+    plugins: [GTDIdentifier, NotebookIdentifier, AgentManagementIdentifier, ...(ctx.plugins || [])],
     systemRole: systemRole,
   }),
 

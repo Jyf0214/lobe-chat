@@ -2,16 +2,16 @@ import * as os from 'node:os';
 
 import { ToolDetectorManager } from '@/core/infrastructure/ToolDetectorManager';
 
+import { BaseContentSearch } from './base';
 import { LinuxContentSearchImpl } from './impl/linux';
 import { MacOSContentSearchImpl } from './impl/macOS';
 import { WindowsContentSearchImpl } from './impl/windows';
-import { BaseContentSearch } from './type';
 
+export { BaseContentSearch } from './base';
 export { LinuxContentSearchImpl } from './impl/linux';
 export { MacOSContentSearchImpl } from './impl/macOS';
 export { UnixContentSearch } from './impl/unix';
 export { WindowsContentSearchImpl } from './impl/windows';
-export { BaseContentSearch } from './type';
 
 /**
  * Create platform-specific content search implementation

@@ -1,7 +1,7 @@
 import { GrepContentParams, GrepContentResult } from '@lobechat/electron-client-ipc';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { BaseContentSearch } from '../type';
+import { BaseContentSearch } from '../base';
 
 // Mock logger
 vi.mock('@/utils/logger', () => ({

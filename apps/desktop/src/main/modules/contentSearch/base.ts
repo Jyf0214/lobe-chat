@@ -147,7 +147,8 @@ export abstract class BaseContentSearch {
     } = params;
     const logPrefix = `[grepContent:nodejs]`;
 
-    const regex = new RegExp(pattern, `g${params['-i'] ? 'i' : ''}${params.multiline ? 's' : ''}`);
+    const flags = `${params['-i'] ? 'i' : ''}${params.multiline ? 's' : ''}`;
+    const regex = new RegExp(pattern, flags);
 
     // Determine files to search
     let filesToSearch: string[] = [];
@@ -220,7 +221,8 @@ export abstract class BaseContentSearch {
             break;
           }
           case 'count': {
-            const fileMatches = (content.match(regex) || []).length;
+            const globalRegex = new RegExp(pattern, `g${flags}`);
+            const fileMatches = (content.match(globalRegex) || []).length;
             if (fileMatches > 0) {
               matches.push(`${filePath}:${fileMatches}`);
               totalMatches += fileMatches;

@@ -9,7 +9,7 @@ import * as os from 'node:os';
 import { ToolDetectorManager } from '@/core/infrastructure/ToolDetectorManager';
 import { createLogger } from '@/utils/logger';
 
-import { BaseFileSearch } from '../type';
+import { BaseFileSearch } from '../base';
 import { FileResult, SearchOptions } from '../types';
 
 const logger = createLogger('module:FileSearch:unix');

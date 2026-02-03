@@ -5,7 +5,7 @@ import { execa } from 'execa';
 import { ToolDetectorManager } from '@/core/infrastructure/ToolDetectorManager';
 import { createLogger } from '@/utils/logger';
 
-import { BaseContentSearch } from '../type';
+import { BaseContentSearch } from '../base';
 
 const logger = createLogger('module:ContentSearch:unix');
 

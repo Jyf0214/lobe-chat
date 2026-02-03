@@ -33,14 +33,11 @@ const Nav = memo(() => {
   const switchTopic = useChatStore((s) => s.switchTopic);
   const [openNewTopicOrSaveTopic] = useChatStore((s) => [s.openNewTopicOrSaveTopic]);
 
-  // 使用 useSWRMutation 代替 useActionSWR，因为它是专为 action 设计的
-  // isMutating 初始值为 false，只有 trigger 被调用后才会变成 true
   const { trigger, isMutating } = useSWRMutation('openNewTopicOrSaveTopic', () =>
     openNewTopicOrSaveTopic(),
   );
 
   const handleNewTopic = () => {
-    // If in agent sub-route, navigate back to agent chat first
     if (isProfileActive && agentId) {
       router.push(urlJoin('/agent', agentId));
     }

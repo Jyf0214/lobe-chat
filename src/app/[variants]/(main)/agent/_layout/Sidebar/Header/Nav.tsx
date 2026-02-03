@@ -6,12 +6,12 @@ import { MessageSquarePlusIcon, SearchIcon } from 'lucide-react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import useSWRMutation from 'swr/mutation';
 import urlJoin from 'url-join';
 
 import NavItem from '@/features/NavPanel/components/NavItem';
 import { useQueryRoute } from '@/hooks/useQueryRoute';
 import { usePathname } from '@/libs/router/navigation';
-import { useActionSWR } from '@/libs/swr';
 import { useAgentStore } from '@/store/agent';
 import { builtinAgentSelectors } from '@/store/agent/selectors';
 import { useChatStore } from '@/store/chat';
@@ -33,20 +33,25 @@ const Nav = memo(() => {
   const switchTopic = useChatStore((s) => s.switchTopic);
   const [openNewTopicOrSaveTopic] = useChatStore((s) => [s.openNewTopicOrSaveTopic]);
 
-  const { mutate, isValidating } = useActionSWR('openNewTopicOrSaveTopic', openNewTopicOrSaveTopic);
+  // 使用 useSWRMutation 代替 useActionSWR，因为它是专为 action 设计的
+  // isMutating 初始值为 false，只有 trigger 被调用后才会变成 true
+  const { trigger, isMutating } = useSWRMutation('openNewTopicOrSaveTopic', () =>
+    openNewTopicOrSaveTopic(),
+  );
+
   const handleNewTopic = () => {
     // If in agent sub-route, navigate back to agent chat first
     if (isProfileActive && agentId) {
       router.push(urlJoin('/agent', agentId));
     }
-    mutate();
+    trigger();
   };
 
   return (
     <Flexbox gap={1} paddingInline={4}>
       <NavItem
         icon={MessageSquarePlusIcon}
-        loading={isValidating}
+        loading={isMutating}
         onClick={handleNewTopic}
         title={tTopic('actions.addNewTopic')}
       />

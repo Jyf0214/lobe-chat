@@ -2,6 +2,7 @@
 
 import { type GlobFilesParams } from '@lobechat/electron-client-ipc';
 import { type BuiltinInspectorProps } from '@lobechat/types';
+import { Text } from '@lobehub/ui';
 import { createStaticStyles, cssVar, cx } from 'antd-style';
 import { Check, X } from 'lucide-react';
 import { memo } from 'react';
@@ -43,6 +44,7 @@ export const GlobLocalFilesInspector = memo<BuiltinInspectorProps<GlobFilesParam
 
     // Check if glob was successful
     const isSuccess = pluginState?.result?.success;
+    const engine = pluginState?.result?.engine;
 
     return (
       <div className={cx(inspectorTextStyles.root, isLoading && shinyTextStyles.shinyText)}>
@@ -56,6 +58,16 @@ export const GlobLocalFilesInspector = memo<BuiltinInspectorProps<GlobFilesParam
               <X className={styles.statusIcon} color={cssVar.colorError} size={14} />
             )
           ) : null}
+          {!isLoading && engine && (
+            <Text
+              as={'span'}
+              color={cssVar.colorTextDescription}
+              fontSize={12}
+              style={{ marginInlineStart: 4 }}
+            >
+              [{engine}]
+            </Text>
+          )}
         </span>
       </div>
     );

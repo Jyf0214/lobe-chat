@@ -402,7 +402,7 @@ export class LocalSystemExecutionRuntime {
 
       const message = result.success
         ? `Found ${result.total_matches} matches in ${result.matches.length} locations`
-        : 'Search failed';
+        : `Search failed: ${result.error || 'Unknown error'}`;
 
       const state: GrepContentState = { message, result };
 
@@ -435,7 +435,9 @@ export class LocalSystemExecutionRuntime {
     try {
       const result: GlobFilesResult = await this.localFileService.globFiles(args);
 
-      const message = result.success ? `Found ${result.total_files} files` : 'Glob search failed';
+      const message = result.success
+        ? `Found ${result.total_files} files`
+        : `Glob search failed: ${result.error || 'Unknown error'}`;
 
       const state: GlobFilesState = { message, result };
 

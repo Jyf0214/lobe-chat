@@ -1,119 +1,366 @@
-import { exec, spawn } from 'node:child_process';
+import { execa } from 'execa';
+import fg from 'fast-glob';
 import * as fs from 'node:fs';
+import * as os from 'node:os';
 import * as path from 'node:path';
-import readline from 'node:readline';
 import { promisify } from 'node:util';
 
+import { ToolDetectorManager } from '@/core/infrastructure/ToolDetectorManager';
 import { FileResult, SearchOptions } from '@/types/fileSearch';
 import { createLogger } from '@/utils/logger';
 
 import { FileSearchImpl } from '../type';
 
-const execPromise = promisify(exec);
 const statPromise = promisify(fs.stat);
 
 // Create logger
 const logger = createLogger('module:FileSearch:macOS');
 
+/**
+ * Fallback tool type for file search
+ * Priority: mdfind > fd > find > fast-glob
+ */
+type FallbackTool = 'mdfind' | 'fd' | 'find' | 'fast-glob';
+
 export class MacOSSearchServiceImpl extends FileSearchImpl {
+  /**
+   * Cache for Spotlight availability status
+   * null = not checked, true = available, false = not available
+   */
+  private spotlightAvailable: boolean | null = null;
+
+  /**
+   * Current fallback tool being used
+   */
+  private currentTool: FallbackTool | null = null;
+
+  constructor(toolDetectorManager?: ToolDetectorManager) {
+    super(toolDetectorManager);
+  }
+
   /**
    * Perform file search
    * @param options Search options
    * @returns Promise of search result list
    */
   async search(options: SearchOptions): Promise<FileResult[]> {
+    // Determine the best available tool on first search
+    if (this.currentTool === null) {
+      this.currentTool = await this.determineBestTool();
+      logger.info(`Using file search tool: ${this.currentTool}`);
+    }
+
+    return this.searchWithTool(this.currentTool, options);
+  }
+
+  /**
+   * Determine the best available tool based on priority
+   * Priority: mdfind > fd > find > fast-glob
+   */
+  private async determineBestTool(): Promise<FallbackTool> {
+    if (this.toolDetectorManager) {
+      const bestTool = await this.toolDetectorManager.getBestTool('file-search');
+      if (bestTool && ['mdfind', 'fd', 'find'].includes(bestTool)) {
+        return bestTool as FallbackTool;
+      }
+    }
+
+    if (await this.checkSpotlightStatus()) {
+      return 'mdfind';
+    }
+
+    if (await this.checkToolAvailable('fd')) {
+      return 'fd';
+    }
+
+    if (await this.checkToolAvailable('find')) {
+      return 'find';
+    }
+
+    return 'fast-glob';
+  }
+
+  /**
+   * Check if a tool is available
+   */
+  private async checkToolAvailable(tool: string): Promise<boolean> {
+    try {
+      await execa('which', [tool], { timeout: 3000 });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Search using the specified tool
+   */
+  private async searchWithTool(tool: FallbackTool, options: SearchOptions): Promise<FileResult[]> {
+    switch (tool) {
+      case 'mdfind': {
+        return this.searchWithSpotlight(options);
+      }
+      case 'fd': {
+        return this.searchWithFd(options);
+      }
+      case 'find': {
+        return this.searchWithFind(options);
+      }
+      default: {
+        return this.searchWithFastGlob(options);
+      }
+    }
+  }
+
+  /**
+   * Fallback to the next available tool
+   */
+  private async fallbackToNextTool(currentTool: FallbackTool): Promise<FallbackTool> {
+    const priority: FallbackTool[] = ['mdfind', 'fd', 'find', 'fast-glob'];
+    const currentIndex = priority.indexOf(currentTool);
+
+    // Try each tool after the current one
+    for (let i = currentIndex + 1; i < priority.length; i++) {
+      const nextTool = priority[i];
+      if (nextTool === 'fast-glob') {
+        return 'fast-glob'; // Always available
+      }
+      if (nextTool === 'fd' && (await this.checkToolAvailable('fd'))) {
+        return 'fd';
+      }
+      if (nextTool === 'find' && (await this.checkToolAvailable('find'))) {
+        return 'find';
+      }
+    }
+
+    return 'fast-glob';
+  }
+
+  /**
+   * Search using Spotlight (mdfind)
+   */
+  private async searchWithSpotlight(options: SearchOptions): Promise<FileResult[]> {
     // Build the command first, regardless of execution method
     const { cmd, args, commandString } = this.buildSearchCommand(options);
     logger.debug(`Executing command: ${commandString}`);
 
-    // Use spawn for both live and non-live updates to handle large outputs
-    return new Promise((resolve, reject) => {
-      const childProcess = spawn(cmd, args);
-
-      let results: string[] = []; // Store raw file paths
-      let stderrData = '';
-
-      // Create a readline interface to process stdout line by line
-      const rl = readline.createInterface({
-        crlfDelay: Infinity,
-        input: childProcess.stdout, // Handle different line endings
+    try {
+      const { stdout, stderr, exitCode } = await execa(cmd, args, {
+        reject: false, // Don't throw on non-zero exit code
       });
 
-      rl.on('line', (line) => {
-        const trimmedLine = line.trim();
-        if (trimmedLine) {
-          results.push(trimmedLine);
-
-          // If we have a limit and we've reached it (in non-live mode), stop processing
-          if (!options.liveUpdate && options.limit && results.length >= options.limit) {
-            logger.debug(`Reached limit (${options.limit}), closing readline and killing process.`);
-            rl.close(); // Stop reading lines
-            childProcess.kill(); // Terminate the mdfind process
-          }
-        }
-      });
-
-      childProcess.stderr.on('data', (data) => {
-        const errorMsg = data.toString();
-        stderrData += errorMsg;
-        logger.warn(`Search stderr: ${errorMsg}`);
-      });
-
-      childProcess.on('error', (error) => {
-        logger.error(`Search process error: ${error.message}`, error);
-        reject(new Error(`Search process failed to start: ${error.message}`));
-      });
-
-      childProcess.on('close', async (code) => {
-        logger.debug(`Search process exited with code ${code}`);
-
-        // Even if the process was killed due to limit, code might be null or non-zero.
-        // Process the results collected so far.
-        if (code !== 0 && stderrData && results.length === 0) {
-          // If exited with error code and we have stderr message and no results, reject.
-          // Filter specific ignorable errors if necessary
-          if (!stderrData.includes('Index is unavailable') && !stderrData.includes('kMD')) {
-            // Avoid rejecting for common Spotlight query syntax errors or index issues if some results might still be valid
-            reject(new Error(`Search process exited with code ${code}: ${stderrData}`));
-            return;
-          } else {
-            logger.warn(
-              `Search process exited with code ${code} but contained potentially ignorable errors: ${stderrData}`,
-            );
-          }
-        }
-
-        try {
-          // Process the collected file paths
-          // Ensure limit is applied again here in case killing the process didn't stop exactly at the limit
-          const limitedResults =
-            options.limit && results.length > options.limit
-              ? results.slice(0, options.limit)
-              : results;
-
-          const processedResults = await this.processSearchResultsFromPaths(
-            limitedResults,
-            options,
-          );
-          resolve(processedResults);
-        } catch (processingError) {
-          logger.error('Error processing search results:', processingError);
-          reject(new Error(`Failed to process search results: ${processingError.message}`));
-        }
-      });
-
-      // Handle live update specific logic (if needed in the future, e.g., sending initial batch)
-      if (options.liveUpdate) {
-        // For live update, we might want to resolve an initial batch
-        // or rely purely on events sent elsewhere.
-        // Current implementation resolves when the stream closes.
-        // We could add a timeout to resolve with initial results if needed.
-        logger.debug('Live update enabled, results will be processed on close.');
-        // Note: The previous `executeLiveSearch` logic is now integrated here.
-        // If specific live update event emission is needed, it would be added here,
-        // potentially calling a callback provided in options.
+      if (stderr) {
+        logger.warn(`Search stderr: ${stderr}`);
       }
-    });
+
+      logger.debug(`Search process exited with code ${exitCode}`);
+
+      // Parse stdout to get file paths
+      const results = stdout
+        .trim()
+        .split('\n')
+        .filter((line) => line.trim());
+
+      // If exited with error code and we have stderr and no results, fallback
+      if (exitCode !== 0 && stderr && results.length === 0) {
+        if (!stderr.includes('Index is unavailable') && !stderr.includes('kMD')) {
+          logger.warn(
+            `Spotlight search failed with code ${exitCode}, falling back to next tool: ${stderr}`,
+          );
+          this.spotlightAvailable = false;
+          this.currentTool = await this.fallbackToNextTool('mdfind');
+          logger.info(`Falling back to: ${this.currentTool}`);
+          return this.searchWithTool(this.currentTool, options);
+        } else {
+          logger.warn(
+            `Search process exited with code ${exitCode} but contained potentially ignorable errors: ${stderr}`,
+          );
+        }
+      }
+
+      // Apply limit
+      const limitedResults =
+        options.limit && results.length > options.limit ? results.slice(0, options.limit) : results;
+
+      return this.processSearchResultsFromPaths(limitedResults, options);
+    } catch (error) {
+      logger.error(`Search process error: ${(error as Error).message}`, error);
+      // Fallback to next tool on Spotlight error
+      this.spotlightAvailable = false;
+      this.currentTool = await this.fallbackToNextTool('mdfind');
+      logger.warn(`Spotlight search failed, falling back to: ${this.currentTool}`);
+      return this.searchWithTool(this.currentTool, options);
+    }
+  }
+
+  /**
+   * Search using fd (fast find alternative)
+   */
+  private async searchWithFd(options: SearchOptions): Promise<FileResult[]> {
+    const searchDir = options.onlyIn || os.homedir() || '/';
+    const limit = options.limit || 30;
+
+    logger.debug('Performing fd search', { keywords: options.keywords, searchDir });
+
+    try {
+      const args: string[] = [];
+
+      // Pattern matching
+      if (options.keywords) {
+        args.push(options.keywords);
+      } else {
+        args.push('.'); // Match all files
+      }
+
+      // Search directory
+      args.push(searchDir, '--type', 'f', '--hidden', '--ignore-case', '--max-depth', '10'); // Limit depth for performance
+      // eslint-disable-next-line unicorn/no-array-push-push
+      args.push(
+        '--max-results',
+        String(limit),
+        '--exclude',
+        'node_modules',
+        '--exclude',
+        '.git',
+        '--exclude',
+        '*cache*',
+      );
+
+      const { stdout, exitCode } = await execa('fd', args, {
+        reject: false,
+        timeout: 30_000,
+      });
+
+      if (exitCode !== 0 && !stdout.trim()) {
+        logger.warn(`fd search failed with code ${exitCode}, falling back to next tool`);
+        this.currentTool = await this.fallbackToNextTool('fd');
+        return this.searchWithTool(this.currentTool, options);
+      }
+
+      const files = stdout
+        .trim()
+        .split('\n')
+        .filter((line) => line.trim());
+
+      logger.debug(`fd found ${files.length} files`);
+
+      return this.processSearchResultsFromPaths(files, options);
+    } catch (error) {
+      logger.error('fd search failed:', error);
+      this.currentTool = await this.fallbackToNextTool('fd');
+      logger.warn(`fd failed, falling back to: ${this.currentTool}`);
+      return this.searchWithTool(this.currentTool, options);
+    }
+  }
+
+  /**
+   * Search using find (Unix standard tool)
+   */
+  private async searchWithFind(options: SearchOptions): Promise<FileResult[]> {
+    const searchDir = options.onlyIn || os.homedir() || '/';
+    const limit = options.limit || 30;
+
+    logger.debug('Performing find search', { keywords: options.keywords, searchDir });
+
+    try {
+      const args: string[] = [searchDir];
+
+      // Limit depth
+      args.push(
+        '-maxdepth',
+        '10',
+        '-type',
+        'f',
+        '(',
+        '-path',
+        '*/node_modules/*',
+        '-o',
+        '-path',
+        '*/.git/*',
+        '-o',
+        '-path',
+        '*/*cache*/*',
+        ')',
+        '-prune',
+        '-o',
+      );
+
+      // Pattern matching
+      if (options.keywords) {
+        args.push('-iname', `*${options.keywords}*`);
+      }
+
+      args.push('-print');
+
+      const { stdout, exitCode } = await execa('find', args, {
+        reject: false,
+        timeout: 30_000,
+      });
+
+      if (exitCode !== 0 && !stdout.trim()) {
+        logger.warn(`find search failed with code ${exitCode}, falling back to fast-glob`);
+        this.currentTool = 'fast-glob';
+        return this.searchWithFastGlob(options);
+      }
+
+      const files = stdout
+        .trim()
+        .split('\n')
+        .filter((line) => line.trim())
+        .slice(0, limit);
+
+      logger.debug(`find found ${files.length} files`);
+
+      return this.processSearchResultsFromPaths(files, options);
+    } catch (error) {
+      logger.error('find search failed:', error);
+      this.currentTool = 'fast-glob';
+      logger.warn('find failed, falling back to fast-glob');
+      return this.searchWithFastGlob(options);
+    }
+  }
+
+  /**
+   * Fallback search using fast-glob when Spotlight is not available
+   */
+  private async searchWithFastGlob(options: SearchOptions): Promise<FileResult[]> {
+    const searchDir = options.onlyIn || os.homedir() || '/';
+    const limit = options.limit || 30;
+
+    logger.debug('Performing fast-glob fallback search', { keywords: options.keywords, searchDir });
+
+    try {
+      // Build glob pattern from keywords
+      const pattern = options.keywords
+        ? `**/*${this.escapeGlobPattern(options.keywords)}*`
+        : '**/*';
+
+      const files = await fg(pattern, {
+        absolute: true,
+        caseSensitiveMatch: false,
+        cwd: searchDir,
+        deep: 10, // Limit depth for performance
+        dot: true,
+        ignore: ['**/node_modules/**', '**/.git/**', '**/.*cache*/**', '**/Library/Caches/**'],
+        onlyFiles: true,
+        suppressErrors: true,
+      });
+
+      logger.debug(`Fast-glob found ${files.length} files matching pattern`);
+
+      const limitedFiles = files.slice(0, limit);
+      return this.processSearchResultsFromPaths(limitedFiles, options);
+    } catch (error) {
+      logger.error('Fast-glob search failed:', error);
+      throw new Error(`File search failed: ${(error as Error).message}`);
+    }
+  }
+
+  /**
+   * Escape special glob characters in the search pattern
+   */
+  private escapeGlobPattern(pattern: string): string {
+    return pattern.replaceAll(/[$()*+.?[\\\]^{|}]/g, '\\$&');
   }
 
   /**
@@ -264,16 +511,6 @@ export class MacOSSearchServiceImpl extends FileSearchImpl {
   }
 
   /**
-   * Execute live search, returns initial results and sets callback
-   * @param command mdfind command
-   * @param options Search options
-   * @returns Promise of initial search results
-   * @deprecated This logic is now integrated into the main search method using spawn.
-   */
-  // private executeLiveSearch(command: string, options: SearchOptions): Promise<FileResult[]> { ... }
-  // Remove or comment out the old executeLiveSearch method
-
-  /**
    * Process search results from a list of file paths
    * @param filePaths Array of file path strings
    * @param options Search options
@@ -302,13 +539,13 @@ export class MacOSSearchServiceImpl extends FileSearchImpl {
           type: path.extname(filePath).toLowerCase().replace('.', ''),
         };
 
-        // If detailed information is needed, get additional metadata
-        if (options.detailed) {
+        // If detailed information is needed and Spotlight is available, get additional metadata
+        if (options.detailed && this.spotlightAvailable) {
           result.metadata = await this.getDetailedMetadata(filePath);
         }
 
         // Determine content type
-        result.contentType = this.determineContentType(result.name, result.type);
+        result.contentType = this.determineContentType(result.type);
 
         return result;
       } catch (error) {
@@ -345,16 +582,6 @@ export class MacOSSearchServiceImpl extends FileSearchImpl {
   }
 
   /**
-   * Process search results
-   * @param stdout Command output (now unused directly, processing happens line by line)
-   * @param options Search options
-   * @returns Formatted file result list
-   * @deprecated Use processSearchResultsFromPaths instead.
-   */
-  // private async processSearchResults(stdout: string, options: SearchOptions): Promise<FileResult[]> { ... }
-  // Remove or comment out the old processSearchResults method
-
-  /**
    * Get detailed metadata for a file
    * @param filePath File path
    * @returns Metadata object
@@ -362,7 +589,7 @@ export class MacOSSearchServiceImpl extends FileSearchImpl {
   private async getDetailedMetadata(filePath: string): Promise<Record<string, any>> {
     try {
       // Use mdls command to get all metadata
-      const { stdout } = await execPromise(`mdls "${filePath}"`);
+      const { stdout } = await execa('mdls', [filePath]);
 
       // Parse mdls output
       const metadata: Record<string, any> = {};
@@ -449,70 +676,6 @@ export class MacOSSearchServiceImpl extends FileSearchImpl {
   }
 
   /**
-   * Determine file content type
-   * @param fileName File name
-   * @param extension File extension
-   * @returns Content type description
-   */
-  private determineContentType(fileName: string, extension: string): string {
-    // Map common file extensions to content types
-    const typeMap: Record<string, string> = {
-      '7z': 'archive',
-      'aac': 'audio',
-      // Others
-      'app': 'application',
-      'avi': 'video',
-      'c': 'code',
-      'cpp': 'code',
-      'css': 'code',
-      'dmg': 'disk-image',
-      'doc': 'document',
-      'docx': 'document',
-      'gif': 'image',
-      'gz': 'archive',
-      'heic': 'image',
-      'html': 'code',
-      'iso': 'disk-image',
-      'java': 'code',
-      'jpeg': 'image',
-      // Images
-      'jpg': 'image',
-      // Code
-      'js': 'code',
-      'json': 'code',
-      'mkv': 'video',
-      'mov': 'video',
-      // Audio
-      'mp3': 'audio',
-      // Video
-      'mp4': 'video',
-      'ogg': 'audio',
-      // Documents
-      'pdf': 'document',
-      'png': 'image',
-      'ppt': 'presentation',
-      'pptx': 'presentation',
-      'py': 'code',
-      'rar': 'archive',
-      'rtf': 'text',
-      'svg': 'image',
-      'swift': 'code',
-      'tar': 'archive',
-      'ts': 'code',
-      'txt': 'text',
-      'wav': 'audio',
-      'webp': 'image',
-      'xls': 'spreadsheet',
-      'xlsx': 'spreadsheet',
-      // Archive files
-      'zip': 'archive',
-    };
-
-    // Find matching content type
-    return typeMap[extension.toLowerCase()] || 'unknown';
-  }
-
-  /**
    * Sort results
    * @param results Result list
    * @param sortBy Sort field
@@ -556,11 +719,26 @@ export class MacOSSearchServiceImpl extends FileSearchImpl {
    */
   private async checkSpotlightStatus(): Promise<boolean> {
     try {
-      // Try to run a simple mdfind command - macOS doesn't support -limit parameter
-      await execPromise('mdfind -name test -onlyin ~ -count');
+      // Try to run a simple mdfind command to check if Spotlight is working
+      // Use a timeout to avoid hanging if Spotlight is completely disabled
+      const { stdout } = await execa(
+        'mdfind',
+        ['-name', 'test', '-onlyin', os.homedir() || '~', '-count'],
+        {
+          timeout: 5000, // 5 second timeout
+        },
+      );
+
+      // If mdfind returns a number (even 0), Spotlight is available
+      const count = parseInt(stdout.trim(), 10);
+      if (Number.isNaN(count)) {
+        logger.warn('Spotlight returned invalid response');
+        return false;
+      }
+
       return true;
     } catch (error) {
-      logger.error(`Spotlight is not available: ${error.message}`, error);
+      logger.warn(`Spotlight is not available: ${(error as Error).message}`);
       return false;
     }
   }
@@ -573,9 +751,7 @@ export class MacOSSearchServiceImpl extends FileSearchImpl {
   private async updateSpotlightIndex(path?: string): Promise<boolean> {
     try {
       // mdutil command is used to manage Spotlight index
-      const command = path ? `mdutil -E "${path}"` : 'mdutil -E /';
-
-      await execPromise(command);
+      await execa('mdutil', ['-E', path || '/']);
       return true;
     } catch (error) {
       logger.error(`Failed to update Spotlight index: ${error.message}`, error);

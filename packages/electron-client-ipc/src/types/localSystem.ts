@@ -192,6 +192,7 @@ export interface GrepContentParams {
 }
 
 export interface GrepContentResult {
+  error?: string;
   matches: string[];
   success: boolean;
   total_matches: number;
@@ -204,6 +205,7 @@ export interface GlobFilesParams {
 }
 
 export interface GlobFilesResult {
+  error?: string;
   files: string[];
   success: boolean;
   total_files: number;

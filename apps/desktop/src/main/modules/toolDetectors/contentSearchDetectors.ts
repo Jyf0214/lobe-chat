@@ -4,6 +4,7 @@ import { IToolDetector, createCommandDetector } from '@/core/infrastructure/Tool
  * Content search tool detectors
  *
  * Priority order: rg (1) > ag (2) > grep (3)
+ * AST search: sg (ast-grep) - separate category for AST-based code search
  */
 
 /**
@@ -12,6 +13,15 @@ import { IToolDetector, createCommandDetector } from '@/core/infrastructure/Tool
  */
 export const ripgrepDetector: IToolDetector = createCommandDetector('rg', {
   description: 'ripgrep - fast grep alternative',
+  priority: 1,
+});
+
+/**
+ * ast-grep (sg) - AST-based code search tool
+ * https://ast-grep.github.io/
+ */
+export const astGrepDetector: IToolDetector = createCommandDetector('sg', {
+  description: 'ast-grep - AST-based code search',
   priority: 1,
 });
 
@@ -33,6 +43,11 @@ export const grepDetector: IToolDetector = createCommandDetector('grep', {
 });
 
 /**
- * All content search detectors
+ * All content search detectors (text-based grep tools)
  */
 export const contentSearchDetectors: IToolDetector[] = [ripgrepDetector, agDetector, grepDetector];
+
+/**
+ * AST-based code search detectors
+ */
+export const astSearchDetectors: IToolDetector[] = [astGrepDetector];

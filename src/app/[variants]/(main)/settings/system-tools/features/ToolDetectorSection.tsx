@@ -1,8 +1,18 @@
 'use client';
 
 import { type ToolStatus } from '@lobechat/electron-client-ipc';
-import { Flexbox, Form, type FormGroupItemType, Icon } from '@lobehub/ui';
-import { Button, Skeleton, Tag, Tooltip, Typography } from 'antd';
+import {
+  Button,
+  CopyButton,
+  Flexbox,
+  Form,
+  type FormGroupItemType,
+  Icon,
+  Skeleton,
+  Tag,
+  Text,
+  Tooltip,
+} from '@lobehub/ui';
 import { CheckCircle2, Loader2Icon, RefreshCw, XCircle } from 'lucide-react';
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -47,7 +57,7 @@ const ToolStatusDisplay = memo<ToolStatusDisplayProps>(({ status, isDetecting })
     return (
       <Flexbox align="center" gap={8} horizontal>
         <Icon icon={Loader2Icon} size={16} spin style={{ opacity: 0.5 }} />
-        <Typography.Text type="secondary">{t('settingSystemTools.detecting')}</Typography.Text>
+        <Text type="secondary">{t('settingSystemTools.detecting')}</Text>
       </Flexbox>
     );
   }
@@ -56,9 +66,7 @@ const ToolStatusDisplay = memo<ToolStatusDisplayProps>(({ status, isDetecting })
     return (
       <Flexbox align="center" gap={8} horizontal>
         <Icon color="var(--ant-color-text-quaternary)" icon={XCircle} size={16} />
-        <Typography.Text type="secondary">
-          {t('settingSystemTools.status.notDetected')}
-        </Typography.Text>
+        <Text type="secondary">{t('settingSystemTools.status.notDetected')}</Text>
       </Flexbox>
     );
   }
@@ -68,9 +76,7 @@ const ToolStatusDisplay = memo<ToolStatusDisplayProps>(({ status, isDetecting })
       {status.available ? (
         <>
           <Icon color="var(--ant-color-success)" icon={CheckCircle2} size={16} />
-          <Typography.Text type="success">
-            {t('settingSystemTools.status.available')}
-          </Typography.Text>
+          <Text type="success">{t('settingSystemTools.status.available')}</Text>
           {status.version && (
             <Tag color="processing" style={{ marginInlineStart: 4 }}>
               {status.version}
@@ -78,28 +84,24 @@ const ToolStatusDisplay = memo<ToolStatusDisplayProps>(({ status, isDetecting })
           )}
           {status.path && (
             <Tooltip title={status.path}>
-              <Typography.Text
-                copyable={{ text: status.path }}
-                ellipsis
-                style={{ fontSize: 12, maxWidth: 200 }}
-                type="secondary"
-              >
-                {status.path}
-              </Typography.Text>
+              <Flexbox align="center" gap={4} horizontal style={{ maxWidth: 200 }}>
+                <Text ellipsis style={{ fontSize: 12 }} type="secondary">
+                  {status.path}
+                </Text>
+                <CopyButton content={status.path} size="small" />
+              </Flexbox>
             </Tooltip>
           )}
         </>
       ) : (
         <>
           <Icon color="var(--ant-color-error)" icon={XCircle} size={16} />
-          <Typography.Text type="secondary">
-            {t('settingSystemTools.status.unavailable')}
-          </Typography.Text>
+          <Text type="secondary">{t('settingSystemTools.status.unavailable')}</Text>
           {status.error && (
             <Tooltip title={status.error}>
-              <Typography.Text ellipsis style={{ fontSize: 12, maxWidth: 200 }} type="secondary">
+              <Text ellipsis style={{ fontSize: 12, maxWidth: 200 }} type="secondary">
                 ({status.error})
-              </Typography.Text>
+              </Text>
             </Tooltip>
           )}
         </>
@@ -166,9 +168,7 @@ const ToolDetectorSection = memo(() => {
           justify="flex-end"
           style={{ marginBlockStart: 8 }}
         >
-          <Typography.Text type="secondary">
-            {t('settingSystemTools.autoSelectDesc')}
-          </Typography.Text>
+          <Text type="secondary">{t('settingSystemTools.autoSelectDesc')}</Text>
           <Button
             icon={<Icon icon={RefreshCw} spin={detecting} />}
             loading={detecting}

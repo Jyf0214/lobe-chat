@@ -11,7 +11,11 @@ import { isDev } from '@/const/env';
 import { ELECTRON_BE_PROTOCOL_SCHEME } from '@/const/protocol';
 import { IControlModule } from '@/controllers';
 import AuthCtr from '@/controllers/AuthCtr';
-import { contentSearchDetectors, fileSearchDetectors } from '@/modules/toolDetectors';
+import {
+  astSearchDetectors,
+  contentSearchDetectors,
+  fileSearchDetectors,
+} from '@/modules/toolDetectors';
 import { IServiceModule } from '@/services';
 import { createLogger } from '@/utils/logger';
 
@@ -175,6 +179,11 @@ export class App {
     // Register content search tools (rg, ag, grep)
     for (const detector of contentSearchDetectors) {
       this.toolDetectorManager.register(detector, 'content-search');
+    }
+
+    // Register AST-based code search tools (ast-grep)
+    for (const detector of astSearchDetectors) {
+      this.toolDetectorManager.register(detector, 'ast-search');
     }
 
     // Register file search tools (mdfind, fd, find)

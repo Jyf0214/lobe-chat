@@ -5,7 +5,7 @@
  * Modules can register additional custom detectors via ToolDetectorManager.
  */
 
-export { contentSearchDetectors } from './contentSearchDetectors';
+export { astSearchDetectors, contentSearchDetectors } from './contentSearchDetectors';
 export { fileSearchDetectors } from './fileSearchDetectors';
 
 // Re-export types for convenience

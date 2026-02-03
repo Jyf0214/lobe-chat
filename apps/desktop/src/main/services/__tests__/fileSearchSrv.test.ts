@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { App } from '@/core/App';
-import { FileSearchImpl } from '@/modules/fileSearch';
 import type { FileResult, SearchOptions } from '@/types/fileSearch';
 
 import FileSearchService from '../fileSearchSrv';
@@ -15,7 +14,7 @@ vi.mock('@/modules/fileSearch', () => {
   }));
 
   return {
-    FileSearchImpl: vi.fn(),
+    BaseFileSearch: vi.fn(),
     createFileSearchModule: vi.fn(() => new MockFileSearchImpl()),
   };
 });

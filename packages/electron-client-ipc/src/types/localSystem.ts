@@ -188,10 +188,14 @@ export interface GrepContentParams {
   'output_mode'?: 'content' | 'files_with_matches' | 'count';
   'path'?: string;
   'pattern': string;
+  /** Preferred search tool: 'rg' | 'ag' | 'grep' */
+  'tool'?: 'rg' | 'ag' | 'grep';
   'type'?: string;
 }
 
 export interface GrepContentResult {
+  /** Search engine used: 'rg' | 'ag' | 'grep' | 'nodejs' */
+  engine?: string;
   error?: string;
   matches: string[];
   success: boolean;
@@ -205,6 +209,8 @@ export interface GlobFilesParams {
 }
 
 export interface GlobFilesResult {
+  /** Search engine used: 'fd' | 'find' | 'fast-glob' */
+  engine?: string;
   error?: string;
   files: string[];
   success: boolean;

@@ -1,4 +1,8 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
+import { GlobFilesParams, GlobFilesResult } from '@lobechat/electron-client-ipc';
+import { stat } from 'node:fs/promises';
+import * as path from 'node:path';
+
 import { ToolDetectorManager } from '@/core/infrastructure/ToolDetectorManager';
 import { FileResult, SearchOptions } from '@/types/fileSearch';
 
@@ -75,7 +79,7 @@ const CONTENT_TYPE_MAP: Record<string, string> = {
  * File Search Service Implementation Abstract Class
  * Defines the interface that different platform file search implementations need to implement
  */
-export abstract class FileSearchImpl {
+export abstract class BaseFileSearch {
   protected toolDetectorManager?: ToolDetectorManager;
 
   constructor(toolDetectorManager?: ToolDetectorManager) {
@@ -100,11 +104,98 @@ export abstract class FileSearchImpl {
   }
 
   /**
+   * Escape special glob characters in the search pattern
+   * @param pattern The pattern to escape
+   * @returns Escaped pattern safe for glob matching
+   */
+  protected escapeGlobPattern(pattern: string): string {
+    return pattern.replaceAll(/[$()*+.?[\\\]^{|}]/g, '\\$&');
+  }
+
+  /**
+   * Process file paths and return FileResult objects
+   * @param filePaths Array of file path strings
+   * @param options Search options
+   * @returns Formatted file result list
+   */
+  protected async processFilePaths(
+    filePaths: string[],
+    options: SearchOptions,
+  ): Promise<FileResult[]> {
+    const results: FileResult[] = [];
+
+    for (const filePath of filePaths) {
+      try {
+        const stats = await stat(filePath);
+        const ext = path.extname(filePath).toLowerCase().replace('.', '');
+
+        results.push({
+          contentType: this.determineContentType(ext),
+          createdTime: stats.birthtime,
+          isDirectory: stats.isDirectory(),
+          lastAccessTime: stats.atime,
+          metadata: {},
+          modifiedTime: stats.mtime,
+          name: path.basename(filePath),
+          path: filePath,
+          size: stats.size,
+          type: ext,
+        });
+      } catch {
+        // Skip files that can't be accessed
+      }
+    }
+
+    return this.sortResults(results, options.sortBy, options.sortDirection);
+  }
+
+  /**
+   * Sort results based on options
+   * @param results Result list
+   * @param sortBy Sort field
+   * @param direction Sort direction
+   * @returns Sorted result list
+   */
+  protected sortResults(
+    results: FileResult[],
+    sortBy?: 'name' | 'date' | 'size',
+    direction: 'asc' | 'desc' = 'asc',
+  ): FileResult[] {
+    if (!sortBy) return results;
+
+    return [...results].sort((a, b) => {
+      let comparison = 0;
+      switch (sortBy) {
+        case 'name': {
+          comparison = a.name.localeCompare(b.name);
+          break;
+        }
+        case 'date': {
+          comparison = a.modifiedTime.getTime() - b.modifiedTime.getTime();
+          break;
+        }
+        case 'size': {
+          comparison = a.size - b.size;
+          break;
+        }
+      }
+      return direction === 'asc' ? comparison : -comparison;
+    });
+  }
+
+  /**
    * Perform file search
    * @param options Search options
    * @returns Promise of search result list
    */
   abstract search(options: SearchOptions): Promise<FileResult[]>;
+
+  /**
+   * Perform glob pattern matching
+   * @param params Glob parameters
+   * @returns Promise of glob result
+   */
+  abstract glob(params: GlobFilesParams): Promise<GlobFilesResult>;
 
   /**
    * Check search service status

@@ -35,7 +35,7 @@ export interface IToolDetector {
 /**
  * Tool categories
  */
-export type ToolCategory = 'content-search' | 'file-search' | 'system' | 'custom';
+export type ToolCategory = 'content-search' | 'ast-search' | 'file-search' | 'system' | 'custom';
 
 /**
  * Tool Detector Manager

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { App } from '@/core/App';
-import type { FileResult, SearchOptions } from '@/types/fileSearch';
+import type { FileResult, SearchOptions } from '@/modules/fileSearch';
 
 import FileSearchService from '../fileSearchSrv';
 

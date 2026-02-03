@@ -159,7 +159,9 @@ class LocalSystemExecutor extends BaseExecutor<typeof LocalSystemApiEnum> {
     try {
       const result: LocalFileItem[] = await localFileService.searchLocalFiles(params);
 
-      const state: LocalFileSearchState = { searchResults: result };
+      // Extract engine from first result (all results use same engine)
+      const engine = result[0]?.engine;
+      const state: LocalFileSearchState = { engine, searchResults: result };
 
       const content = formatFileSearchResults(result);
 

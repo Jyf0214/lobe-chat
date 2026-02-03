@@ -7,10 +7,10 @@ import { stat } from 'node:fs/promises';
 import * as os from 'node:os';
 
 import { ToolDetectorManager } from '@/core/infrastructure/ToolDetectorManager';
-import { FileResult, SearchOptions } from '@/types/fileSearch';
 import { createLogger } from '@/utils/logger';
 
 import { BaseFileSearch } from '../type';
+import { FileResult, SearchOptions } from '../types';
 
 const logger = createLogger('module:FileSearch:unix');
 
@@ -169,7 +169,7 @@ export abstract class UnixFileSearch extends BaseFileSearch {
 
       logger.debug(`fd found ${files.length} files`);
 
-      return this.processFilePaths(files, options);
+      return this.processFilePaths(files, options, 'fd');
     } catch (error) {
       logger.error('fd search failed:', error);
       this.currentTool = await this.fallbackToNextTool('fd');
@@ -238,7 +238,7 @@ export abstract class UnixFileSearch extends BaseFileSearch {
 
       logger.debug(`find found ${files.length} files`);
 
-      return this.processFilePaths(files, options);
+      return this.processFilePaths(files, options, 'find');
     } catch (error) {
       logger.error('find search failed:', error);
       this.currentTool = 'fast-glob';
@@ -278,7 +278,7 @@ export abstract class UnixFileSearch extends BaseFileSearch {
       logger.debug(`fast-glob found ${files.length} files matching pattern`);
 
       const limitedFiles = files.slice(0, limit);
-      return this.processFilePaths(limitedFiles, options);
+      return this.processFilePaths(limitedFiles, options, 'fast-glob');
     } catch (error) {
       logger.error('fast-glob search failed:', error);
       throw new Error(`File search failed: ${(error as Error).message}`);

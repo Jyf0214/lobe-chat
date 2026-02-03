@@ -7,6 +7,7 @@ import { MacOSSearchServiceImpl } from './impl/macOS';
 import { WindowsSearchServiceImpl } from './impl/windows';
 
 export { BaseFileSearch } from './type';
+export type { FileResult, SearchOptions } from './types';
 
 export const createFileSearchModule = (toolDetectorManager?: ToolDetectorManager) => {
   const currentPlatform = platform();

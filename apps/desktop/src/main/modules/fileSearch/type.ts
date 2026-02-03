@@ -4,7 +4,8 @@ import { stat } from 'node:fs/promises';
 import * as path from 'node:path';
 
 import { ToolDetectorManager } from '@/core/infrastructure/ToolDetectorManager';
-import { FileResult, SearchOptions } from '@/types/fileSearch';
+
+import { FileResult, SearchOptions } from './types';
 
 /**
  * Content type mapping for common file extensions
@@ -116,11 +117,13 @@ export abstract class BaseFileSearch {
    * Process file paths and return FileResult objects
    * @param filePaths Array of file path strings
    * @param options Search options
+   * @param engine Optional search engine identifier
    * @returns Formatted file result list
    */
   protected async processFilePaths(
     filePaths: string[],
     options: SearchOptions,
+    engine?: string,
   ): Promise<FileResult[]> {
     const results: FileResult[] = [];
 
@@ -132,6 +135,7 @@ export abstract class BaseFileSearch {
         results.push({
           contentType: this.determineContentType(ext),
           createdTime: stats.birthtime,
+          engine,
           isDirectory: stats.isDirectory(),
           lastAccessTime: stats.atime,
           metadata: {},

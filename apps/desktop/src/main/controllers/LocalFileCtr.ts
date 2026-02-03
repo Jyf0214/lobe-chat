@@ -27,9 +27,9 @@ import { constants } from 'node:fs';
 import { access, mkdir, readFile, readdir, rename, stat, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
 
+import { FileResult, SearchOptions } from '@/modules/fileSearch';
 import ContentSearchService from '@/services/contentSearchSrv';
 import FileSearchService from '@/services/fileSearchSrv';
-import { FileResult, SearchOptions } from '@/types/fileSearch';
 import { makeSureDirExist } from '@/utils/file-system';
 import { createLogger } from '@/utils/logger';
 

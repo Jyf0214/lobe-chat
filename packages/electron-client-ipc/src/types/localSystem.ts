@@ -3,6 +3,8 @@
 export interface LocalFileItem {
   contentType?: string;
   createdTime: Date;
+  /** Search engine used to find this file (e.g., 'mdfind', 'fd', 'find', 'fast-glob') */
+  engine?: string;
   isDirectory: boolean;
   lastAccessTime: Date;
   // Spotlight specific metadata

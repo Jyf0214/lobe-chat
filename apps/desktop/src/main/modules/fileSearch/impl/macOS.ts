@@ -4,9 +4,9 @@ import * as os from 'node:os';
 import * as path from 'node:path';
 
 import { ToolDetectorManager } from '@/core/infrastructure/ToolDetectorManager';
-import { FileResult, SearchOptions } from '@/types/fileSearch';
 import { createLogger } from '@/utils/logger';
 
+import { FileResult, SearchOptions } from '../types';
 import { UnixFileSearch, UnixSearchTool } from './unix';
 
 const logger = createLogger('module:FileSearch:macOS');
@@ -133,7 +133,7 @@ export class MacOSSearchServiceImpl extends UnixFileSearch {
       const limitedResults =
         options.limit && results.length > options.limit ? results.slice(0, options.limit) : results;
 
-      return this.processSpotlightResults(limitedResults, options);
+      return this.processSpotlightResults(limitedResults, options, 'mdfind');
     } catch (error) {
       logger.error(`Search process error: ${(error as Error).message}`, error);
       this.spotlightAvailable = false;
@@ -284,6 +284,7 @@ export class MacOSSearchServiceImpl extends UnixFileSearch {
   private async processSpotlightResults(
     filePaths: string[],
     options: SearchOptions,
+    engine?: string,
   ): Promise<FileResult[]> {
     const resultPromises = filePaths.map(async (filePath) => {
       try {
@@ -291,6 +292,7 @@ export class MacOSSearchServiceImpl extends UnixFileSearch {
 
         const result: FileResult = {
           createdTime: stats.birthtime,
+          engine,
           isDirectory: stats.isDirectory(),
           lastAccessTime: stats.atime,
           metadata: {},
@@ -313,6 +315,7 @@ export class MacOSSearchServiceImpl extends UnixFileSearch {
         return {
           contentType: 'unknown',
           createdTime: new Date(),
+          engine,
           isDirectory: false,
           lastAccessTime: new Date(),
           modifiedTime: new Date(),

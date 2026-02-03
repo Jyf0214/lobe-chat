@@ -76,8 +76,8 @@ export abstract class BaseContentSearch {
           }
         }
 
-        // Ignore common directories
-        args.push('--glob', '!node_modules', '--glob', '!.git', pattern, '.');
+        // Ignore common directories (use **/ prefix to match nested paths)
+        args.push('--glob', '!**/node_modules/**', '--glob', '!**/.git/**', pattern, '.');
         break;
       }
 

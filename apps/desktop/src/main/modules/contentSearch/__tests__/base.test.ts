@@ -72,8 +72,8 @@ describe('BaseContentSearch', () => {
         expect(args).toContain('-l');
         expect(args).toContain('test');
         expect(args).toContain('--glob');
-        expect(args).toContain('!node_modules');
-        expect(args).toContain('!.git');
+        expect(args).toContain('!**/node_modules/**');
+        expect(args).toContain('!**/.git/**');
       });
 
       it('should build rg args with case insensitive flag', () => {

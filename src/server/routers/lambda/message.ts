@@ -12,6 +12,12 @@ import { TopicShareModel } from '@/database/models/topicShare';
 import { CompressionRepository } from '@/database/repositories/compression';
 import { authedProcedure, publicProcedure, router } from '@/libs/trpc/lambda';
 import { serverDatabase } from '@/libs/trpc/lambda/middleware';
+import {
+  PAYLOAD_SIZE_LIMITS,
+  anyWithLimit,
+  nullablePassthroughWithLimit,
+  passthroughObjectWithLimit,
+} from '@/libs/trpc/validators/payloadSize';
 import { FileService } from '@/server/services/file';
 import { MessageService } from '@/server/services/message';
 
@@ -336,7 +342,7 @@ export const messageRouter = router({
       z
         .object({
           id: z.string(),
-          value: z.object({}).passthrough(),
+          value: passthroughObjectWithLimit(PAYLOAD_SIZE_LIMITS.MESSAGE_METADATA, 'metadata'),
         })
         .extend(basicContextSchema.shape),
     )
@@ -352,7 +358,7 @@ export const messageRouter = router({
       z
         .object({
           id: z.string(),
-          value: z.object({}).passthrough().nullable(),
+          value: nullablePassthroughWithLimit(PAYLOAD_SIZE_LIMITS.DEFAULT_JSONB, 'pluginError'),
         })
         .extend(basicContextSchema.shape),
     )
@@ -368,7 +374,7 @@ export const messageRouter = router({
       z
         .object({
           id: z.string(),
-          value: z.object({}).passthrough(),
+          value: passthroughObjectWithLimit(PAYLOAD_SIZE_LIMITS.DEFAULT_JSONB, 'pluginState'),
         })
         .extend(basicContextSchema.shape),
     )
@@ -427,9 +433,15 @@ export const messageRouter = router({
           id: z.string(),
           value: z.object({
             content: z.string().optional(),
-            metadata: z.object({}).passthrough().optional(),
-            pluginError: z.any().optional(),
-            pluginState: z.object({}).passthrough().optional(),
+            metadata: passthroughObjectWithLimit(
+              PAYLOAD_SIZE_LIMITS.MESSAGE_METADATA,
+              'metadata',
+            ).optional(),
+            pluginError: anyWithLimit(PAYLOAD_SIZE_LIMITS.DEFAULT_JSONB, 'pluginError').optional(),
+            pluginState: passthroughObjectWithLimit(
+              PAYLOAD_SIZE_LIMITS.DEFAULT_JSONB,
+              'pluginState',
+            ).optional(),
           }),
         })
         .extend(basicContextSchema.shape),

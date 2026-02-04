@@ -11,6 +11,11 @@ import { UserModel } from '@/database/models/user';
 import { insertAgentSchema } from '@/database/schemas';
 import { authedProcedure, router } from '@/libs/trpc/lambda';
 import { serverDatabase } from '@/libs/trpc/lambda/middleware';
+import {
+  PAYLOAD_SIZE_LIMITS,
+  passthroughObjectWithLimit,
+  passthroughPartialWithLimit,
+} from '@/libs/trpc/validators/payloadSize';
 import { AgentService } from '@/server/services/agent';
 
 const agentProcedure = authedProcedure.use(serverDatabase).use(async (opts) => {
@@ -117,7 +122,10 @@ export const agentRouter = router({
   createAgentOnly: agentProcedure
     .input(
       z.object({
-        config: z.object({}).passthrough().optional(),
+        config: passthroughObjectWithLimit(
+          PAYLOAD_SIZE_LIMITS.LARGE_JSONB,
+          'agentConfig',
+        ).optional(),
         groupId: z.string(),
       }),
     )
@@ -345,7 +353,7 @@ export const agentRouter = router({
     .input(
       z.object({
         agentId: z.string(),
-        value: z.object({}).passthrough().partial(),
+        value: passthroughPartialWithLimit(PAYLOAD_SIZE_LIMITS.LARGE_JSONB, 'agentConfig'),
       }),
     )
     .mutation(async ({ input, ctx }) => {

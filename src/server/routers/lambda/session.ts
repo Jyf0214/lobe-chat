@@ -7,6 +7,11 @@ import { insertAgentSchema, insertSessionSchema } from '@/database/schemas';
 import { getServerDB } from '@/database/server';
 import { authedProcedure, publicProcedure, router } from '@/libs/trpc/lambda';
 import { serverDatabase } from '@/libs/trpc/lambda/middleware';
+import {
+  PAYLOAD_SIZE_LIMITS,
+  passthroughPartialWithLimit,
+  withPayloadSizeLimit,
+} from '@/libs/trpc/validators/payloadSize';
 import { AgentChatConfigSchema } from '@/types/agent';
 import { LobeMetaDataSchema } from '@/types/meta';
 import { type BatchTaskResult } from '@/types/service';
@@ -26,17 +31,21 @@ const sessionProcedure = authedProcedure.use(serverDatabase).use(async (opts) =>
 export const sessionRouter = router({
   batchCreateSessions: sessionProcedure
     .input(
-      z.array(
-        z
-          .object({
-            config: z.object({}).passthrough(),
-            group: z.string().optional(),
-            id: z.string(),
-            meta: LobeMetaDataSchema,
-            pinned: z.boolean().optional(),
-            type: z.string(),
-          })
-          .partial(),
+      withPayloadSizeLimit(
+        z.array(
+          z
+            .object({
+              config: z.object({}).passthrough(),
+              group: z.string().optional(),
+              id: z.string(),
+              meta: LobeMetaDataSchema,
+              pinned: z.boolean().optional(),
+              type: z.string(),
+            })
+            .partial(),
+        ),
+        PAYLOAD_SIZE_LIMITS.IMPORT_DATA,
+        'sessions',
       ),
     )
     .mutation(async ({ input, ctx }): Promise<BatchTaskResult> => {
@@ -185,7 +194,7 @@ export const sessionRouter = router({
     .input(
       z.object({
         id: z.string(),
-        value: z.object({}).passthrough().partial(),
+        value: passthroughPartialWithLimit(PAYLOAD_SIZE_LIMITS.SESSION_CONFIG, 'sessionConfig'),
       }),
     )
     .mutation(async ({ input, ctx }) => {

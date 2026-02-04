@@ -209,6 +209,8 @@ export default {
     'Sorry, your system time does not match the server. Please check your system time and try again.',
   'response.UnknownChatFetchError':
     'Sorry, an unknown request error occurred. Please check the information below or try again.',
+  'response.payloadTooLarge':
+    'The data you are trying to send is too large ({{actualSize}}). Maximum allowed: {{maxSize}}.',
   'stt.responseError': 'Service request failed, please check the configuration or try again',
   'supervisor.decisionFailed':
     'The group host is unable to function. Please check your host configuration to ensure the correct model, API Key, and API endpoint are set.',

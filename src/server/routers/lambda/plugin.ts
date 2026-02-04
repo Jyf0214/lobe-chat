@@ -5,6 +5,7 @@ import { PluginModel } from '@/database/models/plugin';
 import { getServerDB } from '@/database/server';
 import { authedProcedure, publicProcedure, router } from '@/libs/trpc/lambda';
 import { serverDatabase } from '@/libs/trpc/lambda/middleware';
+import { PAYLOAD_SIZE_LIMITS, anyWithLimit } from '@/libs/trpc/validators/payloadSize';
 
 const pluginProcedure = authedProcedure.use(serverDatabase).use(async (opts) => {
   const { ctx } = opts;
@@ -18,10 +19,10 @@ export const pluginRouter = router({
   createOrInstallPlugin: pluginProcedure
     .input(
       z.object({
-        customParams: z.any(),
+        customParams: anyWithLimit(PAYLOAD_SIZE_LIMITS.PLUGIN_SETTINGS, 'customParams'),
         identifier: z.string(),
-        manifest: z.any(),
-        settings: z.any(),
+        manifest: anyWithLimit(PAYLOAD_SIZE_LIMITS.PLUGIN_MANIFEST, 'manifest'),
+        settings: anyWithLimit(PAYLOAD_SIZE_LIMITS.PLUGIN_SETTINGS, 'settings'),
         type: z.enum(['plugin', 'customPlugin']),
       }),
     )
@@ -48,9 +49,9 @@ export const pluginRouter = router({
   createPlugin: pluginProcedure
     .input(
       z.object({
-        customParams: z.any(),
+        customParams: anyWithLimit(PAYLOAD_SIZE_LIMITS.PLUGIN_SETTINGS, 'customParams'),
         identifier: z.string(),
-        manifest: z.any(),
+        manifest: anyWithLimit(PAYLOAD_SIZE_LIMITS.PLUGIN_MANIFEST, 'manifest'),
         type: z.enum(['plugin', 'customPlugin']),
       }),
     )
@@ -88,10 +89,10 @@ export const pluginRouter = router({
   updatePlugin: pluginProcedure
     .input(
       z.object({
-        customParams: z.any().optional(),
+        customParams: anyWithLimit(PAYLOAD_SIZE_LIMITS.PLUGIN_SETTINGS, 'customParams').optional(),
         id: z.string(),
-        manifest: z.any().optional(),
-        settings: z.any().optional(),
+        manifest: anyWithLimit(PAYLOAD_SIZE_LIMITS.PLUGIN_MANIFEST, 'manifest').optional(),
+        settings: anyWithLimit(PAYLOAD_SIZE_LIMITS.PLUGIN_SETTINGS, 'settings').optional(),
       }),
     )
     .mutation(async ({ input, ctx }) => {

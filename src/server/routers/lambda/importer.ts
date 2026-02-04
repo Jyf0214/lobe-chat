@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { DataImporterRepos } from '@/database/repositories/dataImporter';
 import { authedProcedure, router } from '@/libs/trpc/lambda';
 import { serverDatabase } from '@/libs/trpc/lambda/middleware';
+import { PAYLOAD_SIZE_LIMITS, withPayloadSizeLimit } from '@/libs/trpc/validators/payloadSize';
 import { FileService } from '@/server/services/file';
 import { type ImportPgDataStructure } from '@/types/export';
 import { type ImportResultData, type ImporterEntryData } from '@/types/importer';
@@ -56,26 +57,34 @@ export const importerRouter = router({
 
   importByPost: importProcedure
     .input(
-      z.object({
-        data: z.object({
-          messages: z.array(z.any()).optional(),
-          sessionGroups: z.array(z.any()).optional(),
-          sessions: z.array(z.any()).optional(),
-          topics: z.array(z.any()).optional(),
-          version: z.number(),
+      withPayloadSizeLimit(
+        z.object({
+          data: z.object({
+            messages: z.array(z.any()).optional(),
+            sessionGroups: z.array(z.any()).optional(),
+            sessions: z.array(z.any()).optional(),
+            topics: z.array(z.any()).optional(),
+            version: z.number(),
+          }),
         }),
-      }),
+        PAYLOAD_SIZE_LIMITS.IMPORT_DATA,
+        'importData',
+      ),
     )
     .mutation(async ({ input, ctx }): Promise<ImportResultData> => {
       return ctx.dataImporterService.importData(input.data);
     }),
   importPgByPost: importProcedure
     .input(
-      z.object({
-        data: z.record(z.string(), z.array(z.any())),
-        mode: z.enum(['pglite', 'postgres']),
-        schemaHash: z.string(),
-      }),
+      withPayloadSizeLimit(
+        z.object({
+          data: z.record(z.string(), z.array(z.any())),
+          mode: z.enum(['pglite', 'postgres']),
+          schemaHash: z.string(),
+        }),
+        PAYLOAD_SIZE_LIMITS.IMPORT_DATA,
+        'importPgData',
+      ),
     )
     .mutation(async ({ input, ctx }): Promise<ImportResultData> => {
       return ctx.dataImporterService.importPgData(input);

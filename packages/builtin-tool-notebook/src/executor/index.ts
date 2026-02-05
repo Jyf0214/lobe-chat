@@ -6,17 +6,15 @@
  *
  * Note: listDocuments is not exposed as a tool - it's automatically injected by the system.
  */
-import { BaseExecutor, type BuiltinToolContext, type BuiltinToolResult } from '@lobechat/types';
+import type {BuiltinToolContext, BuiltinToolResult} from '@lobechat/types';
+import { BaseExecutor   } from '@lobechat/types';
 
 import { notebookService } from '@/services/notebook';
 
+import type {CreateDocumentArgs, DeleteDocumentArgs, GetDocumentArgs, UpdateDocumentArgs} from '../types';
 import {
-  type CreateDocumentArgs,
-  type DeleteDocumentArgs,
-  type GetDocumentArgs,
   NotebookApiName,
-  NotebookIdentifier,
-  type UpdateDocumentArgs,
+  NotebookIdentifier
 } from '../types';
 
 class NotebookExecutor extends BaseExecutor<typeof NotebookApiName> {

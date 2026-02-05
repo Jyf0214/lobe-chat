@@ -15,6 +15,10 @@ export const RECENT_BLOCK_SIZE = {
     HEIGHT: 216,
     WIDTH: 240,
   },
+  STUDY: {
+    HEIGHT: 186,
+    WIDTH: 240,
+  },
   TOPIC: {
     HEIGHT: 144,
     WIDTH: 144,

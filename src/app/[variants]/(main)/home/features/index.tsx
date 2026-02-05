@@ -13,6 +13,7 @@ import InputArea from './InputArea';
 import RecentPage from './RecentPage';
 import RecentResource from './RecentResource';
 import RecentTopic from './RecentTopic';
+import StudyModule from './StudyModule';
 import WelcomeText from './WelcomeText';
 
 const Home = memo(() => {
@@ -40,6 +41,7 @@ const Home = memo(() => {
         <CommunityAgents />
         {/*<FeaturedPlugins />*/}
         {isLogin && <RecentResource />}
+        <StudyModule />
       </Flexbox>
     </Flexbox>
   );

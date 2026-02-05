@@ -101,7 +101,6 @@ export interface LobeAgentChatConfig {
 
   useModelBuiltinSearch?: boolean;
 }
- 
 
 /**
  * Zod schema for LocalSystemConfig

@@ -1103,7 +1103,7 @@ describe('GoogleGenerativeAIStream', () => {
               content: {
                 parts: [
                   {
-                    text: '**Planning the Solution**\n\nI\'m solidifying my plan...',
+                    text: "**Planning the Solution**\n\nI'm solidifying my plan...",
                     thought: true,
                   },
                 ],

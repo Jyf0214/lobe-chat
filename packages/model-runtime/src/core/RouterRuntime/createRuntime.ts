@@ -22,7 +22,8 @@ import type {
   GenerateObjectOptions,
   GenerateObjectPayload,
   ILobeAgentRuntimeErrorType,
-  TextToSpeechPayload} from '../../types';
+  TextToSpeechPayload,
+} from '../../types';
 import { postProcessModelList } from '../../utils/postProcessModelList';
 import { safeParseJSON } from '../../utils/safeParseJSON';
 import type { LobeRuntimeAI } from '../BaseAI';

@@ -317,6 +317,77 @@ describe('parseModelString', () => {
         type: 'chat',
       });
     });
+
+    it('should handle video capability', async () => {
+      const result = await parseModelString(
+        'test-provider',
+        'gemini-2.0-flash=Gemini 2.0 Flash<32768:video>',
+      );
+      expect(result.add[0]).toEqual({
+        displayName: 'Gemini 2.0 Flash',
+        abilities: {
+          video: true,
+        },
+        id: 'gemini-2.0-flash',
+        contextWindowTokens: 32_768,
+        type: 'chat',
+      });
+    });
+
+    it('should handle mixed capabilities including video', async () => {
+      const result = await parseModelString(
+        'test-provider',
+        'gemini-2.0-flash=Gemini 2.0<32768:vision:video:fc>',
+      );
+      expect(result.add[0]).toEqual({
+        displayName: 'Gemini 2.0',
+        abilities: {
+          vision: true,
+          video: true,
+          functionCall: true,
+        },
+        id: 'gemini-2.0-flash',
+        contextWindowTokens: 32_768,
+        type: 'chat',
+      });
+    });
+
+    it('should warn on unknown capability', async () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      await parseModelString('test-provider', 'model1<1024:unknownCapability>');
+      expect(consoleSpy).toHaveBeenCalledWith('Unknown capability: unknownCapability');
+      consoleSpy.mockRestore();
+    });
+
+    it('should handle multiple unknown capabilities', async () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      await parseModelString('test-provider', 'model1<1024:invalid1:vision:invalid2>');
+      expect(consoleSpy).toHaveBeenCalledWith('Unknown capability: invalid1');
+      expect(consoleSpy).toHaveBeenCalledWith('Unknown capability: invalid2');
+      expect(consoleSpy).toHaveBeenCalledTimes(2);
+      consoleSpy.mockRestore();
+    });
+
+    it('should handle all supported capabilities at once', async () => {
+      const result = await parseModelString(
+        'test-provider',
+        'model1<128000:reasoning:vision:fc:file:video:search:imageOutput>',
+      );
+      expect(result.add[0]).toEqual({
+        id: 'model1',
+        contextWindowTokens: 128000,
+        abilities: {
+          reasoning: true,
+          vision: true,
+          functionCall: true,
+          files: true,
+          video: true,
+          search: true,
+          imageOutput: true,
+        },
+        type: 'chat',
+      });
+    });
   });
 
   describe('FAL image models', () => {
@@ -431,6 +502,134 @@ describe('parseModelString', () => {
         },
       ]);
     });
+
+    it('should handle deployment name with capabilities', async () => {
+      const result = await parseModelString(
+        'azure',
+        'gpt-4o->my-deploy=GPT-4o<128000:vision:fc>',
+        true,
+      );
+      expect(result.add[0]).toEqual({
+        id: 'gpt-4o',
+        displayName: 'GPT-4o',
+        abilities: {
+          vision: true,
+          functionCall: true,
+        },
+        contextWindowTokens: 128000,
+        type: 'chat',
+        config: {
+          deploymentName: 'my-deploy',
+        },
+      });
+    });
+
+    it('should handle deployment name with special characters', async () => {
+      const result = await parseModelString('azure', 'gpt-4o->my-deploy_v1.2=GPT-4o', true);
+      expect(result.add[0]).toEqual({
+        id: 'gpt-4o',
+        displayName: 'GPT-4o',
+        abilities: {},
+        type: 'chat',
+        config: {
+          deploymentName: 'my-deploy_v1.2',
+        },
+      });
+    });
+
+    it('should handle removeAll with deployment names', async () => {
+      const result = await parseModelString('azure', '-all,+gpt-4o->my-deploy=GPT-4o', true);
+      expect(result.removeAll).toBe(true);
+      expect(result.removed).toEqual(['all']);
+      expect(result.add[0]).toEqual({
+        id: 'gpt-4o',
+        displayName: 'GPT-4o',
+        abilities: {},
+        type: 'chat',
+        config: {
+          deploymentName: 'my-deploy',
+        },
+      });
+    });
+  });
+
+  describe('security and edge cases', () => {
+    it('should handle very long model names', async () => {
+      const longModelName = 'a'.repeat(500);
+      const result = await parseModelString('test-provider', longModelName);
+      expect(result.add[0].id).toBe(longModelName);
+    });
+
+    it('should handle very long display names', async () => {
+      const longDisplayName = 'b'.repeat(500);
+      const result = await parseModelString('test-provider', `model=${longDisplayName}`);
+      expect(result.add[0].displayName).toBe(longDisplayName);
+    });
+
+    it('should handle extremely large token values', async () => {
+      const result = await parseModelString('test-provider', 'model<999999999999>');
+      expect(result.add[0].contextWindowTokens).toBe(999_999_999_999);
+    });
+
+    it('should handle negative token values gracefully', async () => {
+      const result = await parseModelString('test-provider', 'model<-1024>');
+      expect(result.add[0].contextWindowTokens).toBe(-1024);
+    });
+
+    it('should handle models with only whitespace in display name', async () => {
+      const result = await parseModelString('test-provider', 'model=   ');
+      expect(result.add[0]).toEqual({
+        id: 'model',
+        displayName: '   ',
+        abilities: {},
+        type: 'chat',
+      });
+    });
+
+    it('should handle multiple consecutive commas', async () => {
+      const result = await parseModelString('test-provider', 'model1,,,,,model2');
+      expect(result.add).toHaveLength(2);
+      expect(result.add[0].id).toBe('model1');
+      expect(result.add[1].id).toBe('model2');
+    });
+
+    it('should handle Chinese comma mixed with English comma', async () => {
+      const result = await parseModelString('test-provider', 'model1，model2,model3，model4');
+      expect(result.add).toHaveLength(4);
+    });
+
+    it('should handle model names with special characters', async () => {
+      const result = await parseModelString('test-provider', 'model-v1.2_beta@2024');
+      expect(result.add[0].id).toBe('model-v1.2_beta@2024');
+    });
+
+    it('should handle equal signs in display name', async () => {
+      const result = await parseModelString('test-provider', 'model=GPT=4=Turbo');
+      // The split('=') only uses the first two parts: id and displayName
+      expect(result.add[0]).toEqual({
+        id: 'model',
+        displayName: 'GPT',
+        abilities: {},
+        type: 'chat',
+      });
+    });
+
+    it('should handle arrow in model id when withDeploymentName is false', async () => {
+      const result = await parseModelString('test-provider', 'model->deploy=Display', false);
+      expect(result.add[0]).toEqual({
+        id: 'model->deploy',
+        displayName: 'Display',
+        abilities: {},
+        type: 'chat',
+      });
+    });
+
+    it('should handle empty model string after splitting', async () => {
+      const result = await parseModelString('test-provider', ',,,');
+      expect(result.add).toHaveLength(0);
+      expect(result.removed).toHaveLength(0);
+      expect(result.removeAll).toBe(false);
+    });
   });
 });
 
@@ -470,6 +669,54 @@ describe('extractEnabledModels', () => {
       '+gpt-4=Custom GPT-4,+claude-2=Custom Claude',
     );
     expect(result).toEqual(['gpt-4', 'claude-2']);
+  });
+
+  it('should handle model strings with capabilities', async () => {
+    const result = await extractEnabledModels(
+      'openai',
+      '+gpt-4=GPT-4<128000:vision:fc>,+claude-2<100000>',
+    );
+    expect(result).toEqual(['gpt-4', 'claude-2']);
+  });
+
+  it('should return undefined for default modelString parameter', async () => {
+    const result = await extractEnabledModels('test-provider');
+    expect(result).toBeUndefined();
+  });
+
+  it('should handle only removal operations', async () => {
+    const result = await extractEnabledModels('test-provider', '-model1,-model2');
+    expect(result).toBeUndefined();
+  });
+
+  it('should handle duplicate model IDs', async () => {
+    const result = await extractEnabledModels('test-provider', '+model1,+model1,+model2,+model1');
+    // Due to deduplication in parseModelString, the last model1 wins and is placed at the end
+    expect(result).toEqual(['model2', 'model1']);
+  });
+
+  it('should handle whitespace and empty entries', async () => {
+    const result = await extractEnabledModels('test-provider', '+model1,  ,+model2,,+model3');
+    expect(result).toEqual(['model1', 'model2', 'model3']);
+  });
+
+  it('should handle deployment names with capabilities', async () => {
+    const result = await extractEnabledModels(
+      'azure',
+      '+gpt-4->deploy1=GPT-4<128000:fc>,+gpt-35-turbo->deploy2',
+      true,
+    );
+    expect(result).toEqual(['gpt-4', 'gpt-35-turbo']);
+  });
+
+  it('should return undefined when only removeAll is specified', async () => {
+    const result = await extractEnabledModels('test-provider', '-all');
+    expect(result).toBeUndefined();
+  });
+
+  it('should handle models added after removeAll', async () => {
+    const result = await extractEnabledModels('test-provider', '-all,+model1,+model2');
+    expect(result).toEqual(['model1', 'model2']);
   });
 });
 
@@ -832,5 +1079,107 @@ describe('transformToChatModelCards', () => {
         type: 'chat',
       },
     ]);
+  });
+
+  it('should handle removing specific model then re-adding it with custom name', async () => {
+    const defaultChatModels: AiFullModelCard[] = [
+      { id: 'model1', displayName: 'Model 1', enabled: true, type: 'chat' },
+      { id: 'model2', displayName: 'Model 2', enabled: true, type: 'chat' },
+    ];
+    const result = await transformToAiModelList({
+      modelString: '-model1,+model1=Custom Model 1',
+      defaultModels: defaultChatModels,
+      providerId: 'openai',
+    });
+    expect(result).toContainEqual({
+      id: 'model1',
+      displayName: 'Custom Model 1',
+      enabled: true,
+      abilities: {},
+      type: 'chat',
+    });
+  });
+
+  it('should handle abilities merging correctly', async () => {
+    const defaultChatModels: AiFullModelCard[] = [
+      {
+        id: 'model1',
+        displayName: 'Model 1',
+        enabled: false,
+        type: 'chat',
+        abilities: { vision: true },
+      },
+    ];
+    const result = await transformToAiModelList({
+      modelString: '+model1<8192:fc>',
+      defaultModels: defaultChatModels,
+      providerId: 'openai',
+    });
+    // Merge operation preserves existing abilities and adds new ones from parsed model
+    expect(result?.[0].abilities).toEqual({
+      vision: true,
+    });
+  });
+
+  it('should preserve original displayName when adding model without custom name', async () => {
+    const knownModel = LOBE_DEFAULT_MODEL_LIST.find((m) => m.providerId === 'openai')!;
+    const result = await transformToAiModelList({
+      modelString: `+${knownModel.id}`,
+      defaultModels: [],
+      providerId: 'openai',
+    });
+    expect(result?.[0].displayName).toBe(knownModel.displayName || knownModel.id);
+  });
+
+  it('should handle complex real-world scenario with multiple operations', async () => {
+    const defaultChatModels: AiFullModelCard[] = [
+      { id: 'model1', displayName: 'Model 1', enabled: true, type: 'chat' },
+      { id: 'model2', displayName: 'Model 2', enabled: false, type: 'chat' },
+      { id: 'model3', displayName: 'Model 3', enabled: true, type: 'chat' },
+    ];
+    const result = await transformToAiModelList({
+      modelString: '-model2,+model4=New Model<4096:vision>',
+      defaultModels: defaultChatModels,
+      providerId: 'openai',
+    });
+    // model2 should be removed
+    expect(result?.find((m) => m.id === 'model2')).toBeUndefined();
+    // model3 should remain
+    expect(result?.find((m) => m.id === 'model3')).toBeDefined();
+    // model1 should remain unchanged
+    expect(result?.find((m) => m.id === 'model1')).toBeDefined();
+    // model4 should be added
+    const model4 = result?.find((m) => m.id === 'model4');
+    expect(model4).toBeDefined();
+    expect(model4?.displayName).toBe('New Model');
+    expect(model4?.abilities?.vision).toBe(true);
+  });
+
+  it('should return undefined for undefined modelString', async () => {
+    const result = await transformToAiModelList({
+      modelString: undefined,
+      defaultModels: [],
+      providerId: 'openai',
+    });
+    expect(result).toBeUndefined();
+  });
+
+  it('should handle withDeploymentName for custom models not in known list', async () => {
+    const result = await transformToAiModelList({
+      modelString: '+custom-model->my-deployment=Custom Model',
+      defaultModels: [],
+      providerId: 'custom-provider',
+      withDeploymentName: true,
+    });
+    expect(result?.[0]).toEqual({
+      id: 'custom-model',
+      displayName: 'Custom Model',
+      enabled: true,
+      abilities: {},
+      type: 'chat',
+      config: {
+        deploymentName: 'my-deployment',
+      },
+    });
   });
 });

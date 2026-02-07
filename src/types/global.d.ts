@@ -18,6 +18,7 @@ declare global {
   interface Window {
     lobeEnv?: {
       darwinMajorVersion?: number;
+      isMacTahoe?: boolean;
     };
   }
 }

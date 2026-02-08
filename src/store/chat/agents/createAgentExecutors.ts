@@ -80,19 +80,19 @@ export const createAgentExecutors = (context: {
 
   /**
    * Get effective agentId for message creation - depends on scope
-   * - scope: 'group' | 'group_agent': subAgentId changes message ownership (agentId = subAgentId)
-   * - scope: 'sub_agent': agentId stays the same (subAgentId only for config/display)
+   * - scope: 'sub_agent': agentId stays unchanged (subAgentId only for config/display)
+   * - Other scopes with subAgentId: use subAgentId for message ownership (e.g., Group mode)
    * - Default: use agentId
    */
   const getEffectiveAgentId = () => {
     const opContext = getOperationContext();
-    const isGroupScope =
-      opContext.scope === 'group' ||
-      opContext.scope === 'group_agent' ||
-      opContext.scope === 'group_agent_builder';
 
-    // Only use subAgentId for message ownership in Group scopes
-    return isGroupScope && opContext.subAgentId ? opContext.subAgentId : opContext.agentId;
+    // Use subAgentId for message ownership except in sub_agent scope
+    // - sub_agent scope: callAgent scenario, message.agentId should stay unchanged
+    // - Other scopes with subAgentId: Group mode, message.agentId should be subAgentId
+    return opContext.subAgentId && opContext.scope !== 'sub_agent'
+      ? opContext.subAgentId
+      : opContext.agentId;
   };
 
   /**

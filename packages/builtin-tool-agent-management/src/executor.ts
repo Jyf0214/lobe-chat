@@ -11,11 +11,11 @@ import {
   type BuiltinToolContext,
   type BuiltinToolResult,
   type ConversationContext,
-  type UIChatMessage,
 } from '@lobechat/types';
 
 import { agentService } from '@/services/agent';
 import { discoverService } from '@/services/discover';
+import { useAgentStore } from '@/store/agent';
 import { useChatStore } from '@/store/chat';
 import { dbMessageSelectors } from '@/store/chat/slices/message/selectors';
 import { messageMapKey } from '@/store/chat/utils/messageMapKey';
@@ -128,14 +128,6 @@ class AgentManagementExecutor extends BaseExecutor<typeof AgentManagementApiName
     // Mode 2: Agents mode (non-group) - execute directly with subAgentId
     if (ctx.registerAfterCompletion) {
       ctx.registerAfterCompletion(async () => {
-
-        // Dynamic import to avoid issues with @/ paths in packages
-        const { useChatStore } = await import('@/store/chat');
-        const { dbMessageSelectors } = await import('@/store/chat/slices/message/selectors');
-        const { messageMapKey } = await import('@/store/chat/utils/messageMapKey');
-        const { useAgentStore } = await import('@/store/agent');
-        const { agentService } = await import('@/services/agent');
-
         const get = useChatStore.getState;
 
         // Load target agent config if not already loaded
@@ -168,14 +160,6 @@ class AgentManagementExecutor extends BaseExecutor<typeof AgentManagementApiName
           console.error('[callAgent] No messages found in current conversation');
           return;
         }
-
-        // Inject instruction as virtual user message if provided
-        const now = Date.now();
-        const messagesWithInstruction: UIChatMessage[] = instruction
-          ? [
-            ...messages,
-          ]
-          : messages;
 
         try {
           // Execute with subAgentId + scope: 'sub_agent'

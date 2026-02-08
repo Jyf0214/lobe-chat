@@ -1240,6 +1240,7 @@ describe('call_llm executor', () => {
       const mockStore = createMockStore();
       const context = createTestContext({
         agentId: 'supervisor-agent', // Main agent (supervisor)
+        scope: 'group_agent',
         subAgentId: 'worker-agent', // Actual executing agent
         topicId: 'group-topic',
       });
@@ -1326,6 +1327,7 @@ describe('call_llm executor', () => {
       const mockStore = createMockStore();
       const context = createTestContext({
         agentId: 'supervisor-agent',
+        scope: 'group_agent',
         subAgentId: 'worker-agent',
         groupId: 'group-123',
         topicId: 'group-topic',
@@ -1358,6 +1360,52 @@ describe('call_llm executor', () => {
         expect.objectContaining({
           groupId: 'group-123',
           agentId: 'worker-agent',
+          role: 'assistant',
+        }),
+        expect.objectContaining({
+          operationId: expect.any(String),
+        }),
+      );
+    });
+
+    it('should use subAgentId even without explicit scope when groupId is present (backward compatibility)', async () => {
+      // Given - Group scenario without explicit scope (backward compatibility test)
+      const mockStore = createMockStore();
+      const context = createTestContext({
+        agentId: 'supervisor-agent',
+        subAgentId: 'worker-agent',
+        groupId: 'group-123',
+        topicId: 'group-topic',
+        // No explicit scope - should infer from groupId
+      });
+      const instruction = createCallLLMInstruction({
+        model: 'gpt-4',
+        provider: 'openai',
+        messages: [createUserMessage()],
+      });
+      const state = createInitialState({ operationId: context.operationId });
+
+      mockStore.internal_fetchAIChatMessage = vi.fn().mockResolvedValue({
+        content: 'AI response',
+        finishType: 'stop',
+        isFunctionCall: false,
+      });
+      mockStore.dbMessagesMap[context.messageKey] = [];
+
+      // When
+      await executeWithMockContext({
+        executor: 'call_llm',
+        instruction,
+        state,
+        mockStore,
+        context,
+      });
+
+      // Then - should still use subAgentId for backward compatibility
+      expect(mockStore.optimisticCreateMessage).toHaveBeenCalledWith(
+        expect.objectContaining({
+          agentId: 'worker-agent', // Should use subAgentId even without explicit scope
+          groupId: 'group-123',
           role: 'assistant',
         }),
         expect.objectContaining({

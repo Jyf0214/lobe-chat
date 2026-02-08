@@ -85,7 +85,7 @@ describe('createClientTaskThread Integration', () => {
     testTopicId = topic.id;
 
     // Create parent message (simulating a task message from supervisor)
-    const [parentMsg] = await serverDB
+    const parentMsgResult = await serverDB
       .insert(messages)
       .values({
         userId,
@@ -96,6 +96,7 @@ describe('createClientTaskThread Integration', () => {
         groupId: testGroupId,
       })
       .returning();
+    const [parentMsg] = parentMsgResult;
     parentMessageId = parentMsg.id;
   });
 

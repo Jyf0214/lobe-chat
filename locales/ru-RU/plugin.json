@@ -1,4 +1,5 @@
 {
+  "arguments.moreParams": "Всего параметров: {{count}}",
   "arguments.title": "Аргументы",
   "builtins.lobe-agent-builder.apiName.getAvailableModels": "Получить доступные модели",
   "builtins.lobe-agent-builder.apiName.getAvailableTools": "Получить доступные навыки",
@@ -177,6 +178,9 @@
   "builtins.lobe-user-memory.apiName.searchUserMemory": "Поиск в памяти",
   "builtins.lobe-user-memory.apiName.updateIdentityMemory": "Обновить память личности",
   "builtins.lobe-user-memory.inspector.noResults": "Нет результатов",
+  "builtins.lobe-user-memory.render.contexts": "Контексты",
+  "builtins.lobe-user-memory.render.experiences": "Опыт",
+  "builtins.lobe-user-memory.render.preferences": "Предпочтения",
   "builtins.lobe-user-memory.title": "Память",
   "builtins.lobe-web-browsing.apiName.crawlMultiPages": "Прочитать несколько страниц",
   "builtins.lobe-web-browsing.apiName.crawlSinglePage": "Прочитать содержимое страницы",

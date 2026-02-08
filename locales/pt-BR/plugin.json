@@ -1,4 +1,5 @@
 {
+  "arguments.moreParams": "{{count}} parâmetros no total",
   "arguments.title": "Argumentos",
   "builtins.lobe-agent-builder.apiName.getAvailableModels": "Obter modelos disponíveis",
   "builtins.lobe-agent-builder.apiName.getAvailableTools": "Obter Habilidades disponíveis",
@@ -177,6 +178,9 @@
   "builtins.lobe-user-memory.apiName.searchUserMemory": "Buscar memória",
   "builtins.lobe-user-memory.apiName.updateIdentityMemory": "Atualizar memória de identidade",
   "builtins.lobe-user-memory.inspector.noResults": "Nenhum resultado encontrado",
+  "builtins.lobe-user-memory.render.contexts": "Contextos",
+  "builtins.lobe-user-memory.render.experiences": "Experiências",
+  "builtins.lobe-user-memory.render.preferences": "Preferências",
   "builtins.lobe-user-memory.title": "Memória",
   "builtins.lobe-web-browsing.apiName.crawlMultiPages": "Ler várias páginas",
   "builtins.lobe-web-browsing.apiName.crawlSinglePage": "Ler conteúdo da página",

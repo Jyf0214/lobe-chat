@@ -235,7 +235,9 @@ export type ModelSearchImplementType = 'tool' | 'params' | 'internal';
 export type ExtendParamsType =
   | 'reasoningBudgetToken'
   | 'enableReasoning'
+  | 'enableAdaptiveThinking'
   | 'disableContextCaching'
+  | 'effort'
   | 'reasoningEffort'
   | 'gpt5ReasoningEffort'
   | 'gpt5_1ReasoningEffort'
@@ -258,6 +260,35 @@ export interface AiModelSettings {
   searchImpl?: ModelSearchImplementType;
   searchProvider?: string;
 }
+
+export const ExtendParamsTypeSchema = z.enum([
+  'reasoningBudgetToken',
+  'enableReasoning',
+  'enableAdaptiveThinking',
+  'disableContextCaching',
+  'effort',
+  'reasoningEffort',
+  'gpt5ReasoningEffort',
+  'gpt5_1ReasoningEffort',
+  'gpt5_2ReasoningEffort',
+  'gpt5_2ProReasoningEffort',
+  'textVerbosity',
+  'thinking',
+  'thinkingBudget',
+  'thinkingLevel',
+  'thinkingLevel2',
+  'imageAspectRatio',
+  'imageResolution',
+  'urlContext',
+]);
+
+export const ModelSearchImplementTypeSchema = z.enum(['tool', 'params', 'internal']);
+
+export const AiModelSettingsSchema = z.object({
+  extendParams: z.array(ExtendParamsTypeSchema).optional(),
+  searchImpl: ModelSearchImplementTypeSchema.optional(),
+  searchProvider: z.string().optional(),
+});
 
 export interface AIChatModelCard extends AIBaseModelCard {
   abilities?: ModelAbilities;
@@ -344,6 +375,7 @@ export const CreateAiModelSchema = z.object({
   id: z.string(),
   providerId: z.string(),
   releasedAt: z.string().optional(),
+  settings: AiModelSettingsSchema.optional(),
   type: AiModelTypeSchema.optional(),
 
   // checkModel: z.string().optional(),
@@ -380,6 +412,7 @@ export const UpdateAiModelSchema = z.object({
     .optional(),
   contextWindowTokens: z.number().nullable().optional(),
   displayName: z.string().nullable().optional(),
+  settings: AiModelSettingsSchema.optional(),
   type: AiModelTypeSchema.optional(),
 });
 

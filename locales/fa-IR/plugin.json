@@ -1,4 +1,5 @@
 {
+  "arguments.moreParams": "{{count}} پارامتر در مجموع",
   "arguments.title": "آرگومان‌ها",
   "builtins.lobe-agent-builder.apiName.getAvailableModels": "دریافت مدل‌های موجود",
   "builtins.lobe-agent-builder.apiName.getAvailableTools": "دریافت مهارت‌های موجود",
@@ -177,6 +178,9 @@
   "builtins.lobe-user-memory.apiName.searchUserMemory": "جستجوی حافظه",
   "builtins.lobe-user-memory.apiName.updateIdentityMemory": "به‌روزرسانی حافظه هویتی",
   "builtins.lobe-user-memory.inspector.noResults": "نتیجه‌ای یافت نشد",
+  "builtins.lobe-user-memory.render.contexts": "زمینه‌ها",
+  "builtins.lobe-user-memory.render.experiences": "تجربه‌ها",
+  "builtins.lobe-user-memory.render.preferences": "ترجیحات",
   "builtins.lobe-user-memory.title": "حافظه",
   "builtins.lobe-web-browsing.apiName.crawlMultiPages": "خواندن چندین صفحه",
   "builtins.lobe-web-browsing.apiName.crawlSinglePage": "خواندن محتوای صفحه",

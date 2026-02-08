@@ -1,4 +1,5 @@
 {
+  "arguments.moreParams": "合計で{{count}}個のパラメーターがあります",
   "arguments.title": "パラメーター一覧",
   "builtins.lobe-agent-builder.apiName.getAvailableModels": "利用可能なモデルを取得",
   "builtins.lobe-agent-builder.apiName.getAvailableTools": "利用可能なツールを取得",
@@ -177,6 +178,9 @@
   "builtins.lobe-user-memory.apiName.searchUserMemory": "記憶を検索",
   "builtins.lobe-user-memory.apiName.updateIdentityMemory": "アイデンティティ記憶を更新",
   "builtins.lobe-user-memory.inspector.noResults": "結果が見つかりません",
+  "builtins.lobe-user-memory.render.contexts": "コンテキスト",
+  "builtins.lobe-user-memory.render.experiences": "体験",
+  "builtins.lobe-user-memory.render.preferences": "設定",
   "builtins.lobe-user-memory.title": "記憶",
   "builtins.lobe-web-browsing.apiName.crawlMultiPages": "複数のページの内容を読み取る",
   "builtins.lobe-web-browsing.apiName.crawlSinglePage": "ページの内容を読み取る",

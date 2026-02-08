@@ -1,4 +1,5 @@
 {
+  "arguments.moreParams": "{{count}} Parameter insgesamt",
   "arguments.title": "Argumente",
   "builtins.lobe-agent-builder.apiName.getAvailableModels": "Verfügbare Modelle abrufen",
   "builtins.lobe-agent-builder.apiName.getAvailableTools": "Verfügbare Skills abrufen",
@@ -177,6 +178,9 @@
   "builtins.lobe-user-memory.apiName.searchUserMemory": "Gedächtnis durchsuchen",
   "builtins.lobe-user-memory.apiName.updateIdentityMemory": "Identitätsgedächtnis aktualisieren",
   "builtins.lobe-user-memory.inspector.noResults": "Keine Ergebnisse",
+  "builtins.lobe-user-memory.render.contexts": "Kontexte",
+  "builtins.lobe-user-memory.render.experiences": "Erfahrungen",
+  "builtins.lobe-user-memory.render.preferences": "Einstellungen",
   "builtins.lobe-user-memory.title": "Gedächtnis",
   "builtins.lobe-web-browsing.apiName.crawlMultiPages": "Mehrere Seiten lesen",
   "builtins.lobe-web-browsing.apiName.crawlSinglePage": "Seiteninhalt lesen",

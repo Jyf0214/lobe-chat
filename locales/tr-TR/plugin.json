@@ -1,4 +1,5 @@
 {
+  "arguments.moreParams": "Toplam {{count}} parametre",
   "arguments.title": "Argümanlar",
   "builtins.lobe-agent-builder.apiName.getAvailableModels": "Mevcut modelleri al",
   "builtins.lobe-agent-builder.apiName.getAvailableTools": "Mevcut Yetenekleri al",
@@ -177,6 +178,9 @@
   "builtins.lobe-user-memory.apiName.searchUserMemory": "Hafızada ara",
   "builtins.lobe-user-memory.apiName.updateIdentityMemory": "Kimlik hafızasını güncelle",
   "builtins.lobe-user-memory.inspector.noResults": "Sonuç bulunamadı",
+  "builtins.lobe-user-memory.render.contexts": "Bağlamlar",
+  "builtins.lobe-user-memory.render.experiences": "Deneyimler",
+  "builtins.lobe-user-memory.render.preferences": "Tercihler",
   "builtins.lobe-user-memory.title": "Hafıza",
   "builtins.lobe-web-browsing.apiName.crawlMultiPages": "Birden fazla sayfayı oku",
   "builtins.lobe-web-browsing.apiName.crawlSinglePage": "Sayfa içeriğini oku",

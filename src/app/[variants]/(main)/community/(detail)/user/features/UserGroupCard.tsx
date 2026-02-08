@@ -19,6 +19,7 @@ import {
   DownloadIcon,
   Eye,
   EyeOff,
+  GitForkIcon,
   MoreVerticalIcon,
   Pencil,
   UsersIcon,
@@ -116,10 +117,12 @@ const UserGroupCard = memo<UserGroupCardProps>(
     description,
     createdAt,
     category,
+    forkCount,
     installCount,
     identifier,
     memberCount,
     status,
+    isValidated,
   }) => {
     const { t } = useTranslation(['discover', 'setting']);
     const navigate = useNavigate();
@@ -235,10 +238,17 @@ const UserGroupCard = memo<UserGroupCardProps>(
                     {title}
                   </Text>
                 </Link>
-                {isOwner && status && (
-                  <AntTag color={getStatusTagColor(status)} style={{ flexShrink: 0, margin: 0 }}>
-                    {t(`setting:myAgents.status.${status}`)}
+                {isValidated === false ? (
+                  <AntTag color="orange" style={{ flexShrink: 0, margin: 0 }}>
+                    {t('groupAgents.underReview', { defaultValue: 'Under Review' })}
                   </AntTag>
+                ) : (
+                  isOwner &&
+                  status && (
+                    <AntTag color={getStatusTagColor(status)} style={{ flexShrink: 0, margin: 0 }}>
+                      {t(`setting:myAgents.status.${status}`)}
+                    </AntTag>
+                  )
                 )}
               </Flexbox>
             </Flexbox>
@@ -264,6 +274,17 @@ const UserGroupCard = memo<UserGroupCardProps>(
                 >
                   <Tag className={styles.statTag} icon={<Icon icon={UsersIcon} />}>
                     {formatIntergerNumber(memberCount)}
+                  </Tag>
+                </Tooltip>
+              )}
+              {Boolean(forkCount && forkCount > 0) && (
+                <Tooltip
+                  placement={'top'}
+                  styles={{ root: { pointerEvents: 'none' } }}
+                  title={t('fork.forksCount', { count: forkCount })}
+                >
+                  <Tag className={styles.statTag} icon={<Icon icon={GitForkIcon} />}>
+                    {formatIntergerNumber(forkCount)}
                   </Tag>
                 </Tooltip>
               )}

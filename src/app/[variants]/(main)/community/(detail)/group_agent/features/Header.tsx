@@ -6,13 +6,20 @@ import {
   Button,
   Flexbox,
   Icon,
+  Tag,
   Text,
   Tooltip,
   TooltipGroup,
 } from '@lobehub/ui';
 import { App } from 'antd';
 import { createStaticStyles, cssVar, useResponsive } from 'antd-style';
-import { BookmarkCheckIcon, BookmarkIcon, DotIcon, HeartIcon, UsersIcon } from 'lucide-react';
+import {
+  BookmarkCheckIcon,
+  BookmarkIcon,
+  DotIcon,
+  GitBranchIcon,
+  UsersIcon,
+} from 'lucide-react';
 import qs from 'query-string';
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +32,7 @@ import { useMarketAuth } from '@/layout/AuthProvider/MarketAuth';
 import { socialService } from '@/services/social';
 
 import { useDetailContext } from './DetailProvider';
+import GroupAgentForkTag from './GroupAgentForkTag';
 
 const styles = createStaticStyles(({ css, cssVar }) => ({
   time: css`
@@ -40,7 +48,6 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
   const { mobile = isMobile } = useResponsive();
   const { isAuthenticated, signIn, session } = useMarketAuth();
   const [favoriteLoading, setFavoriteLoading] = useState(false);
-  const [likeLoading, setLikeLoading] = useState(false);
 
   const {
     memberAgents = [],
@@ -51,6 +58,7 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
     identifier,
     createdAt,
     userName,
+    forkCount,
   } = data;
 
   const displayAvatar = avatar || title?.[0] || '👥';
@@ -65,19 +73,11 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
   // Fetch favorite status
   const { data: favoriteStatus, mutate: mutateFavorite } = useSWR(
     identifier && isAuthenticated ? ['favorite-status', 'agent', identifier] : null,
-    () => socialService.checkFavoriteStatus('agent', identifier!),
+    () => socialService.checkFavoriteStatus('agent-group', identifier!),
     { revalidateOnFocus: false },
   );
 
   const isFavorited = favoriteStatus?.isFavorited ?? false;
-
-  // Fetch like status
-  const { data: likeStatus, mutate: mutateLike } = useSWR(
-    identifier && isAuthenticated ? ['like-status', 'agent', identifier] : null,
-    () => socialService.checkLikeStatus('agent', identifier!),
-    { revalidateOnFocus: false },
-  );
-  const isLiked = likeStatus?.isLiked ?? false;
 
   const handleFavoriteClick = async () => {
     if (!isAuthenticated) {
@@ -90,10 +90,10 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
     setFavoriteLoading(true);
     try {
       if (isFavorited) {
-        await socialService.removeFavorite('agent', identifier);
+        await socialService.removeFavorite('agent-group', identifier);
         message.success(t('assistant.unfavoriteSuccess'));
       } else {
-        await socialService.addFavorite('agent', identifier);
+        await socialService.addFavorite('agent-group', identifier);
         message.success(t('assistant.favoriteSuccess'));
       }
       await mutateFavorite();
@@ -101,31 +101,6 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
       message.error(t('assistant.favoriteFailed'));
     } finally {
       setFavoriteLoading(false);
-    }
-  };
-
-  const handleLikeClick = async () => {
-    if (!isAuthenticated) {
-      await signIn();
-      return;
-    }
-
-    if (!identifier) return;
-
-    setLikeLoading(true);
-    try {
-      if (isLiked) {
-        await socialService.unlike('agent', identifier);
-        message.success(t('assistant.unlikeSuccess'));
-      } else {
-        await socialService.like('agent', identifier);
-        message.success(t('assistant.likeSuccess'));
-      }
-      await mutateLike();
-    } catch {
-      message.error(t('assistant.likeFailed'));
-    } finally {
-      setLikeLoading(false);
     }
   };
 
@@ -182,14 +157,6 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
                 {title}
               </Text>
             </Flexbox>
-            <Tooltip title={isLiked ? t('assistant.unlike') : t('assistant.like')}>
-              <ActionIcon
-                icon={HeartIcon}
-                loading={likeLoading}
-                onClick={handleLikeClick}
-                style={isLiked ? { color: '#ff4d4f' } : undefined}
-              />
-            </Tooltip>
             <Tooltip title={isFavorited ? t('assistant.unfavorite') : t('assistant.favorite')}>
               <ActionIcon
                 icon={isFavorited ? BookmarkCheckIcon : BookmarkIcon}
@@ -199,7 +166,7 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
               />
             </Tooltip>
           </Flexbox>
-          <Flexbox align={'center'} gap={4} horizontal>
+          <Flexbox align={'center'} gap={8} horizontal wrap={'wrap'}>
             {(() => {
               // API returns author as object {avatar, name, userName}, but type definition says string
               const authorObj =
@@ -220,6 +187,12 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
               date={createdAt as string}
               template={'MMM DD, YYYY'}
             />
+            <GroupAgentForkTag />
+            {!!forkCount && forkCount > 0 && (
+              <Tag bordered={false} color="default" icon={<Icon icon={GitBranchIcon} />}>
+                {forkCount} {t('fork.forks')}
+              </Tag>
+            )}
           </Flexbox>
         </Flexbox>
       </Flexbox>

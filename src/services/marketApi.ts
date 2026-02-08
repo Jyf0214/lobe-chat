@@ -45,7 +45,7 @@ export class MarketApiService {
   }
 
   // Get agent detail by identifier
-  async getAgentDetail(identifier: string): Promise<AgentItemDetail> {
+  async getAgentDetail(identifier: string): Promise<AgentItemDetail & { forkedFromAgentId?: string }> {
     return lambdaClient.market.agent.getAgentDetail.query({
       identifier,
     }) as Promise<AgentItemDetail>;
@@ -147,6 +147,13 @@ export class MarketApiService {
   }
 
   // ==================== Agent Group Status Management ====================
+
+  // Get agent group detail by identifier
+  async getAgentGroupDetail(identifier: string): Promise<any> {
+    return lambdaClient.market.agentGroup.getAgentGroupDetail.query({
+      identifier,
+    }) as Promise<any>;
+  }
 
   async publishAgentGroup(identifier: string): Promise<void> {
     await lambdaClient.market.agentGroup.publishAgentGroup.mutate({ identifier });

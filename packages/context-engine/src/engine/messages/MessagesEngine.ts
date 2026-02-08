@@ -10,6 +10,7 @@ import {
   GroupMessageFlattenProcessor,
   GroupOrchestrationFilterProcessor,
   GroupRoleTransformProcessor,
+  HistoryTruncateProcessor,
   InputTemplateProcessor,
   MessageCleanupProcessor,
   MessageContentProcessor,
@@ -114,6 +115,8 @@ export class MessagesEngine {
       provider,
       systemRole,
       inputTemplate,
+      enableHistoryCount,
+      historyCount,
       historySummary,
       formatHistorySummary,
       knowledge,
@@ -214,10 +217,10 @@ export class MessagesEngine {
         historySummary,
       }),
 
-      // 12. Page Selections injection (inject user-selected text into each user message that has them)
+      // 10. Page Selections injection (inject user-selected text into each user message that has them)
       new PageSelectionsInjector({ enabled: isPageEditorEnabled }),
 
-      // 10. Page Editor context injection (inject current page content to last user message)
+      // 11. Page Editor context injection (inject current page content to last user message)
       new PageEditorContextInjector({
         enabled: isPageEditorEnabled,
         // Use direct pageContentContext if provided (server-side), otherwise build from initialContext + stepContext (frontend)
@@ -244,33 +247,39 @@ export class MessagesEngine {
       // Phase 4: Message Transformation
       // =============================================
 
-      // 13. Input template processing
+      // 12. History truncate (limit message count based on configuration)
+      new HistoryTruncateProcessor({
+        enableHistoryCount,
+        historyCount,
+      }),
+
+      // 14. Input template processing
       new InputTemplateProcessor({ inputTemplate }),
 
-      // 14. Placeholder variables processing
+      // 15. Placeholder variables processing
       new PlaceholderVariablesProcessor({
         variableGenerators: variableGenerators || {},
       }),
 
-      // 15. AgentCouncil message flatten (convert role=agentCouncil to standard assistant + tool messages)
+      // 16. AgentCouncil message flatten (convert role=agentCouncil to standard assistant + tool messages)
       new AgentCouncilFlattenProcessor(),
 
-      // 16. Group message flatten (convert role=assistantGroup to standard assistant + tool messages)
+      // 17. Group message flatten (convert role=assistantGroup to standard assistant + tool messages)
       new GroupMessageFlattenProcessor(),
 
-      // 17. Tasks message flatten (convert role=tasks to individual task messages)
+      // 18. Tasks message flatten (convert role=tasks to individual task messages)
       new TasksFlattenProcessor(),
 
-      // 18. Task message processing (convert role=task to assistant with instruction + content)
+      // 19. Task message processing (convert role=task to assistant with instruction + content)
       new TaskMessageProcessor(),
 
-      // 19. Supervisor role restore (convert role=supervisor back to role=assistant for model)
+      // 20. Supervisor role restore (convert role=supervisor back to role=assistant for model)
       new SupervisorRoleRestoreProcessor(),
 
-      // 19b. Compressed group role transform (convert role=compressedGroup to role=user for model)
+      // 21. Compressed group role transform (convert role=compressedGroup to role=user for model)
       new CompressedGroupRoleTransformProcessor(),
 
-      // 20. Group orchestration filter (remove supervisor's orchestration messages like broadcast/speak)
+      // 22. Group orchestration filter (remove supervisor's orchestration messages like broadcast/speak)
       // This must be BEFORE GroupRoleTransformProcessor so we filter based on original agentId/tools
       ...(isAgentGroupEnabled && agentGroup.agentMap && agentGroup.currentAgentId
         ? [
@@ -285,7 +294,7 @@ export class MessagesEngine {
           ]
         : []),
 
-      // 21. Group role transform (convert other agents' messages to user role with speaker tags)
+      // 23. Group role transform (convert other agents' messages to user role with speaker tags)
       // This must be BEFORE ToolCallProcessor so other agents' tool messages are converted first
       ...(isAgentGroupEnabled && agentGroup.currentAgentId
         ? [
@@ -300,7 +309,7 @@ export class MessagesEngine {
       // Phase 5: Content Processing
       // =============================================
 
-      // 22. Message content processing (image encoding, etc.)
+      // 24. Message content processing (image encoding, etc.)
       new MessageContentProcessor({
         fileContext: fileContext || { enabled: true, includeFileUrl: true },
         isCanUseVideo: capabilities?.isCanUseVideo || (() => false),
@@ -309,7 +318,7 @@ export class MessagesEngine {
         provider,
       }),
 
-      // 23. Tool call processing
+      // 25. Tool call processing
       new ToolCallProcessor({
         genToolCallingName: this.toolNameResolver.generate.bind(this.toolNameResolver),
         isCanUseFC: capabilities?.isCanUseFC || (() => true),
@@ -317,10 +326,10 @@ export class MessagesEngine {
         provider,
       }),
 
-      // 24. Tool message reordering
+      // 26. Tool message reordering
       new ToolMessageReorder(),
 
-      // 25. Message cleanup (final step, keep only necessary fields)
+      // 27. Message cleanup (final step, keep only necessary fields)
       new MessageCleanupProcessor(),
     ];
   }

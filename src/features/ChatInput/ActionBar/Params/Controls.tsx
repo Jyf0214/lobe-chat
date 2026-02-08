@@ -16,7 +16,7 @@ import {
   TopP,
 } from '@/features/ModelParamsControl';
 import { useAgentStore } from '@/store/agent';
-import { agentByIdSelectors } from '@/store/agent/selectors';
+import { agentByIdSelectors, chatConfigByIdSelectors } from '@/store/agent/selectors';
 import { useServerConfigStore } from '@/store/serverConfig';
 
 import { useAgentId } from '../../hooks/useAgentId';
@@ -152,7 +152,15 @@ const Controls = memo<ControlsProps>(({ setUpdating }) => {
   const [form] = Form.useForm();
 
   const enableMaxTokens = AntdForm.useWatch(['chatConfig', 'enableMaxTokens'], form);
+  const enableHistoryCount = AntdForm.useWatch(['chatConfig', 'enableHistoryCount'], form);
   const { frequency_penalty, presence_penalty, temperature, top_p } = config.params ?? {};
+
+  const historyCountFromStore = useAgentStore((s) =>
+    chatConfigByIdSelectors.getHistoryCountById(agentId)(s),
+  );
+  const enableHistoryCountFromStore = useAgentStore((s) =>
+    chatConfigByIdSelectors.getEnableHistoryCountById(agentId)(s),
+  );
 
   const lastValuesRef = useRef<Record<ParamKey, number | undefined>>({
     frequency_penalty,
@@ -173,6 +181,17 @@ const Controls = memo<ControlsProps>(({ setUpdating }) => {
       lastValuesRef.current.frequency_penalty = frequency_penalty;
     }
   }, [config, form, frequency_penalty, presence_penalty, temperature, top_p]);
+
+  // Sync history count values to form
+  useEffect(() => {
+    form.setFieldsValue({
+      chatConfig: {
+        ...form.getFieldValue('chatConfig'),
+        enableHistoryCount: enableHistoryCountFromStore,
+        historyCount: historyCountFromStore,
+      },
+    });
+  }, [enableHistoryCountFromStore, historyCountFromStore, form]);
 
   const temperatureValue = AntdForm.useWatch(PARAM_NAME_MAP.temperature, form);
   const topPValue = AntdForm.useWatch(PARAM_NAME_MAP.top_p, form);
@@ -336,7 +355,55 @@ const Controls = memo<ControlsProps>(({ setUpdating }) => {
     },
   ];
 
-  const allItems = [...baseItems, ...maxTokensItems, ...contextCompressionItems];
+  // History Count items
+  const historyCountItems: FormItemProps[] = [
+    {
+      children: <Switch />,
+      label: (
+        <Flexbox align={'center'} className={styles.label} gap={8} horizontal>
+          {t('settingChat.enableHistoryCount.title')}
+          <InfoTooltip title={t('settingChat.historyCount.desc')} />
+        </Flexbox>
+      ),
+      name: ['chatConfig', 'enableHistoryCount'],
+      tag: 'history',
+      valuePropName: 'checked',
+    },
+    ...(enableHistoryCount
+      ? [
+          {
+            children: (
+              <SliderWithInput
+                max={20}
+                min={0}
+                step={1}
+                styles={{
+                  input: {
+                    maxWidth: 64,
+                  },
+                }}
+                unlimitedInput={true}
+              />
+            ),
+            label: (
+              <Flexbox align={'center'} className={styles.label} gap={8} horizontal>
+                {t('settingChat.historyCount.title')}
+                <InfoTooltip title={t('settingChat.historyCount.desc')} />
+              </Flexbox>
+            ),
+            name: ['chatConfig', 'historyCount'],
+            tag: 'history',
+          } satisfies FormItemProps,
+        ]
+      : []),
+  ];
+
+  const allItems = [
+    ...baseItems,
+    ...maxTokensItems,
+    ...contextCompressionItems,
+    ...historyCountItems,
+  ];
 
   return (
     <Form

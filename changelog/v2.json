@@ -1,6 +1,82 @@
 [
   {
     "children": {
+      "fixes": [
+        "Add api/version and api/desktop to public routes, show notification when file upload fails due to storage plan limit."
+      ]
+    },
+    "date": "2026-02-08",
+    "version": "2.1.20"
+  },
+  {
+    "children": {
+      "fixes": ["Fixed in community pluings tab the lobehub skills not display."]
+    },
+    "date": "2026-02-06",
+    "version": "2.1.19"
+  },
+  {
+    "children": {},
+    "date": "2026-02-04",
+    "version": "2.1.18"
+  },
+  {
+    "children": {},
+    "date": "2026-02-04",
+    "version": "2.1.17"
+  },
+  {
+    "children": {
+      "fixes": ["Add the preview publish to market button preview check."]
+    },
+    "date": "2026-02-04",
+    "version": "2.1.16"
+  },
+  {
+    "children": {
+      "fixes": ["Fixed the agents list the show updateAt time error."]
+    },
+    "date": "2026-02-04",
+    "version": "2.1.15"
+  },
+  {
+    "children": {
+      "fixes": ["Fix cannot uncompressed messages."]
+    },
+    "date": "2026-02-04",
+    "version": "2.1.14"
+  },
+  {
+    "children": {},
+    "date": "2026-02-03",
+    "version": "2.1.13"
+  },
+  {
+    "children": {},
+    "date": "2026-02-03",
+    "version": "2.1.12"
+  },
+  {
+    "children": {
+      "fixes": ["Hide password features when AUTH_DISABLE_EMAIL_PASSWORD is set."]
+    },
+    "date": "2026-02-02",
+    "version": "2.1.11"
+  },
+  {
+    "children": {},
+    "date": "2026-02-02",
+    "version": "2.1.10"
+  },
+  {
+    "children": {
+      "fixes": ["Use oauth2.link for generic OIDC provider account linking."]
+    },
+    "date": "2026-02-02",
+    "version": "2.1.9"
+  },
+  {
+    "children": {
       "improvements": ["Improve tasks display."]
     },
     "date": "2026-02-01",

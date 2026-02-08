@@ -2,6 +2,618 @@
 
 # Changelog
 
+### [Version 2.1.21](https://github.com/lobehub/lobe-chat/compare/v2.1.20...v2.1.21)
+
+<sup>Released on **2026-02-08**</sup>
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.20](https://github.com/lobehub/lobe-chat/compare/v2.1.19...v2.1.20)
+
+<sup>Released on **2026-02-08**</sup>
+
+#### 🐛 Bug Fixes
+
+- **misc**: Add api/version and api/desktop to public routes, show notification when file upload fails due to storage plan limit.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **misc**: Add api/version and api/desktop to public routes, closes [#12194](https://github.com/lobehub/lobe-chat/issues/12194) ([ea81cd4](https://github.com/lobehub/lobe-chat/commit/ea81cd4))
+- **misc**: Show notification when file upload fails due to storage plan limit, closes [#12176](https://github.com/lobehub/lobe-chat/issues/12176) ([f26d0df](https://github.com/lobehub/lobe-chat/commit/f26d0df))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.20](https://github.com/lobehub/lobe-chat/compare/v2.1.19...v2.1.20)
+
+<sup>Released on **2026-02-08**</sup>
+
+#### 🐛 Bug Fixes
+
+- **misc**: Add api/version and api/desktop to public routes, show notification when file upload fails due to storage plan limit.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **misc**: Add api/version and api/desktop to public routes, closes [#12194](https://github.com/lobehub/lobe-chat/issues/12194) ([ea81cd4](https://github.com/lobehub/lobe-chat/commit/ea81cd4))
+- **misc**: Show notification when file upload fails due to storage plan limit, closes [#12176](https://github.com/lobehub/lobe-chat/issues/12176) ([f26d0df](https://github.com/lobehub/lobe-chat/commit/f26d0df))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.20](https://github.com/lobehub/lobe-chat/compare/v2.1.19...v2.1.20)
+
+<sup>Released on **2026-02-07**</sup>
+
+#### 🐛 Bug Fixes
+
+- **misc**: Show notification when file upload fails due to storage plan limit.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **misc**: Show notification when file upload fails due to storage plan limit, closes [#12176](https://github.com/lobehub/lobe-chat/issues/12176) ([f26d0df](https://github.com/lobehub/lobe-chat/commit/f26d0df))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.20](https://github.com/lobehub/lobe-chat/compare/v2.1.19...v2.1.20)
+
+<sup>Released on **2026-02-07**</sup>
+
+#### 🐛 Bug Fixes
+
+- **misc**: Show notification when file upload fails due to storage plan limit.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **misc**: Show notification when file upload fails due to storage plan limit, closes [#12176](https://github.com/lobehub/lobe-chat/issues/12176) ([f26d0df](https://github.com/lobehub/lobe-chat/commit/f26d0df))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.19](https://github.com/lobehub/lobe-chat/compare/v2.1.18...v2.1.19)
+
+<sup>Released on **2026-02-06**</sup>
+
+#### ♻ Code Refactoring
+
+- **docker-compose**: Restructure dev environment.
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button.
+
+#### 🐛 Bug Fixes
+
+- **misc**: Fixed in community pluings tab the lobehub skills not display.
+
+#### 💄 Styles
+
+- **model-runtime**: Add Claude Opus 4.6 support for Bedrock runtime.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Code refactoring
+
+- **docker-compose**: Restructure dev environment, closes [#12132](https://github.com/lobehub/lobe-chat/issues/12132) ([7ba15cc](https://github.com/lobehub/lobe-chat/commit/7ba15cc))
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button, closes [#12127](https://github.com/lobehub/lobe-chat/issues/12127) ([e402c51](https://github.com/lobehub/lobe-chat/commit/e402c51))
+
+#### What's fixed
+
+- **misc**: Fixed in community pluings tab the lobehub skills not display, closes [#12141](https://github.com/lobehub/lobe-chat/issues/12141) ([193c96f](https://github.com/lobehub/lobe-chat/commit/193c96f))
+
+#### Styles
+
+- **model-runtime**: Add Claude Opus 4.6 support for Bedrock runtime, closes [#12155](https://github.com/lobehub/lobe-chat/issues/12155) ([90a75af](https://github.com/lobehub/lobe-chat/commit/90a75af))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.19](https://github.com/lobehub/lobe-chat/compare/v2.1.18...v2.1.19)
+
+<sup>Released on **2026-02-06**</sup>
+
+#### ♻ Code Refactoring
+
+- **docker-compose**: Restructure dev environment.
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button.
+
+#### 🐛 Bug Fixes
+
+- **misc**: Fixed in community pluings tab the lobehub skills not display.
+
+#### 💄 Styles
+
+- **model-runtime**: Add Claude Opus 4.6 support for Bedrock runtime.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Code refactoring
+
+- **docker-compose**: Restructure dev environment, closes [#12132](https://github.com/lobehub/lobe-chat/issues/12132) ([7ba15cc](https://github.com/lobehub/lobe-chat/commit/7ba15cc))
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button, closes [#12127](https://github.com/lobehub/lobe-chat/issues/12127) ([e402c51](https://github.com/lobehub/lobe-chat/commit/e402c51))
+
+#### What's fixed
+
+- **misc**: Fixed in community pluings tab the lobehub skills not display, closes [#12141](https://github.com/lobehub/lobe-chat/issues/12141) ([193c96f](https://github.com/lobehub/lobe-chat/commit/193c96f))
+
+#### Styles
+
+- **model-runtime**: Add Claude Opus 4.6 support for Bedrock runtime, closes [#12155](https://github.com/lobehub/lobe-chat/issues/12155) ([90a75af](https://github.com/lobehub/lobe-chat/commit/90a75af))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.19](https://github.com/lobehub/lobe-chat/compare/v2.1.18...v2.1.19)
+
+<sup>Released on **2026-02-06**</sup>
+
+#### ♻ Code Refactoring
+
+- **docker-compose**: Restructure dev environment.
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button.
+
+#### 🐛 Bug Fixes
+
+- **misc**: Fixed in community pluings tab the lobehub skills not display.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Code refactoring
+
+- **docker-compose**: Restructure dev environment, closes [#12132](https://github.com/lobehub/lobe-chat/issues/12132) ([7ba15cc](https://github.com/lobehub/lobe-chat/commit/7ba15cc))
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button, closes [#12127](https://github.com/lobehub/lobe-chat/issues/12127) ([e402c51](https://github.com/lobehub/lobe-chat/commit/e402c51))
+
+#### What's fixed
+
+- **misc**: Fixed in community pluings tab the lobehub skills not display, closes [#12141](https://github.com/lobehub/lobe-chat/issues/12141) ([193c96f](https://github.com/lobehub/lobe-chat/commit/193c96f))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.19](https://github.com/lobehub/lobe-chat/compare/v2.1.18...v2.1.19)
+
+<sup>Released on **2026-02-06**</sup>
+
+#### ♻ Code Refactoring
+
+- **docker-compose**: Restructure dev environment.
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button.
+
+#### 🐛 Bug Fixes
+
+- **misc**: Fixed in community pluings tab the lobehub skills not display.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Code refactoring
+
+- **docker-compose**: Restructure dev environment, closes [#12132](https://github.com/lobehub/lobe-chat/issues/12132) ([7ba15cc](https://github.com/lobehub/lobe-chat/commit/7ba15cc))
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button, closes [#12127](https://github.com/lobehub/lobe-chat/issues/12127) ([e402c51](https://github.com/lobehub/lobe-chat/commit/e402c51))
+
+#### What's fixed
+
+- **misc**: Fixed in community pluings tab the lobehub skills not display, closes [#12141](https://github.com/lobehub/lobe-chat/issues/12141) ([193c96f](https://github.com/lobehub/lobe-chat/commit/193c96f))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.19](https://github.com/lobehub/lobe-chat/compare/v2.1.18...v2.1.19)
+
+<sup>Released on **2026-02-06**</sup>
+
+#### ♻ Code Refactoring
+
+- **docker-compose**: Restructure dev environment.
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button.
+
+#### 🐛 Bug Fixes
+
+- **misc**: Fixed in community pluings tab the lobehub skills not display.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Code refactoring
+
+- **docker-compose**: Restructure dev environment, closes [#12132](https://github.com/lobehub/lobe-chat/issues/12132) ([7ba15cc](https://github.com/lobehub/lobe-chat/commit/7ba15cc))
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button, closes [#12127](https://github.com/lobehub/lobe-chat/issues/12127) ([e402c51](https://github.com/lobehub/lobe-chat/commit/e402c51))
+
+#### What's fixed
+
+- **misc**: Fixed in community pluings tab the lobehub skills not display, closes [#12141](https://github.com/lobehub/lobe-chat/issues/12141) ([193c96f](https://github.com/lobehub/lobe-chat/commit/193c96f))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.19](https://github.com/lobehub/lobe-chat/compare/v2.1.18...v2.1.19)
+
+<sup>Released on **2026-02-06**</sup>
+
+#### ♻ Code Refactoring
+
+- **docker-compose**: Restructure dev environment.
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Code refactoring
+
+- **docker-compose**: Restructure dev environment, closes [#12132](https://github.com/lobehub/lobe-chat/issues/12132) ([7ba15cc](https://github.com/lobehub/lobe-chat/commit/7ba15cc))
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button, closes [#12127](https://github.com/lobehub/lobe-chat/issues/12127) ([e402c51](https://github.com/lobehub/lobe-chat/commit/e402c51))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.19](https://github.com/lobehub/lobe-chat/compare/v2.1.18...v2.1.19)
+
+<sup>Released on **2026-02-05**</sup>
+
+#### ♻ Code Refactoring
+
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Code refactoring
+
+- **misc**: Upgrade agents/group detail pages tabs、hidden like button, closes [#12127](https://github.com/lobehub/lobe-chat/issues/12127) ([e402c51](https://github.com/lobehub/lobe-chat/commit/e402c51))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.18](https://github.com/lobehub/lobe-chat/compare/v2.1.17...v2.1.18)
+
+<sup>Released on **2026-02-04**</sup>
+
+#### 🐛 Bug Fixes
+
+- **model-runtime**: Fix moonshot interleaved thinking and circular dependency.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **model-runtime**: Fix moonshot interleaved thinking and circular dependency, closes [#12112](https://github.com/lobehub/lobe-chat/issues/12112) ([3f1a198](https://github.com/lobehub/lobe-chat/commit/3f1a198))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.17](https://github.com/lobehub/lobe-chat/compare/v2.1.16...v2.1.17)
+
+<sup>Released on **2026-02-04**</sup>
+
+#### ♻ Code Refactoring
+
+- **model-runtime**: Extract Anthropic factory and convert Moonshot to RouterRuntime.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Code refactoring
+
+- **model-runtime**: Extract Anthropic factory and convert Moonshot to RouterRuntime, closes [#12109](https://github.com/lobehub/lobe-chat/issues/12109) ([71064fd](https://github.com/lobehub/lobe-chat/commit/71064fd))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.16](https://github.com/lobehub/lobe-chat/compare/v2.1.15...v2.1.16)
+
+<sup>Released on **2026-02-04**</sup>
+
+#### 🐛 Bug Fixes
+
+- **misc**: Add the preview publish to market button preview check.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **misc**: Add the preview publish to market button preview check, closes [#12105](https://github.com/lobehub/lobe-chat/issues/12105) ([28887c7](https://github.com/lobehub/lobe-chat/commit/28887c7))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.15](https://github.com/lobehub/lobe-chat/compare/v2.1.14...v2.1.15)
+
+<sup>Released on **2026-02-04**</sup>
+
+#### 🐛 Bug Fixes
+
+- **misc**: Fixed the agents list the show updateAt time error.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **misc**: Fixed the agents list the show updateAt time error, closes [#12103](https://github.com/lobehub/lobe-chat/issues/12103) ([3063cee](https://github.com/lobehub/lobe-chat/commit/3063cee))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.14](https://github.com/lobehub/lobe-chat/compare/v2.1.13...v2.1.14)
+
+<sup>Released on **2026-02-04**</sup>
+
+#### 🐛 Bug Fixes
+
+- **misc**: Fix cannot uncompressed messages.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **misc**: Fix cannot uncompressed messages, closes [#12086](https://github.com/lobehub/lobe-chat/issues/12086) ([ccfaec2](https://github.com/lobehub/lobe-chat/commit/ccfaec2))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.13](https://github.com/lobehub/lobe-chat/compare/v2.1.12...v2.1.13)
+
+<sup>Released on **2026-02-03**</sup>
+
+#### 🐛 Bug Fixes
+
+- **docker**: Add librt.so.1 to fix PDF parsing.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **docker**: Add librt.so.1 to fix PDF parsing, closes [#12039](https://github.com/lobehub/lobe-chat/issues/12039) ([4a6be92](https://github.com/lobehub/lobe-chat/commit/4a6be92))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.12](https://github.com/lobehub/lobe-chat/compare/v2.1.11...v2.1.12)
+
+<sup>Released on **2026-02-03**</sup>
+
+#### 🐛 Bug Fixes
+
+- **changelog**: Normalize versionRange to valid semver.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **changelog**: Normalize versionRange to valid semver, closes [#12049](https://github.com/lobehub/lobe-chat/issues/12049) ([74b9bd0](https://github.com/lobehub/lobe-chat/commit/74b9bd0))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.11](https://github.com/lobehub/lobe-chat/compare/v2.1.10...v2.1.11)
+
+<sup>Released on **2026-02-02**</sup>
+
+#### 🐛 Bug Fixes
+
+- **misc**: Hide password features when AUTH_DISABLE_EMAIL_PASSWORD is set.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **misc**: Hide password features when AUTH_DISABLE_EMAIL_PASSWORD is set, closes [#12023](https://github.com/lobehub/lobe-chat/issues/12023) ([e2fd28e](https://github.com/lobehub/lobe-chat/commit/e2fd28e))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.10](https://github.com/lobehub/lobe-chat/compare/v2.1.9...v2.1.10)
+
+<sup>Released on **2026-02-02**</sup>
+
+#### 🐛 Bug Fixes
+
+- **auth**: Revert authority URL and tenant ID for Microsoft authentication..
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **auth**: Revert authority URL and tenant ID for Microsoft authentication., closes [#11930](https://github.com/lobehub/lobe-chat/issues/11930) ([98f93ef](https://github.com/lobehub/lobe-chat/commit/98f93ef))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 2.1.9](https://github.com/lobehub/lobe-chat/compare/v2.1.8...v2.1.9)
+
+<sup>Released on **2026-02-02**</sup>
+
+#### 🐛 Bug Fixes
+
+- **misc**: Use oauth2.link for generic OIDC provider account linking.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **misc**: Use oauth2.link for generic OIDC provider account linking, closes [#12024](https://github.com/lobehub/lobe-chat/issues/12024) ([c7a06a4](https://github.com/lobehub/lobe-chat/commit/c7a06a4))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
 ### [Version 2.1.8](https://github.com/lobehub/lobe-chat/compare/v2.1.7...v2.1.8)
 
 <sup>Released on **2026-02-01**</sup>

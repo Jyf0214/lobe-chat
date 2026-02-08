@@ -1,7 +1,8 @@
 import { ModelIcon } from '@lobehub/icons';
 import { Center, Flexbox } from '@lobehub/ui';
 import { createStaticStyles, cx } from 'antd-style';
-import { type ReactNode, memo, useCallback } from 'react';
+import type { ReactNode } from 'react';
+import { memo, useCallback } from 'react';
 
 import ModelSwitchPanel from '@/features/ModelSwitchPanel';
 import { useAgentStore } from '@/store/agent';
@@ -14,9 +15,13 @@ import ControlsForm from './ControlsForm';
 
 const styles = createStaticStyles(({ css, cssVar }) => ({
   extraControls: css`
-    padding-block: 8px;
+    padding-block: 4px;
     padding-inline: 12px;
     border-block-start: 1px solid ${cssVar.colorBorderSecondary};
+
+    .ant-form-item {
+      padding-block: 8px;
+    }
   `,
   icon: cx(
     'model-switch',
@@ -81,9 +86,9 @@ const ModelSwitch = memo(() => {
     <ModelSwitchPanel
       extraControls={renderControls}
       model={model}
-      onModelChange={handleModelChange}
       placement={dropdownPlacement}
       provider={provider}
+      onModelChange={handleModelChange}
     >
       <Center className={styles.model} height={36} width={36}>
         <div className={styles.icon}>

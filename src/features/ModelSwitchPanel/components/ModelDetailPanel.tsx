@@ -2,7 +2,7 @@ import { getCachedTextInputUnitRate } from '@lobechat/utils';
 import { ModelIcon } from '@lobehub/icons';
 import { Accordion, AccordionItem, Flexbox, Icon, Tag, Text, Tooltip } from '@lobehub/ui';
 import { createStaticStyles } from 'antd-style';
-import type { LucideIcon } from 'lucide-react';
+import { type LucideIcon } from 'lucide-react';
 import {
   ArrowDownToDot,
   ArrowUpFromDot,
@@ -15,16 +15,16 @@ import {
   ToyBrickIcon,
   VideoIcon,
 } from 'lucide-react';
-import type {
-  AiModelForSelect,
-  FixedPricingUnit,
-  ModelPriceCurrency,
-  Pricing,
-  PricingUnit,
-  PricingUnitName,
-  TieredPricingUnit,
+import {
+  type AiModelForSelect,
+  type FixedPricingUnit,
+  type ModelPriceCurrency,
+  type Pricing,
+  type PricingUnit,
+  type PricingUnitName,
+  type TieredPricingUnit,
 } from 'model-bank';
-import type { FC, ReactNode } from 'react';
+import { type FC, type ReactNode } from 'react';
 import { memo, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -205,36 +205,36 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
         <Accordion
           expandedKeys={expandedKeys}
           gap={8}
-          indicatorPlacement={'end'}
           onExpandedChange={(keys) => setExpandedKeys(keys as string[])}
         >
           {/* Context Length */}
           {hasContext && (
             <AccordionItem
+              alwaysShowAction
               hideIndicator
               allowExpand={false}
               itemKey="context"
               paddingBlock={6}
               paddingInline={8}
+              action={
+                <span style={{ fontSize: 12, fontWeight: 400 }}>
+                  {model.contextWindowTokens === 0
+                    ? '∞'
+                    : `${formatTokenNumber(model.contextWindowTokens!)} tokens`}
+                </span>
+              }
               title={
-                <Flexbox horizontal align={'center'} justify={'space-between'} style={{ flex: 1 }}>
-                  <Flexbox horizontal align={'center'} gap={8}>
-                    <div
-                      style={{
-                        background: '#1677ff',
-                        borderRadius: 2,
-                        flexShrink: 0,
-                        height: 14,
-                        width: 3,
-                      }}
-                    />
-                    <span>{t('ModelSwitchPanel.detail.context')}</span>
-                  </Flexbox>
-                  <span style={{ fontSize: 12, fontWeight: 400 }}>
-                    {model.contextWindowTokens === 0
-                      ? '∞'
-                      : `${formatTokenNumber(model.contextWindowTokens!)} tokens`}
-                  </span>
+                <Flexbox horizontal align={'center'} gap={8}>
+                  <div
+                    style={{
+                      background: '#1677ff',
+                      borderRadius: 2,
+                      flexShrink: 0,
+                      height: 14,
+                      width: 3,
+                    }}
+                  />
+                  <span>{t('ModelSwitchPanel.detail.context')}</span>
                 </Flexbox>
               }
             />
@@ -247,33 +247,33 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
               itemKey="abilities"
               paddingBlock={6}
               paddingInline={8}
-              title={
-                <Flexbox horizontal align={'center'} justify={'space-between'} style={{ flex: 1 }}>
-                  <Flexbox horizontal align={'center'} gap={8}>
-                    <div
-                      style={{
-                        background: '#722ed1',
-                        borderRadius: 2,
-                        flexShrink: 0,
-                        height: 14,
-                        width: 3,
-                      }}
-                    />
-                    <span>{t('ModelSwitchPanel.detail.abilities')}</span>
+              action={
+                !expandedKeys.includes('abilities') && (
+                  <Flexbox horizontal gap={2}>
+                    {enabledAbilities.map((ability) => (
+                      <Tag
+                        color={ability.color}
+                        key={ability.key}
+                        style={{ borderRadius: 4, minWidth: 0, padding: '0 4px' }}
+                      >
+                        <Icon icon={ability.icon} style={{ fontSize: 12 }} />
+                      </Tag>
+                    ))}
                   </Flexbox>
-                  {!expandedKeys.includes('abilities') && (
-                    <Flexbox horizontal gap={2}>
-                      {enabledAbilities.map((ability) => (
-                        <Tag
-                          color={ability.color}
-                          key={ability.key}
-                          style={{ borderRadius: 4, minWidth: 0, padding: '0 4px' }}
-                        >
-                          <Icon icon={ability.icon} style={{ fontSize: 12 }} />
-                        </Tag>
-                      ))}
-                    </Flexbox>
-                  )}
+                )
+              }
+              title={
+                <Flexbox horizontal align={'center'} gap={8}>
+                  <div
+                    style={{
+                      background: '#722ed1',
+                      borderRadius: 2,
+                      flexShrink: 0,
+                      height: 14,
+                      width: 3,
+                    }}
+                  />
+                  <span>{t('ModelSwitchPanel.detail.abilities')}</span>
                 </Flexbox>
               }
             >
@@ -304,64 +304,65 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
           {/* Pricing */}
           {hasPricing && formatPrice && (
             <AccordionItem
+              alwaysShowAction
               itemKey="pricing"
               paddingBlock={6}
               paddingInline={8}
-              title={
-                <Flexbox horizontal align={'center'} justify={'space-between'} style={{ flex: 1 }}>
-                  <Flexbox horizontal align={'center'} gap={8}>
-                    <div
-                      style={{
-                        background: '#fa8c16',
-                        borderRadius: 2,
-                        flexShrink: 0,
-                        height: 14,
-                        width: 3,
-                      }}
-                    />
-                    <span>{t('ModelSwitchPanel.detail.pricing')}</span>
-                  </Flexbox>
-                  {!expandedKeys.includes('pricing') && (
-                    <Flexbox
-                      horizontal
-                      align={'center'}
-                      gap={8}
-                      style={{ fontSize: 12, fontWeight: 400, opacity: 0.65 }}
+              action={
+                !expandedKeys.includes('pricing') && (
+                  <Flexbox
+                    horizontal
+                    align={'center'}
+                    gap={8}
+                    style={{ fontSize: 12, fontWeight: 400, opacity: 0.65 }}
+                  >
+                    {getCachedTextInputUnitRate(model.pricing!) && (
+                      <Tooltip
+                        title={t('ModelSwitchPanel.detail.pricing.cachedInput', {
+                          amount: formatPrice.cachedInput,
+                        })}
+                      >
+                        <Flexbox horizontal align={'center'} gap={2}>
+                          <Icon icon={CircleFadingArrowUp} size={'small'} />
+                          {formatPrice.cachedInput}
+                        </Flexbox>
+                      </Tooltip>
+                    )}
+                    <Tooltip
+                      title={t('ModelSwitchPanel.detail.pricing.input', {
+                        amount: formatPrice.input,
+                      })}
                     >
-                      {getCachedTextInputUnitRate(model.pricing!) && (
-                        <Tooltip
-                          title={t('ModelSwitchPanel.detail.pricing.cachedInput', {
-                            amount: formatPrice.cachedInput,
-                          })}
-                        >
-                          <Flexbox horizontal align={'center'} gap={2}>
-                            <Icon icon={CircleFadingArrowUp} size={'small'} />
-                            {formatPrice.cachedInput}
-                          </Flexbox>
-                        </Tooltip>
-                      )}
-                      <Tooltip
-                        title={t('ModelSwitchPanel.detail.pricing.input', {
-                          amount: formatPrice.input,
-                        })}
-                      >
-                        <Flexbox horizontal align={'center'} gap={2}>
-                          <Icon icon={ArrowUpFromDot} size={'small'} />
-                          {formatPrice.input}
-                        </Flexbox>
-                      </Tooltip>
-                      <Tooltip
-                        title={t('ModelSwitchPanel.detail.pricing.output', {
-                          amount: formatPrice.output,
-                        })}
-                      >
-                        <Flexbox horizontal align={'center'} gap={2}>
-                          <Icon icon={ArrowDownToDot} size={'small'} />
-                          {formatPrice.output}
-                        </Flexbox>
-                      </Tooltip>
-                    </Flexbox>
-                  )}
+                      <Flexbox horizontal align={'center'} gap={2}>
+                        <Icon icon={ArrowUpFromDot} size={'small'} />
+                        {formatPrice.input}
+                      </Flexbox>
+                    </Tooltip>
+                    <Tooltip
+                      title={t('ModelSwitchPanel.detail.pricing.output', {
+                        amount: formatPrice.output,
+                      })}
+                    >
+                      <Flexbox horizontal align={'center'} gap={2}>
+                        <Icon icon={ArrowDownToDot} size={'small'} />
+                        {formatPrice.output}
+                      </Flexbox>
+                    </Tooltip>
+                  </Flexbox>
+                )
+              }
+              title={
+                <Flexbox horizontal align={'center'} gap={8}>
+                  <div
+                    style={{
+                      background: '#fa8c16',
+                      borderRadius: 2,
+                      flexShrink: 0,
+                      height: 14,
+                      width: 3,
+                    }}
+                  />
+                  <span>{t('ModelSwitchPanel.detail.pricing')}</span>
                 </Flexbox>
               }
             >

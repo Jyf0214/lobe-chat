@@ -5,10 +5,8 @@ import { type FlexboxProps } from '@lobehub/ui';
 import { Avatar, Flexbox, Icon, Tag, Text, Tooltip } from '@lobehub/ui';
 import { createStaticStyles, useResponsive } from 'antd-style';
 import {
-  AtomIcon,
   Infinity,
   LucideEye,
-  LucideGlobe,
   LucideImage,
   LucidePaperclip,
   ToyBrick,
@@ -65,7 +63,7 @@ interface ModelInfoTagsProps extends ModelAbilities {
 
 interface FeatureTagsProps extends Pick<
   ModelAbilities,
-  'files' | 'imageOutput' | 'vision' | 'video' | 'functionCall' | 'reasoning' | 'search'
+  'files' | 'imageOutput' | 'vision' | 'video' | 'functionCall'
 > {
   disableTooltip?: boolean;
   placement: 'top' | 'right';
@@ -109,8 +107,6 @@ const FeatureTags = memo<FeatureTagsProps>(
     functionCall,
     imageOutput,
     placement,
-    reasoning,
-    search,
     tagClassName,
     video,
     vision,
@@ -163,24 +159,6 @@ const FeatureTags = memo<FeatureTagsProps>(
           icon={ToyBrick}
           placement={placement}
           title={t('ModelSelect.featureTag.functionCall')}
-        />
-        <FeatureTagItem
-          className={tagClassName}
-          color={'purple'}
-          disableTooltip={disableTooltip}
-          enabled={reasoning}
-          icon={AtomIcon}
-          placement={placement}
-          title={t('ModelSelect.featureTag.reasoning')}
-        />
-        <FeatureTagItem
-          className={tagClassName}
-          color={'cyan'}
-          disableTooltip={disableTooltip}
-          enabled={search}
-          icon={LucideGlobe}
-          placement={placement}
-          title={t('ModelSelect.featureTag.search')}
         />
       </>
     );
@@ -239,8 +217,6 @@ export const ModelInfoTags = memo<ModelInfoTagsProps>(
           functionCall={model.functionCall}
           imageOutput={model.imageOutput}
           placement={placement}
-          reasoning={model.reasoning}
-          search={model.search}
           tagClassName={styles.tag}
           video={model.video}
           vision={model.vision}
@@ -273,8 +249,6 @@ export const ModelItemRender = memo<ModelItemRenderProps>(
     functionCall,
     imageOutput,
     newBadgeLabel,
-    reasoning,
-    search,
     video,
     vision,
     id,
@@ -327,8 +301,6 @@ export const ModelItemRender = memo<ModelItemRenderProps>(
             files={files ?? abilities?.files}
             functionCall={functionCall ?? abilities?.functionCall}
             imageOutput={imageOutput ?? abilities?.imageOutput}
-            reasoning={reasoning ?? abilities?.reasoning}
-            search={search ?? abilities?.search}
             style={{ zoom: 0.9 }}
             video={video ?? abilities?.video}
             vision={vision ?? abilities?.vision}

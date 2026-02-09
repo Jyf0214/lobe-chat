@@ -15,7 +15,8 @@ import {
 } from '@lobehub/ui';
 import { cx } from 'antd-style';
 import { Check, LucideBolt } from 'lucide-react';
-import { type ReactNode, memo, useEffect, useState } from 'react';
+import type {ReactNode} from 'react';
+import { memo,  useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import urlJoin from 'url-join';

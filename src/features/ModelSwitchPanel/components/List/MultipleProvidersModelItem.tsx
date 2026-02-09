@@ -72,8 +72,10 @@ export const MultipleProvidersModelItem = memo<MultipleProvidersModelItemProps>(
             sideOffset={8}
           >
             <DropdownMenuPopup className={cx(styles.detailPopup, styles.dropdownMenu)}>
-              <ModelDetailPanel model={data.model} />
-              {extraControls?.(data.model.id, (activeProvider ?? data.providers[0]).id)}
+              <ModelDetailPanel
+                extraControls={extraControls?.(data.model.id, (activeProvider ?? data.providers[0]).id)}
+                model={data.model}
+              />
               <DropdownMenuGroup>
                 <DropdownMenuGroupLabel>
                   {t('ModelSwitchPanel.useModelFrom')}

@@ -1,5 +1,5 @@
 import { ModelIcon } from '@lobehub/icons';
-import { Center, Flexbox } from '@lobehub/ui';
+import { Center } from '@lobehub/ui';
 import { createStaticStyles, cx } from 'antd-style';
 import type { ReactNode } from 'react';
 import { memo, useCallback } from 'react';
@@ -15,12 +15,18 @@ import ControlsForm from './ControlsForm';
 
 const styles = createStaticStyles(({ css, cssVar }) => ({
   extraControls: css`
-    padding-block: 4px;
-    padding-inline: 12px;
-    border-block-start: 1px solid ${cssVar.colorBorderSecondary};
+    padding: 8px;
 
-    .ant-form-item {
-      padding-block: 8px;
+    .ant-form-item:first-child {
+      padding-block: 0 4px;
+    }
+
+    .ant-form-item:last-child {
+      padding-block: 4px 0;
+    }
+
+    .ant-divider {
+      display: none;
     }
   `,
   icon: cx(
@@ -53,9 +59,9 @@ const ControlsSection = memo<{ model: string; provider: string }>(({ model, prov
   if (!isModelHasExtendParams) return null;
 
   return (
-    <Flexbox className={styles.extraControls}>
+    <div className={styles.extraControls}>
       <ControlsForm model={model} provider={provider} />
-    </Flexbox>
+    </div>
   );
 });
 

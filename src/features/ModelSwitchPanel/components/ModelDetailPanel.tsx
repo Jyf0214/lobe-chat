@@ -1,10 +1,9 @@
 import { ModelIcon } from '@lobehub/icons';
-import { Flexbox, Icon, Tag, Text } from '@lobehub/ui';
+import { Accordion, AccordionItem, Flexbox, Icon, Tag, Text } from '@lobehub/ui';
 import { createStaticStyles } from 'antd-style';
 import type { LucideIcon } from 'lucide-react';
 import {
   AtomIcon,
-  ChevronRightIcon,
   EyeIcon,
   GlobeIcon,
   ImageIcon,
@@ -21,9 +20,7 @@ import { formatTokenNumber } from '@/utils/format';
 import { formatPriceByCurrency, getTextInputUnitRate, getTextOutputUnitRate } from '@/utils/index';
 
 const styles = createStaticStyles(({ css, cssVar }) => ({
-  container: css`
-    padding: 8px;
-  `,
+  container: css``,
   description: css`
     font-size: 12px;
     line-height: 1.5;
@@ -34,35 +31,6 @@ const styles = createStaticStyles(({ css, cssVar }) => ({
     padding-inline: 8px;
     font-size: 12px;
     color: ${cssVar.colorTextSecondary};
-  `,
-  sectionCollapsibleTitle: css`
-    cursor: pointer;
-    user-select: none;
-
-    padding-block: 6px;
-    padding-inline: 8px;
-    border-inline-start: 3px solid var(--section-color, ${cssVar.colorPrimary});
-    border-radius: 0 6px 6px 0;
-
-    font-size: 13px;
-    font-weight: 500;
-
-    background: ${cssVar.colorFillQuaternary};
-
-    &:hover {
-      background: ${cssVar.colorFillTertiary};
-    }
-  `,
-  sectionTitle: css`
-    padding-block: 6px;
-    padding-inline: 8px;
-    border-inline-start: 3px solid var(--section-color, ${cssVar.colorPrimary});
-    border-radius: 0 6px 6px 0;
-
-    font-size: 13px;
-    font-weight: 500;
-
-    background: ${cssVar.colorFillQuaternary};
   `,
 }));
 
@@ -80,135 +48,11 @@ const getPrice = (pricing: Pricing) => {
   };
 };
 
-interface SectionProps {
-  children: ReactNode;
-  color?: string;
-  title: string;
-}
-
-const Section: FC<SectionProps> = ({ children, color, title }) => (
-  <Flexbox gap={6}>
-    <span className={styles.sectionTitle} style={{ '--section-color': color } as any}>
-      {title}
-    </span>
-    {children}
-  </Flexbox>
-);
-
-const PricingSection: FC<{ color?: string; formatPrice: { input: string; output: string }; t: any }> = memo(
-  ({ color, formatPrice, t }) => {
-    const [open, setOpen] = useState(false);
-
-    return (
-      <Flexbox gap={6}>
-        <Flexbox
-          horizontal
-          align={'center'}
-          className={styles.sectionCollapsibleTitle}
-          justify={'space-between'}
-          style={{ '--section-color': color } as any}
-          onClick={() => setOpen(!open)}
-        >
-          <Flexbox horizontal align={'center'} gap={4}>
-            <Icon
-              icon={ChevronRightIcon}
-              size={'small'}
-              style={{
-                transform: open ? 'rotate(90deg)' : 'rotate(0deg)',
-                transition: 'transform 200ms ease',
-              }}
-            />
-            <span>{t('ModelSwitchPanel.detail.pricing')}</span>
-          </Flexbox>
-          {!open && (
-            <span style={{ fontSize: 12, fontWeight: 400, opacity: 0.6 }}>
-              ${formatPrice.input} / ${formatPrice.output}
-            </span>
-          )}
-        </Flexbox>
-        {open && (
-          <Flexbox gap={4}>
-            <Flexbox horizontal className={styles.row} justify={'space-between'}>
-              <span>{t('ModelSwitchPanel.detail.pricing.input')}</span>
-              <span>${formatPrice.input}/M tokens</span>
-            </Flexbox>
-            <Flexbox horizontal className={styles.row} justify={'space-between'}>
-              <span>{t('ModelSwitchPanel.detail.pricing.output')}</span>
-              <span>${formatPrice.output}/M tokens</span>
-            </Flexbox>
-          </Flexbox>
-        )}
-      </Flexbox>
-    );
-  },
-);
-
 interface AbilityItem {
   color: string;
   icon: LucideIcon;
   key: string;
 }
-
-const AbilitiesSection: FC<{ color?: string; enabledAbilities: AbilityItem[]; t: any }> = memo(
-  ({ color, enabledAbilities, t }) => {
-    const [open, setOpen] = useState(false);
-
-    return (
-      <Flexbox gap={6}>
-        <Flexbox
-          horizontal
-          align={'center'}
-          className={styles.sectionCollapsibleTitle}
-          justify={'space-between'}
-          style={{ '--section-color': color } as any}
-          onClick={() => setOpen(!open)}
-        >
-          <Flexbox horizontal align={'center'} gap={4}>
-            <Icon
-              icon={ChevronRightIcon}
-              size={'small'}
-              style={{
-                transform: open ? 'rotate(90deg)' : 'rotate(0deg)',
-                transition: 'transform 200ms ease',
-              }}
-            />
-            <span>{t('ModelSwitchPanel.detail.abilities')}</span>
-          </Flexbox>
-          {!open && (
-            <Flexbox horizontal gap={4}>
-              {enabledAbilities.map((ability) => (
-                <Tag color={ability.color} key={ability.key}>
-                  <Icon icon={ability.icon} style={{ fontSize: 12 }} />
-                </Tag>
-              ))}
-            </Flexbox>
-          )}
-        </Flexbox>
-        {open && (
-          <Flexbox gap={4}>
-            {enabledAbilities.map((ability) => (
-              <Flexbox
-                horizontal
-                align={'center'}
-                className={styles.row}
-                justify={'space-between'}
-                key={ability.key}
-              >
-                <Flexbox horizontal align={'center'} gap={6}>
-                  <Icon icon={ability.icon} style={{ fontSize: 12 }} />
-                  <span>{t(`ModelSwitchPanel.detail.abilities.${ability.key}`)}</span>
-                </Flexbox>
-                <span style={{ color: 'var(--ant-color-text-tertiary)', fontSize: 11 }}>
-                  {t(`ModelSelect.featureTag.${ability.key === 'files' ? 'file' : ability.key}`)}
-                </span>
-              </Flexbox>
-            ))}
-          </Flexbox>
-        )}
-      </Flexbox>
-    );
-  },
-);
 
 const ABILITY_CONFIG: AbilityItem[] = [
   { color: 'success', icon: EyeIcon, key: 'vision' },
@@ -228,6 +72,11 @@ interface ModelDetailPanelProps {
 const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model }) => {
   const { t } = useTranslation('components');
   const { t: tModels } = useTranslation('models');
+  const [expandedKeys, setExpandedKeys] = useState<string[]>(() => {
+    const keys: string[] = [];
+    if (extraControls) keys.push('config');
+    return keys;
+  });
 
   const hasPricing = !!model.pricing;
   const formatPrice = hasPricing ? getPrice(model.pricing!) : null;
@@ -240,7 +89,7 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
   return (
     <Flexbox className={styles.container} gap={16}>
       {/* Header */}
-      <Flexbox gap={8}>
+      <Flexbox gap={8} padding={8}>
         <Flexbox horizontal align={'center'} gap={8}>
           <ModelIcon model={model.id} size={28} />
           <Text ellipsis style={{ fontSize: 16, fontWeight: 600 }}>
@@ -254,44 +103,149 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
 
       {/* Sections */}
       {(hasPricing || hasContext || hasAbilities || extraControls) && (
-        <Flexbox gap={12}>
+        <Accordion
+          expandedKeys={expandedKeys}
+          gap={8}
+          indicatorPlacement={'end'}
+          onExpandedChange={(keys) => setExpandedKeys(keys as string[])}
+        >
           {/* Context Length */}
           {hasContext && (
-            <Flexbox
-              horizontal
-              align={'center'}
-              className={styles.sectionTitle}
-              justify={'space-between'}
-              style={{ '--section-color': '#1677ff' } as any}
-            >
-              <span>
-                {t('ModelSwitchPanel.detail.context')}
-              </span>
-              <span style={{ fontSize: 12 }}>
-                {model.contextWindowTokens === 0
-                  ? '∞'
-                  : `${formatTokenNumber(model.contextWindowTokens!)} tokens`}
-              </span>
-            </Flexbox>
+            <AccordionItem
+              hideIndicator
+              allowExpand={false}
+              itemKey="context"
+              paddingBlock={6}
+              paddingInline={8}
+              title={
+                <Flexbox
+                  horizontal
+                  align={'center'}
+                  justify={'space-between'}
+                  style={{ flex: 1 }}
+                >
+                  <Flexbox horizontal align={'center'} gap={8}>
+                    <div style={{ background: '#1677ff', borderRadius: 2, flexShrink: 0, height: 14, width: 3 }} />
+                    <span>{t('ModelSwitchPanel.detail.context')}</span>
+                  </Flexbox>
+                  <span style={{ fontSize: 12, fontWeight: 400 }}>
+                    {model.contextWindowTokens === 0
+                      ? '∞'
+                      : `${formatTokenNumber(model.contextWindowTokens!)} tokens`}
+                  </span>
+                </Flexbox>
+              }
+            />
           )}
 
           {/* Abilities */}
           {hasAbilities && (
-            <AbilitiesSection color="#722ed1" enabledAbilities={enabledAbilities} t={t} />
+            <AccordionItem
+              itemKey="abilities"
+              paddingBlock={6}
+              paddingInline={8}
+              title={
+                <Flexbox
+                  horizontal
+                  align={'center'}
+                  justify={'space-between'}
+                  style={{ flex: 1 }}
+                >
+                  <Flexbox horizontal align={'center'} gap={8}>
+                    <div style={{ background: '#722ed1', borderRadius: 2, flexShrink: 0, height: 14, width: 3 }} />
+                    <span>{t('ModelSwitchPanel.detail.abilities')}</span>
+                  </Flexbox>
+                  {!expandedKeys.includes('abilities') && (
+                    <Flexbox horizontal gap={4}>
+                      {enabledAbilities.map((ability) => (
+                        <Tag color={ability.color} key={ability.key}>
+                          <Icon icon={ability.icon} style={{ fontSize: 12 }} />
+                        </Tag>
+                      ))}
+                    </Flexbox>
+                  )}
+                </Flexbox>
+              }
+            >
+              <Flexbox gap={4}>
+                {enabledAbilities.map((ability) => (
+                  <Flexbox
+                    horizontal
+                    align={'center'}
+                    className={styles.row}
+                    justify={'space-between'}
+                    key={ability.key}
+                  >
+                    <Flexbox horizontal align={'center'} gap={6}>
+                      <Icon icon={ability.icon} style={{ fontSize: 12 }} />
+                      <span>{t(`ModelSwitchPanel.detail.abilities.${ability.key}`)}</span>
+                    </Flexbox>
+                    <span style={{ color: 'var(--ant-color-text-tertiary)', fontSize: 11 }}>
+                      {t(
+                        `ModelSelect.featureTag.${ability.key === 'files' ? 'file' : ability.key}`,
+                      )}
+                    </span>
+                  </Flexbox>
+                ))}
+              </Flexbox>
+            </AccordionItem>
           )}
 
-          {/* Pricing Section */}
+          {/* Pricing */}
           {hasPricing && formatPrice && (
-            <PricingSection color="#fa8c16" formatPrice={formatPrice} t={t} />
+            <AccordionItem
+              itemKey="pricing"
+              paddingBlock={6}
+              paddingInline={8}
+              title={
+                <Flexbox
+                  horizontal
+                  align={'center'}
+                  justify={'space-between'}
+                  style={{ flex: 1 }}
+                >
+                  <Flexbox horizontal align={'center'} gap={8}>
+                    <div style={{ background: '#fa8c16', borderRadius: 2, flexShrink: 0, height: 14, width: 3 }} />
+                    <span>{t('ModelSwitchPanel.detail.pricing')}</span>
+                  </Flexbox>
+                  {!expandedKeys.includes('pricing') && (
+                    <span style={{ fontSize: 12, fontWeight: 400, opacity: 0.6 }}>
+                      ${formatPrice.input} / ${formatPrice.output}
+                    </span>
+                  )}
+                </Flexbox>
+              }
+            >
+              <Flexbox gap={4}>
+                <Flexbox horizontal className={styles.row} justify={'space-between'}>
+                  <span>{t('ModelSwitchPanel.detail.pricing.input')}</span>
+                  <span>${formatPrice.input}/M tokens</span>
+                </Flexbox>
+                <Flexbox horizontal className={styles.row} justify={'space-between'}>
+                  <span>{t('ModelSwitchPanel.detail.pricing.output')}</span>
+                  <span>${formatPrice.output}/M tokens</span>
+                </Flexbox>
+              </Flexbox>
+            </AccordionItem>
           )}
 
           {/* Model Config */}
           {extraControls && (
-            <Section color="#52c41a" title={t('ModelSwitchPanel.detail.config')}>
+            <AccordionItem
+              itemKey="config"
+              paddingBlock={6}
+              paddingInline={8}
+              title={
+                <Flexbox horizontal align={'center'} gap={8}>
+                  <div style={{ background: '#52c41a', borderRadius: 2, flexShrink: 0, height: 14, width: 3 }} />
+                  <span>{t('ModelSwitchPanel.detail.config')}</span>
+                </Flexbox>
+              }
+            >
               {extraControls}
-            </Section>
+            </AccordionItem>
           )}
-        </Flexbox>
+        </Accordion>
       )}
     </Flexbox>
   );

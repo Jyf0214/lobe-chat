@@ -97,7 +97,7 @@ export default {
   'ModelSelect.featureTag.custom':
     'Custom model, by default, supports both function calls and visual recognition. Please verify the availability of the above capabilities based on actual situations.',
   'ModelSelect.featureTag.file': 'This model supports file upload for reading and recognition.',
-  'ModelSelect.featureTag.functionCall': 'This model supports function calls.',
+  'ModelSelect.featureTag.functionCall': 'This model supports tool calls.',
   'ModelSelect.featureTag.imageOutput': 'This model supports image generation.',
   'ModelSelect.featureTag.reasoning': 'This model supports deep thinking.',
   'ModelSelect.featureTag.search': 'This model supports online search.',
@@ -111,7 +111,7 @@ export default {
   'ModelSwitchPanel.byProvider': 'By Provider',
   'ModelSwitchPanel.detail.abilities': 'Abilities',
   'ModelSwitchPanel.detail.abilities.files': 'Files',
-  'ModelSwitchPanel.detail.abilities.functionCall': 'Function Call',
+  'ModelSwitchPanel.detail.abilities.functionCall': 'Tool Call',
   'ModelSwitchPanel.detail.abilities.imageOutput': 'Image Output',
   'ModelSwitchPanel.detail.abilities.reasoning': 'Reasoning',
   'ModelSwitchPanel.detail.abilities.search': 'Search',

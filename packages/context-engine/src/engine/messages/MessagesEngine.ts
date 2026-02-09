@@ -148,6 +148,17 @@ export class MessagesEngine {
 
     return [
       // =============================================
+      // Phase 0: History Truncation (FIRST - truncate before any processing)
+      // =============================================
+
+      // 0. History truncate (limit message count based on configuration)
+      // This MUST be first to ensure subsequent processors only work with truncated messages
+      new HistoryTruncateProcessor({
+        enableHistoryCount,
+        historyCount,
+      }),
+
+      // =============================================
       // Phase 1: System Role Injection
       // =============================================
 
@@ -247,39 +258,33 @@ export class MessagesEngine {
       // Phase 4: Message Transformation
       // =============================================
 
-      // 12. History truncate (limit message count based on configuration)
-      new HistoryTruncateProcessor({
-        enableHistoryCount,
-        historyCount,
-      }),
-
-      // 14. Input template processing
+      // 12. Input template processing
       new InputTemplateProcessor({ inputTemplate }),
 
-      // 15. Placeholder variables processing
+      // 13. Placeholder variables processing
       new PlaceholderVariablesProcessor({
         variableGenerators: variableGenerators || {},
       }),
 
-      // 16. AgentCouncil message flatten (convert role=agentCouncil to standard assistant + tool messages)
+      // 14. AgentCouncil message flatten (convert role=agentCouncil to standard assistant + tool messages)
       new AgentCouncilFlattenProcessor(),
 
-      // 17. Group message flatten (convert role=assistantGroup to standard assistant + tool messages)
+      // 15. Group message flatten (convert role=assistantGroup to standard assistant + tool messages)
       new GroupMessageFlattenProcessor(),
 
-      // 18. Tasks message flatten (convert role=tasks to individual task messages)
+      // 16. Tasks message flatten (convert role=tasks to individual task messages)
       new TasksFlattenProcessor(),
 
-      // 19. Task message processing (convert role=task to assistant with instruction + content)
+      // 17. Task message processing (convert role=task to assistant with instruction + content)
       new TaskMessageProcessor(),
 
-      // 20. Supervisor role restore (convert role=supervisor back to role=assistant for model)
+      // 18. Supervisor role restore (convert role=supervisor back to role=assistant for model)
       new SupervisorRoleRestoreProcessor(),
 
-      // 21. Compressed group role transform (convert role=compressedGroup to role=user for model)
+      // 19. Compressed group role transform (convert role=compressedGroup to role=user for model)
       new CompressedGroupRoleTransformProcessor(),
 
-      // 22. Group orchestration filter (remove supervisor's orchestration messages like broadcast/speak)
+      // 20. Group orchestration filter (remove supervisor's orchestration messages like broadcast/speak)
       // This must be BEFORE GroupRoleTransformProcessor so we filter based on original agentId/tools
       ...(isAgentGroupEnabled && agentGroup.agentMap && agentGroup.currentAgentId
         ? [
@@ -294,7 +299,7 @@ export class MessagesEngine {
           ]
         : []),
 
-      // 23. Group role transform (convert other agents' messages to user role with speaker tags)
+      // 21. Group role transform (convert other agents' messages to user role with speaker tags)
       // This must be BEFORE ToolCallProcessor so other agents' tool messages are converted first
       ...(isAgentGroupEnabled && agentGroup.currentAgentId
         ? [
@@ -309,7 +314,7 @@ export class MessagesEngine {
       // Phase 5: Content Processing
       // =============================================
 
-      // 24. Message content processing (image encoding, etc.)
+      // 22. Message content processing (image encoding, etc.)
       new MessageContentProcessor({
         fileContext: fileContext || { enabled: true, includeFileUrl: true },
         isCanUseVideo: capabilities?.isCanUseVideo || (() => false),
@@ -318,7 +323,7 @@ export class MessagesEngine {
         provider,
       }),
 
-      // 25. Tool call processing
+      // 23. Tool call processing
       new ToolCallProcessor({
         genToolCallingName: this.toolNameResolver.generate.bind(this.toolNameResolver),
         isCanUseFC: capabilities?.isCanUseFC || (() => true),
@@ -326,10 +331,10 @@ export class MessagesEngine {
         provider,
       }),
 
-      // 26. Tool message reordering
+      // 24. Tool message reordering
       new ToolMessageReorder(),
 
-      // 27. Message cleanup (final step, keep only necessary fields)
+      // 25. Message cleanup (final step, keep only necessary fields)
       new MessageCleanupProcessor(),
     ];
   }

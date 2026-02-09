@@ -106,8 +106,8 @@ const PricingSection: FC<{ color?: string; formatPrice: { input: string; output:
           align={'center'}
           className={styles.sectionCollapsibleTitle}
           justify={'space-between'}
-          onClick={() => setOpen(!open)}
           style={{ '--section-color': color } as any}
+          onClick={() => setOpen(!open)}
         >
           <Flexbox horizontal align={'center'} gap={4}>
             <Icon
@@ -160,8 +160,8 @@ const AbilitiesSection: FC<{ color?: string; enabledAbilities: AbilityItem[]; t:
           align={'center'}
           className={styles.sectionCollapsibleTitle}
           justify={'space-between'}
-          onClick={() => setOpen(!open)}
           style={{ '--section-color': color } as any}
+          onClick={() => setOpen(!open)}
         >
           <Flexbox horizontal align={'center'} gap={4}>
             <Icon

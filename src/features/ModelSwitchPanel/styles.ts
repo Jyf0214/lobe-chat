@@ -6,7 +6,7 @@ export const styles = createStaticStyles(({ css, cssVar }) => ({
     padding: 0 !important;
   `,
   detailPopup: css`
-    max-width: 460px;
+    width: 400px;
   `,
   dropdownMenu: css`
     [role='menuitem'] {

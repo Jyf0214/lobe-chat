@@ -188,7 +188,7 @@ const ControlsForm = memo<ControlsFormProps>(({ model: modelProp, provider: prov
       children: <ThinkingBudgetSlider />,
       label: t('extendParams.thinkingBudget.title'),
       layout: 'vertical',
-      minWidth: 460,
+      minWidth: undefined,
       name: 'thinkingBudget',
       style: {
         paddingBottom: 0,
@@ -206,7 +206,7 @@ const ControlsForm = memo<ControlsFormProps>(({ model: modelProp, provider: prov
       layout: isNarrow ? 'vertical' : 'horizontal',
       minWidth: undefined,
       name: 'urlContext',
-      style: isNarrow ? undefined : { minWidth: 360 },
+      style: undefined,
       tag: 'urlContext',
     },
     {
@@ -226,10 +226,9 @@ const ControlsForm = memo<ControlsFormProps>(({ model: modelProp, provider: prov
       minWidth: undefined,
       name: 'thinkingLevel',
       style: {
-        minWidth: 400,
         paddingBottom: 0,
       },
-      tag: 'thinkingLevel',
+      desc: 'thinkingLevel',
     },
     {
       children: <ThinkingLevel2Slider />,
@@ -238,10 +237,9 @@ const ControlsForm = memo<ControlsFormProps>(({ model: modelProp, provider: prov
       minWidth: undefined,
       name: 'thinkingLevel2',
       style: {
-        minWidth: 400,
         paddingBottom: 0,
       },
-      tag: 'thinkingLevel',
+      desc: 'thinkingLevel',
     },
     {
       children: <ImageAspectRatioSelect />,
@@ -252,7 +250,7 @@ const ControlsForm = memo<ControlsFormProps>(({ model: modelProp, provider: prov
       style: {
         paddingBottom: 0,
       },
-      tag: 'aspectRatio',
+      desc: 'aspectRatio',
     },
     {
       children: <ImageResolutionSlider />,
@@ -263,7 +261,7 @@ const ControlsForm = memo<ControlsFormProps>(({ model: modelProp, provider: prov
       style: {
         paddingBottom: 0,
       },
-      tag: 'imageSize',
+      desc: 'imageSize',
     },
   ].filter(Boolean) as FormItemProps[];
 

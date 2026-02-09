@@ -84,9 +84,19 @@ const ModelSwitch = memo(() => {
     [agentId, updateAgentConfigById],
   );
 
-  const renderControls = useCallback((modelId: string, providerId: string): ReactNode => {
-    return <ControlsSection model={modelId} provider={providerId} />;
-  }, []);
+  const renderControls = useCallback(
+    (modelId: string, providerId: string): ReactNode => {
+      const hasExtendParams = aiModelSelectors.isModelHasExtendParams(
+        modelId,
+        providerId,
+      )(useAiInfraStore.getState());
+
+      if (!hasExtendParams) return null;
+
+      return <ControlsSection model={modelId} provider={providerId} />;
+    },
+    [],
+  );
 
   return (
     <ModelSwitchPanel

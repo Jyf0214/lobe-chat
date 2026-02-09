@@ -97,6 +97,20 @@ const UNIT_GROUP_MAP: Record<PricingUnitName, PricingGroup> = {
 
 const GROUP_ORDER: PricingGroup[] = ['text', 'image', 'audio'];
 
+const UNIT_ICON_MAP: Partial<Record<PricingUnitName, LucideIcon>> = {
+  audioInput: ArrowUpFromDot,
+  audioInput_cacheRead: CircleFadingArrowUp,
+  audioOutput: ArrowDownToDot,
+  imageGeneration: ImageIcon,
+  imageInput: ArrowUpFromDot,
+  imageInput_cacheRead: CircleFadingArrowUp,
+  imageOutput: ArrowDownToDot,
+  textInput: ArrowUpFromDot,
+  textInput_cacheRead: CircleFadingArrowUp,
+  textInput_cacheWrite: CircleFadingArrowUp,
+  textOutput: ArrowDownToDot,
+};
+
 const UNIT_SORT_ORDER: Record<PricingUnitName, number> = {
   textInput: 0,
   textOutput: 1,
@@ -408,7 +422,14 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
                         justify={'space-between'}
                         key={unit.name}
                       >
-                        <span>{t(`ModelSwitchPanel.detail.pricing.unit.${unit.name}` as any)}</span>
+                        <Flexbox horizontal align={'center'} gap={6}>
+                          {UNIT_ICON_MAP[unit.name] && (
+                            <Icon icon={UNIT_ICON_MAP[unit.name]!} size={'small'} />
+                          )}
+                          <span>
+                            {t(`ModelSwitchPanel.detail.pricing.unit.${unit.name}` as any)}
+                          </span>
+                        </Flexbox>
                         <span>
                           {formatUnitRate(unit, model.pricing?.currency as ModelPriceCurrency)}
                         </span>

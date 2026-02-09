@@ -12,8 +12,8 @@ import {
 } from '@lobehub/ui';
 import { cssVar, cx } from 'antd-style';
 import { LucideArrowRight, LucideBolt } from 'lucide-react';
-import type {ReactNode} from 'react';
-import { memo,  useEffect, useState } from 'react';
+import { type ReactNode } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import urlJoin from 'url-join';
@@ -144,11 +144,7 @@ export const ListItemRenderer = memo<ListItemRendererProps>(
                 />
               </DropdownMenuSubmenuTrigger>
               <DropdownMenuPortal>
-                <DropdownMenuPositioner
-                  anchor={null}
-                  placement="right"
-                  sideOffset={8}
-                >
+                <DropdownMenuPositioner anchor={null} placement="right" sideOffset={8}>
                   <DropdownMenuPopup className={styles.detailPopup}>
                     <ModelDetailPanel
                       extraControls={extraControls?.(item.model.id, item.provider.id)}
@@ -182,11 +178,7 @@ export const ListItemRenderer = memo<ListItemRendererProps>(
                 <SingleProviderModelItem data={item.data} newLabel={newLabel} />
               </DropdownMenuSubmenuTrigger>
               <DropdownMenuPortal>
-                <DropdownMenuPositioner
-                  anchor={null}
-                  placement="right"
-                  sideOffset={8}
-                >
+                <DropdownMenuPositioner anchor={null} placement="right" sideOffset={8}>
                   <DropdownMenuPopup className={styles.detailPopup}>
                     <ModelDetailPanel
                       extraControls={extraControls?.(item.data.model.id, singleProvider.id)}

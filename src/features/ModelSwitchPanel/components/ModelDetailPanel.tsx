@@ -1,6 +1,7 @@
 import { getCachedTextInputUnitRate } from '@lobechat/utils';
 import { ModelIcon } from '@lobehub/icons';
 import { Accordion, AccordionItem, Flexbox, Icon, Tag, Text, Tooltip } from '@lobehub/ui';
+import { Divider } from 'antd';
 import { createStaticStyles } from 'antd-style';
 import { type LucideIcon } from 'lucide-react';
 import {
@@ -32,7 +33,14 @@ import { formatTokenNumber } from '@/utils/format';
 import { formatPriceByCurrency, getTextInputUnitRate, getTextOutputUnitRate } from '@/utils/index';
 
 const styles = createStaticStyles(({ css, cssVar }) => ({
-  container: css``,
+  actionText: css`
+    font-size: 14px;
+    font-weight: 500;
+    color: ${cssVar.colorText};
+  `,
+  container: css`
+    padding-block-end: 8px;
+  `,
   description: css`
     font-size: 12px;
     line-height: 1.5;
@@ -42,6 +50,11 @@ const styles = createStaticStyles(({ css, cssVar }) => ({
     padding-block: 4px;
     padding-inline: 8px;
     font-size: 12px;
+    color: ${cssVar.colorTextSecondary};
+  `,
+  titleText: css`
+    font-size: 14px;
+    font-weight: 400;
     color: ${cssVar.colorTextSecondary};
   `,
 }));
@@ -186,7 +199,7 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
   const hasAbilities = enabledAbilities.length > 0;
 
   return (
-    <Flexbox className={styles.container} gap={16}>
+    <Flexbox className={styles.container}>
       {/* Header */}
       <Flexbox gap={8} padding={8}>
         <Flexbox horizontal align={'center'} gap={8}>
@@ -199,6 +212,7 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
           <div className={styles.description}>{tModels(`${model.id}.description`)}</div>
         )}
       </Flexbox>
+      <Divider size="small" />
 
       {/* Sections */}
       {(hasPricing || hasContext || hasAbilities || extraControls) && (
@@ -217,7 +231,7 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
               paddingBlock={6}
               paddingInline={8}
               action={
-                <span style={{ fontSize: 12, fontWeight: 400 }}>
+                <span className={styles.actionText}>
                   {model.contextWindowTokens === 0
                     ? '∞'
                     : `${formatTokenNumber(model.contextWindowTokens!)} tokens`}
@@ -234,7 +248,7 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
                       width: 3,
                     }}
                   />
-                  <span>{t('ModelSwitchPanel.detail.context')}</span>
+                  <span className={styles.titleText}>{t('ModelSwitchPanel.detail.context')}</span>
                 </Flexbox>
               }
             />
@@ -273,7 +287,7 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
                       width: 3,
                     }}
                   />
-                  <span>{t('ModelSwitchPanel.detail.abilities')}</span>
+                  <span className={styles.titleText}>{t('ModelSwitchPanel.detail.abilities')}</span>
                 </Flexbox>
               }
             >
@@ -310,12 +324,7 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
               paddingInline={8}
               action={
                 !expandedKeys.includes('pricing') && (
-                  <Flexbox
-                    horizontal
-                    align={'center'}
-                    gap={8}
-                    style={{ fontSize: 12, fontWeight: 400, opacity: 0.65 }}
-                  >
+                  <Flexbox horizontal align={'center'} className={styles.actionText} gap={8}>
                     {getCachedTextInputUnitRate(model.pricing!) && (
                       <Tooltip
                         title={t('ModelSwitchPanel.detail.pricing.cachedInput', {
@@ -362,7 +371,7 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
                       width: 3,
                     }}
                   />
-                  <span>{t('ModelSwitchPanel.detail.pricing')}</span>
+                  <span className={styles.titleText}>{t('ModelSwitchPanel.detail.pricing')}</span>
                 </Flexbox>
               }
             >
@@ -393,7 +402,6 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
               </Flexbox>
             </AccordionItem>
           )}
-
           {/* Model Config */}
           {extraControls && (
             <AccordionItem
@@ -411,7 +419,7 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
                       width: 3,
                     }}
                   />
-                  <span>{t('ModelSwitchPanel.detail.config')}</span>
+                  <span className={styles.titleText}>{t('ModelSwitchPanel.detail.config')}</span>
                 </Flexbox>
               }
             >

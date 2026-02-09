@@ -8,9 +8,9 @@ import { useMarketAuth } from '@/layout/AuthProvider/MarketAuth';
 import { resolveMarketAuthError } from '@/layout/AuthProvider/MarketAuth/errors';
 
 import ForkConfirmModal from './ForkConfirmModal';
-import type { MarketPublishAction } from './types';
-import type {OriginalAgentInfo} from './useMarketPublish';
-import {  useMarketPublish } from './useMarketPublish';
+import { type MarketPublishAction } from './types';
+import { type OriginalAgentInfo } from './useMarketPublish';
+import { useMarketPublish } from './useMarketPublish';
 
 interface MarketPublishButtonProps {
   action: MarketPublishAction;

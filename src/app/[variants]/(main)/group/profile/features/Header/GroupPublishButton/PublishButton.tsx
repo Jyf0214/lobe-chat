@@ -8,7 +8,7 @@ import { useMarketAuth } from '@/layout/AuthProvider/MarketAuth';
 import { resolveMarketAuthError } from '@/layout/AuthProvider/MarketAuth/errors';
 
 import GroupForkConfirmModal from './GroupForkConfirmModal';
-import type { MarketPublishAction, OriginalGroupInfo } from './types';
+import { type MarketPublishAction, type OriginalGroupInfo } from './types';
 import { useMarketGroupPublish } from './useMarketGroupPublish';
 
 interface GroupPublishButtonProps {

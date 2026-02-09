@@ -14,7 +14,7 @@ import { localSystemExecutor } from '@lobechat/builtin-tool-local-system/executo
 import { memoryExecutor } from '@lobechat/builtin-tool-memory/executor';
 import { notebookExecutor } from '@lobechat/builtin-tool-notebook/executor';
 
-import type { IBuiltinToolExecutor } from '../types';
+import { type IBuiltinToolExecutor } from '../types';
 import { pageAgentExecutor } from './lobe-page-agent';
 import { webBrowsing } from './lobe-web-browsing';
 

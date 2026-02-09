@@ -217,14 +217,17 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
               paddingBlock={6}
               paddingInline={8}
               title={
-                <Flexbox
-                  horizontal
-                  align={'center'}
-                  justify={'space-between'}
-                  style={{ flex: 1 }}
-                >
+                <Flexbox horizontal align={'center'} justify={'space-between'} style={{ flex: 1 }}>
                   <Flexbox horizontal align={'center'} gap={8}>
-                    <div style={{ background: '#1677ff', borderRadius: 2, flexShrink: 0, height: 14, width: 3 }} />
+                    <div
+                      style={{
+                        background: '#1677ff',
+                        borderRadius: 2,
+                        flexShrink: 0,
+                        height: 14,
+                        width: 3,
+                      }}
+                    />
                     <span>{t('ModelSwitchPanel.detail.context')}</span>
                   </Flexbox>
                   <span style={{ fontSize: 12, fontWeight: 400 }}>
@@ -245,20 +248,27 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
               paddingBlock={6}
               paddingInline={8}
               title={
-                <Flexbox
-                  horizontal
-                  align={'center'}
-                  justify={'space-between'}
-                  style={{ flex: 1 }}
-                >
+                <Flexbox horizontal align={'center'} justify={'space-between'} style={{ flex: 1 }}>
                   <Flexbox horizontal align={'center'} gap={8}>
-                    <div style={{ background: '#722ed1', borderRadius: 2, flexShrink: 0, height: 14, width: 3 }} />
+                    <div
+                      style={{
+                        background: '#722ed1',
+                        borderRadius: 2,
+                        flexShrink: 0,
+                        height: 14,
+                        width: 3,
+                      }}
+                    />
                     <span>{t('ModelSwitchPanel.detail.abilities')}</span>
                   </Flexbox>
                   {!expandedKeys.includes('abilities') && (
-                    <Flexbox horizontal gap={4}>
+                    <Flexbox horizontal gap={2}>
                       {enabledAbilities.map((ability) => (
-                        <Tag color={ability.color} key={ability.key}>
+                        <Tag
+                          color={ability.color}
+                          key={ability.key}
+                          style={{ borderRadius: 4, minWidth: 0, padding: '0 4px' }}
+                        >
                           <Icon icon={ability.icon} style={{ fontSize: 12 }} />
                         </Tag>
                       ))}
@@ -298,33 +308,53 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
               paddingBlock={6}
               paddingInline={8}
               title={
-                <Flexbox
-                  horizontal
-                  align={'center'}
-                  justify={'space-between'}
-                  style={{ flex: 1 }}
-                >
+                <Flexbox horizontal align={'center'} justify={'space-between'} style={{ flex: 1 }}>
                   <Flexbox horizontal align={'center'} gap={8}>
-                    <div style={{ background: '#fa8c16', borderRadius: 2, flexShrink: 0, height: 14, width: 3 }} />
+                    <div
+                      style={{
+                        background: '#fa8c16',
+                        borderRadius: 2,
+                        flexShrink: 0,
+                        height: 14,
+                        width: 3,
+                      }}
+                    />
                     <span>{t('ModelSwitchPanel.detail.pricing')}</span>
                   </Flexbox>
                   {!expandedKeys.includes('pricing') && (
-                    <Flexbox horizontal align={'center'} gap={8} style={{ fontSize: 12, fontWeight: 400, opacity: 0.65 }}>
+                    <Flexbox
+                      horizontal
+                      align={'center'}
+                      gap={8}
+                      style={{ fontSize: 12, fontWeight: 400, opacity: 0.65 }}
+                    >
                       {getCachedTextInputUnitRate(model.pricing!) && (
-                        <Tooltip title={t('ModelSwitchPanel.detail.pricing.cachedInput', { amount: formatPrice.cachedInput })}>
+                        <Tooltip
+                          title={t('ModelSwitchPanel.detail.pricing.cachedInput', {
+                            amount: formatPrice.cachedInput,
+                          })}
+                        >
                           <Flexbox horizontal align={'center'} gap={2}>
                             <Icon icon={CircleFadingArrowUp} size={'small'} />
                             {formatPrice.cachedInput}
                           </Flexbox>
                         </Tooltip>
                       )}
-                      <Tooltip title={t('ModelSwitchPanel.detail.pricing.input', { amount: formatPrice.input })}>
+                      <Tooltip
+                        title={t('ModelSwitchPanel.detail.pricing.input', {
+                          amount: formatPrice.input,
+                        })}
+                      >
                         <Flexbox horizontal align={'center'} gap={2}>
                           <Icon icon={ArrowUpFromDot} size={'small'} />
                           {formatPrice.input}
                         </Flexbox>
                       </Tooltip>
-                      <Tooltip title={t('ModelSwitchPanel.detail.pricing.output', { amount: formatPrice.output })}>
+                      <Tooltip
+                        title={t('ModelSwitchPanel.detail.pricing.output', {
+                          amount: formatPrice.output,
+                        })}
+                      >
                         <Flexbox horizontal align={'center'} gap={2}>
                           <Icon icon={ArrowDownToDot} size={'small'} />
                           {formatPrice.output}
@@ -351,10 +381,10 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
                         justify={'space-between'}
                         key={unit.name}
                       >
+                        <span>{t(`ModelSwitchPanel.detail.pricing.unit.${unit.name}` as any)}</span>
                         <span>
-                          {t(`ModelSwitchPanel.detail.pricing.unit.${unit.name}` as any)}
+                          {formatUnitRate(unit, model.pricing?.currency as ModelPriceCurrency)}
                         </span>
-                        <span>{formatUnitRate(unit, model.pricing?.currency as ModelPriceCurrency)}</span>
                       </Flexbox>
                     ))}
                   </Flexbox>
@@ -371,7 +401,15 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
               paddingInline={8}
               title={
                 <Flexbox horizontal align={'center'} gap={8}>
-                  <div style={{ background: '#52c41a', borderRadius: 2, flexShrink: 0, height: 14, width: 3 }} />
+                  <div
+                    style={{
+                      background: '#52c41a',
+                      borderRadius: 2,
+                      flexShrink: 0,
+                      height: 14,
+                      width: 3,
+                    }}
+                  />
                   <span>{t('ModelSwitchPanel.detail.config')}</span>
                 </Flexbox>
               }

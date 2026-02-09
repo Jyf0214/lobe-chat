@@ -97,6 +97,20 @@ const UNIT_GROUP_MAP: Record<PricingUnitName, PricingGroup> = {
 
 const GROUP_ORDER: PricingGroup[] = ['text', 'image', 'audio'];
 
+const UNIT_SORT_ORDER: Record<PricingUnitName, number> = {
+  textInput: 0,
+  textOutput: 1,
+  textInput_cacheRead: 2,
+  textInput_cacheWrite: 3,
+  imageInput: 0,
+  imageOutput: 1,
+  imageInput_cacheRead: 2,
+  imageGeneration: 3,
+  audioInput: 0,
+  audioOutput: 1,
+  audioInput_cacheRead: 2,
+};
+
 const UNIT_LABEL_MAP: Record<string, string> = {
   image: '/img',
   megapixel: '/MP',
@@ -152,6 +166,9 @@ const groupPricingUnits = (units: PricingUnit[]): PricingGroupData[] => {
     const arr = map.get(group) || [];
     arr.push(unit);
     map.set(group, arr);
+  }
+  for (const [, arr] of map) {
+    arr.sort((a, b) => (UNIT_SORT_ORDER[a.name] ?? 99) - (UNIT_SORT_ORDER[b.name] ?? 99));
   }
   return GROUP_ORDER.filter((g) => map.has(g)).map((g) => ({ group: g, units: map.get(g)! }));
 };

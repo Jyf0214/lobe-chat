@@ -3,6 +3,8 @@ import { Accordion, AccordionItem, Flexbox, Icon, Tag, Text } from '@lobehub/ui'
 import { createStaticStyles } from 'antd-style';
 import type { LucideIcon } from 'lucide-react';
 import {
+  ArrowDownToLineIcon,
+  ArrowUpFromLineIcon,
   AtomIcon,
   EyeIcon,
   GlobeIcon,
@@ -209,9 +211,13 @@ const ModelDetailPanel: FC<ModelDetailPanelProps> = memo(({ extraControls, model
                     <span>{t('ModelSwitchPanel.detail.pricing')}</span>
                   </Flexbox>
                   {!expandedKeys.includes('pricing') && (
-                    <span style={{ fontSize: 12, fontWeight: 400, opacity: 0.6 }}>
-                      ${formatPrice.input} / ${formatPrice.output}
-                    </span>
+                    <Flexbox horizontal align={'center'} gap={4} style={{ fontSize: 12, fontWeight: 400, opacity: 0.6 }}>
+                      <Icon icon={ArrowDownToLineIcon} size={'small'} />
+                      ${formatPrice.input}/M
+                      <span style={{ opacity: 0.4 }}>·</span>
+                      <Icon icon={ArrowUpFromLineIcon} size={'small'} />
+                      ${formatPrice.output}/M
+                    </Flexbox>
                   )}
                 </Flexbox>
               }

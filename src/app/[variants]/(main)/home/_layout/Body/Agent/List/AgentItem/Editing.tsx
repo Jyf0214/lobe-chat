@@ -1,4 +1,5 @@
 import { Avatar, Block, Flexbox, Input,stopPropagation } from '@lobehub/ui';
+import { DEFAULT_AVATAR } from '@lobechat/const';
 import { type InputRef, Popover } from 'antd';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 
@@ -22,7 +23,7 @@ const Editing = memo<EditingProps>(({ id, title, avatar, toggleEditing }) => {
 
   const editing = useHomeStore((s) => s.agentRenamingId === id);
 
-  const currentAvatar = avatar || '';
+  const currentAvatar = avatar || DEFAULT_AVATAR;
 
   const [newTitle, setNewTitle] = useState(title);
   const [newAvatar, setNewAvatar] = useState(currentAvatar);
@@ -81,7 +82,12 @@ const Editing = memo<EditingProps>(({ id, title, avatar, toggleEditing }) => {
                 width={36}
                 onClick={stopPropagation}
               >
-                <Avatar emojiScaleWithBackground avatar={avatarValue} shape={'square'} size={32} />
+                <Avatar
+                  emojiScaleWithBackground
+                  avatar={avatarValue || DEFAULT_AVATAR}
+                  shape={'square'}
+                  size={32}
+                />
               </Block>
             )}
             onChange={setNewAvatar}
@@ -90,7 +96,6 @@ const Editing = memo<EditingProps>(({ id, title, avatar, toggleEditing }) => {
             defaultValue={title}
             ref={inputRef}
             style={{ flex: 1 }}
-            onBlur={() => handleUpdate()}
             onChange={(e) => setNewTitle(e.target.value)}
             onPressEnter={() => handleUpdate()}
             onKeyDown={(e) => {
@@ -99,6 +104,9 @@ const Editing = memo<EditingProps>(({ id, title, avatar, toggleEditing }) => {
           />
         </Flexbox>
       }
+      onOpenChange={(open) => {
+        if (!open) handleUpdate();
+      }}
     >
       <div />
     </Popover>

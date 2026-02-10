@@ -10,6 +10,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { useGroupTemplates } from '@/components/ChatGroupWizard/templates';
 import { DEFAULT_CHAT_GROUP_CHAT_CONFIG } from '@/const/settings';
+import { type CreateAgentParams } from '@/services/agent';
 import { type GroupMemberConfig } from '@/services/chatGroup';
 import { chatGroupService } from '@/services/chatGroup';
 import { useAgentStore } from '@/store/agent';
@@ -49,8 +50,8 @@ export const useCreateMenuItems = () => {
   // SWR-based agent creation with auto navigation to profile
   const { trigger: mutateAgent, isMutating: isMutatingAgent } = useSWRMutation(
     'agent.createAgent',
-    async () => {
-      const result = await storeCreateAgent({});
+    async (_key: string, { arg }: { arg?: CreateAgentParams }) => {
+      const result = await storeCreateAgent(arg ?? {});
       return result;
     },
     {
@@ -89,7 +90,7 @@ export const useCreateMenuItems = () => {
    */
   const createAgent = useCallback(
     async (options?: CreateAgentOptions) => {
-      await mutateAgent();
+      await mutateAgent({ groupId: options?.groupId });
       options?.onSuccess?.();
     },
     [mutateAgent],

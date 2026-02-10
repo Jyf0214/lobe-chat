@@ -464,6 +464,7 @@
     "overrides": {
       "better-auth": "1.4.6",
       "better-call": "1.1.8",
+      "css-functions-list": "3.2.3",
       "drizzle-orm": "0.44.7"
     }
   }

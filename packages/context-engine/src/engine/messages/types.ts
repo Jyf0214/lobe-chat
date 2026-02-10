@@ -6,6 +6,7 @@ import type { OpenAIChatMessage, UIChatMessage } from '@/types/index';
 
 import type { AgentInfo } from '../../processors/GroupRoleTransform';
 import type { AgentBuilderContext } from '../../providers/AgentBuilderContextInjector';
+import type { AgentManagementContext } from '../../providers/AgentManagementContextInjector';
 import type { GTDPlan } from '../../providers/GTDPlanInjector';
 import type { GTDTodoList } from '../../providers/GTDTodoInjector';
 import type { GroupAgentBuilderContext } from '../../providers/GroupAgentBuilderContextInjector';
@@ -212,6 +213,8 @@ export interface MessagesEngineParams {
   // ========== Extended contexts (both frontend and backend) ==========
   /** Agent Builder context */
   agentBuilderContext?: AgentBuilderContext;
+  /** Agent Management context */
+  agentManagementContext?: AgentManagementContext;
   /** Agent group configuration for multi-agent scenarios */
   agentGroup?: AgentGroupConfig;
   /** Group Agent Builder context */
@@ -262,6 +265,7 @@ export interface MessagesEngineResult {
 
 export { type AgentInfo } from '../../processors/GroupRoleTransform';
 export { type AgentBuilderContext } from '../../providers/AgentBuilderContextInjector';
+export { type AgentManagementContext } from '../../providers/AgentManagementContextInjector';
 export { type GroupAgentBuilderContext } from '../../providers/GroupAgentBuilderContextInjector';
 export { type GTDPlan } from '../../providers/GTDPlanInjector';
 export { type GTDTodoItem, type GTDTodoList } from '../../providers/GTDTodoInjector';

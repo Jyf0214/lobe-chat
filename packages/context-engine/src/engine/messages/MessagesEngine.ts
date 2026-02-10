@@ -22,6 +22,7 @@ import {
 } from '../../processors';
 import {
   AgentBuilderContextInjector,
+  AgentManagementContextInjector,
   GTDPlanInjector,
   GTDTodoInjector,
   GroupAgentBuilderContextInjector,
@@ -122,6 +123,7 @@ export class MessagesEngine {
       variableGenerators,
       fileContext,
       agentBuilderContext,
+      agentManagementContext,
       groupAgentBuilderContext,
       agentGroup,
       gtd,
@@ -132,6 +134,7 @@ export class MessagesEngine {
     } = this.params;
 
     const isAgentBuilderEnabled = !!agentBuilderContext;
+    const isAgentManagementEnabled = !!agentManagementContext;
     const isGroupAgentBuilderEnabled = !!groupAgentBuilderContext;
     const isAgentGroupEnabled = agentGroup?.agentMap && Object.keys(agentGroup.agentMap).length > 0;
     const isGroupContextEnabled =
@@ -190,13 +193,19 @@ export class MessagesEngine {
         agentContext: agentBuilderContext,
       }),
 
-      // 7. Group Agent Builder context injection (current group config/members for editing)
+      // 7. Agent Management context injection (available models and plugins for agent creation)
+      new AgentManagementContextInjector({
+        enabled: isAgentManagementEnabled,
+        context: agentManagementContext,
+      }),
+
+      // 8. Group Agent Builder context injection (current group config/members for editing)
       new GroupAgentBuilderContextInjector({
         enabled: isGroupAgentBuilderEnabled,
         groupContext: groupAgentBuilderContext,
       }),
 
-      // 8. Tool system role injection (conditionally added)
+      // 9. Tool system role injection (conditionally added)
       ...(toolsConfig?.manifests && toolsConfig.manifests.length > 0
         ? [
             new ToolSystemRoleProvider({
@@ -208,16 +217,16 @@ export class MessagesEngine {
           ]
         : []),
 
-      // 9. History summary injection
+      // 10. History summary injection
       new HistorySummaryProvider({
         formatHistorySummary,
         historySummary,
       }),
 
-      // 12. Page Selections injection (inject user-selected text into each user message that has them)
+      // 11. Page Selections injection (inject user-selected text into each user message that has them)
       new PageSelectionsInjector({ enabled: isPageEditorEnabled }),
 
-      // 10. Page Editor context injection (inject current page content to last user message)
+      // 12. Page Editor context injection (inject current page content to last user message)
       new PageEditorContextInjector({
         enabled: isPageEditorEnabled,
         // Use direct pageContentContext if provided (server-side), otherwise build from initialContext + stepContext (frontend)
@@ -237,40 +246,40 @@ export class MessagesEngine {
             : undefined,
       }),
 
-      // 11. GTD Todo injection (conditionally added, at end of last user message)
+      // 13. GTD Todo injection (conditionally added, at end of last user message)
       ...(isGTDTodoEnabled ? [new GTDTodoInjector({ enabled: true, todos: gtd.todos })] : []),
 
       // =============================================
       // Phase 4: Message Transformation
       // =============================================
 
-      // 13. Input template processing
+      // 14. Input template processing
       new InputTemplateProcessor({ inputTemplate }),
 
-      // 14. Placeholder variables processing
+      // 15. Placeholder variables processing
       new PlaceholderVariablesProcessor({
         variableGenerators: variableGenerators || {},
       }),
 
-      // 15. AgentCouncil message flatten (convert role=agentCouncil to standard assistant + tool messages)
+      // 16. AgentCouncil message flatten (convert role=agentCouncil to standard assistant + tool messages)
       new AgentCouncilFlattenProcessor(),
 
-      // 16. Group message flatten (convert role=assistantGroup to standard assistant + tool messages)
+      // 17. Group message flatten (convert role=assistantGroup to standard assistant + tool messages)
       new GroupMessageFlattenProcessor(),
 
-      // 17. Tasks message flatten (convert role=tasks to individual task messages)
+      // 18. Tasks message flatten (convert role=tasks to individual task messages)
       new TasksFlattenProcessor(),
 
-      // 18. Task message processing (convert role=task to assistant with instruction + content)
+      // 19. Task message processing (convert role=task to assistant with instruction + content)
       new TaskMessageProcessor(),
 
-      // 19. Supervisor role restore (convert role=supervisor back to role=assistant for model)
+      // 20. Supervisor role restore (convert role=supervisor back to role=assistant for model)
       new SupervisorRoleRestoreProcessor(),
 
       // 19b. Compressed group role transform (convert role=compressedGroup to role=user for model)
       new CompressedGroupRoleTransformProcessor(),
 
-      // 20. Group orchestration filter (remove supervisor's orchestration messages like broadcast/speak)
+      // 21. Group orchestration filter (remove supervisor's orchestration messages like broadcast/speak)
       // This must be BEFORE GroupRoleTransformProcessor so we filter based on original agentId/tools
       ...(isAgentGroupEnabled && agentGroup.agentMap && agentGroup.currentAgentId
         ? [
@@ -285,7 +294,7 @@ export class MessagesEngine {
           ]
         : []),
 
-      // 21. Group role transform (convert other agents' messages to user role with speaker tags)
+      // 22. Group role transform (convert other agents' messages to user role with speaker tags)
       // This must be BEFORE ToolCallProcessor so other agents' tool messages are converted first
       ...(isAgentGroupEnabled && agentGroup.currentAgentId
         ? [
@@ -300,7 +309,7 @@ export class MessagesEngine {
       // Phase 5: Content Processing
       // =============================================
 
-      // 22. Message content processing (image encoding, etc.)
+      // 23. Message content processing (image encoding, etc.)
       new MessageContentProcessor({
         fileContext: fileContext || { enabled: true, includeFileUrl: true },
         isCanUseVideo: capabilities?.isCanUseVideo || (() => false),
@@ -309,7 +318,7 @@ export class MessagesEngine {
         provider,
       }),
 
-      // 23. Tool call processing
+      // 24. Tool call processing
       new ToolCallProcessor({
         genToolCallingName: this.toolNameResolver.generate.bind(this.toolNameResolver),
         isCanUseFC: capabilities?.isCanUseFC || (() => true),
@@ -317,10 +326,10 @@ export class MessagesEngine {
         provider,
       }),
 
-      // 24. Tool message reordering
+      // 25. Tool message reordering
       new ToolMessageReorder(),
 
-      // 25. Message cleanup (final step, keep only necessary fields)
+      // 26. Message cleanup (final step, keep only necessary fields)
       new MessageCleanupProcessor(),
     ];
   }

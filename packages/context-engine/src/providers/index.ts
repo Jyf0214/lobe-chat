@@ -1,5 +1,6 @@
 // Context Provider exports
 export { AgentBuilderContextInjector } from './AgentBuilderContextInjector';
+export { AgentManagementContextInjector } from './AgentManagementContextInjector';
 export { GroupAgentBuilderContextInjector } from './GroupAgentBuilderContextInjector';
 export { GroupContextInjector } from './GroupContextInjector';
 export { GTDPlanInjector } from './GTDPlanInjector';
@@ -18,6 +19,13 @@ export type {
   AgentBuilderContextInjectorConfig,
   OfficialToolItem,
 } from './AgentBuilderContextInjector';
+export type {
+  AgentManagementContext,
+  AgentManagementContextInjectorConfig,
+  AvailableModelInfo,
+  AvailablePluginInfo,
+  AvailableProviderInfo,
+} from './AgentManagementContextInjector';
 export type {
   GroupAgentBuilderContext,
   GroupAgentBuilderContextInjectorConfig,

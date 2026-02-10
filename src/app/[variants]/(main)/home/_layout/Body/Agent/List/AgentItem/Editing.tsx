@@ -1,5 +1,6 @@
-import { Avatar, Block, Flexbox, Input, Popover, stopPropagation } from '@lobehub/ui';
-import { memo, useCallback, useState } from 'react';
+import { Avatar, Block, Flexbox, Input,stopPropagation } from '@lobehub/ui';
+import { type InputRef, Popover } from 'antd';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 
 import EmojiPicker from '@/components/EmojiPicker';
 import { useIsDark } from '@/hooks/useIsDark';
@@ -26,26 +27,32 @@ const Editing = memo<EditingProps>(({ id, title, avatar, toggleEditing }) => {
   const [newTitle, setNewTitle] = useState(title);
   const [newAvatar, setNewAvatar] = useState(currentAvatar);
 
+  const inputRef = useRef<InputRef>(null);
+
+  useEffect(() => {
+    if (editing) {
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [editing]);
+
   const handleUpdate = useCallback(async () => {
     const hasChanges =
       (newTitle && title !== newTitle) || (newAvatar && currentAvatar !== newAvatar);
 
     if (hasChanges) {
       try {
-        // Set loading state
         useHomeStore.getState().setAgentUpdatingId(id);
 
         const updates: { avatar?: string; title?: string } = {};
         if (newTitle && title !== newTitle) updates.title = newTitle;
         if (newAvatar && currentAvatar !== newAvatar) updates.avatar = newAvatar;
 
-        // Use optimisticUpdateAgentMeta to update the specific agent's meta
         await useAgentStore.getState().optimisticUpdateAgentMeta(id, updates);
-
-        // Refresh agent list to update sidebar display (including updatedAt)
         await useHomeStore.getState().refreshAgentList();
       } finally {
-        // Clear loading state
         useHomeStore.getState().setAgentUpdatingId(null);
       }
     }
@@ -55,6 +62,7 @@ const Editing = memo<EditingProps>(({ id, title, avatar, toggleEditing }) => {
   return (
     <Popover
       open={editing}
+      overlayInnerStyle={{ padding: 4 }}
       placement="bottomLeft"
       trigger="click"
       content={
@@ -79,26 +87,18 @@ const Editing = memo<EditingProps>(({ id, title, avatar, toggleEditing }) => {
             onChange={setNewAvatar}
           />
           <Input
-            autoFocus
             defaultValue={title}
+            ref={inputRef}
             style={{ flex: 1 }}
+            onBlur={() => handleUpdate()}
             onChange={(e) => setNewTitle(e.target.value)}
-            onPressEnter={() => {
-              handleUpdate();
-              toggleEditing(false);
+            onPressEnter={() => handleUpdate()}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') toggleEditing(false);
             }}
           />
         </Flexbox>
       }
-      styles={{
-        content: {
-          padding: 4,
-        },
-      }}
-      onOpenChange={(open) => {
-        if (!open) handleUpdate();
-        toggleEditing(open);
-      }}
     >
       <div />
     </Popover>

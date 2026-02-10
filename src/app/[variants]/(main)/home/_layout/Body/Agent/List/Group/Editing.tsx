@@ -43,11 +43,14 @@ const Editing = memo<EditingProps>(({ id, name, toggleEditing }) => {
           onClick={stopPropagation}
           onBlur={() => {
             handleUpdate();
-            toggleEditing(false);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              toggleEditing(false);
+            }
           }}
           onPressEnter={() => {
             handleUpdate();
-            toggleEditing(false);
           }}
         />
       }
@@ -56,10 +59,6 @@ const Editing = memo<EditingProps>(({ id, name, toggleEditing }) => {
           padding: 4,
           width: 320,
         },
-      }}
-      onOpenChange={(open) => {
-        if (!open) handleUpdate();
-        toggleEditing(open);
       }}
     >
       <div />

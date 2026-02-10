@@ -65,10 +65,11 @@ export const useCreateMenuItems = () => {
   // SWR-based group creation with auto navigation to profile
   const { trigger: mutateGroup, isMutating: isMutatingGroup } = useSWRMutation(
     'group.createGroup',
-    async () => {
+    async (_key: string, { arg }: { arg?: CreateAgentOptions }) => {
       const groupId = await createGroup(
         {
           config: DEFAULT_CHAT_GROUP_CHAT_CONFIG,
+          groupId: arg?.groupId,
           title: t('defaultGroupChat'),
         },
         [],
@@ -198,22 +199,25 @@ export const useCreateMenuItems = () => {
   /**
    * Create empty group and navigate to profile
    */
-  const createEmptyGroup = useCallback(async () => {
-    await mutateGroup();
-  }, [mutateGroup]);
+  const createEmptyGroup = useCallback(
+    async (options?: CreateAgentOptions) => {
+      await mutateGroup(options);
+    },
+    [mutateGroup],
+  );
 
   /**
    * Create group chat menu item
    * Creates an empty group and navigates to its profile page
    */
   const createGroupChatMenuItem = useCallback(
-    (): ItemType => ({
+    (options?: CreateAgentOptions): ItemType => ({
       icon: <Icon icon={GroupBotSquareIcon} />,
       key: 'newGroupChat',
       label: t('newGroupChat'),
       onClick: async (info) => {
         info.domEvent?.stopPropagation();
-        await createEmptyGroup();
+        await createEmptyGroup(options);
       },
     }),
     [t, createEmptyGroup],

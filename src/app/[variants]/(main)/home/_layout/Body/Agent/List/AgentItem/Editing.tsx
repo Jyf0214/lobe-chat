@@ -1,14 +1,17 @@
-import { Avatar, Block, Flexbox, Input,stopPropagation } from '@lobehub/ui';
 import { DEFAULT_AVATAR } from '@lobechat/const';
-import { type InputRef, Popover } from 'antd';
+import { Flexbox, Input, stopPropagation } from '@lobehub/ui';
+import { type InputRef, message,Popover } from 'antd';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import EmojiPicker from '@/components/EmojiPicker';
-import { useIsDark } from '@/hooks/useIsDark';
 import { useAgentStore } from '@/store/agent';
+import { useFileStore } from '@/store/file';
 import { useGlobalStore } from '@/store/global';
 import { globalGeneralSelectors } from '@/store/global/selectors';
 import { useHomeStore } from '@/store/home';
+
+const MAX_AVATAR_SIZE = 1024 * 1024;
 
 interface EditingProps {
   avatar?: string;
@@ -18,15 +21,17 @@ interface EditingProps {
 }
 
 const Editing = memo<EditingProps>(({ id, title, avatar, toggleEditing }) => {
+  const { t } = useTranslation('setting');
   const locale = useGlobalStore(globalGeneralSelectors.currentLanguage);
-  const isDarkMode = useIsDark();
 
   const editing = useHomeStore((s) => s.agentRenamingId === id);
+  const uploadWithProgress = useFileStore((s) => s.uploadWithProgress);
 
   const currentAvatar = avatar || DEFAULT_AVATAR;
 
   const [newTitle, setNewTitle] = useState(title);
   const [newAvatar, setNewAvatar] = useState(currentAvatar);
+  const [uploading, setUploading] = useState(false);
 
   const inputRef = useRef<InputRef>(null);
 
@@ -60,6 +65,30 @@ const Editing = memo<EditingProps>(({ id, title, avatar, toggleEditing }) => {
     toggleEditing(false);
   }, [newTitle, newAvatar, title, currentAvatar, id, toggleEditing]);
 
+  const handleAvatarUpload = useCallback(
+    async (file: File) => {
+      if (file.size > MAX_AVATAR_SIZE) {
+        message.error(t('settingAgent.avatar.sizeExceeded'));
+        return;
+      }
+
+      setUploading(true);
+      try {
+        const result = await uploadWithProgress({ file });
+        if (result?.url) {
+          setNewAvatar(result.url);
+        }
+      } finally {
+        setUploading(false);
+      }
+    },
+    [uploadWithProgress, t],
+  );
+
+  const handleAvatarDelete = useCallback(() => {
+    setNewAvatar(DEFAULT_AVATAR);
+  }, []);
+
   return (
     <Popover
       open={editing}
@@ -69,28 +98,16 @@ const Editing = memo<EditingProps>(({ id, title, avatar, toggleEditing }) => {
       content={
         <Flexbox horizontal gap={4} style={{ width: 320 }} onClick={stopPropagation}>
           <EmojiPicker
+            allowUpload
+            allowDelete={!!newAvatar && newAvatar !== DEFAULT_AVATAR}
+            loading={uploading}
             locale={locale}
             shape={'square'}
+            size={36}
             value={newAvatar}
-            customRender={(avatarValue) => (
-              <Block
-                clickable
-                align={'center'}
-                height={36}
-                justify={'center'}
-                variant={isDarkMode ? 'filled' : 'outlined'}
-                width={36}
-                onClick={stopPropagation}
-              >
-                <Avatar
-                  emojiScaleWithBackground
-                  avatar={avatarValue || DEFAULT_AVATAR}
-                  shape={'square'}
-                  size={32}
-                />
-              </Block>
-            )}
             onChange={setNewAvatar}
+            onDelete={handleAvatarDelete}
+            onUpload={handleAvatarUpload}
           />
           <Input
             defaultValue={title}

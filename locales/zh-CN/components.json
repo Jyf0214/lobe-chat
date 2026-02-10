@@ -84,7 +84,7 @@
   "MaxTokenSlider.unlimited": "无限制",
   "ModelSelect.featureTag.custom": "自定义模型，默认支持函数调用和视觉识别。请根据实际情况确认上述功能是否可用。",
   "ModelSelect.featureTag.file": "该模型支持上传文件读取与识别",
-  "ModelSelect.featureTag.functionCall": "该模型支持工具调用（Tool Call）",
+  "ModelSelect.featureTag.functionCall": "该模型支持工具调用（Tool Calling）",
   "ModelSelect.featureTag.imageOutput": "该模型支持生成图片",
   "ModelSelect.featureTag.reasoning": "该模型支持深度思考",
   "ModelSelect.featureTag.search": "该模型支持联网搜索",

@@ -4,14 +4,7 @@ import { LobeHub, ModelIcon, ProviderIcon } from '@lobehub/icons';
 import { type FlexboxProps } from '@lobehub/ui';
 import { Avatar, Flexbox, Icon, Tag, Text, Tooltip } from '@lobehub/ui';
 import { createStaticStyles, useResponsive } from 'antd-style';
-import {
-  Infinity,
-  LucideEye,
-  LucideImage,
-  LucidePaperclip,
-  ToyBrick,
-  Video,
-} from 'lucide-react';
+import { Infinity, LucideEye, LucideImage, LucidePaperclip, Video, Wrench } from 'lucide-react';
 import { type ModelAbilities } from 'model-bank';
 import numeral from 'numeral';
 import { type CSSProperties, type FC } from 'react';
@@ -156,7 +149,7 @@ const FeatureTags = memo<FeatureTagsProps>(
           color={'info'}
           disableTooltip={disableTooltip}
           enabled={functionCall}
-          icon={ToyBrick}
+          icon={Wrench}
           placement={placement}
           title={t('ModelSelect.featureTag.functionCall')}
         />

@@ -111,7 +111,7 @@ export default {
   'ModelSwitchPanel.byProvider': 'By Provider',
   'ModelSwitchPanel.detail.abilities': 'Abilities',
   'ModelSwitchPanel.detail.abilities.files': 'Files',
-  'ModelSwitchPanel.detail.abilities.functionCall': 'Tool Call',
+  'ModelSwitchPanel.detail.abilities.functionCall': 'Tool Calling',
   'ModelSwitchPanel.detail.abilities.imageOutput': 'Image Output',
   'ModelSwitchPanel.detail.abilities.reasoning': 'Reasoning',
   'ModelSwitchPanel.detail.abilities.search': 'Search',

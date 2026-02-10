@@ -13,8 +13,8 @@ import {
   GlobeIcon,
   ImageIcon,
   PaperclipIcon,
-  ToyBrickIcon,
   VideoIcon,
+  WrenchIcon,
 } from 'lucide-react';
 import {
   type AiModelForSelect,
@@ -198,7 +198,7 @@ const ABILITY_CONFIG: AbilityItem[] = [
   { color: 'success', icon: PaperclipIcon, key: 'files' },
   { color: 'success', icon: ImageIcon, key: 'imageOutput' },
   { color: 'magenta', icon: VideoIcon, key: 'video' },
-  { color: 'info', icon: ToyBrickIcon, key: 'functionCall' },
+  { color: 'info', icon: WrenchIcon, key: 'functionCall' },
   { color: 'purple', icon: AtomIcon, key: 'reasoning' },
   { color: 'cyan', icon: GlobeIcon, key: 'search' },
 ];

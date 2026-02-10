@@ -141,6 +141,7 @@
     ]
   },
   "overrides": {
+    "css-functions-list": "3.2.3",
     "pdfjs-dist": "5.4.530",
     "stylelint-config-clean-order": "7.0.0"
   },

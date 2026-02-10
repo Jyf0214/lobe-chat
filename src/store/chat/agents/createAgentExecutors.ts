@@ -955,7 +955,11 @@ export const createAgentExecutors = (context: {
       const opContext = getOperationContext();
       const { agentId, topicId } = opContext;
 
-      if (!agentId || !topicId) {
+      // Check for targetAgentId (callAgent mode)
+      const targetAgentId = (task as any).targetAgentId;
+      const executionAgentId = targetAgentId || agentId;
+
+      if (!agentId || !topicId || !executionAgentId) {
         log('[%s][exec_task] No valid context, cannot execute task', sessionLogId);
         return {
           events,
@@ -981,15 +985,31 @@ export const createAgentExecutors = (context: {
         };
       }
 
+      if (targetAgentId) {
+        log(
+          '[%s][exec_task] callAgent mode - current agent: %s, target agent: %s',
+          sessionLogId,
+          agentId,
+          targetAgentId,
+        );
+      }
+
       const taskLogId = `${sessionLogId}:task`;
 
       try {
         // 1. Create task message as placeholder
+        // IMPORTANT: Use operation context's agentId (current agent) for message creation
+        // This ensures the task message appears in the current conversation
         const taskMessageResult = await context.get().optimisticCreateMessage(
           {
-            agentId,
+            agentId, // Use current agent's ID (not targetAgentId)
             content: '',
-            metadata: { instruction: task.instruction, taskTitle: task.description },
+            metadata: {
+              instruction: task.instruction,
+              taskTitle: task.description,
+              // Store targetAgentId in metadata for UI display
+              ...(targetAgentId && { targetAgentId }),
+            },
             parentId: parentMessageId,
             role: 'task',
             topicId,
@@ -1027,9 +1047,11 @@ export const createAgentExecutors = (context: {
         log('[%s] Created task message: %s', taskLogId, taskMessageId);
 
         // 2. Create and execute task on server
-        log('[%s] Using server-side execution', taskLogId);
+        // IMPORTANT: Use executionAgentId here (targetAgentId if in callAgent mode)
+        // This ensures the task executes with the correct agent's config
+        log('[%s] Using server-side execution with agentId: %s', taskLogId, executionAgentId);
         const createResult = await aiAgentService.execSubAgentTask({
-          agentId,
+          agentId: executionAgentId, // Use targetAgentId for callAgent, or current agentId for GTD
           instruction: task.instruction,
           parentMessageId: taskMessageId,
           title: task.description,

@@ -385,11 +385,7 @@ export const contextEngineering = async ({
       window.global_serverConfigStore?.getState()?.serverConfig?.enableKlavis;
 
     if (isKlavisEnabled) {
-      const allKlavisServers = klavisStoreSelectors.getServers(toolState);
-
       for (const klavisType of KLAVIS_SERVER_TYPES) {
-        const server = allKlavisServers.find((s) => s.identifier === klavisType.identifier);
-
         availablePlugins.push({
           description: `LobeHub Mcp Server: ${klavisType.label}`,
           identifier: klavisType.identifier,
@@ -405,11 +401,7 @@ export const contextEngineering = async ({
       window.global_serverConfigStore?.getState()?.serverConfig?.enableLobehubSkill;
 
     if (isLobehubSkillEnabled) {
-      const allLobehubSkillServers = lobehubSkillStoreSelectors.getServers(toolState);
-
       for (const provider of LOBEHUB_SKILL_PROVIDERS) {
-        const server = allLobehubSkillServers.find((s) => s.identifier === provider.id);
-
         availablePlugins.push({
           description: `LobeHub Skill Provider: ${provider.label}`,
           identifier: provider.id,

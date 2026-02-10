@@ -1,6 +1,6 @@
 import { GROUP_CHAT_URL } from '@lobechat/const';
 import { type SidebarAgentItem } from '@lobechat/types';
-import { ActionIcon, Icon } from '@lobehub/ui';
+import { ActionIcon, Avatar, Icon } from '@lobehub/ui';
 import { cssVar } from 'antd-style';
 import { Loader2, PinIcon } from 'lucide-react';
 import { type CSSProperties, type DragEvent } from 'react';
@@ -24,7 +24,7 @@ interface GroupItemProps {
 }
 
 const GroupItem = memo<GroupItemProps>(({ item, style, className }) => {
-  const { id, avatar, title, pinned } = item;
+  const { id, avatar, groupAvatar, title, pinned } = item;
   const { t } = useTranslation('chat');
 
   const openAgentInNewWindow = useGlobalStore((s) => s.openAgentInNewWindow);
@@ -83,8 +83,11 @@ const GroupItem = memo<GroupItemProps>(({ item, style, className }) => {
     if (isUpdating) {
       return <Icon spin color={cssVar.colorTextDescription} icon={Loader2} size={18} />;
     }
+    if (groupAvatar) {
+      return <Avatar avatar={groupAvatar} shape={'square'} size={22} />;
+    }
     return <GroupAvatar avatars={(avatar as any) || []} size={22} />;
-  }, [isUpdating, avatar]);
+  }, [isUpdating, groupAvatar, avatar]);
 
   const dropdownMenu = useGroupDropdownMenu({
     id,
@@ -111,7 +114,13 @@ const GroupItem = memo<GroupItemProps>(({ item, style, className }) => {
           onDragStart={handleDragStart}
         />
       </Link>
-      <Editing id={id} title={displayTitle} toggleEditing={toggleEditing} />
+      <Editing
+        avatar={groupAvatar || undefined}
+        id={id}
+        memberAvatars={Array.isArray(avatar) ? avatar : undefined}
+        title={displayTitle}
+        toggleEditing={toggleEditing}
+      />
     </>
   );
 });

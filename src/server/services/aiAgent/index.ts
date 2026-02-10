@@ -16,6 +16,8 @@ import debug from 'debug';
 
 import { LOADING_FLAT } from '@/const/message';
 import { AgentModel } from '@/database/models/agent';
+import { AiModelModel } from '@/database/models/aiModel';
+import { AiProviderModel } from '@/database/models/aiProvider';
 import { MessageModel } from '@/database/models/message';
 import { PluginModel } from '@/database/models/plugin';
 import { ThreadModel } from '@/database/models/thread';
@@ -157,6 +159,14 @@ export class AiAgentService {
     const resolvedAgentId = agentConfig.id;
 
     log('execAgent: got agent config for %s (id: %s)', identifier, resolvedAgentId);
+    console.log('[DEBUG] execAgent - using agent config:', {
+      identifier,
+      resolvedAgentId,
+      agentTitle: agentConfig.title,
+      model: agentConfig.model,
+      provider: agentConfig.provider,
+      systemRolePreview: agentConfig.systemRole?.slice(0, 100),
+    });
 
     // 2. Handle topic creation: if no topicId provided, create a new topic; otherwise reuse existing
     let topicId = appContext?.topicId;
@@ -279,6 +289,84 @@ export class AiAgentService {
       klavisManifests.length,
     );
 
+    // 7.5. Build Agent Management context if agent-management tool is enabled
+    const isAgentManagementEnabled = toolsResult.enabledToolIds?.includes('lobe-agent-management');
+    let agentManagementContext;
+    if (isAgentManagementEnabled) {
+      // Query user's enabled models from database
+      const aiModelModel = new AiModelModel(this.db, this.userId);
+      const allUserModels = await aiModelModel.getAllModels();
+
+      // Filter only enabled chat models and group by provider
+      const providerMap = new Map<
+        string,
+        { id: string; models: Array<{ abilities?: any; description?: string; id: string; name: string }>; name: string }
+      >();
+
+      for (const userModel of allUserModels) {
+        // Only include enabled chat models
+        if (!userModel.enabled || userModel.type !== 'chat') continue;
+
+        // Get model info from LOBE_DEFAULT_MODEL_LIST for full metadata
+        const modelInfo = LOBE_DEFAULT_MODEL_LIST.find(
+          (m) => m.id === userModel.id && m.providerId === userModel.providerId,
+        );
+
+        if (!providerMap.has(userModel.providerId)) {
+          providerMap.set(userModel.providerId, {
+            id: userModel.providerId,
+            models: [],
+            name: userModel.providerId, // TODO: Map to friendly provider name
+          });
+        }
+
+        const provider = providerMap.get(userModel.providerId)!;
+        provider.models.push({
+          abilities: userModel.abilities || modelInfo?.abilities,
+          description: modelInfo?.description,
+          id: userModel.id,
+          name: userModel.displayName || modelInfo?.displayName || userModel.id,
+        });
+      }
+
+      // Build availablePlugins from all plugin sources
+      const availablePlugins = [
+        // Builtin tools from installed plugins
+        ...installedPlugins.map((plugin) => ({
+          description: plugin.manifest?.meta?.description,
+          identifier: plugin.identifier,
+          name: plugin.manifest?.meta?.title || plugin.identifier,
+          type: 'builtin' as const,
+        })),
+        // Lobehub Skills
+        ...lobehubSkillManifests.map((manifest) => ({
+          description: manifest.meta?.description,
+          identifier: manifest.identifier,
+          name: manifest.meta?.title || manifest.identifier,
+          type: 'lobehub-skill' as const,
+        })),
+        // Klavis tools
+        ...klavisManifests.map((manifest) => ({
+          description: manifest.meta?.description,
+          identifier: manifest.identifier,
+          name: manifest.meta?.title || manifest.identifier,
+          type: 'klavis' as const,
+        })),
+      ];
+
+      agentManagementContext = {
+        availablePlugins,
+        // Limit to first 5 providers to avoid context bloat
+        availableProviders: Array.from(providerMap.values()).slice(0, 5),
+      };
+
+      log(
+        'execAgent: built agentManagementContext with %d providers and %d plugins',
+        agentManagementContext.availableProviders.length,
+        agentManagementContext.availablePlugins.length,
+      );
+    }
+
     // 8. Get existing messages if provided
     let historyMessages: any[] = [];
     if (existingMessageIds.length > 0) {
@@ -325,6 +413,7 @@ export class AiAgentService {
 
     // 11. Process messages using Server ContextEngineering
     const processedMessages = await serverMessagesEngine({
+      agentManagementContext,
       capabilities: {
         isCanUseFC: isModelSupportToolUse,
         isCanUseVideo: () => modelInfo?.abilities?.video ?? false,
@@ -564,6 +653,19 @@ export class AiAgentService {
       topicId,
       instruction.slice(0, 50),
     );
+
+    // DEBUG: Verify the agentId and get agent config to confirm
+    const agentConfig = await this.agentService.getAgentConfig(agentId);
+    if (!agentConfig) {
+      throw new Error(`Agent not found: ${agentId}`);
+    }
+    console.log('[DEBUG] execSubAgentTask - target agent info:', {
+      agentId,
+      resolvedAgentId: agentConfig.id,
+      agentTitle: agentConfig.title,
+      model: agentConfig.model,
+      provider: agentConfig.provider,
+    });
 
     // 1. Create Thread for isolated task execution
     const thread = await this.threadModel.create({

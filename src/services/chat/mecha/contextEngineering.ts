@@ -1,10 +1,12 @@
 import { AgentBuilderIdentifier } from '@lobechat/builtin-tool-agent-builder';
+import { AgentManagementIdentifier } from '@lobechat/builtin-tool-agent-management';
 import { GroupAgentBuilderIdentifier } from '@lobechat/builtin-tool-group-agent-builder';
 import { GTDIdentifier } from '@lobechat/builtin-tool-gtd';
 import { KLAVIS_SERVER_TYPES, LOBEHUB_SKILL_PROVIDERS, isDesktop } from '@lobechat/const';
 import {
   type AgentBuilderContext,
   type AgentGroupConfig,
+  type AgentManagementContext,
   type GTDConfig,
   type GroupAgentBuilderContext,
   type GroupOfficialToolItem,
@@ -27,6 +29,7 @@ import { getAgentStoreState } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
 import { getChatGroupStoreState } from '@/store/agentGroup';
 import { agentGroupSelectors } from '@/store/agentGroup/selectors';
+import { getAiInfraStoreState } from '@/store/aiInfra';
 import { getChatStoreState } from '@/store/chat';
 import { getToolStoreState } from '@/store/tool';
 import {
@@ -104,9 +107,12 @@ export const contextEngineering = async ({
   const isAgentBuilderEnabled = tools?.includes(AgentBuilderIdentifier) ?? false;
   // Check if Group Agent Builder tool is enabled
   const isGroupAgentBuilderEnabled = tools?.includes(GroupAgentBuilderIdentifier) ?? false;
+  // Check if Agent Management tool is enabled
+  const isAgentManagementEnabled = tools?.includes(AgentManagementIdentifier) ?? false;
 
   log('isAgentBuilderEnabled: %s', isAgentBuilderEnabled);
   log('isGroupAgentBuilderEnabled: %s', isGroupAgentBuilderEnabled);
+  log('isAgentManagementEnabled: %s', isAgentManagementEnabled);
 
   // Build agent group configuration if groupId is provided
   let agentGroup: AgentGroupConfig | undefined;
@@ -331,6 +337,100 @@ export const contextEngineering = async ({
     }
   }
 
+  // Build Agent Management context if Agent Management tool is enabled
+  let agentManagementContext: AgentManagementContext | undefined;
+  if (isAgentManagementEnabled) {
+    // Get enabled providers and models from aiInfra store
+    const aiProviderState = getAiInfraStoreState();
+    const enabledChatModelList = aiProviderState.enabledChatModelList || [];
+
+    // Build availableProviders from enabled chat models (only user-enabled providers)
+    // Limit to first 5 providers to avoid context bloat
+    const availableProviders = enabledChatModelList.slice(0, 5).map((provider) => ({
+      id: provider.id,
+      models: provider.children.map((model) => ({
+        abilities: model.abilities,
+        description: model.description,
+        id: model.id,
+        name: model.displayName || model.id,
+      })),
+      name: provider.name,
+    }));
+
+    // Get tool state for plugins
+    const toolState = getToolStoreState();
+
+    // Build availablePlugins from all plugin sources
+    const availablePlugins = [];
+
+    // Builtin tools (excluding Klavis tools)
+    const builtinTools = builtinToolSelectors.metaList(toolState);
+    const klavisIdentifiers = new Set(KLAVIS_SERVER_TYPES.map((t) => t.identifier));
+
+    for (const tool of builtinTools) {
+      // Skip Klavis tools in builtin list (they'll be shown separately)
+      if (klavisIdentifiers.has(tool.identifier)) continue;
+
+      availablePlugins.push({
+        description: tool.meta?.description,
+        identifier: tool.identifier,
+        name: tool.meta?.title || tool.identifier,
+        type: 'builtin' as const,
+      });
+    }
+
+    // Klavis tools (if enabled)
+    const isKlavisEnabled =
+      typeof window !== 'undefined' &&
+      window.global_serverConfigStore?.getState()?.serverConfig?.enableKlavis;
+
+    if (isKlavisEnabled) {
+      const allKlavisServers = klavisStoreSelectors.getServers(toolState);
+
+      for (const klavisType of KLAVIS_SERVER_TYPES) {
+        const server = allKlavisServers.find((s) => s.identifier === klavisType.identifier);
+
+        availablePlugins.push({
+          description: `LobeHub Mcp Server: ${klavisType.label}`,
+          identifier: klavisType.identifier,
+          name: klavisType.label,
+          type: 'klavis' as const,
+        });
+      }
+    }
+
+    // LobehubSkill providers (if enabled)
+    const isLobehubSkillEnabled =
+      typeof window !== 'undefined' &&
+      window.global_serverConfigStore?.getState()?.serverConfig?.enableLobehubSkill;
+
+    if (isLobehubSkillEnabled) {
+      const allLobehubSkillServers = lobehubSkillStoreSelectors.getServers(toolState);
+
+      for (const provider of LOBEHUB_SKILL_PROVIDERS) {
+        const server = allLobehubSkillServers.find((s) => s.identifier === provider.id);
+
+        availablePlugins.push({
+          description: `LobeHub Skill Provider: ${provider.label}`,
+          identifier: provider.id,
+          name: provider.label,
+          type: 'lobehub-skill' as const,
+        });
+      }
+    }
+
+    agentManagementContext = {
+      availablePlugins,
+      availableProviders,
+    };
+
+    log(
+      'agentManagementContext built: %d providers, %d plugins',
+      agentManagementContext.availableProviders?.length ?? 0,
+      agentManagementContext.availablePlugins?.length ?? 0,
+    );
+  }
+
   // Create MessagesEngine with injected dependencies
   /* eslint-disable sort-keys-fix/sort-keys-fix */
   const engine = new MessagesEngine({
@@ -379,9 +479,9 @@ export const contextEngineering = async ({
     userMemory:
       enableUserMemories && userMemoryData
         ? {
-            enabled: enableUserMemories,
-            memories: userMemoryData,
-          }
+          enabled: enableUserMemories,
+          memories: userMemoryData,
+        }
         : undefined,
 
     // Variable generators
@@ -390,6 +490,7 @@ export const contextEngineering = async ({
     // Extended contexts - only pass when enabled
     ...(isAgentBuilderEnabled && { agentBuilderContext }),
     ...(isGroupAgentBuilderEnabled && { groupAgentBuilderContext }),
+    ...(isAgentManagementEnabled && { agentManagementContext }),
     ...(agentGroup && { agentGroup }),
     ...(gtdConfig && { gtd: gtdConfig }),
   });

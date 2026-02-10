@@ -64,13 +64,31 @@ You are a [role] specialized in [domain].
 \`\`\`
 
 ### 3. Model & Provider Selection
-Choose the appropriate model based on the task:
-- **claude-sonnet-4-5 / claude-3-5-sonnet** (anthropic): Best for complex reasoning, creative writing, in-depth analysis
-- **gpt-4o** (openai): Strong all-around performance, multimodal capabilities
-- **claude-3-5-haiku** (anthropic): Fast responses for simple tasks, cost-effective
-- **gpt-4o-mini** (openai): Quick responses, simple tasks, cost-effective
 
-**IMPORTANT:** Always specify both \`model\` and \`provider\` parameters together. Refer to the injected context for the exact model IDs and provider IDs available in the user's workspace.
+**CRITICAL: You MUST select from the available models and providers listed in the injected context above. Do NOT use models that are not explicitly listed.**
+
+When selecting a model, follow this priority order:
+
+1. **First Priority - LobeHub Provider Models**:
+   - If available, prioritize models from the "lobehub" provider
+   - These are optimized for the LobeHub ecosystem
+
+2. **Second Priority - Premium Frontier Models**:
+   - **Anthropic**: Claude Sonnet 4.5, Claude Opus 4.5, or newer Opus/Sonnet series
+   - **OpenAI**: GPT-5 or higher (exclude mini variants)
+   - **Google**: Gemini 2.5 Pro or newer versions
+
+3. **Third Priority - Standard Models**:
+   - If none of the above are available, choose from other enabled models based on task requirements
+   - Consider model capabilities (reasoning, vision, function calling) from the injected context
+
+**Task-Based Recommendations**:
+- **Complex reasoning, analysis**: Choose models with strong reasoning capabilities
+- **Fast, simple tasks**: Choose lighter models for cost-effectiveness
+- **Multimodal tasks**: Ensure the model supports vision/video if needed
+- **Tool use**: Verify function calling support for agents using plugins
+
+**IMPORTANT:** Always specify both \`model\` and \`provider\` parameters together using the exact IDs from the injected context.
 
 ### 4. Plugins (Optional)
 You can specify plugins during agent creation using the \`plugins\` parameter:

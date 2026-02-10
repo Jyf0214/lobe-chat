@@ -135,6 +135,7 @@ export class MessagesEngine {
 
     const isAgentBuilderEnabled = !!agentBuilderContext;
     const isAgentManagementEnabled = !!agentManagementContext;
+
     const isGroupAgentBuilderEnabled = !!groupAgentBuilderContext;
     const isAgentGroupEnabled = agentGroup?.agentMap && Object.keys(agentGroup.agentMap).length > 0;
     const isGroupContextEnabled =
@@ -208,13 +209,13 @@ export class MessagesEngine {
       // 9. Tool system role injection (conditionally added)
       ...(toolsConfig?.manifests && toolsConfig.manifests.length > 0
         ? [
-            new ToolSystemRoleProvider({
-              isCanUseFC: capabilities?.isCanUseFC || (() => true),
-              manifests: toolsConfig.manifests,
-              model,
-              provider,
-            }),
-          ]
+          new ToolSystemRoleProvider({
+            isCanUseFC: capabilities?.isCanUseFC || (() => true),
+            manifests: toolsConfig.manifests,
+            model,
+            provider,
+          }),
+        ]
         : []),
 
       // 10. History summary injection
@@ -234,15 +235,15 @@ export class MessagesEngine {
           ? pageContentContext
           : initialContext?.pageEditor
             ? {
-                markdown: initialContext.pageEditor.markdown,
-                metadata: {
-                  charCount: initialContext.pageEditor.metadata.charCount,
-                  lineCount: initialContext.pageEditor.metadata.lineCount,
-                  title: initialContext.pageEditor.metadata.title,
-                },
-                // Use latest XML from stepContext if available, otherwise fallback to initial XML
-                xml: stepContext?.stepPageEditor?.xml || initialContext.pageEditor.xml,
-              }
+              markdown: initialContext.pageEditor.markdown,
+              metadata: {
+                charCount: initialContext.pageEditor.metadata.charCount,
+                lineCount: initialContext.pageEditor.metadata.lineCount,
+                title: initialContext.pageEditor.metadata.title,
+              },
+              // Use latest XML from stepContext if available, otherwise fallback to initial XML
+              xml: stepContext?.stepPageEditor?.xml || initialContext.pageEditor.xml,
+            }
             : undefined,
       }),
 
@@ -283,26 +284,26 @@ export class MessagesEngine {
       // This must be BEFORE GroupRoleTransformProcessor so we filter based on original agentId/tools
       ...(isAgentGroupEnabled && agentGroup.agentMap && agentGroup.currentAgentId
         ? [
-            new GroupOrchestrationFilterProcessor({
-              agentMap: Object.fromEntries(
-                Object.entries(agentGroup.agentMap).map(([id, info]) => [id, { role: info.role }]),
-              ),
-              currentAgentId: agentGroup.currentAgentId,
-              // Only enabled when current agent is NOT supervisor (supervisor needs to see orchestration history)
-              enabled: agentGroup.currentAgentRole !== 'supervisor',
-            }),
-          ]
+          new GroupOrchestrationFilterProcessor({
+            agentMap: Object.fromEntries(
+              Object.entries(agentGroup.agentMap).map(([id, info]) => [id, { role: info.role }]),
+            ),
+            currentAgentId: agentGroup.currentAgentId,
+            // Only enabled when current agent is NOT supervisor (supervisor needs to see orchestration history)
+            enabled: agentGroup.currentAgentRole !== 'supervisor',
+          }),
+        ]
         : []),
 
       // 22. Group role transform (convert other agents' messages to user role with speaker tags)
       // This must be BEFORE ToolCallProcessor so other agents' tool messages are converted first
       ...(isAgentGroupEnabled && agentGroup.currentAgentId
         ? [
-            new GroupRoleTransformProcessor({
-              agentMap: agentGroup.agentMap!,
-              currentAgentId: agentGroup.currentAgentId,
-            }),
-          ]
+          new GroupRoleTransformProcessor({
+            agentMap: agentGroup.agentMap!,
+            currentAgentId: agentGroup.currentAgentId,
+          }),
+        ]
         : []),
 
       // =============================================

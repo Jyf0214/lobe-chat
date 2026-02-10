@@ -101,7 +101,11 @@ export class SidebarUIActionImpl {
     await this.#get().refreshAgentList();
   };
 
-  renameAgentGroup = async (groupId: string, title: string, avatar?: string): Promise<void> => {
+  renameAgentGroup = async (
+    groupId: string,
+    title: string,
+    avatar?: string | null,
+  ): Promise<void> => {
     await chatGroupService.updateGroup(groupId, { avatar, title });
     await this.#get().refreshAgentList();
   };

@@ -117,6 +117,7 @@ const GroupItem = memo<GroupItemProps>(({ item, style, className }) => {
       <Editing
         avatar={groupAvatar || undefined}
         id={id}
+        memberAvatars={Array.isArray(avatar) ? avatar : undefined}
         title={displayTitle}
         toggleEditing={toggleEditing}
       />

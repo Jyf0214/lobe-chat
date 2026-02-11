@@ -22,6 +22,7 @@ import { MessageModel } from '@/database/models/message';
 import { PluginModel } from '@/database/models/plugin';
 import { ThreadModel } from '@/database/models/thread';
 import { TopicModel } from '@/database/models/topic';
+import { builtinTools } from '@/tools';
 import {
   type ServerAgentToolsContext,
   createServerAgentToolsEngine,
@@ -330,14 +331,24 @@ export class AiAgentService {
       }
 
       // Build availablePlugins from all plugin sources
+      // Exclude only truly internal tools (agent-management itself, agent-builder, page-agent)
+      const INTERNAL_TOOLS = new Set([
+        'lobe-agent-management', // Don't show agent-management in its own context
+        'lobe-agent-builder', // Used for editing current agent, not for creating new agents
+        'lobe-group-agent-builder', // Used for editing current group, not for creating new agents
+        'lobe-page-agent', // Page-editor specific tool
+      ]);
+
       const availablePlugins = [
-        // Builtin tools from installed plugins
-        ...installedPlugins.map((plugin) => ({
-          description: plugin.manifest?.meta?.description,
-          identifier: plugin.identifier,
-          name: plugin.manifest?.meta?.title || plugin.identifier,
-          type: 'builtin' as const,
-        })),
+        // All builtin tools (including hidden ones like web-browsing, cloud-sandbox)
+        ...builtinTools
+          .filter((tool) => !INTERNAL_TOOLS.has(tool.identifier))
+          .map((tool) => ({
+            description: tool.manifest.meta?.description,
+            identifier: tool.identifier,
+            name: tool.manifest.meta?.title || tool.identifier,
+            type: 'builtin' as const,
+          })),
         // Lobehub Skills
         ...lobehubSkillManifests.map((manifest) => ({
           description: manifest.meta?.description,

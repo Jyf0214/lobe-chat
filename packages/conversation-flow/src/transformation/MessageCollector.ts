@@ -183,14 +183,14 @@ export class MessageCollector {
       return lastNode;
     }
 
-    // Check if lastNode is a tool with multiple task children
+    // Check if lastNode is a tool with ANY task children
     // In this case, return the tool node itself so ContextTreeBuilder can process tasks
     if (lastMsg?.role === 'tool') {
       const taskChildren = lastNode.children.filter((child) => {
         const childMsg = this.messageMap.get(child.id);
         return childMsg?.role === 'task';
       });
-      if (taskChildren.length > 1) {
+      if (taskChildren.length > 0) {
         return lastNode;
       }
     }

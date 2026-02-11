@@ -363,13 +363,22 @@ export const contextEngineering = async ({
     // Build availablePlugins from all plugin sources
     const availablePlugins = [];
 
-    // Builtin tools (excluding Klavis tools)
-    const builtinTools = builtinToolSelectors.metaList(toolState);
+    // Builtin tools (use allMetaList to include hidden tools like web-browsing, cloud-sandbox, etc.)
+    // Exclude only truly internal tools (agent-management itself, agent-builder, page-agent)
+    const allBuiltinTools = builtinToolSelectors.allMetaList(toolState);
     const klavisIdentifiers = new Set(KLAVIS_SERVER_TYPES.map((t) => t.identifier));
+    const INTERNAL_TOOLS = new Set([
+      'lobe-agent-management', // Don't show agent-management in its own context
+      'lobe-agent-builder', // Used for editing current agent, not for creating new agents
+      'lobe-group-agent-builder', // Used for editing current group, not for creating new agents
+      'lobe-page-agent', // Page-editor specific tool
+    ]);
 
-    for (const tool of builtinTools) {
+    for (const tool of allBuiltinTools) {
       // Skip Klavis tools in builtin list (they'll be shown separately)
       if (klavisIdentifiers.has(tool.identifier)) continue;
+      // Skip internal tools
+      if (INTERNAL_TOOLS.has(tool.identifier)) continue;
 
       availablePlugins.push({
         description: tool.meta?.description,
@@ -387,7 +396,7 @@ export const contextEngineering = async ({
     if (isKlavisEnabled) {
       for (const klavisType of KLAVIS_SERVER_TYPES) {
         availablePlugins.push({
-          description: `LobeHub Mcp Server: ${klavisType.label}`,
+          description: klavisType.description,
           identifier: klavisType.identifier,
           name: klavisType.label,
           type: 'klavis' as const,
@@ -403,7 +412,7 @@ export const contextEngineering = async ({
     if (isLobehubSkillEnabled) {
       for (const provider of LOBEHUB_SKILL_PROVIDERS) {
         availablePlugins.push({
-          description: `LobeHub Skill Provider: ${provider.label}`,
+          description: provider.description,
           identifier: provider.id,
           name: provider.label,
           type: 'lobehub-skill' as const,

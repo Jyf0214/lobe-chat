@@ -4,6 +4,8 @@ import debug from 'debug';
 import { sha256 } from 'js-sha256';
 import { z } from 'zod';
 
+import { AgentSkillModel } from '@/database/models/agentSkill';
+import { FileModel } from '@/database/models/file';
 import { type ToolCallContent } from '@/libs/mcp';
 import { authedProcedure, router } from '@/libs/trpc/lambda';
 import { marketUserInfo, serverDatabase, telemetry } from '@/libs/trpc/lambda/middleware';
@@ -242,21 +244,40 @@ export const marketRouter = router({
         // For execScript tool, look up skill zipUrl if config is provided
         let enhancedParams = params;
         if (toolName === 'execScript' && params.config) {
-          const { AgentSkillModel } = await import('@/database/models/agentSkill');
-
           const agentSkillModel = new AgentSkillModel(ctx.serverDB, userId);
 
           // Look up skill by name
           let skill;
           if (params.config.name) {
             skill = await agentSkillModel.findByName(params.config.name);
+
+            // If skill not found, return error with available skills
+            if (!skill) {
+              const allSkills = await agentSkillModel.findAll();
+              const availableSkills = allSkills.data.map((s) => s.name).join(', ');
+
+              const errorMessage = availableSkills
+                ? `Skill "${params.config.name}" not found. Available skills: ${availableSkills}`
+                : `Skill "${params.config.name}" not found. No skills available. Please import a skill first.`;
+
+              log('Skill not found: %s. Available skills: %s', params.config.name, availableSkills);
+
+              return {
+                error: {
+                  message: errorMessage,
+                  name: 'SkillNotFound',
+                },
+                result: null,
+                sessionExpiredAndRecreated: false,
+                success: false,
+              } as CallToolResult;
+            }
           }
 
           // If skill exists and has zipFileHash, get the full URL
           if (skill?.zipFileHash) {
             const fileService = ctx.fileService;
             // Get S3 key from globalFiles
-            const { FileModel } = await import('@/database/models/file');
             const fileModel = new FileModel(ctx.serverDB, userId);
             const fileInfo = await fileModel.checkHash(skill.zipFileHash);
 

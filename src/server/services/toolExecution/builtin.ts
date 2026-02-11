@@ -58,7 +58,7 @@ export class BuiltinToolsExecutor implements IToolExecutor {
       throw new Error(`Builtin tool "${identifier}" is not implemented`);
     }
 
-    const runtime = getServerRuntime(identifier, context);
+    const runtime = await getServerRuntime(identifier, context);
 
     if (!runtime[apiName]) {
       throw new Error(`Builtin tool ${identifier}'s ${apiName} is not implemented`);

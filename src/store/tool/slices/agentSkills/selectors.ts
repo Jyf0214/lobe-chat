@@ -4,6 +4,12 @@ import type { ToolStoreState } from '../../initialState';
 
 const getAgentSkills = (s: ToolStoreState): SkillListItem[] => s.agentSkills || [];
 
+const getMarketAgentSkills = (s: ToolStoreState): SkillListItem[] =>
+  (s.agentSkills || []).filter((skill) => skill.source === 'market');
+
+const getUserAgentSkills = (s: ToolStoreState): SkillListItem[] =>
+  (s.agentSkills || []).filter((skill) => skill.source === 'user');
+
 const getAgentSkillByIdentifier =
   (identifier: string) =>
   (s: ToolStoreState): SkillListItem | undefined =>
@@ -36,5 +42,7 @@ export const agentSkillsSelectors = {
   getAgentSkillByIdentifier,
   getAgentSkillDetail,
   getAgentSkills,
+  getMarketAgentSkills,
+  getUserAgentSkills,
   isAgentSkill,
 };

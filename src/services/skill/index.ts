@@ -41,6 +41,10 @@ class AgentSkillService {
     return lambdaClient.agentSkills.getById.query({ id });
   }
 
+  async getZipUrl(id: string): Promise<{ name: string; url: string | null }> {
+    return lambdaClient.agentSkills.getByIdWithZipUrl.query({ id });
+  }
+
   async getByIdentifier(identifier: string): Promise<SkillItem | undefined> {
     return lambdaClient.agentSkills.getByIdentifier.query({ identifier });
   }
@@ -59,8 +63,8 @@ class AgentSkillService {
 
   // ===== Resources =====
 
-  async listResources(id: string): Promise<SkillResourceTreeNode[]> {
-    return lambdaClient.agentSkills.listResources.query({ id });
+  async listResources(id: string, includeContent?: boolean): Promise<SkillResourceTreeNode[]> {
+    return lambdaClient.agentSkills.listResources.query({ id, includeContent });
   }
 
   async readResource(id: string, path: string): Promise<SkillResourceContent> {

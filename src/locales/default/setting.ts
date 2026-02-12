@@ -134,6 +134,25 @@ export default {
   'agentInfoDescription.value.unset': 'Not Set',
 
   'agentInfoDescription.value.untitled': 'Untitled Agent',
+  'agentSkillDetail.addedAt': 'Added',
+  'agentSkillDetail.publishedAt': 'Published',
+  'agentSkillDetail.repository': 'GitHub Repository',
+  'agentSkillDetail.sourceUrl': 'Skill Import Source',
+  'agentSkillDetail.updatedAt': 'Updated',
+  'agentSkillEdit.descriptionDesc':
+    'A brief summary of what the skill does, helping the agent understand when to use it',
+  'agentSkillEdit.fileReadonly':
+    'This file is read-only. Only skill description and instructions can be edited.',
+  'agentSkillEdit.instructions': 'Instructions',
+  'agentSkillEdit.instructionsDesc':
+    'The core instructions in Markdown that define the skill behavior and workflow',
+  'agentSkillEdit.instructionsPlaceholder': 'Enter the skill instructions in Markdown format...',
+  'agentSkillEdit.nameDesc': 'The unique identifier for this skill, not editable after creation',
+  'agentSkillEdit.saveSuccess': 'Skill updated successfully',
+  'agentSkillEdit.title': 'Skill Settings',
+  'agentSkillItem.deleteConfirm.desc':
+    'Are you sure you want to delete the agent skill "{{name}}"? This action cannot be undone.',
+  'agentSkillItem.deleteConfirm.title': 'Delete Agent Skill',
   'agentSkillModal.content': 'Skill Content',
   'agentSkillModal.contentPlaceholder': 'Enter skill content in Markdown format...',
   'agentSkillModal.description': 'Description',
@@ -150,9 +169,11 @@ export default {
   'agentSkillModal.upload.requirementZip': '.zip or .skill file with SKILL.md in root directory',
   'agentSkillModal.upload.requirements': 'File Requirements',
   'agentSkillModal.upload.title': 'Upload Skill',
+  'agentSkillModal.upload.uploading': 'Uploading...',
   'agentSkillModal.url.desc': 'Import a skill by providing a direct link to a SKILL.md file.',
   'agentSkillModal.url.title': 'Import from URL',
   'agentSkillModal.url.urlPlaceholder': 'https://example.com/path/to/SKILL.md',
+  'agentSkillTag': 'Agent Skill',
   'agentTab.chat': 'Chat Preferences',
   'agentTab.meta': 'Agent info',
   'agentTab.modal': 'Model Settings',

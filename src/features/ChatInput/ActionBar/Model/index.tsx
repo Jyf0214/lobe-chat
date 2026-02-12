@@ -103,7 +103,12 @@ const ModelSwitch = memo(() => {
       provider={provider}
       onModelChange={handleModelChange}
     >
-      <Center className={styles.model} height={36} style={borderRadius ? { borderRadius } : undefined} width={36}           >
+      <Center
+        className={styles.model}
+        height={36}
+        style={borderRadius ? { borderRadius } : undefined}
+        width={36}
+      >
         <div className={styles.icon}>
           <ModelIcon model={model} size={22} />
         </div>

@@ -67,56 +67,56 @@ export class TrayManager {
   }
 
   /**
-   * 通过标识符获取托盘实例
-   * @param identifier 托盘标识符
+   * Retrieve tray instance by identifier
+   * @param identifier Tray identifier
    */
   retrieveByIdentifier(identifier: TrayIdentifiers) {
-    logger.debug(`通过标识符获取托盘: ${identifier}`);
+    logger.debug(`Retrieve tray by identifier: ${identifier}`);
     return this.trays.get(identifier);
   }
 
   /**
-   * 向所有托盘广播消息
-   * @param event 事件名称
-   * @param data 事件数据
+   * Broadcast message to all trays
+   * @param event Event name
+   * @param data Event data
    */
   broadcastToAllTrays = <T extends MainBroadcastEventKey>(
     event: T,
     data: MainBroadcastParams<T>,
   ) => {
-    logger.debug(`向所有托盘广播事件 ${event}`);
+    logger.debug(`Broadcast event to all trays: ${event}`);
     this.trays.forEach((tray) => {
       tray.broadcast(event, data);
     });
   };
 
   /**
-   * 向指定托盘广播消息
-   * @param identifier 托盘标识符
-   * @param event 事件名称
-   * @param data 事件数据
+   * Broadcast message to specified tray
+   * @param identifier Tray identifier
+   * @param event Event name
+   * @param data Event data
    */
   broadcastToTray = <T extends MainBroadcastEventKey>(
     identifier: TrayIdentifiers,
     event: T,
     data: MainBroadcastParams<T>,
   ) => {
-    logger.debug(`向托盘 ${identifier} 广播事件 ${event}`);
+    logger.debug(`Broadcast event to tray ${identifier}: ${event}`);
     this.trays.get(identifier)?.broadcast(event, data);
   };
 
   /**
-   * 获取或创建托盘实例
-   * @param options 托盘选项
+   * Retrieve or initialize tray instance
+   * @param options Tray options
    */
   private retrieveOrInitialize(options: TrayOptions) {
     let tray = this.trays.get(options.identifier as TrayIdentifiers);
     if (tray) {
-      logger.debug(`获取现有托盘: ${options.identifier}`);
+      logger.debug(`Retrieve existing tray: ${options.identifier}`);
       return tray;
     }
 
-    logger.debug(`创建新托盘: ${options.identifier}`);
+    logger.debug(`Create new tray: ${options.identifier}`);
     tray = new Tray(options, this.app);
 
     this.trays.set(options.identifier as TrayIdentifiers, tray);
@@ -125,10 +125,10 @@ export class TrayManager {
   }
 
   /**
-   * 销毁所有托盘
+   * Destroy all trays
    */
   destroyAll() {
-    logger.debug('销毁所有托盘');
+    logger.debug('Destroy all trays');
     this.trays.forEach((tray) => {
       tray.destroy();
     });

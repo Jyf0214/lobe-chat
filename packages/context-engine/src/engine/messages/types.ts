@@ -10,6 +10,7 @@ import type { GTDPlan } from '../../providers/GTDPlanInjector';
 import type { GTDTodoList } from '../../providers/GTDTodoInjector';
 import type { GroupAgentBuilderContext } from '../../providers/GroupAgentBuilderContextInjector';
 import type { GroupMemberInfo } from '../../providers/GroupContextInjector';
+import type { SkillMeta } from '../../providers/SkillContextProvider';
 import type { LobeToolManifest } from '../tools/types';
 
 /**
@@ -43,6 +44,13 @@ export interface ToolsConfig {
   manifests?: LobeToolManifest[];
   /** Enabled tool IDs (kept for compatibility) */
   tools?: string[];
+}
+
+/**
+ * Skills configuration
+ */
+export interface SkillsConfig {
+  enabledSkills?: SkillMeta[];
 }
 
 /**
@@ -201,6 +209,10 @@ export interface MessagesEngineParams {
   /** Knowledge configuration */
   knowledge?: KnowledgeConfig;
 
+  // ========== Skills ==========
+  /** Skills configuration */
+  skillsConfig?: SkillsConfig;
+
   // ========== Tools ==========
   /** Tools configuration */
   toolsConfig?: ToolsConfig;
@@ -269,5 +281,6 @@ export { type AgentBuilderContext } from '../../providers/AgentBuilderContextInj
 export { type GroupAgentBuilderContext } from '../../providers/GroupAgentBuilderContextInjector';
 export { type GTDPlan } from '../../providers/GTDPlanInjector';
 export { type GTDTodoItem, type GTDTodoList } from '../../providers/GTDTodoInjector';
+export { type SkillMeta } from '../../providers/SkillContextProvider';
 export { type OpenAIChatMessage, type UIChatMessage } from '@/types/index';
 export { type FileContent, type KnowledgeBaseInfo } from '@lobechat/prompts';

@@ -1,7 +1,14 @@
-import { IWorldOptions, World, setWorldConstructor } from '@cucumber/cucumber';
-import { Browser, BrowserContext, Page, Response, chromium } from '@playwright/test';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+
+import { type IWorldOptions, setWorldConstructor, World } from '@cucumber/cucumber';
+import {
+  type Browser,
+  type BrowserContext,
+  chromium,
+  type Page,
+  type Response,
+} from '@playwright/test';
 
 /**
  * Default timeout for waiting operations (e.g., waitForURL, toBeVisible)
@@ -73,6 +80,13 @@ export class CustomWorld extends World {
     });
 
     this.page.setDefaultTimeout(30_000);
+
+    // Capture unhandled promise rejections (not caught by pageerror)
+    await this.page.addInitScript(() => {
+      window.addEventListener('unhandledrejection', (event) => {
+        console.error('[E2E] Unhandled rejection:', String(event.reason));
+      });
+    });
   }
 
   async cleanup() {

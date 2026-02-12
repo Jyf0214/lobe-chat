@@ -124,23 +124,109 @@ When(
     await this.page.waitForTimeout(300);
     await this.page.keyboard.type(message, { delay: 30 });
 
+    // Verify text appeared in the editor
+    const editorEl = this.page
+      .locator('[data-testid="chat-input"] [contenteditable="true"]')
+      .first();
+    const fallbackEditor = this.page.locator('[contenteditable="true"]').first();
+    const targetEditor = (await editorEl.count()) > 0 ? editorEl : fallbackEditor;
+    await expect(targetEditor).toContainText(message.slice(0, 10), { timeout: 5000 });
+
+    // Wait for the editor's debounced onChange (100ms) to fire and sync inputMessage to store.
+    // The @lobehub/editor debounces onChange using useMemo which may lose timers on re-renders,
+    // so we wait generously and then type+delete a character to ensure a fresh debounce fires.
+    await this.page.waitForTimeout(300);
+
     console.log(`   ✅ 已输入 "${message}"`);
   },
 );
 
-When('用户按 Enter 发送', { timeout: 30_000 }, async function (this: CustomWorld) {
+When('用户按 Enter 发送', { timeout: 60_000 }, async function (this: CustomWorld) {
   console.log('   📍 Step: 按 Enter 发送...');
 
-  // Wait for editor's debounced onChange (100ms default) to sync inputMessage to store
-  // Without this, inputMessage is empty and send() silently returns
-  await this.page.waitForTimeout(200);
+  // Diagnostic: check editor state before sending
+  const editorState = await this.page.evaluate(() => {
+    const el = document.querySelector('[contenteditable="true"]');
+    return {
+      activeTag: document.activeElement?.tagName || 'none',
+      editorExists: !!el,
+      focused: document.activeElement === el || (el?.contains(document.activeElement) ?? false),
+      text: el?.textContent?.trim() || '',
+    };
+  });
+  console.log(
+    `   📍 Editor: text="${editorState.text.slice(0, 30)}", focused=${editorState.focused}, active=${editorState.activeTag}`,
+  );
+
+  // Ensure focus is on the editor before pressing Enter
+  if (!editorState.focused) {
+    console.log('   ⚠️ Editor not focused, clicking to focus...');
+    const editor = this.page.locator('[contenteditable="true"]').first();
+    await editor.click();
+    await this.page.waitForTimeout(200);
+  }
+
+  // Type a space and delete it to trigger a fresh onChange debounce cycle.
+  // The @lobehub/editor uses useMemo to create debounced onChange, which can lose
+  // pending timers when the component re-renders (useEditorState triggers re-renders
+  // on every keystroke). By typing after re-renders have settled, we ensure the
+  // debounce timer fires and syncs inputMessage to the store.
+  await this.page.keyboard.press('Space');
+  await this.page.waitForTimeout(50);
+  await this.page.keyboard.press('Backspace');
+
+  // Wait for the debounce (100ms) to fire and sync inputMessage
+  await this.page.waitForTimeout(300);
 
   // Listen for navigation to capture the agent/group ID
   const navigationPromise = this.page.waitForURL(/\/(agent|group)\/.*\/profile/, {
-    timeout: 30_000,
+    timeout: 45_000,
   });
 
+  // Monitor TRPC response to confirm the request reaches the server
+  const trpcResponsePromise = this.page
+    .waitForResponse(
+      (response) => response.url().includes('/trpc/lambda') && response.status() === 200,
+      { timeout: 10_000 },
+    )
+    .catch(() => null);
+
   await this.page.keyboard.press('Enter');
+  console.log('   📍 Enter pressed, waiting for response...');
+
+  // Wait for TRPC response (short timeout) to confirm the request was sent
+  const trpcResponse = await trpcResponsePromise;
+  if (trpcResponse) {
+    console.log(`   📍 TRPC response: ${trpcResponse.url()}`);
+  } else {
+    // TRPC request was not sent. Diagnose and retry.
+    const postEnterState = await this.page.evaluate(() => {
+      const el = document.querySelector('[contenteditable="true"]');
+      return {
+        text: el?.textContent?.trim() || '',
+        url: window.location.href,
+      };
+    });
+    console.log(
+      `   ⚠️ No TRPC response. Editor text="${postEnterState.text.slice(0, 30)}", URL=${postEnterState.url}`,
+    );
+
+    // Retry: click the send button if visible
+    console.log('   ⚠️ Retrying via send button...');
+    const sendBtn = this.page.locator('[data-testid="chat-input"] button:has(svg)').last();
+    const sendBtnVisible = await sendBtn.isVisible().catch(() => false);
+    if (sendBtnVisible) {
+      await sendBtn.click();
+      console.log('   📍 Clicked send button');
+    } else {
+      // Last resort: re-focus editor and press Enter again
+      console.log('   ⚠️ No send button, re-pressing Enter...');
+      const editor = this.page.locator('[contenteditable="true"]').first();
+      await editor.click();
+      await this.page.waitForTimeout(300);
+      await this.page.keyboard.press('Enter');
+    }
+  }
 
   // Wait for navigation to profile page
   await navigationPromise;

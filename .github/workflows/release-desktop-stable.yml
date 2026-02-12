@@ -84,11 +84,16 @@ jobs:
     steps:
       - name: Check release info
         id: check
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_BODY: ${{ github.event.release.body }}
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_VERSION: ${{ inputs.version }}
         run: |
           # 判断触发方式
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          if [ "$EVENT_NAME" == "workflow_dispatch" ]; then
             # 手动触发: 使用输入的版本号
-            version="${{ inputs.version }}"
+            version="$INPUT_VERSION"
             version="${version#v}"
             echo "is_manual=true" >> $GITHUB_OUTPUT
             echo "version=${version}" >> $GITHUB_OUTPUT
@@ -96,14 +101,13 @@ jobs:
             echo "🔧 Manual trigger: version=${version}"
           else
             # Release 触发: 从 tag 提取版本号
-            version="${{ github.event.release.tag_name }}"
+            version="$RELEASE_TAG"
             version="${version#v}"
             echo "is_manual=false" >> $GITHUB_OUTPUT
             echo "version=${version}" >> $GITHUB_OUTPUT
-            release_body="${{ github.event.release.body }}"
             {
               echo "release_notes<<EOF"
-              printf '%s\n' "$release_body"
+              printf '%s\n' "$RELEASE_BODY"
               echo "EOF"
             } >> $GITHUB_OUTPUT
           fi

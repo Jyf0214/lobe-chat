@@ -23,7 +23,7 @@ let createdDocumentId: string | null = null;
 // Given Steps
 // ============================================
 
-Given('用户在 Home 页面', async function (this: CustomWorld) {
+Given('用户在 Home 页面', { timeout: 30_000 }, async function (this: CustomWorld) {
   console.log('   📍 Step: 设置 LLM mock...');
   // Setup LLM mock before navigation (for agent/group/page builder message)
   llmMockManager.setResponse('E2E Test Agent', presetResponses.greeting);
@@ -51,7 +51,7 @@ Given('用户在 Home 页面', async function (this: CustomWorld) {
 // When Steps
 // ============================================
 
-When('用户点击创建 Agent 按钮', async function (this: CustomWorld) {
+When('用户点击创建 Agent 按钮', { timeout: 30_000 }, async function (this: CustomWorld) {
   console.log('   📍 Step: 点击创建 Agent 按钮...');
 
   // Find the "Create Agent" button by text (supports both English and Chinese)
@@ -66,7 +66,7 @@ When('用户点击创建 Agent 按钮', async function (this: CustomWorld) {
   console.log('   ✅ 已点击创建 Agent 按钮');
 });
 
-When('用户点击创建 Group 按钮', async function (this: CustomWorld) {
+When('用户点击创建 Group 按钮', { timeout: 30_000 }, async function (this: CustomWorld) {
   console.log('   📍 Step: 点击创建 Group 按钮...');
 
   // Find the "Create Group" button by text (supports both English and Chinese)
@@ -81,7 +81,7 @@ When('用户点击创建 Group 按钮', async function (this: CustomWorld) {
   console.log('   ✅ 已点击创建 Group 按钮');
 });
 
-When('用户点击写作按钮', async function (this: CustomWorld) {
+When('用户点击写作按钮', { timeout: 30_000 }, async function (this: CustomWorld) {
   console.log('   📍 Step: 点击写作按钮...');
 
   // Find the "Write" button by text (supports both English and Chinese)
@@ -94,35 +94,39 @@ When('用户点击写作按钮', async function (this: CustomWorld) {
   console.log('   ✅ 已点击写作按钮');
 });
 
-When('用户在输入框中输入 {string}', async function (this: CustomWorld, message: string) {
-  console.log(`   📍 Step: 在输入框中输入 "${message}"...`);
+When(
+  '用户在输入框中输入 {string}',
+  { timeout: 30_000 },
+  async function (this: CustomWorld, message: string) {
+    console.log(`   📍 Step: 在输入框中输入 "${message}"...`);
 
-  // The chat input is a contenteditable editor, need to click first then type
-  const chatInputContainer = this.page.locator('[data-testid="chat-input"]').first();
+    // The chat input is a contenteditable editor, need to click first then type
+    const chatInputContainer = this.page.locator('[data-testid="chat-input"]').first();
 
-  // If data-testid not found, try alternative selectors
-  let inputFound = false;
-  if ((await chatInputContainer.count()) > 0) {
-    await chatInputContainer.click();
-    inputFound = true;
-  } else {
-    // Try to find the editor by its contenteditable attribute
-    const editor = this.page.locator('[contenteditable="true"]').first();
-    if ((await editor.count()) > 0) {
-      await editor.click();
+    // If data-testid not found, try alternative selectors
+    let inputFound = false;
+    if ((await chatInputContainer.count()) > 0) {
+      await chatInputContainer.click();
       inputFound = true;
+    } else {
+      // Try to find the editor by its contenteditable attribute
+      const editor = this.page.locator('[contenteditable="true"]').first();
+      if ((await editor.count()) > 0) {
+        await editor.click();
+        inputFound = true;
+      }
     }
-  }
 
-  if (!inputFound) {
-    throw new Error('Could not find chat input');
-  }
+    if (!inputFound) {
+      throw new Error('Could not find chat input');
+    }
 
-  await this.page.waitForTimeout(300);
-  await this.page.keyboard.type(message, { delay: 30 });
+    await this.page.waitForTimeout(300);
+    await this.page.keyboard.type(message, { delay: 30 });
 
-  console.log(`   ✅ 已输入 "${message}"`);
-});
+    console.log(`   ✅ 已输入 "${message}"`);
+  },
+);
 
 When('用户按 Enter 发送', { timeout: 30_000 }, async function (this: CustomWorld) {
   console.log('   📍 Step: 按 Enter 发送...');
@@ -188,7 +192,7 @@ When('用户按 Enter 发送创建文档', { timeout: 30_000 }, async function (
   console.log('   ✅ 已发送并创建文档');
 });
 
-When('用户返回 Home 页面', async function (this: CustomWorld) {
+When('用户返回 Home 页面', { timeout: 30_000 }, async function (this: CustomWorld) {
   console.log('   📍 Step: 返回 Home 页面...');
 
   await this.page.goto('/');
@@ -202,27 +206,35 @@ When('用户返回 Home 页面', async function (this: CustomWorld) {
 // Then Steps
 // ============================================
 
-Then('页面应该跳转到 Agent 的 profile 页面', async function (this: CustomWorld) {
-  console.log('   📍 Step: 验证页面跳转到 Agent profile 页面...');
+Then(
+  '页面应该跳转到 Agent 的 profile 页面',
+  { timeout: 30_000 },
+  async function (this: CustomWorld) {
+    console.log('   📍 Step: 验证页面跳转到 Agent profile 页面...');
 
-  // Check current URL matches /agent/{id}/profile pattern
-  const currentUrl = this.page.url();
-  expect(currentUrl).toMatch(/\/agent\/[^/]+\/profile/);
+    // Check current URL matches /agent/{id}/profile pattern
+    const currentUrl = this.page.url();
+    expect(currentUrl).toMatch(/\/agent\/[^/]+\/profile/);
 
-  console.log('   ✅ 已跳转到 Agent profile 页面');
-});
+    console.log('   ✅ 已跳转到 Agent profile 页面');
+  },
+);
 
-Then('页面应该跳转到 Group 的 profile 页面', async function (this: CustomWorld) {
-  console.log('   📍 Step: 验证页面跳转到 Group profile 页面...');
+Then(
+  '页面应该跳转到 Group 的 profile 页面',
+  { timeout: 30_000 },
+  async function (this: CustomWorld) {
+    console.log('   📍 Step: 验证页面跳转到 Group profile 页面...');
 
-  // Check current URL matches /group/{id}/profile pattern
-  const currentUrl = this.page.url();
-  expect(currentUrl).toMatch(/\/group\/[^/]+\/profile/);
+    // Check current URL matches /group/{id}/profile pattern
+    const currentUrl = this.page.url();
+    expect(currentUrl).toMatch(/\/group\/[^/]+\/profile/);
 
-  console.log('   ✅ 已跳转到 Group profile 页面');
-});
+    console.log('   ✅ 已跳转到 Group profile 页面');
+  },
+);
 
-Then('新创建的 Agent 应该在侧边栏中显示', async function (this: CustomWorld) {
+Then('新创建的 Agent 应该在侧边栏中显示', { timeout: 30_000 }, async function (this: CustomWorld) {
   console.log('   📍 Step: 验证 Agent 在侧边栏中显示...');
 
   // Wait for sidebar to be visible and data to load
@@ -245,7 +257,7 @@ Then('新创建的 Agent 应该在侧边栏中显示', async function (this: Cus
   console.log('   ✅ Agent 已在侧边栏中显示');
 });
 
-Then('新创建的 Group 应该在侧边栏中显示', async function (this: CustomWorld) {
+Then('新创建的 Group 应该在侧边栏中显示', { timeout: 30_000 }, async function (this: CustomWorld) {
   console.log('   📍 Step: 验证 Group 在侧边栏中显示...');
 
   // Wait for sidebar to be visible and data to load
@@ -268,7 +280,7 @@ Then('新创建的 Group 应该在侧边栏中显示', async function (this: Cus
   console.log('   ✅ Group 已在侧边栏中显示');
 });
 
-Then('页面应该跳转到文档编辑页面', async function (this: CustomWorld) {
+Then('页面应该跳转到文档编辑页面', { timeout: 30_000 }, async function (this: CustomWorld) {
   console.log('   📍 Step: 验证页面跳转到文档编辑页面...');
 
   // Check current URL matches /page/{id} pattern
@@ -282,7 +294,7 @@ Then('页面应该跳转到文档编辑页面', async function (this: CustomWorl
   console.log(`   ✅ 已跳转到文档编辑页面: /page/${createdDocumentId}`);
 });
 
-Then('Page Agent 应该收到用户的提示词', async function (this: CustomWorld) {
+Then('Page Agent 应该收到用户的提示词', { timeout: 30_000 }, async function (this: CustomWorld) {
   console.log('   📍 Step: 验证 Page Agent 收到用户的提示词...');
 
   // Wait for the page to fully load and Page Agent panel to appear

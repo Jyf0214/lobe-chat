@@ -13,7 +13,7 @@ import { knowledgeBaseExecutor } from '@lobechat/builtin-tool-knowledge-base/exe
 import { localSystemExecutor } from '@lobechat/builtin-tool-local-system/executor';
 import { memoryExecutor } from '@lobechat/builtin-tool-memory/executor';
 
-import type { IBuiltinToolExecutor } from '../types';
+import { type IBuiltinToolExecutor } from '../types';
 import { notebookExecutor } from './lobe-notebook';
 import { pageAgentExecutor } from './lobe-page-agent';
 import { webBrowsing } from './lobe-web-browsing';

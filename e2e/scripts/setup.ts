@@ -275,8 +275,12 @@ async function buildApp(): Promise<void> {
 
 async function isServerRunning(port: number): Promise<boolean> {
   try {
-    const response = await fetch(`http://localhost:${port}/chat`, { method: 'HEAD' });
-    return response.ok;
+    const response = await fetch(`http://localhost:${port}/`, {
+      method: 'HEAD',
+      redirect: 'manual',
+    });
+    // Any HTTP response (including redirects) means the server is running
+    return response.status > 0;
   } catch {
     return false;
   }

@@ -254,7 +254,7 @@ const BenchmarkCard = memo<BenchmarkCardProps>(
                 <p style={{ color: 'var(--ant-color-text-quaternary)', fontSize: 12, margin: '0 0 12px' }}>
                   {t('benchmark.card.emptyHint')}
                 </p>
-                <Link style={{ textDecoration: 'none' }} to={`/eval/bench/${id}`}>
+                <Link style={{ textDecoration: 'none' }} to={`/eval/bench/${id}?tab=runs`}>
                   <Button icon={Play} size="small" variant="filled">
                     {t('benchmark.card.startFirst')}
                   </Button>

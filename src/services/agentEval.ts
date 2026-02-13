@@ -55,7 +55,12 @@ class AgentEvalService {
     return lambdaClient.agentEval.createDataset.mutate(params);
   }
 
-  async updateDataset(params: { description?: string; id: string; name: string }) {
+  async updateDataset(params: {
+    description?: string;
+    id: string;
+    metadata?: Record<string, unknown>;
+    name: string;
+  }) {
     return lambdaClient.agentEval.updateDataset.mutate(params);
   }
 
@@ -63,7 +68,7 @@ class AgentEvalService {
     return lambdaClient.agentEval.deleteDataset.mutate({ id });
   }
 
-  async parseDatasetFile(params: { pathname: string }) {
+  async parseDatasetFile(params: { filename?: string; pathname: string }) {
     return lambdaClient.agentEval.parseDatasetFile.mutate(params);
   }
 
@@ -76,8 +81,8 @@ class AgentEvalService {
       input: string;
       expected?: string;
       expectedDelimiter?: string;
+      category?: string;
       choices?: string;
-      context?: string;
       metadata?: Record<string, string>;
       sortOrder?: string;
     };
@@ -92,8 +97,8 @@ class AgentEvalService {
 
   async createTestCase(params: {
     content: {
+      category?: string;
       choices?: string[];
-      context?: string;
       expectedOutput?: string;
       input: string;
     };
@@ -104,6 +109,23 @@ class AgentEvalService {
     };
   }) {
     return lambdaClient.agentEval.createTestCase.mutate(params);
+  }
+
+  async updateTestCase(params: {
+    id: string;
+    content?: {
+      category?: string;
+      expected?: string;
+      input: string;
+    };
+    metadata?: Record<string, unknown>;
+    sortOrder?: number;
+  }) {
+    return lambdaClient.agentEval.updateTestCase.mutate(params);
+  }
+
+  async deleteTestCase(id: string) {
+    return lambdaClient.agentEval.deleteTestCase.mutate({ id });
   }
 
   // ============ Run ============
@@ -120,17 +142,13 @@ class AgentEvalService {
   }
 
   async createRun(params: {
-    agentId: string;
-    benchmarkId?: string;
     config?: {
       concurrency?: number;
-      judgeModel?: string;
-      temperature?: number;
       timeout?: number;
     };
-    datasetIds: string[];
-    description?: string;
+    datasetId: string;
     name?: string;
+    targetAgentId?: string;
   }) {
     return lambdaClient.agentEval.createRun.mutate(params);
   }

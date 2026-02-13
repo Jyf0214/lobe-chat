@@ -10,7 +10,7 @@ import { agentEvalService } from '@/services/agentEval';
 interface TestCaseCreateModalProps {
   datasetId: string;
   onClose: () => void;
-  onSuccess?: () => void;
+  onSuccess?: (datasetId: string) => void;
   open: boolean;
 }
 
@@ -49,11 +49,15 @@ const TestCaseCreateModal = memo<TestCaseCreateModalProps>(
           },
         });
 
-        message.success(t('testCase.create.success'));
+        setTimeout(() => {
+          message.success(t('testCase.create.success'));
+        }, 0);
         handleClose();
-        onSuccess?.();
+        onSuccess?.(datasetId);
       } catch {
-        message.error(t('testCase.create.error'));
+        setTimeout(() => {
+          message.error(t('testCase.create.error'));
+        }, 0);
       } finally {
         setLoading(false);
       }

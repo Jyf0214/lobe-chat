@@ -2,7 +2,13 @@ import { eq } from 'drizzle-orm';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { getTestDB } from '../../../core/getTestDB';
-import { agentEvalBenchmarks } from '../../../schemas';
+import {
+  agentEvalBenchmarks,
+  agentEvalDatasets,
+  agentEvalRuns,
+  agentEvalTestCases,
+  users,
+} from '../../../schemas';
 import { AgentEvalBenchmarkModel } from '../benchmark';
 
 let serverDB = await getTestDB();
@@ -11,11 +17,22 @@ const userId = 'benchmark-test-user';
 const benchmarkModel = new AgentEvalBenchmarkModel(serverDB, userId);
 
 beforeEach(async () => {
+  await serverDB.delete(agentEvalRuns);
+  await serverDB.delete(agentEvalTestCases);
+  await serverDB.delete(agentEvalDatasets);
   await serverDB.delete(agentEvalBenchmarks);
+  await serverDB.delete(users);
+
+  // Create test user (needed for runs FK constraint)
+  await serverDB.insert(users).values([{ id: userId }]);
 });
 
 afterEach(async () => {
+  await serverDB.delete(agentEvalRuns);
+  await serverDB.delete(agentEvalTestCases);
+  await serverDB.delete(agentEvalDatasets);
   await serverDB.delete(agentEvalBenchmarks);
+  await serverDB.delete(users);
 });
 
 describe('AgentEvalBenchmarkModel', () => {
@@ -172,6 +189,97 @@ describe('AgentEvalBenchmarkModel', () => {
       // 最新的应该在前面
       // Order may vary in PGlite due to timing
       expect(results.length).toBeGreaterThanOrEqual(3);
+    });
+
+    it('should return datasetCount for benchmarks with datasets', async () => {
+      // Find the user-1 benchmark
+      const benchmarks = await serverDB.query.agentEvalBenchmarks.findMany();
+      const userBenchmark = benchmarks.find((b) => b.identifier === 'user-1')!;
+
+      // Add 2 datasets to it
+      await serverDB.insert(agentEvalDatasets).values([
+        {
+          benchmarkId: userBenchmark.id,
+          identifier: 'ds-1',
+          name: 'Dataset 1',
+          userId,
+        },
+        {
+          benchmarkId: userBenchmark.id,
+          identifier: 'ds-2',
+          name: 'Dataset 2',
+          userId,
+        },
+      ]);
+
+      const results = await benchmarkModel.query(true);
+      const result = results.find((r) => r.identifier === 'user-1')!;
+
+      expect(result.datasetCount).toBe(2);
+    });
+
+    it('should return testCaseCount for benchmarks with test cases', async () => {
+      const benchmarks = await serverDB.query.agentEvalBenchmarks.findMany();
+      const userBenchmark = benchmarks.find((b) => b.identifier === 'user-1')!;
+
+      // Add a dataset
+      const [dataset] = await serverDB
+        .insert(agentEvalDatasets)
+        .values({
+          benchmarkId: userBenchmark.id,
+          identifier: 'ds-for-cases',
+          name: 'Dataset for Cases',
+          userId,
+        })
+        .returning();
+
+      // Add 3 test cases to the dataset
+      await serverDB.insert(agentEvalTestCases).values([
+        { datasetId: dataset.id, content: { input: 'test' }, sortOrder: 1 },
+        { datasetId: dataset.id, content: { input: 'test' }, sortOrder: 2 },
+        { datasetId: dataset.id, content: { input: 'test' }, sortOrder: 3 },
+      ]);
+
+      const results = await benchmarkModel.query(true);
+      const result = results.find((r) => r.identifier === 'user-1')!;
+
+      expect(result.testCaseCount).toBe(3);
+    });
+
+    it('should return runCount for benchmarks with runs', async () => {
+      const benchmarks = await serverDB.query.agentEvalBenchmarks.findMany();
+      const userBenchmark = benchmarks.find((b) => b.identifier === 'user-1')!;
+
+      // Add a dataset
+      const [dataset] = await serverDB
+        .insert(agentEvalDatasets)
+        .values({
+          benchmarkId: userBenchmark.id,
+          identifier: 'ds-for-runs',
+          name: 'Dataset for Runs',
+          userId,
+        })
+        .returning();
+
+      // Add 2 runs
+      await serverDB.insert(agentEvalRuns).values([
+        { datasetId: dataset.id, userId, status: 'idle' },
+        { datasetId: dataset.id, userId, status: 'idle' },
+      ]);
+
+      const results = await benchmarkModel.query(true);
+      const result = results.find((r) => r.identifier === 'user-1')!;
+
+      expect(result.runCount).toBe(2);
+    });
+
+    it('should return 0 counts for benchmarks without related data', async () => {
+      const results = await benchmarkModel.query(true);
+      const result = results.find((r) => r.identifier === 'user-1')!;
+
+      expect(result.datasetCount).toBe(0);
+      expect(result.testCaseCount).toBe(0);
+      expect(result.runCount).toBe(0);
     });
   });
 

@@ -22,9 +22,6 @@ const styles = createStaticStyles(({ css, cssVar }) => ({
   divider: css`
     margin: 0;
   `,
-  dragger: css`
-    padding: 32px 0;
-  `,
   draggerContent: css`
     min-height: 140px;
   `,
@@ -78,9 +75,9 @@ interface UploadStepProps {
   uploadProgress?: FileUploadState;
 }
 
-type FieldRole = 'choices' | 'context' | 'expected' | 'input' | 'sortOrder';
+type FieldRole = 'category' | 'choices' | 'expected' | 'input' | 'sortOrder';
 
-const FIELD_ROLE_KEYS: FieldRole[] = ['input', 'expected', 'choices', 'context', 'sortOrder'];
+const FIELD_ROLE_KEYS: FieldRole[] = ['input', 'expected', 'choices', 'category', 'sortOrder'];
 
 const getFieldRole = (
   fieldName: string,
@@ -121,7 +118,7 @@ const UploadStep = memo<UploadStepProps>(({ onFileSelect, loading, preset, uploa
       {preset && (
         <div className={styles.container}>
           {/* Header */}
-          <Flexbox horizontal align="center" gap={8} padding={12}>
+          <Flexbox horizontal align="center" gap={8} paddingBlock={12} paddingInline={16}>
             <Center className={styles.iconCenter} flex="none" height={36} width={36}>
               <Icon icon={preset.icon} />
             </Center>
@@ -134,7 +131,7 @@ const UploadStep = memo<UploadStepProps>(({ onFileSelect, loading, preset, uploa
           <Divider className={styles.divider} />
 
           {/* Body */}
-          <Flexbox gap={12} padding={12}>
+          <Flexbox gap={12} paddingBlock={12} paddingInline={16}>
             {preset.formatDescription && (
               <div className={styles.formatDescription}>{preset.formatDescription}</div>
             )}
@@ -174,7 +171,6 @@ const UploadStep = memo<UploadStepProps>(({ onFileSelect, loading, preset, uploa
 
       <Dragger
         accept=".csv,.xlsx,.xls,.json,.jsonl"
-        className={styles.dragger}
         disabled={loading}
         maxCount={1}
         showUploadList={false}

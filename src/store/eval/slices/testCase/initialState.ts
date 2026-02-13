@@ -1,11 +1,16 @@
+interface TestCaseCacheItem {
+  data: any[];
+  pagination: { limit: number; offset: number };
+  total: number;
+}
+
 export interface TestCaseSliceState {
-  isLoadingTestCases: boolean;
-  testCaseList: any[];
-  testCaseTotal: number;
+  // Map to cache test cases by datasetId
+  loadingTestCaseIds: string[];
+  testCasesCache: Record<string, TestCaseCacheItem>;
 }
 
 export const testCaseInitialState: TestCaseSliceState = {
-  isLoadingTestCases: false,
-  testCaseList: [],
-  testCaseTotal: 0,
+  loadingTestCaseIds: [],
+  testCasesCache: {},
 };

@@ -15,7 +15,7 @@ import UploadStep from './UploadStep';
 
 type MappingTarget =
   | 'choices'
-  | 'context'
+  | 'category'
   | 'expected'
   | 'ignore'
   | 'input'
@@ -25,7 +25,7 @@ type MappingTarget =
 interface DatasetImportModalProps {
   datasetId: string;
   onClose: () => void;
-  onSuccess?: () => void;
+  onSuccess?: (datasetId: string) => void;
   open: boolean;
   presetId?: string;
 }
@@ -95,6 +95,7 @@ const DatasetImportModal = memo<DatasetImportModalProps>(
           // 2. Parse the file on server
           const result = await agentEvalService.parseDatasetFile({
             pathname: metadata.path,
+            filename: file.name,
           });
 
           setHeaders(result.headers);
@@ -109,7 +110,10 @@ const DatasetImportModal = memo<DatasetImportModalProps>(
           // 4. Advance to mapping step
           setStep(1);
         } catch {
-          message.error(t('dataset.import.parseError'));
+          // Use setTimeout to avoid calling message during render
+          setTimeout(() => {
+            message.error(t('dataset.import.parseError'));
+          }, 0);
         } finally {
           setUploading(false);
           setUploadProgress(undefined);
@@ -124,7 +128,7 @@ const DatasetImportModal = memo<DatasetImportModalProps>(
 
       const expectedCol = Object.entries(mapping).find(([, v]) => v === 'expected')?.[0];
       const choicesCol = Object.entries(mapping).find(([, v]) => v === 'choices')?.[0];
-      const contextCol = Object.entries(mapping).find(([, v]) => v === 'context')?.[0];
+      const categoryCol = Object.entries(mapping).find(([, v]) => v === 'category')?.[0];
       const sortOrderCol = Object.entries(mapping).find(([, v]) => v === 'sortOrder')?.[0];
 
       const metadataCols = Object.entries(mapping).filter(([, v]) => v === 'metadata');
@@ -134,8 +138,8 @@ const DatasetImportModal = memo<DatasetImportModalProps>(
           : undefined;
 
       return {
+        category: categoryCol,
         choices: choicesCol,
-        context: contextCol,
         expected: expectedCol,
         expectedDelimiter: delimiter || undefined,
         input: inputCol,
@@ -160,16 +164,20 @@ const DatasetImportModal = memo<DatasetImportModalProps>(
             expected: fieldMapping.expected,
             expectedDelimiter: fieldMapping.expectedDelimiter,
             choices: fieldMapping.choices,
-            context: fieldMapping.context,
+            category: fieldMapping.category,
             sortOrder: fieldMapping.sortOrder,
             metadata: fieldMapping.metadata,
           },
         });
-        message.success(t('dataset.import.success', { count: result.count }));
+        setTimeout(() => {
+          message.success(t('dataset.import.success', { count: result.count }));
+        }, 0);
         handleClose();
-        onSuccess?.();
+        onSuccess?.(datasetId);
       } catch {
-        message.error(t('dataset.import.error'));
+        setTimeout(() => {
+          message.error(t('dataset.import.error'));
+        }, 0);
       } finally {
         setImporting(false);
       }

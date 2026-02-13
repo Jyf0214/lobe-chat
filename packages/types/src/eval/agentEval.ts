@@ -7,8 +7,8 @@
  * Test case content structure
  */
 export interface EvalTestCaseContent {
+  category?: string;
   choices?: string[];
-  context?: Record<string, unknown>;
   expected?: string;
   input: string;
 }
@@ -71,8 +71,8 @@ export interface EvalRunMetrics {
  * Field mapping configuration for dataset import
  */
 export interface ImportFieldMapping {
+  category?: string;
   choices?: string;
-  context?: string;
   expected?: string;
   expectedDelimiter?: string;
   input: string;

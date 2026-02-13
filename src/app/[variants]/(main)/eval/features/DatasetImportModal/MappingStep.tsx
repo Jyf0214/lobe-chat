@@ -30,12 +30,12 @@ const EXPECTED_CANDIDATES = new Set([
   'ground_truth',
   'groundtruth',
 ]);
-const CONTEXT_CANDIDATES = new Set(['context', 'reference', 'passage', 'document']);
+const CATEGORY_CANDIDATES = new Set(['category', 'topic', 'type', 'subject', 'class', 'tag']);
 const CHOICES_CANDIDATES = new Set(['choices', 'options', 'alternatives', 'candidates']);
 
 type MappingTarget =
   | 'choices'
-  | 'context'
+  | 'category'
   | 'expected'
   | 'ignore'
   | 'input'
@@ -44,7 +44,7 @@ type MappingTarget =
 
 export interface FieldMappingValue {
   choices?: string;
-  context?: string;
+  category?: string;
   expected?: string;
   expectedDelimiter?: string;
   input: string;
@@ -71,7 +71,7 @@ const autoInferMapping = (
   const result: Record<string, MappingTarget> = {};
   let inputFound = false;
   let expectedFound = false;
-  let contextFound = false;
+  let categoryFound = false;
   let choicesFound = false;
   let sortOrderFound = false;
 
@@ -85,9 +85,9 @@ const autoInferMapping = (
   const choicesCandidates = preset
     ? new Set(preset.fieldInference.choices.map((s) => s.toLowerCase()))
     : CHOICES_CANDIDATES;
-  const contextCandidates = preset
-    ? new Set(preset.fieldInference.context.map((s) => s.toLowerCase()))
-    : CONTEXT_CANDIDATES;
+  const categoryCandidates = preset
+    ? new Set(preset.fieldInference.category.map((s) => s.toLowerCase()))
+    : CATEGORY_CANDIDATES;
   const sortOrderCandidates = preset?.fieldInference.sortOrder
     ? new Set(preset.fieldInference.sortOrder.map((s) => s.toLowerCase()))
     : SORT_ORDER_CANDIDATES;
@@ -103,9 +103,9 @@ const autoInferMapping = (
     } else if (!choicesFound && choicesCandidates.has(lower)) {
       result[h] = 'choices';
       choicesFound = true;
-    } else if (!contextFound && contextCandidates.has(lower)) {
-      result[h] = 'context';
-      contextFound = true;
+    } else if (!categoryFound && categoryCandidates.has(lower)) {
+      result[h] = 'category';
+      categoryFound = true;
     } else if (!sortOrderFound && sortOrderCandidates.has(lower)) {
       result[h] = 'sortOrder';
       sortOrderFound = true;
@@ -125,8 +125,8 @@ const autoInferMapping = (
 export { autoInferMapping };
 
 const COL_WIDTHS: Record<MappingTarget, number> = {
+  category: 160,
   choices: 200,
-  context: 240,
   expected: 300,
   ignore: 100,
   input: 800,
@@ -155,7 +155,7 @@ const MappingStep = memo<MappingStepProps>(
       { desc: 'inputDesc', label: 'input', value: 'input' },
       { desc: 'expectedDesc', label: 'expected', value: 'expected' },
       { desc: 'choicesDesc', label: 'choices', value: 'choices' },
-      { desc: 'contextDesc', label: 'context', value: 'context' },
+      { desc: 'categoryDesc', label: 'category', value: 'category' },
       { desc: 'sortOrderDesc', label: 'sortOrder', value: 'sortOrder' },
       { desc: 'metadataDesc', label: 'metadata', value: 'metadata' },
       { desc: 'ignoreDesc', label: 'ignore', value: 'ignore' },

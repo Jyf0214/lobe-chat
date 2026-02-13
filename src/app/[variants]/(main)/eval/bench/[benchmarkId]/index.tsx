@@ -23,6 +23,7 @@ import { memo, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
+import { parseAsStringEnum, useQueryState } from '@/hooks/useQueryParam';
 import { useEvalStore } from '@/store/eval';
 
 import DatasetImportModal from '../../features/DatasetImportModal';
@@ -119,7 +120,10 @@ const styles = createStaticStyles(({ css, cssVar }) => ({
 const BenchmarkDetail = memo(() => {
   const { t } = useTranslation('eval');
   const { benchmarkId } = useParams<{ benchmarkId: string }>();
-  const [activeTab, setActiveTab] = useState<'datasets' | 'runs'>('datasets');
+  const [activeTab, setActiveTab] = useQueryState(
+    'tab',
+    parseAsStringEnum(['datasets', 'runs'] as const).withDefault('datasets'),
+  );
   const [importOpen, setImportOpen] = useState(false);
 
   const systemIcon = useMemo(

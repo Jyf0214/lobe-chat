@@ -23,7 +23,7 @@ export interface DatasetPreset {
     input: string[];
     expected: string[];
     choices: string[];
-    context: string[];
+    category: string[];
     sortOrder?: string[];
   };
 
@@ -51,7 +51,7 @@ export const DATASET_PRESETS: Record<string, DatasetPreset> = {
       input: ['Question', 'question', 'prompt'],
       expected: ['Answer', 'answer'],
       choices: [],
-      context: ['Topic', 'topic', 'category'],
+      category: ['Topic', 'topic', 'category'],
     },
     validation: {
       requireExpected: true,
@@ -73,7 +73,7 @@ export const DATASET_PRESETS: Record<string, DatasetPreset> = {
       input: ['prompt', 'question', 'input'],
       expected: ['answer', 'response'],
       choices: [],
-      context: ['type', 'category'],
+      category: ['type', 'category'],
       sortOrder: ['id'],
     },
     validation: {
@@ -97,7 +97,7 @@ export const DATASET_PRESETS: Record<string, DatasetPreset> = {
       input: ['question', 'prompt', 'query'],
       expected: ['answer', 'correct_answer', 'label'],
       choices: ['choices', 'options', 'A', 'B', 'C', 'D'],
-      context: ['context', 'subject', 'category'],
+      category: ['context', 'subject', 'category'],
     },
     validation: {
       requireExpected: true,
@@ -116,12 +116,12 @@ export const DATASET_PRESETS: Record<string, DatasetPreset> = {
     formatDescription:
       'Custom format - you define the mapping. Only requirement: must have an "input" field.',
     requiredFields: ['input'],
-    optionalFields: ['expected', 'choices', 'context', 'metadata'],
+    optionalFields: ['expected', 'choices', 'category', 'metadata'],
     fieldInference: {
       input: ['input', 'question', 'prompt', 'query'],
       expected: ['expected', 'answer', 'output', 'response'],
       choices: ['choices', 'options'],
-      context: ['context', 'reference'],
+      category: ['category', 'type', 'topic', 'subject'],
     },
   },
 };

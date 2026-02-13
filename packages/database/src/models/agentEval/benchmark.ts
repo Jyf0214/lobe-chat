@@ -1,6 +1,12 @@
-import { and, desc, eq } from 'drizzle-orm';
+import { and, count, desc, eq, getTableColumns, sql } from 'drizzle-orm';
 
-import { type NewAgentEvalBenchmark, agentEvalBenchmarks } from '../../schemas';
+import {
+  type NewAgentEvalBenchmark,
+  agentEvalBenchmarks,
+  agentEvalDatasets,
+  agentEvalRuns,
+  agentEvalTestCases,
+} from '../../schemas';
 import { LobeChatDatabase } from '../../type';
 
 export class AgentEvalBenchmarkModel {
@@ -36,11 +42,55 @@ export class AgentEvalBenchmarkModel {
   query = async (includeSystem = true) => {
     const conditions = includeSystem ? undefined : eq(agentEvalBenchmarks.isSystem, false);
 
-    return this.db
-      .select()
+    const datasetCountSq = this.db
+      .select({
+        benchmarkId: agentEvalDatasets.benchmarkId,
+        count: count().as('dataset_count'),
+      })
+      .from(agentEvalDatasets)
+      .groupBy(agentEvalDatasets.benchmarkId)
+      .as('dc');
+
+    const testCaseCountSq = this.db
+      .select({
+        benchmarkId: agentEvalDatasets.benchmarkId,
+        count: count().as('test_case_count'),
+      })
+      .from(agentEvalTestCases)
+      .innerJoin(agentEvalDatasets, eq(agentEvalTestCases.datasetId, agentEvalDatasets.id))
+      .groupBy(agentEvalDatasets.benchmarkId)
+      .as('tc');
+
+    const runCountSq = this.db
+      .select({
+        benchmarkId: agentEvalDatasets.benchmarkId,
+        count: count().as('run_count'),
+      })
+      .from(agentEvalRuns)
+      .innerJoin(agentEvalDatasets, eq(agentEvalRuns.datasetId, agentEvalDatasets.id))
+      .groupBy(agentEvalDatasets.benchmarkId)
+      .as('rc');
+
+    const rows = await this.db
+      .select({
+        ...getTableColumns(agentEvalBenchmarks),
+        datasetCount: sql<number>`COALESCE(${datasetCountSq.count}, 0)`.as('datasetCount'),
+        testCaseCount: sql<number>`COALESCE(${testCaseCountSq.count}, 0)`.as('testCaseCount'),
+        runCount: sql<number>`COALESCE(${runCountSq.count}, 0)`.as('runCount'),
+      })
       .from(agentEvalBenchmarks)
+      .leftJoin(datasetCountSq, eq(agentEvalBenchmarks.id, datasetCountSq.benchmarkId))
+      .leftJoin(testCaseCountSq, eq(agentEvalBenchmarks.id, testCaseCountSq.benchmarkId))
+      .leftJoin(runCountSq, eq(agentEvalBenchmarks.id, runCountSq.benchmarkId))
       .where(conditions)
       .orderBy(desc(agentEvalBenchmarks.createdAt));
+
+    return rows.map((row) => ({
+      ...row,
+      datasetCount: Number(row.datasetCount),
+      runCount: Number(row.runCount),
+      testCaseCount: Number(row.testCaseCount),
+    }));
   };
 
   /**

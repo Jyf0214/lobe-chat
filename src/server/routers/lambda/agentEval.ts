@@ -1,6 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix  */
-import { TRPCError } from '@trpc/server';
 import { parseDataset } from '@lobechat/eval-dataset-parser';
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import {
@@ -244,7 +244,8 @@ export const agentEvalRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       const format = input.format || 'auto';
-      const isXlsx = format === 'xlsx' || input.filename?.match(/\.xlsx?$/i);
+      const resolvedFilename = input.filename || input.pathname;
+      const isXlsx = format === 'xlsx' || resolvedFilename?.match(/\.xlsx?$/i);
 
       const content = isXlsx
         ? await ctx.fileService.getFileByteArray(input.pathname)
@@ -252,7 +253,7 @@ export const agentEvalRouter = router({
 
       try {
         const result = parseDataset(content, {
-          filename: input.filename,
+          filename: resolvedFilename,
           format: format === 'auto' ? undefined : format,
           preview: 50,
         });
@@ -283,7 +284,7 @@ export const agentEvalRouter = router({
           expected: z.string().optional(),
           expectedDelimiter: z.string().optional(),
           choices: z.string().optional(),
-          context: z.string().optional(),
+          category: z.string().optional(),
           metadata: z.record(z.string()).optional(),
           sortOrder: z.string().optional(),
         }),
@@ -291,7 +292,8 @@ export const agentEvalRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       const format = input.format || 'auto';
-      const isXlsx = format === 'xlsx' || input.filename?.match(/\.xlsx?$/i);
+      const resolvedFilename = input.filename || input.pathname;
+      const isXlsx = format === 'xlsx' || resolvedFilename?.match(/\.xlsx?$/i);
 
       const content = isXlsx
         ? await ctx.fileService.getFileByteArray(input.pathname)
@@ -300,7 +302,7 @@ export const agentEvalRouter = router({
       let parsed;
       try {
         parsed = parseDataset(content, {
-          filename: input.filename,
+          filename: resolvedFilename,
           format: format === 'auto' ? undefined : format,
         });
       } catch (error: any) {
@@ -353,11 +355,14 @@ export const agentEvalRouter = router({
             input: String(row[fieldMapping.input] ?? ''),
             expected: expectedStr,
             choices,
-            context: fieldMapping.context ? row[fieldMapping.context] : undefined,
+            category: fieldMapping.category ? String(row[fieldMapping.category]) : undefined,
           },
           metadata: fieldMapping.metadata
             ? Object.fromEntries(
-                Object.entries(fieldMapping.metadata).map(([key, col]) => [key, row[col as string]]),
+                Object.entries(fieldMapping.metadata).map(([key, col]) => [
+                  key,
+                  row[col as string],
+                ]),
               )
             : {},
           sortOrder: fieldMapping.sortOrder ? Number(row[fieldMapping.sortOrder]) || index : index,
@@ -379,7 +384,7 @@ export const agentEvalRouter = router({
           input: z.string(),
           expected: z.string().optional(),
           choices: z.array(z.string()).optional(),
-          context: z.record(z.unknown()).optional(),
+          category: z.string().optional(),
         }),
         metadata: z.record(z.unknown()).optional(),
         sortOrder: z.number().optional(),
@@ -420,7 +425,7 @@ export const agentEvalRouter = router({
               input: z.string(),
               expected: z.string().optional(),
               choices: z.array(z.string()).optional(),
-              context: z.record(z.unknown()).optional(),
+              category: z.string().optional(),
             }),
             metadata: z.record(z.unknown()).optional(),
             sortOrder: z.number().optional(),
@@ -459,7 +464,7 @@ export const agentEvalRouter = router({
           .object({
             input: z.string(),
             expected: z.string().optional(),
-            context: z.record(z.unknown()).optional(),
+            category: z.string().optional(),
           })
           .optional(),
         metadata: z.record(z.unknown()).optional(),
@@ -759,11 +764,12 @@ export const agentEvalRouter = router({
       const allRunTopics = await ctx.runTopicModel.findByRunId(input.id);
 
       // Filter by status
-      const filtered = input.status === 'all' || !input.status
-        ? allRunTopics
-        : allRunTopics.filter((rt) =>
-          input.status === 'passed' ? rt.passed === true : rt.passed === false,
-        );
+      const filtered =
+        input.status === 'all' || !input.status
+          ? allRunTopics
+          : allRunTopics.filter((rt) =>
+              input.status === 'passed' ? rt.passed === true : rt.passed === false,
+            );
 
       // Pagination
       const offset = input.offset ?? 0;

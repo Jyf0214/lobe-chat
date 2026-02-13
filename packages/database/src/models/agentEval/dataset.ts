@@ -1,7 +1,7 @@
-import { and, desc, eq, isNull, or } from 'drizzle-orm';
+import { and, count, desc, eq, isNull, or } from 'drizzle-orm';
 
-import { type NewAgentEvalDataset, agentEvalDatasets } from '../../schemas';
-import { LobeChatDatabase } from '../../type';
+import { agentEvalDatasets, agentEvalTestCases,type NewAgentEvalDataset } from '../../schemas';
+import { type LobeChatDatabase } from '../../type';
 
 export class AgentEvalDatasetModel {
   private userId: string;
@@ -33,7 +33,7 @@ export class AgentEvalDatasetModel {
   };
 
   /**
-   * Query datasets (system + user-owned)
+   * Query datasets (system + user-owned) with test case counts
    * @param benchmarkId - Optional benchmark filter
    */
   query = async (benchmarkId?: string) => {
@@ -46,9 +46,22 @@ export class AgentEvalDatasetModel {
     }
 
     return this.db
-      .select()
+      .select({
+        benchmarkId: agentEvalDatasets.benchmarkId,
+        createdAt: agentEvalDatasets.createdAt,
+        description: agentEvalDatasets.description,
+        id: agentEvalDatasets.id,
+        identifier: agentEvalDatasets.identifier,
+        metadata: agentEvalDatasets.metadata,
+        name: agentEvalDatasets.name,
+        testCaseCount: count(agentEvalTestCases.id).as('testCaseCount'),
+        updatedAt: agentEvalDatasets.updatedAt,
+        userId: agentEvalDatasets.userId,
+      })
       .from(agentEvalDatasets)
+      .leftJoin(agentEvalTestCases, eq(agentEvalDatasets.id, agentEvalTestCases.datasetId))
       .where(and(...conditions))
+      .groupBy(agentEvalDatasets.id)
       .orderBy(desc(agentEvalDatasets.createdAt));
   };
 

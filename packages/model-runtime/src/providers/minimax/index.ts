@@ -18,7 +18,7 @@ export const LobeMinimaxAI = createOpenAICompatibleRuntime({
       // Interleaved thinking
       const processedMessages = messages.map((message: any) => {
         if (message.role === 'assistant' && message.reasoning) {
-          // 只处理没有 signature 的历史推理内容
+          // Only process historical reasoning content without signature
           if (!message.reasoning.signature && message.reasoning.content) {
             const { reasoning, ...messageWithoutReasoning } = message;
             return {
@@ -35,7 +35,7 @@ export const LobeMinimaxAI = createOpenAICompatibleRuntime({
             };
           }
 
-          // 有 signature 或没有 content 的情况，移除 reasoning 字段
+          // Remove reasoning field if has signature or no content
           // eslint-disable-next-line unused-imports/no-unused-vars
           const { reasoning, ...messageWithoutReasoning } = message;
           return messageWithoutReasoning;

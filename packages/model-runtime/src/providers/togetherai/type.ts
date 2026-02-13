@@ -1,5 +1,5 @@
 interface ModelInstanceConfig {
-  appearsIn: any[]; // 你可以替换为实际类型
+  appearsIn: any[]; // You can replace with actual type
   order: number;
 }
 

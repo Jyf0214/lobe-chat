@@ -208,7 +208,7 @@ const transformOpenAIStream = (
               // [{"id":"xbhnmTtY7","function":{"name":"lobe-image-designer____text2image____builtin","arguments":"{\"prompts\": [\"A photo of a small, fluffy dog with a playful expression and wagging tail.\", \"A watercolor painting of a small, energetic dog with a glossy coat and bright eyes.\", \"A vector illustration of a small, adorable dog with a short snout and perky ears.\", \"A drawing of a small, scruffy dog with a mischievous grin and a wagging tail.\"], \"quality\": \"standard\", \"seeds\": [123456, 654321, 111222, 333444], \"size\": \"1024x1024\", \"style\": \"vivid\"}"}}]
 
               // minimax's tool calling don't have index field, it's data like:
-              // [{"id":"call_function_4752059746","type":"function","function":{"name":"lobe-image-designer____text2image____builtin","arguments":"{\"prompts\": [\"一个流浪的地球，背景是浩瀚"}}]
+              // [{"id":"call_function_4752059746","type":"function","function":{"name":"lobe-image-designer____text2image____builtin","arguments":"{\"prompts\": [\"A wandering earth, background is vast"}}]
 
               // so we need to add these default values
               index: toolIndex,
@@ -265,7 +265,7 @@ const transformOpenAIStream = (
       //  {"id":"demo","model":"deepl-en","choices":[{"index":0,"delta":{"role":"assistant","content":"Introduce yourself."},"finish_reason":"stop"}]}
       if (typeof item.delta?.content === 'string' && !!item.delta.content) {
         // MiniMax built-in search returns citation sources in the first tool stream content, needs to be ignored
-        // {"id":"0483748a25071c611e2f48d2982fbe96","choices":[{"finish_reason":"stop","index":0,"delta":{"content":"[{\"no\":1,\"url\":\"https://www.xiaohongshu.com/discovery/item/66d8de3c000000001f01e752\",\"title\":\"郑钦文为国而战，没有理由不坚持🏅\",\"content\":\"·2024年08月03日\\n中国队选手郑钦文夺得巴黎奥运会网球女单比赛金牌（巴黎奥运第16金）\\n#巴黎奥运会[话题]# #郑钦文[话题]# #人物素材积累[话题]# #作文素材积累[话题]# #申论素材[话题]#\",\"web_icon\":\"https://www.xiaohongshu.com/favicon.ico\"}]","role":"tool","tool_call_id":"call_function_6696730535"}}],"created":1748255114,"model":"abab6.5s-chat","object":"chat.completion.chunk","usage":{"total_tokens":0,"total_characters":0},"input_sensitive":false,"output_sensitive":false,"input_sensitive_type":0,"output_sensitive_type":0,"output_sensitive_int":0}
+        // {"id":"0483748a25071c611e2f48d2982fbe96","choices":[{"finish_reason":"stop","index":0,"delta":{"content":"[{\"no\":1,\"url\":\"https://www.xiaohongshu.com/discovery/item/66d8de3c000000001f01e752\",\"title\":\"Zheng Qinwen fights for the country, no reason not to persist\",\"content\":\"·August 03, 2024\\nChinese team athlete Zheng Qinwen won the Paris Olympics women's singles tennis gold medal (Paris Olympics 16th gold)\\n#Paris Olympics[Topic]# #Zheng Qinwen[Topic]# #Character Material Collection[Topic]# #Essay Material Collection[Topic]# #Public Examination Material[Topic]#\",\"web_icon\":\"https://www.xiaohongshu.com/favicon.ico\"}]","role":"tool","tool_call_id":"call_function_6696730535"}}],"created":1748255114,"model":"abab6.5s-chat","object":"chat.completion.chunk","usage":{"total_tokens":0,"total_characters":0},"input_sensitive":false,"output_sensitive":false,"input_sensitive_type":0,"output_sensitive_type":0,"output_sensitive_int":0}
         if (typeof item.delta?.role === 'string' && item.delta.role === 'tool') {
           return { data: null, id: chunk.id, type: 'text' };
         }
@@ -402,8 +402,8 @@ const transformOpenAIStream = (
       let content = 'content' in item.delta ? item.delta.content : null;
 
       // DeepSeek reasoner will put thinking in the reasoning_content field
-      // litellm and not set content = null when processing reasoning content
-      // en: siliconflow and aliyun bailian has encountered a situation where both content and reasoning_content are present, so need to handle it
+      // litellm does not set content = null when processing reasoning content
+      // Note: siliconflow and aliyun bailian have encountered a situation where both content and reasoning_content are present, so need to handle it
       // refs: https://github.com/lobehub/lobe-chat/issues/5681 (siliconflow)
       // refs: https://github.com/lobehub/lobe-chat/issues/5956 (aliyun bailian)
       if (typeof content === 'string' && typeof reasoning_content === 'string') {

@@ -1,12 +1,13 @@
+import { execFile } from 'node:child_process';
 import { createWriteStream, promises as fs } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
+import { promisify } from 'node:util';
 
 import { type LobeChatDatabase } from '@lobechat/database';
 import debug from 'debug';
-import ffmpeg from 'fluent-ffmpeg';
 import { sha256 } from 'js-sha256';
 import { nanoid } from 'nanoid';
 import sharp from 'sharp';
@@ -16,14 +17,14 @@ import { calculateThumbnailDimensions } from '@/utils/number';
 import { getYYYYmmddHHMMss } from '@/utils/time';
 
 const log = debug('lobe-video:generation-service');
+const execFileAsync = promisify(execFile);
 
-let ffmpegPathInitialized = false;
+let _ffmpegPath: string | null = null;
 
-function ensureFfmpegPath() {
-  if (ffmpegPathInitialized) return;
-  const ffmpegPath = require('ffmpeg-static') as string;
-  ffmpeg.setFfmpegPath(ffmpegPath);
-  ffmpegPathInitialized = true;
+function getFfmpegPath(): string {
+  if (_ffmpegPath) return _ffmpegPath;
+  _ffmpegPath = require('ffmpeg-static') as string;
+  return _ffmpegPath;
 }
 
 interface VideoMetadata {
@@ -56,7 +57,6 @@ export class VideoGenerationService {
    */
   async processVideoForGeneration(videoUrl: string): Promise<VideoProcessResult> {
     log('Processing video from URL: %s', videoUrl);
-    ensureFfmpegPath();
 
     let tempVideoPath: string | null = null;
     let tempCoverPath: string | null = null;
@@ -178,24 +178,38 @@ export class VideoGenerationService {
   }
 
   private async getVideoMetadata(videoPath: string): Promise<VideoMetadata> {
-    return new Promise((resolve, reject) => {
-      ffmpeg.ffprobe(videoPath, (err, metadata) => {
-        if (err) return reject(err);
+    const ffmpegPath = getFfmpegPath();
 
-        const videoStream = metadata.streams.find((s) => s.codec_type === 'video');
-        if (!videoStream) {
-          return reject(new Error('No video stream found'));
-        }
+    // ffmpeg -i exits with code 1 when no output is specified, but stderr contains metadata
+    let stderr = '';
+    try {
+      const result = await execFileAsync(ffmpegPath, ['-i', videoPath, '-hide_banner']);
+      stderr = result.stderr;
+    } catch (error: any) {
+      stderr = error.stderr || '';
+      // Exit code 1 is expected when no output is specified
+      if (!stderr) throw error;
+    }
 
-        const { width, height, duration } = videoStream;
+    // Parse duration: "Duration: 00:05:30.12"
+    const durationMatch = stderr.match(/Duration:\s*(\d+):(\d+):([\d.]+)/);
+    const duration = durationMatch
+      ? Number.parseInt(durationMatch[1]) * 3600 +
+        Number.parseInt(durationMatch[2]) * 60 +
+        Number.parseFloat(durationMatch[3])
+      : 0;
 
-        resolve({
-          duration: typeof duration === 'string' ? Number.parseFloat(duration) : duration || 0,
-          height: Number(height) || 0,
-          width: Number(width) || 0,
-        });
-      });
-    });
+    // Parse video stream dimensions: "Stream #0:0...: Video: ..., 1920x1080"
+    const streamMatch = stderr.match(/Stream.*Video.*?(\d{2,5})x(\d{2,5})/);
+    if (!streamMatch) {
+      throw new Error(`Failed to parse video dimensions from ffmpeg output:\n${stderr}`);
+    }
+
+    return {
+      duration,
+      height: Number.parseInt(streamMatch[2]),
+      width: Number.parseInt(streamMatch[1]),
+    };
   }
 
   /**
@@ -206,23 +220,20 @@ export class VideoGenerationService {
     width: number,
     height: number,
   ): Promise<string> {
-    const screenshotDir = os.tmpdir();
-    const screenshotFilename = `lobe-cover-${nanoid()}.jpg`;
+    const ffmpegPath = getFfmpegPath();
+    const outputPath = path.join(os.tmpdir(), `lobe-cover-${nanoid()}.jpg`);
 
     log('Generating screenshot from video');
 
-    await new Promise<void>((resolve, reject) => {
-      ffmpeg(videoPath)
-        .screenshots({
-          filename: screenshotFilename,
-          folder: screenshotDir,
-          size: `${width}x${height}`,
-          timestamps: ['00:00:00.1'],
-        })
-        .on('end', () => resolve())
-        .on('error', reject);
-    });
+    await execFileAsync(ffmpegPath, [
+      '-ss', '0.1',
+      '-i', videoPath,
+      '-frames:v', '1',
+      '-s', `${width}x${height}`,
+      '-y',
+      outputPath,
+    ]);
 
-    return path.join(screenshotDir, screenshotFilename);
+    return outputPath;
   }
 }

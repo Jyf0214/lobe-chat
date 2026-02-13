@@ -11,6 +11,7 @@ import {
   type NewGeneration,
   type NewGenerationBatch,
 } from '@/database/schemas';
+import { appEnv } from '@/envs/app';
 import { authedProcedure, router } from '@/libs/trpc/lambda';
 import { keyVaults, serverDatabase } from '@/libs/trpc/lambda/middleware';
 import { initModelRuntimeFromDB } from '@/server/modules/ModelRuntime';
@@ -194,7 +195,7 @@ export const videoRouter = router({
     try {
       const modelRuntime = await initModelRuntimeFromDB(serverDB, userId, provider);
 
-      const callbackBaseUrl = process.env.WEBHOOK_PROXY_URL || process.env.APP_URL;
+      const callbackBaseUrl = process.env.WEBHOOK_PROXY_URL || appEnv.APP_URL;
       const callbackUrl = `${callbackBaseUrl}/api/webhooks/video/${provider}`;
       log('Using callback URL: %s', callbackUrl);
 

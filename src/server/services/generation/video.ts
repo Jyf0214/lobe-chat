@@ -1,13 +1,14 @@
-import { type LobeChatDatabase } from '@lobechat/database';
-import debug from 'debug';
-import ffmpeg from 'fluent-ffmpeg';
-import { sha256 } from 'js-sha256';
-import { nanoid } from 'nanoid';
 import { createWriteStream, promises as fs } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
+
+import { type LobeChatDatabase } from '@lobechat/database';
+import debug from 'debug';
+import ffmpeg from 'fluent-ffmpeg';
+import { sha256 } from 'js-sha256';
+import { nanoid } from 'nanoid';
 import sharp from 'sharp';
 
 import { FileService } from '@/server/services/file';
@@ -20,7 +21,6 @@ let ffmpegPathInitialized = false;
 
 function ensureFfmpegPath() {
   if (ffmpegPathInitialized) return;
-  // eslint-disable-next-line unicorn/prefer-module
   const ffmpegPath = require('ffmpeg-static') as string;
   ffmpeg.setFfmpegPath(ffmpegPath);
   ffmpegPathInitialized = true;

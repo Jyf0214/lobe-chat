@@ -43,7 +43,7 @@ export const createCreateVideoSlice: StateCreator<
     let finalTopicId = activeGenerationTopicId;
 
     // 1. Create generation topic if not exists
-    let generationTopicId = activeGenerationTopicId;
+    const generationTopicId = activeGenerationTopicId;
     let isNewTopic = false;
 
     if (!generationTopicId) {

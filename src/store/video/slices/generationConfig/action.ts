@@ -1,9 +1,9 @@
 import {
   type AIVideoModelCard,
+  extractVideoDefaultValues,
   type RuntimeVideoGenParamsKeys,
   type RuntimeVideoGenParamsValue,
   type VideoModelParamsSchema,
-  extractVideoDefaultValues,
 } from 'model-bank';
 import { type StateCreator } from 'zustand/vanilla';
 
@@ -15,18 +15,18 @@ import { authSelectors } from '@/store/user/selectors';
 import type { VideoStore } from '../../store';
 
 export interface GenerationConfigAction {
-  initializeVideoConfig(
+  initializeVideoConfig: (
     isLogin?: boolean,
     lastSelectedVideoModel?: string,
     lastSelectedVideoProvider?: string,
-  ): void;
+  ) => void;
 
-  setModelAndProviderOnSelect(model: string, provider: string): void;
+  setModelAndProviderOnSelect: (model: string, provider: string) => void;
 
-  setParamOnInput<K extends RuntimeVideoGenParamsKeys>(
+  setParamOnInput: <K extends RuntimeVideoGenParamsKeys>(
     paramName: K,
     value: RuntimeVideoGenParamsValue,
-  ): void;
+  ) => void;
 }
 
 export function getVideoModelAndDefaults(model: string, provider: string) {

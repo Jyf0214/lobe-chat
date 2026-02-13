@@ -1,9 +1,9 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/interface */
+/* eslint-disable perfectionist/sort-interfaces */
 import {
+  extractVideoDefaultValues,
   ModelProvider,
   type RuntimeVideoGenParams,
   type VideoModelParamsSchema,
-  extractVideoDefaultValues,
 } from 'model-bank';
 import { seedance15ProParams } from 'model-bank/lobehub';
 

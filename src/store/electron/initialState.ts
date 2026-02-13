@@ -20,10 +20,17 @@ export const defaultProxySettings: NetworkProxySettings = {
   proxyType: 'http',
 };
 
+export interface InstalledApp {
+  icon: string;
+  id: string;
+  name: string;
+}
+
 export interface ElectronState extends NavigationHistoryState, RecentPagesState {
   appState: ElectronAppState;
   dataSyncConfig: DataSyncConfig;
   desktopHotkeys: Record<string, string>;
+  installedApps: InstalledApp[];
   isAppStateInit?: boolean;
   isConnectingServer?: boolean;
   isConnectionDrawerOpen?: boolean;
@@ -32,6 +39,7 @@ export interface ElectronState extends NavigationHistoryState, RecentPagesState 
   isSyncActive?: boolean;
   proxySettings: NetworkProxySettings;
   remoteServerSyncError?: { message?: string; type: RemoteServerError };
+  workingDirectories: Record<string, string>;
 }
 
 export const initialState: ElectronState = {
@@ -40,6 +48,7 @@ export const initialState: ElectronState = {
   appState: {},
   dataSyncConfig: { storageMode: 'cloud' },
   desktopHotkeys: {},
+  installedApps: [],
   isAppStateInit: false,
   isConnectingServer: false,
   isConnectionDrawerOpen: false,
@@ -47,4 +56,5 @@ export const initialState: ElectronState = {
   isInitRemoteServerConfig: false,
   isSyncActive: false,
   proxySettings: defaultProxySettings,
+  workingDirectories: {},
 };

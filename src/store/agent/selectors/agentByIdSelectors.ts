@@ -1,7 +1,7 @@
 import { DEFAULT_PROVIDER } from '@lobechat/business-const';
 import { DEFAULT_MODEL, DEFAUTT_AGENT_TTS_CONFIG } from '@lobechat/const';
 import { type AgentBuilderContext } from '@lobechat/context-engine';
-import { type AgentMode, type LobeAgentTTSConfig, type LocalSystemConfig } from '@lobechat/types';
+import { type AgentMode, type LobeAgentTTSConfig } from '@lobechat/types';
 
 import { type AgentStoreState } from '../initialState';
 import { agentSelectors } from './selectors';
@@ -74,23 +74,6 @@ const getAgentEnableModeById =
   };
 
 /**
- * Get local system config by agentId
- * Now reads from chatConfig.localSystem
- */
-const getAgentLocalSystemConfigById =
-  (agentId: string) =>
-  (s: AgentStoreState): LocalSystemConfig | undefined =>
-    agentSelectors.getAgentConfigById(agentId)(s)?.chatConfig?.localSystem;
-
-/**
- * Get working directory by agentId
- */
-const getAgentWorkingDirectoryById =
-  (agentId: string) =>
-  (s: AgentStoreState): string | undefined =>
-    getAgentLocalSystemConfigById(agentId)(s)?.workingDirectory;
-
-/**
  * Get agent builder context by agentId
  * Used for injecting current agent config/meta into Agent Builder context
  */
@@ -128,13 +111,11 @@ export const agentByIdSelectors = {
   getAgentEnableModeById,
   getAgentFilesById,
   getAgentKnowledgeBasesById,
-  getAgentLocalSystemConfigById,
   getAgentModeById,
   getAgentModelById,
   getAgentModelProviderById,
   getAgentPluginsById,
   getAgentSystemRoleById,
   getAgentTTSById,
-  getAgentWorkingDirectoryById,
   isAgentConfigLoadingById,
 };

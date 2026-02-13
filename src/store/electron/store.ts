@@ -14,6 +14,8 @@ import { type ElectronSettingsAction } from './actions/settings';
 import { settingsSlice } from './actions/settings';
 import { type ElectronRemoteServerAction } from './actions/sync';
 import { remoteSyncSlice } from './actions/sync';
+import { type WorkingDirectoryAction } from './actions/workingDirectory';
+import { workingDirectorySlice } from './actions/workingDirectory';
 import { type ElectronState } from './initialState';
 import { initialState } from './initialState';
 
@@ -26,7 +28,8 @@ export interface ElectronStore
     ElectronAppAction,
     ElectronSettingsAction,
     NavigationHistoryAction,
-    RecentPagesAction {
+    RecentPagesAction,
+    WorkingDirectoryAction {
   /* empty */
 }
 
@@ -34,7 +37,8 @@ type ElectronStoreAction = ElectronRemoteServerAction &
   ElectronAppAction &
   ElectronSettingsAction &
   NavigationHistoryAction &
-  RecentPagesAction;
+  RecentPagesAction &
+  WorkingDirectoryAction;
 
 const createStore: StateCreator<ElectronStore, [['zustand/devtools', never]]> = (
   ...parameters: Parameters<StateCreator<ElectronStore, [['zustand/devtools', never]]>>
@@ -46,6 +50,7 @@ const createStore: StateCreator<ElectronStore, [['zustand/devtools', never]]> = 
     settingsSlice(...parameters),
     createNavigationHistorySlice(...parameters),
     createRecentPagesSlice(...parameters),
+    workingDirectorySlice(...parameters),
   ]),
 });
 

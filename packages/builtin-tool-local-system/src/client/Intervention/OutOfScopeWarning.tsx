@@ -4,9 +4,9 @@ import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAgentStore } from '@/store/agent';
-import { agentSelectors } from '@/store/agent/selectors';
 import { useChatStore } from '@/store/chat';
-import { topicSelectors } from '@/store/chat/selectors';
+import { workingDirectorySelectors } from '@/store/electron/selectors';
+import { useElectronStore } from '@/store/electron/store';
 
 interface OutOfScopeWarningProps {
   /**
@@ -34,9 +34,16 @@ const isPathWithinWorkingDirectory = (targetPath: string, workingDirectory: stri
 const OutOfScopeWarning = memo<OutOfScopeWarningProps>(({ paths }) => {
   const { t } = useTranslation('tool');
 
-  // Get working directory from topic or agent store
-  const topicWorkingDir = useChatStore(topicSelectors.currentTopicWorkingDirectory);
-  const agentWorkingDir = useAgentStore(agentSelectors.currentAgentWorkingDirectory);
+  const activeTopicId = useChatStore((s) => s.activeTopicId);
+  const activeAgentId = useAgentStore((s) => s.activeAgentId);
+
+  // Get working directory from Electron Store
+  const topicWorkingDir = useElectronStore((s) =>
+    activeTopicId ? workingDirectorySelectors.topicWorkingDirectory(activeTopicId)(s) : undefined,
+  );
+  const agentWorkingDir = useElectronStore((s) =>
+    activeAgentId ? workingDirectorySelectors.agentWorkingDirectory(activeAgentId)(s) : undefined,
+  );
   const workingDirectory = topicWorkingDir || agentWorkingDir;
 
   // Find paths that are outside the working directory

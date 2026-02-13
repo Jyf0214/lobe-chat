@@ -36,7 +36,6 @@ vi.mock('@/store/agent/selectors', () => ({
   agentSelectors: {
     currentAgentModel: () => 'gpt-4',
     currentAgentModelProvider: () => 'openai',
-    currentAgentWorkingDirectory: () => undefined,
   },
 }));
 
@@ -46,10 +45,10 @@ vi.mock('@/store/chat', () => ({
   },
 }));
 
-vi.mock('@/store/chat/selectors', () => ({
-  topicSelectors: {
-    currentTopicWorkingDirectory: () => undefined,
-  },
+vi.mock('@/store/electron/store', () => ({
+  getElectronStoreState: () => ({
+    workingDirectories: {},
+  }),
 }));
 
 vi.mock('../GlobalAgentContextManager', () => ({

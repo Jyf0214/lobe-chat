@@ -1,4 +1,4 @@
-import { DataSyncConfig, NetworkProxySettings } from '@lobechat/electron-client-ipc';
+import { type DataSyncConfig, type NetworkProxySettings } from '@lobechat/electron-client-ipc';
 
 export interface ElectronMainStore {
   dataSyncConfig: DataSyncConfig;
@@ -13,6 +13,7 @@ export interface ElectronMainStore {
   shortcuts: Record<string, string>;
   storagePath: string;
   themeMode: 'dark' | 'light' | 'system';
+  workingDirectories: Record<string, string>;
 }
 
 export type StoreKey = keyof ElectronMainStore;

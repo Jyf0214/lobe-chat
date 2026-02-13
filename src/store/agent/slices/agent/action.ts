@@ -11,11 +11,7 @@ import { agentService } from '@/services/agent';
 import { type StoreSetter } from '@/store/types';
 import { getUserStoreState } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
-import {
-  type LobeAgentChatConfig,
-  type LobeAgentConfig,
-  type LocalSystemConfig,
-} from '@/types/agent';
+import { type LobeAgentChatConfig, type LobeAgentConfig } from '@/types/agent';
 import { type MetaData } from '@/types/meta';
 import { merge } from '@/utils/merge';
 
@@ -188,15 +184,6 @@ export class AgentSliceActionImpl {
     const controller = this.#get().internal_createAbortController('updateAgentConfigSignal');
 
     await this.#get().optimisticUpdateAgentConfig(agentId, config, controller.signal);
-  };
-
-  updateAgentLocalSystemConfigById = async (
-    agentId: string,
-    config: Partial<LocalSystemConfig>,
-  ): Promise<void> => {
-    if (!agentId) return;
-
-    await this.#get().updateAgentChatConfigById(agentId, { localSystem: config });
   };
 
   updateAgentMeta = async (meta: Partial<MetaData>): Promise<void> => {

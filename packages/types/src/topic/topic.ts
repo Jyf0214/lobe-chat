@@ -11,7 +11,6 @@ export type TimeGroupId =
   | `${number}-${string}`
   | `${number}`;
 
-/* eslint-disable typescript-sort-keys/string-enum */
 export enum TopicDisplayMode {
   ByTime = 'byTime',
   Flat = 'flat',
@@ -43,11 +42,6 @@ export interface ChatTopicMetadata {
   provider?: string;
   userMemoryExtractRunState?: TopicUserMemoryExtractRunState;
   userMemoryExtractStatus?: 'pending' | 'completed' | 'failed';
-  /**
-   * Local System working directory (desktop only)
-   * Priority is higher than Agent-level settings
-   */
-  workingDirectory?: string;
 }
 
 export interface ChatTopicSummary {

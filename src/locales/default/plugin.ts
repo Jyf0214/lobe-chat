@@ -369,6 +369,10 @@ export default {
   'localSystem.workingDirectory.topicDescription':
     'Override Agent default for this conversation only',
   'localSystem.workingDirectory.topicLevel': 'Conversation override',
+  'localSystem.workingDirectory.copiedPath': 'Copied!',
+  'localSystem.workingDirectory.copyPath': 'Copy Path',
+  'localSystem.workingDirectory.open': 'Open',
+  'localSystem.workingDirectory.openIn': 'Open In',
   'localSystem.workingDirectory.topicOverride': 'Override for this conversation',
   'mcpEmpty.deployment': 'No deployment options',
   'mcpEmpty.prompts': 'No prompts',

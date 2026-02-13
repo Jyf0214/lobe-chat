@@ -245,7 +245,7 @@ export class AgentRuntimeService {
           // need be removed
           modelRuntimeConfig,
           userId,
-          workingDirectory: agentConfig?.chatConfig?.localSystem?.workingDirectory,
+          workingDirectory: appContext?.workingDirectory,
           ...appContext,
         },
         // modelRuntimeConfig at state level for executor fallback

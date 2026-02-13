@@ -31,6 +31,7 @@ import { getAgentStoreState } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
 import { createAgentExecutors } from '@/store/chat/agents/createAgentExecutors';
 import { type ChatStore } from '@/store/chat/store';
+import { getElectronStoreState } from '@/store/electron/store';
 import { getFileStoreState } from '@/store/file/store';
 import { pageAgentRuntime } from '@/store/tool/slices/builtin/executors/lobe-page-agent';
 import { type StoreSetter } from '@/store/types';
@@ -182,8 +183,13 @@ export class StreamingExecutorActionImpl {
       provider: agentConfigData.provider!,
     };
 
-    const topicWorkingDirectory = topicSelectors.currentTopicWorkingDirectory(this.#get());
-    const agentWorkingDirectory = agentSelectors.currentAgentWorkingDirectory(getAgentStoreState());
+    const electronState = getElectronStoreState();
+    const topicWorkingDirectory = topicId
+      ? electronState.workingDirectories[`topic:${topicId}`]
+      : undefined;
+    const agentWorkingDirectory = agentId
+      ? electronState.workingDirectories[`agent:${agentId}`]
+      : undefined;
     const workingDirectory = topicWorkingDirectory ?? agentWorkingDirectory;
 
     // Create initial state or use provided state

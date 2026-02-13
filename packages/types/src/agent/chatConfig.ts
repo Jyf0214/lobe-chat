@@ -1,8 +1,6 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/interface */
 import { z } from 'zod';
 
-import { SearchMode } from '../search';
-import { LocalSystemConfig } from './agentConfig';
+import { type SearchMode } from '../search';
 
 export interface WorkingModel {
   model: string;
@@ -10,46 +8,64 @@ export interface WorkingModel {
 }
 
 export interface LobeAgentChatConfig {
-  /**
-   * Local System configuration (desktop only)
-   */
-  localSystem?: LocalSystemConfig;
-  enableAutoCreateTopic?: boolean;
   autoCreateTopicThreshold: number;
-
-  enableMaxTokens?: boolean;
+  /**
+   * Model ID to use for generating compression summaries
+   */
+  compressionModelId?: string;
 
   /**
-   * Whether to enable streaming output
+   * Disable context caching
    */
-  enableStreaming?: boolean;
+  disableContextCaching?: boolean;
 
+  effort?: 'low' | 'medium' | 'high' | 'max';
+
+  /**
+   * Whether to enable adaptive thinking (Claude Opus 4.6)
+   */
+  enableAdaptiveThinking?: boolean;
+  enableAutoCreateTopic?: boolean;
+  /**
+   * Whether to auto-scroll during AI streaming output
+   * undefined = use global setting
+   */
+  enableAutoScrollOnStreaming?: boolean;
+  /**
+   * Enable history message compression threshold
+   * @deprecated Use enableContextCompression instead
+   */
+  enableCompressHistory?: boolean;
+  /**
+   * Enable context compression
+   * When enabled, old messages will be compressed into summaries when token threshold is reached
+   */
+  enableContextCompression?: boolean;
+  /**
+   * Enable historical message count
+   */
+  enableHistoryCount?: boolean;
+  enableMaxTokens?: boolean;
   /**
    * Whether to enable reasoning
    */
   enableReasoning?: boolean;
   /**
-   * Whether to enable adaptive thinking (Claude Opus 4.6)
-   */
-  enableAdaptiveThinking?: boolean;
-  /**
    * Custom reasoning effort level
    */
   enableReasoningEffort?: boolean;
-  effort?: 'low' | 'medium' | 'high' | 'max';
-  reasoningBudgetToken?: number;
-  reasoningEffort?: 'low' | 'medium' | 'high';
-  gpt5ReasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
-  gpt5_1ReasoningEffort?: 'none' | 'low' | 'medium' | 'high';
-  gpt5_2ReasoningEffort?: 'none' | 'low' | 'medium' | 'high' | 'xhigh';
-  gpt5_2ProReasoningEffort?: 'medium' | 'high' | 'xhigh';
   /**
-   * Output text verbosity control
+   * Whether to enable streaming output
    */
-  textVerbosity?: 'low' | 'medium' | 'high';
-  thinking?: 'disabled' | 'auto' | 'enabled';
-  thinkingLevel?: 'minimal' | 'low' | 'medium' | 'high';
-  thinkingBudget?: number;
+  enableStreaming?: boolean;
+  gpt5_1ReasoningEffort?: 'none' | 'low' | 'medium' | 'high';
+  gpt5_2ProReasoningEffort?: 'medium' | 'high' | 'xhigh';
+  gpt5_2ReasoningEffort?: 'none' | 'low' | 'medium' | 'high' | 'xhigh';
+  gpt5ReasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
+  /**
+   * Number of historical messages
+   */
+  historyCount?: number;
   /**
    * Image aspect ratio for image generation models
    */
@@ -58,41 +74,21 @@ export interface LobeAgentChatConfig {
    * Image resolution for image generation models
    */
   imageResolution?: '1K' | '2K' | '4K';
-  /**
-   * Disable context caching
-   */
-  disableContextCaching?: boolean;
-  /**
-   * Number of historical messages
-   */
-  historyCount?: number;
-  /**
-   * Enable historical message count
-   */
-  enableHistoryCount?: boolean;
-  /**
-   * Enable history message compression threshold
-   * @deprecated Use enableContextCompression instead
-   */
-  enableCompressHistory?: boolean;
-
-  /**
-   * Enable context compression
-   * When enabled, old messages will be compressed into summaries when token threshold is reached
-   */
-  enableContextCompression?: boolean;
-  /**
-   * Model ID to use for generating compression summaries
-   */
-  compressionModelId?: string;
-
   inputTemplate?: string;
+  reasoningBudgetToken?: number;
+  reasoningEffort?: 'low' | 'medium' | 'high';
 
-  searchMode?: SearchMode;
   searchFCModel?: WorkingModel;
-  urlContext?: boolean;
-  useModelBuiltinSearch?: boolean;
+  searchMode?: SearchMode;
 
+  /**
+   * Output text verbosity control
+   */
+  textVerbosity?: 'low' | 'medium' | 'high';
+
+  thinking?: 'disabled' | 'auto' | 'enabled';
+  thinkingBudget?: number;
+  thinkingLevel?: 'minimal' | 'low' | 'medium' | 'high';
   /**
    * Maximum length for tool execution result content (in characters)
    * This prevents context overflow when sending tool results back to LLM
@@ -100,20 +96,10 @@ export interface LobeAgentChatConfig {
    */
   toolResultMaxLength?: number;
 
-  /**
-   * Whether to auto-scroll during AI streaming output
-   * undefined = use global setting
-   */
-  enableAutoScrollOnStreaming?: boolean;
-}
-/* eslint-enable */
+  urlContext?: boolean;
 
-/**
- * Zod schema for LocalSystemConfig
- */
-export const LocalSystemConfigSchema = z.object({
-  workingDirectory: z.string().optional(),
-});
+  useModelBuiltinSearch?: boolean;
+}
 
 export const AgentChatConfigSchema = z.object({
   autoCreateTopicThreshold: z.number().default(2),
@@ -137,7 +123,6 @@ export const AgentChatConfigSchema = z.object({
   historyCount: z.number().optional(),
   imageAspectRatio: z.string().optional(),
   imageResolution: z.enum(['1K', '2K', '4K']).optional(),
-  localSystem: LocalSystemConfigSchema.optional(),
   reasoningBudgetToken: z.number().optional(),
   reasoningEffort: z.enum(['low', 'medium', 'high']).optional(),
   searchFCModel: z

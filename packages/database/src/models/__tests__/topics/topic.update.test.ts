@@ -59,11 +59,11 @@ describe('TopicModel - Update', () => {
       await serverDB.insert(topics).values({ userId, id: topicId, title: 'Test' });
 
       const result = await topicModel.updateMetadata(topicId, {
-        workingDirectory: '/path/to/dir',
+        model: 'gpt-4',
       });
 
       expect(result).toHaveLength(1);
-      expect(result[0].metadata).toEqual({ workingDirectory: '/path/to/dir' });
+      expect(result[0].metadata).toEqual({ model: 'gpt-4' });
     });
 
     it('should merge metadata with existing metadata', async () => {
@@ -76,14 +76,13 @@ describe('TopicModel - Update', () => {
       });
 
       const result = await topicModel.updateMetadata(topicId, {
-        workingDirectory: '/new/path',
+        provider: 'anthropic',
       });
 
       expect(result).toHaveLength(1);
       expect(result[0].metadata).toEqual({
         model: 'gpt-4',
-        provider: 'openai',
-        workingDirectory: '/new/path',
+        provider: 'anthropic',
       });
     });
 
@@ -93,17 +92,17 @@ describe('TopicModel - Update', () => {
         userId,
         id: topicId,
         title: 'Test',
-        metadata: { workingDirectory: '/old/path', model: 'gpt-4' },
+        metadata: { provider: 'openai', model: 'gpt-4' },
       });
 
       const result = await topicModel.updateMetadata(topicId, {
-        workingDirectory: '/new/path',
+        model: 'claude-3',
       });
 
       expect(result).toHaveLength(1);
       expect(result[0].metadata).toEqual({
-        model: 'gpt-4',
-        workingDirectory: '/new/path',
+        model: 'claude-3',
+        provider: 'openai',
       });
     });
 
@@ -117,7 +116,7 @@ describe('TopicModel - Update', () => {
       });
 
       const result = await topicModel.updateMetadata(topicId, {
-        workingDirectory: '/path/to/dir',
+        model: 'gpt-4',
       });
 
       expect(result).toHaveLength(0);

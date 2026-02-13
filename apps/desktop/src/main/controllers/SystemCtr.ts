@@ -1,3 +1,5 @@
+import { exec } from 'node:child_process';
+import { join } from 'node:path';
 import process from 'node:process';
 
 import type { ElectronAppState, ThemeMode } from '@lobechat/electron-client-ipc';
@@ -20,6 +22,31 @@ import {
 import { ControllerModule, IpcMethod } from './index';
 
 const logger = createLogger('controllers:SystemCtr');
+
+interface KnownApp {
+  bundleName: string;
+  id: string;
+  name: string;
+}
+
+export interface InstalledApp {
+  icon: string;
+  id: string;
+  name: string;
+}
+
+const KNOWN_APPS: KnownApp[] = [
+  { bundleName: 'Cursor.app', id: 'cursor', name: 'Cursor' },
+  { bundleName: 'Visual Studio Code.app', id: 'vscode', name: 'VS Code' },
+  { bundleName: 'Zed.app', id: 'zed', name: 'Zed' },
+  { bundleName: 'Xcode.app', id: 'xcode', name: 'Xcode' },
+  { bundleName: 'WebStorm.app', id: 'webstorm', name: 'WebStorm' },
+  { bundleName: 'IntelliJ IDEA.app', id: 'idea', name: 'IntelliJ IDEA' },
+  { bundleName: 'Ghostty.app', id: 'ghostty', name: 'Ghostty' },
+  { bundleName: 'iTerm.app', id: 'iterm', name: 'iTerm' },
+  { bundleName: 'Fork.app', id: 'fork', name: 'Fork' },
+  { bundleName: 'Trae.app', id: 'trae', name: 'Trae' },
+];
 
 export default class SystemController extends ControllerModule {
   static override readonly groupName = 'system';
@@ -123,8 +150,8 @@ export default class SystemController extends ControllerModule {
       buttons: [openSettingsButtonText, skipButtonText],
       cancelId: 1,
       defaultId: 0,
-      message: message,
-      title: title,
+      message,
+      title,
       type: 'info',
     });
 
@@ -228,6 +255,106 @@ export default class SystemController extends ControllerModule {
       // If directory exists but cannot be read, treat as "used" to surface guidance.
       return true;
     }
+  }
+
+  @IpcMethod()
+  getWorkingDirectories(): Record<string, string> {
+    return this.app.storeManager.get('workingDirectories', {});
+  }
+
+  @IpcMethod()
+  setWorkingDirectory(payload: { key: string; path: string }): void {
+    const current = this.app.storeManager.get('workingDirectories', {});
+    this.app.storeManager.set('workingDirectories', { ...current, [payload.key]: payload.path });
+  }
+
+  @IpcMethod()
+  removeWorkingDirectory(payload: { key: string }): void {
+    const current = this.app.storeManager.get('workingDirectories', {});
+    const { [payload.key]: _, ...rest } = current;
+    this.app.storeManager.set('workingDirectories', rest);
+  }
+
+  @IpcMethod()
+  async getInstalledApps(): Promise<InstalledApp[]> {
+    if (process.platform !== 'darwin') return [];
+
+    const results: InstalledApp[] = [];
+
+    // Finder is always available on macOS
+    const finderPath = '/System/Library/CoreServices/Finder.app';
+    try {
+      const finderIcon = await app.getFileIcon(finderPath, { size: 'small' });
+      results.push({ icon: finderIcon.toDataURL(), id: 'finder', name: 'Finder' });
+    } catch {
+      results.push({ icon: '', id: 'finder', name: 'Finder' });
+    }
+
+    // Terminal.app is always available
+    const terminalPaths = [
+      '/System/Applications/Utilities/Terminal.app',
+      '/Applications/Utilities/Terminal.app',
+    ];
+    for (const tp of terminalPaths) {
+      if (await pathExists(tp)) {
+        try {
+          const icon = await app.getFileIcon(tp, { size: 'small' });
+          results.push({ icon: icon.toDataURL(), id: 'terminal', name: 'Terminal' });
+        } catch {
+          results.push({ icon: '', id: 'terminal', name: 'Terminal' });
+        }
+        break;
+      }
+    }
+
+    // Check known apps
+    for (const knownApp of KNOWN_APPS) {
+      const appPath = join('/Applications', knownApp.bundleName);
+      if (await pathExists(appPath)) {
+        try {
+          const icon = await app.getFileIcon(appPath, { size: 'small' });
+          results.push({ icon: icon.toDataURL(), id: knownApp.id, name: knownApp.name });
+        } catch {
+          results.push({ icon: '', id: knownApp.id, name: knownApp.name });
+        }
+      }
+    }
+
+    return results;
+  }
+
+  @IpcMethod()
+  async openDirectoryInApp(payload: { appId: string; path: string }): Promise<void> {
+    const { appId, path: dirPath } = payload;
+
+    if (appId === 'finder') {
+      await shell.openPath(dirPath);
+      return;
+    }
+
+    if (process.platform !== 'darwin') return;
+
+    // Find app name from known apps or built-in
+    let appName: string | undefined;
+    if (appId === 'terminal') {
+      appName = 'Terminal';
+    } else {
+      const known = KNOWN_APPS.find((a) => a.id === appId);
+      appName = known?.name;
+    }
+
+    if (!appName) return;
+
+    return new Promise<void>((resolve, reject) => {
+      exec(`open -a "${appName}" "${dirPath}"`, (error) => {
+        if (error) {
+          logger.error(`Failed to open directory in ${appName}:`, error);
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
   }
 
   private async setSystemThemeMode(themeMode: ThemeMode) {

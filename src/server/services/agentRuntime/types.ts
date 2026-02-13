@@ -76,6 +76,7 @@ export interface OperationCreationParams {
     groupId?: string | null;
     threadId?: string | null;
     topicId?: string | null;
+    workingDirectory?: string;
   };
   autoStart?: boolean;
   initialContext: AgentRuntimeContext;

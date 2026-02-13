@@ -6,17 +6,3 @@
  * - implement: execute directly without asking
  */
 export type AgentMode = 'auto' | 'plan' | 'ask' | 'implement';
-
-/**
- * Local System configuration (desktop only)
- */
-export interface LocalSystemConfig {
-  /**
-   * Local System working directory (desktop only)
-   */
-  workingDirectory?: string;
-
-  // Future extensions:
-  // allowedPaths?: string[];
-  // deniedCommands?: string[];
-}

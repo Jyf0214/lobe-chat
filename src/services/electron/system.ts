@@ -65,6 +65,26 @@ class ElectronSystemService {
   }): Promise<string | undefined> {
     return this.ipc.system.selectFolder(params);
   }
+
+  async getWorkingDirectories(): Promise<Record<string, string>> {
+    return this.ipc.system.getWorkingDirectories();
+  }
+
+  async setWorkingDirectory(key: string, path: string): Promise<void> {
+    return this.ipc.system.setWorkingDirectory({ key, path });
+  }
+
+  async removeWorkingDirectory(key: string): Promise<void> {
+    return this.ipc.system.removeWorkingDirectory({ key });
+  }
+
+  async getInstalledApps(): Promise<Array<{ icon: string; id: string; name: string }>> {
+    return this.ipc.system.getInstalledApps();
+  }
+
+  async openDirectoryInApp(appId: string, path: string): Promise<void> {
+    return this.ipc.system.openDirectoryInApp({ appId, path });
+  }
 }
 
 // Export a singleton instance of the service

@@ -2,13 +2,14 @@ import { LocalSystemManifest } from '@lobechat/builtin-tool-local-system';
 import { Flexbox, Icon, Popover, Tooltip } from '@lobehub/ui';
 import { createStaticStyles, cx } from 'antd-style';
 import { LaptopIcon, SquircleDashed } from 'lucide-react';
-import { memo, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAgentStore } from '@/store/agent';
 import { agentByIdSelectors } from '@/store/agent/selectors';
 import { useChatStore } from '@/store/chat';
-import { topicSelectors } from '@/store/chat/selectors';
+import { workingDirectorySelectors } from '@/store/electron/selectors';
+import { useElectronStore } from '@/store/electron/store';
 
 import WorkingDirectoryContent from './WorkingDirectoryContent';
 
@@ -36,6 +37,7 @@ const WorkingDirectory = memo(() => {
   const [open, setOpen] = useState(false);
 
   const agentId = useAgentStore((s) => s.activeAgentId);
+  const activeTopicId = useChatStore((s) => s.activeTopicId);
 
   // Check if local-system plugin is enabled for current agent
   const plugins = useAgentStore((s) =>
@@ -46,10 +48,32 @@ const WorkingDirectory = memo(() => {
     [plugins],
   );
 
-  // Get working directory from Topic (higher priority) or Agent (fallback)
-  const topicWorkingDirectory = useChatStore(topicSelectors.currentTopicWorkingDirectory);
-  const agentWorkingDirectory = useAgentStore((s) =>
-    agentId ? agentByIdSelectors.getAgentWorkingDirectoryById(agentId)(s) : undefined,
+  // Load working directories from Electron Store
+  const useFetchWorkingDirectories = useElectronStore((s) => s.useFetchWorkingDirectories);
+  useFetchWorkingDirectories();
+
+  // Lazy migration: move old chatConfig.localSystem.workingDirectory to Electron Store
+  const setWorkingDirectory = useElectronStore((s) => s.setWorkingDirectory);
+  const updateAgentChatConfig = useAgentStore((s) => s.updateAgentChatConfigById);
+  const migratedRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (!agentId || migratedRef.current.has(agentId)) return;
+    const agentData = useAgentStore.getState().agentMap[agentId] as any;
+    const oldDir = agentData?.chatConfig?.localSystem?.workingDirectory;
+    if (oldDir && !useElectronStore.getState().workingDirectories[`agent:${agentId}`]) {
+      migratedRef.current.add(agentId);
+      setWorkingDirectory(`agent:${agentId}`, oldDir);
+      updateAgentChatConfig(agentId, { localSystem: undefined } as any);
+    }
+  }, [agentId, setWorkingDirectory, updateAgentChatConfig]);
+
+  // Get working directory from Electron Store: Topic (higher priority) or Agent (fallback)
+  const topicWorkingDirectory = useElectronStore((s) =>
+    activeTopicId ? workingDirectorySelectors.topicWorkingDirectory(activeTopicId)(s) : undefined,
+  );
+  const agentWorkingDirectory = useElectronStore((s) =>
+    agentId ? workingDirectorySelectors.agentWorkingDirectory(agentId)(s) : undefined,
   );
 
   const effectiveWorkingDirectory = topicWorkingDirectory || agentWorkingDirectory;
@@ -89,10 +113,16 @@ const WorkingDirectory = memo(() => {
   );
   return (
     <Popover
-      content={<WorkingDirectoryContent agentId={agentId} onClose={() => setOpen(false)} />}
       open={open}
       placement="bottomRight"
       trigger="click"
+      content={
+        <WorkingDirectoryContent
+          agentId={agentId}
+          effectiveWorkingDirectory={effectiveWorkingDirectory}
+          onClose={() => setOpen(false)}
+        />
+      }
       onOpenChange={setOpen}
     >
       <div>

@@ -4,7 +4,7 @@ import { template } from 'es-toolkit/compat';
 import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
 import { useChatStore } from '@/store/chat';
-import { topicSelectors } from '@/store/chat/selectors';
+import { getElectronStoreState } from '@/store/electron/store';
 import { useUserStore } from '@/store/user';
 import { userProfileSelectors } from '@/store/user/selectors';
 
@@ -157,13 +157,23 @@ export const VARIABLE_GENERATORS = {
    * Working directory: Topic-level setting takes priority over Agent-level setting
    */
   workingDirectory: () => {
+    const electronState = getElectronStoreState();
+    const activeTopicId = useChatStore.getState().activeTopicId;
+    const activeAgentId = useAgentStore.getState().activeAgentId;
+
     // First check topic-level working directory
-    const topicWorkingDir = topicSelectors.currentTopicWorkingDirectory(useChatStore.getState());
-    if (topicWorkingDir) return topicWorkingDir;
+    if (activeTopicId) {
+      const topicDir = electronState.workingDirectories[`topic:${activeTopicId}`];
+      if (topicDir) return topicDir;
+    }
 
     // Fallback to agent-level working directory
-    const agentWorkingDir = agentSelectors.currentAgentWorkingDirectory(useAgentStore.getState());
-    return agentWorkingDir ?? '(not specified, use user Desktop directory as default)';
+    if (activeAgentId) {
+      const agentDir = electronState.workingDirectories[`agent:${activeAgentId}`];
+      if (agentDir) return agentDir;
+    }
+
+    return '(not specified, use user Desktop directory as default)';
   },
 } as Record<string, () => string>;
 

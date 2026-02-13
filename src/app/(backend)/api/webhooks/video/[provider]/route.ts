@@ -7,10 +7,13 @@ import {
   type VideoGenerationAsset,
 } from '@lobechat/types';
 import debug from 'debug';
+import { eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 
+import { chargeAfterGenerate } from '@/business/server/video-generation/chargeAfterGenerate';
 import { AsyncTaskModel } from '@/database/models/asyncTask';
 import { GenerationModel } from '@/database/models/generation';
+import { generationBatches } from '@/database/schemas';
 import { getServerDB } from '@/database/server';
 import { VideoGenerationService } from '@/server/services/generation/video';
 
@@ -138,6 +141,29 @@ export const POST = async (req: Request, { params }: { params: Promise<{ provide
     await asyncTaskModel.update(asyncTask.id, {
       status: AsyncTaskStatus.Success,
     });
+
+    // Charge after successful video generation
+    try {
+      const batch = await db.query.generationBatches.findFirst({
+        where: eq(generationBatches.id, generation.generationBatchId!),
+      });
+
+      await chargeAfterGenerate({
+        generateAudio: result.generateAudio,
+        metadata: {
+          asyncTaskId: asyncTask.id,
+          generationBatchId: generation.generationBatchId!,
+          modelId: result.model ?? batch?.model ?? '',
+          topicId: batch?.generationTopicId,
+        },
+        model: result.model ?? batch?.model ?? '',
+        provider,
+        usage: result.usage,
+        userId: asyncTask.userId,
+      });
+    } catch (chargeError) {
+      console.error('[video-webhook] Failed to charge after generate:', chargeError);
+    }
 
     log('Video webhook processing completed successfully for generation: %s', generation.id);
 

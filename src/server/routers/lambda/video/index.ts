@@ -2,13 +2,14 @@ import debug from 'debug';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
+import { chargeBeforeGenerate } from '@/business/server/video-generation/chargeBeforeGenerate';
 import { AsyncTaskModel } from '@/database/models/asyncTask';
 import {
-  type NewGeneration,
-  type NewGenerationBatch,
   asyncTasks,
   generationBatches,
   generations,
+  type NewGeneration,
+  type NewGenerationBatch,
 } from '@/database/schemas';
 import { authedProcedure, router } from '@/libs/trpc/lambda';
 import { keyVaults, serverDatabase } from '@/libs/trpc/lambda/middleware';
@@ -122,6 +123,16 @@ export const videoRouter = router({
         generationParams = { ...params, ...updates };
       }
     }
+
+    // Step 0: Pre-charge check (budget exhaustion check, no deduction)
+    const chargeResult = await chargeBeforeGenerate({
+      generationTopicId,
+      model,
+      params,
+      provider,
+      userId,
+    });
+    if (chargeResult) return chargeResult;
 
     // Step 1: Atomically create all database records in a transaction
     const {

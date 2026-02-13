@@ -15,8 +15,14 @@ interface VolcengineVideoWebhookBody {
     code?: string;
     message?: string;
   };
+  generate_audio?: boolean;
   id?: string;
+  model?: string;
   status?: string;
+  usage?: {
+    completion_tokens?: number;
+    total_tokens?: number;
+  };
 }
 
 export async function handleVolcengineVideoWebhook(
@@ -47,7 +53,20 @@ export async function handleVolcengineVideoWebhook(
 
     log('Video generation succeeded: %s, videoUrl: %s', inferenceId, videoUrl);
 
-    return { inferenceId, status: 'success', videoUrl };
+    return {
+      generateAudio: body.generate_audio,
+      inferenceId,
+      model: body.model,
+      status: 'success' as const,
+      usage:
+        typeof body.usage?.completion_tokens === 'number'
+          ? {
+              completionTokens: body.usage.completion_tokens,
+              totalTokens: body.usage.total_tokens ?? body.usage.completion_tokens,
+            }
+          : undefined,
+      videoUrl,
+    };
   }
 
   // failed / expired

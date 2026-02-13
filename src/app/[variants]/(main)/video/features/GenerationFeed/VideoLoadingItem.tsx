@@ -7,7 +7,7 @@ import { memo } from 'react';
 
 import { ElapsedTime } from '@/app/[variants]/(main)/image/features/GenerationFeed/GenerationItem/ElapsedTime';
 import { AsyncTaskStatus } from '@/types/asyncTask';
-import { type Generation } from '@/types/generation';
+import type { Generation } from '@/types/generation';
 
 interface VideoLoadingItemProps {
   aspectRatio?: string;

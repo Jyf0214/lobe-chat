@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useVideoStore } from '@/store/video';
 import { AsyncTaskStatus } from '@/types/asyncTask';
-import { type GenerationBatch } from '@/types/generation';
+import type { GenerationBatch } from '@/types/generation';
 import { downloadFile } from '@/utils/client/downloadFile';
 
 import VideoErrorItem from './VideoErrorItem';

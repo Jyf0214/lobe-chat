@@ -5,7 +5,7 @@ import { memo } from 'react';
 
 import { ActionButtons } from '@/app/[variants]/(main)/image/features/GenerationFeed/GenerationItem/ActionButtons';
 import { styles } from '@/app/[variants]/(main)/image/features/GenerationFeed/GenerationItem/styles';
-import { type Generation, type VideoGenerationAsset } from '@/types/generation';
+import type { Generation, VideoGenerationAsset } from '@/types/generation';
 
 interface VideoSuccessItemProps {
   generation: Generation;

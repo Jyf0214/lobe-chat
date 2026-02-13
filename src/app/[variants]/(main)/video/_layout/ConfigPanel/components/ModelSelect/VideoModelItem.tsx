@@ -1,7 +1,7 @@
 import { ModelIcon } from '@lobehub/icons';
 import { Flexbox, Popover, Text } from '@lobehub/ui';
 import { createStaticStyles, cx } from 'antd-style';
-import { type AiModelForSelect } from 'model-bank';
+import type { AiModelForSelect } from 'model-bank';
 import { memo, useMemo } from 'react';
 
 import NewModelBadge from '@/components/ModelSelect/NewModelBadge';

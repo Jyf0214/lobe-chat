@@ -35,7 +35,7 @@ const ModelConfigForm = memo<ModelConfigFormProps>(
             'embedding',
             'tts',
             'stt',
-            'image',
+            // 'image',
             // 'video',
             // 'text2music',
             'realtime',

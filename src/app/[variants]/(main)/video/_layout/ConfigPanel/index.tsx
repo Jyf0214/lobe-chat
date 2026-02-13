@@ -12,7 +12,8 @@ import {
 import { Switch } from 'antd';
 import { Dices } from 'lucide-react';
 import { MAX_VIDEO_SEED } from 'model-bank';
-import { type ReactNode, memo, useCallback, useMemo } from 'react';
+import type { ReactNode } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import AspectRatioSelect from '@/app/[variants]/(main)/image/_layout/ConfigPanel/components/AspectRatioSelect';
@@ -22,9 +23,9 @@ import { useVideoGenerationConfigParam } from '@/store/video/slices/generationCo
 import { useVideoStore } from '@/store/video/store';
 import { generateUniqueSeeds } from '@/utils/number';
 
-import VideoConfigSkeleton from './VideoConfigSkeleton';
 import FrameUpload from './components/FrameUpload';
 import ModelSelect from './components/ModelSelect';
+import VideoConfigSkeleton from './VideoConfigSkeleton';
 
 interface ConfigItemLayoutProps {
   children: ReactNode;
@@ -47,7 +48,7 @@ const AspectRatioItem = memo(() => {
 
   const options = useMemo(() => (enumValues ?? []).map((v) => ({ value: v })), [enumValues]);
 
-  return <AspectRatioSelect onChange={(v) => setValue(v as any)} options={options} value={value} />;
+  return <AspectRatioSelect options={options} value={value} onChange={(v) => setValue(v as any)} />;
 });
 
 const ResolutionItem = memo(() => {
@@ -63,11 +64,11 @@ const ResolutionItem = memo(() => {
   return (
     <Segmented
       block
-      onChange={(v) => setValue(String(v) as any)}
       options={options}
       style={{ width: '100%' }}
       value={value}
       variant="filled"
+      onChange={(v) => setValue(String(v) as any)}
     />
   );
 });
@@ -79,9 +80,9 @@ const DurationItem = memo(() => {
     <SliderWithInput
       max={max}
       min={min}
-      onChange={(v) => setValue(v as any)}
       step={step ?? 1}
       value={value ?? min}
+      onChange={(v) => setValue(v as any)}
     />
   );
 });
@@ -95,22 +96,22 @@ const SeedItem = memo(() => {
   }, [setValue]);
 
   return (
-    <Flexbox gap={4} horizontal>
+    <Flexbox horizontal gap={4}>
       <InputNumber
         max={MAX_VIDEO_SEED}
         min={0}
-        onChange={(v) => setValue(v as any)}
         placeholder={t('config.seed.random')}
         step={1}
         style={{ width: '100%' }}
         value={value}
+        onChange={(v) => setValue(v as any)}
       />
       <Tooltip title={t('config.seed.random')}>
         <Button
           icon={Dices}
-          onClick={handleRandomize}
           style={{ flex: 'none', width: 48 }}
           variant={'outlined'}
+          onClick={handleRandomize}
         />
       </Tooltip>
     </Flexbox>
@@ -126,7 +127,7 @@ const SwitchItem = memo<SwitchItemProps>(({ label, paramName }) => {
   const { value, setValue } = useVideoGenerationConfigParam(paramName);
 
   return (
-    <Flexbox align="center" horizontal justify="space-between" padding={'0 2px'}>
+    <Flexbox horizontal align="center" justify="space-between" padding={'0 2px'}>
       <Text weight={500}>{label}</Text>
       <Switch checked={!!value} onChange={(checked) => setValue(checked as any)} />
     </Flexbox>

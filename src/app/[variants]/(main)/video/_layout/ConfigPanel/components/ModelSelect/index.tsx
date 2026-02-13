@@ -1,5 +1,5 @@
-import { ActionIcon, Icon, Select, type SelectProps } from '@lobehub/ui';
-import { Flexbox } from '@lobehub/ui';
+import type { SelectProps } from '@lobehub/ui';
+import { ActionIcon, Flexbox, Icon, Select } from '@lobehub/ui';
 import { createStaticStyles, cssVar } from 'antd-style';
 import { LucideArrowRight, LucideBolt } from 'lucide-react';
 import { memo, useMemo } from 'react';
@@ -11,7 +11,7 @@ import { useAiInfraStore } from '@/store/aiInfra';
 import { aiProviderSelectors } from '@/store/aiInfra/slices/aiProvider/selectors';
 import { useVideoStore } from '@/store/video';
 import { videoGenerationConfigSelectors } from '@/store/video/selectors';
-import { type EnabledProviderWithModels } from '@/types/index';
+import type { EnabledProviderWithModels } from '@/types/index';
 
 import VideoModelItem from './VideoModelItem';
 

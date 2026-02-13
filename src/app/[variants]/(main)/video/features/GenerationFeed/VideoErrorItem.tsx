@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ActionButtons } from '@/app/[variants]/(main)/image/features/GenerationFeed/GenerationItem/ActionButtons';
 import { styles } from '@/app/[variants]/(main)/image/features/GenerationFeed/GenerationItem/styles';
-import { type Generation } from '@/types/generation';
+import type { Generation } from '@/types/generation';
 
 interface VideoErrorItemProps {
   aspectRatio?: string;

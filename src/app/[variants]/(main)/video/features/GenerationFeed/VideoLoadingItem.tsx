@@ -23,10 +23,10 @@ const VideoLoadingItem = memo<VideoLoadingItemProps>(({ generation, aspectRatio 
     <Block
       align={'center'}
       justify={'center'}
-      style={{
-        aspectRatio: aspectRatio?.includes('/') ? aspectRatio : '16/9',
-      }}
       variant={'filled'}
+      style={{
+        aspectRatio: aspectRatio?.includes(':') ? aspectRatio.replace(':', '/') : '16/9',
+      }}
     >
       <Center gap={8}>
         <Spin indicator={<LoadingOutlined spin />} />

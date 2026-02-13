@@ -59,14 +59,14 @@ const VideoErrorItem = memo<VideoErrorItemProps>(
         align={'center'}
         className={styles.placeholderContainer}
         justify={'center'}
-        onClick={onCopyError}
         padding={16}
+        variant={'filled'}
         style={{
-          aspectRatio: aspectRatio?.includes('/') ? aspectRatio : '16/9',
+          aspectRatio: aspectRatio?.includes(':') ? aspectRatio.replace(':', '/') : '16/9',
           cursor: 'pointer',
           width: '100%',
         }}
-        variant={'filled'}
+        onClick={onCopyError}
       >
         <Center gap={8}>
           <Icon color={cssVar.colorTextDescription} icon={VideoOffIcon} size={24} />
@@ -78,11 +78,11 @@ const VideoErrorItem = memo<VideoErrorItemProps>(
               code
               ellipsis={{ rows: 2 }}
               fontSize={10}
+              title={t('generation.actions.copyError')}
+              type={'secondary'}
               style={{
                 wordBreak: 'break-all',
               }}
-              title={t('generation.actions.copyError')}
-              type={'secondary'}
             >
               {errorMessage}
             </Text>

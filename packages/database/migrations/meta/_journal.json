@@ -606,15 +606,8 @@
     {
       "idx": 86,
       "version": "7",
-      "when": 1770866533887,
-      "tag": "0086_generation_topics_add_type_column",
-      "breakpoints": true
-    },
-    {
-      "idx": 87,
-      "version": "7",
-      "when": 1770891880026,
-      "tag": "0087_async_tasks_add_inference_id",
+      "when": 1770957617427,
+      "tag": "0086_video_generation_schema",
       "breakpoints": true
     }
   ],

@@ -1,1 +1,0 @@
-ALTER TABLE "generation_topics" ADD COLUMN IF NOT EXISTS "type" varchar(32) DEFAULT 'image' NOT NULL;

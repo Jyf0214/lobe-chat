@@ -8,7 +8,7 @@ import {
 import { seedance15ProParams } from 'model-bank/lobehub';
 
 export const DEFAULT_AI_VIDEO_PROVIDER = ModelProvider.LobeHub;
-export const DEFAULT_AI_VIDEO_MODEL = 'doubao-seedance-1-5-pro-251215';
+export const DEFAULT_AI_VIDEO_MODEL = 'seedance-1-5-pro-251215';
 
 export interface VideoGenerationConfigState {
   parameters: RuntimeVideoGenParams;

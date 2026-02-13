@@ -1,5 +1,6 @@
 interface ChargeParams {
   generateAudio?: boolean;
+  isError?: boolean;
   metadata: {
     asyncTaskId: string;
     generationBatchId: string;
@@ -7,6 +8,7 @@ interface ChargeParams {
     topicId?: string;
   };
   model: string;
+  prechargeResult?: Record<string, unknown>;
   provider: string;
   usage?: { completionTokens: number; totalTokens: number };
   userId: string;

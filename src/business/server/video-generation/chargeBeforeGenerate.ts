@@ -9,19 +9,22 @@ interface ChargeParams {
   userId: string;
 }
 
-type ChargeResult =
-  | undefined
-  | {
-      data: {
-        batch: NewGenerationBatch;
-        generations: NewGeneration[];
-      };
-      success: true;
-    };
+interface ErrorBatch {
+  data: {
+    batch: NewGenerationBatch;
+    generations: NewGeneration[];
+  };
+  success: true;
+}
+
+interface ChargeBeforeResult {
+  errorBatch?: ErrorBatch;
+  prechargeResult?: Record<string, unknown>;
+}
 
 export async function chargeBeforeGenerate(
   // eslint-disable-next-line unused-imports/no-unused-vars
   params: ChargeParams,
-): Promise<ChargeResult> {
-  return undefined;
+): Promise<ChargeBeforeResult> {
+  return {};
 }

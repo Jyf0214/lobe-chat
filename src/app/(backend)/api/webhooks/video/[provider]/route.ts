@@ -33,6 +33,8 @@ export const POST = async (req: Request, { params }: { params: Promise<{ provide
 
   let asyncTaskModel: AsyncTaskModel | undefined;
   let asyncTaskId: string | undefined;
+  let asyncTaskUserId: string | undefined;
+  let asyncTaskMetadata: any;
 
   try {
     // Parse webhook body using provider-specific handler
@@ -68,6 +70,8 @@ export const POST = async (req: Request, { params }: { params: Promise<{ provide
     }
 
     asyncTaskId = asyncTask.id;
+    asyncTaskUserId = asyncTask.userId;
+    asyncTaskMetadata = asyncTask.metadata;
 
     log(
       'Found asyncTask: %s, userId: %s, status: %s',
@@ -99,13 +103,31 @@ export const POST = async (req: Request, { params }: { params: Promise<{ provide
 
     log('Found generation: %s', generation.id);
 
-    // Handle error result
+    // Handle error result: refund precharge and mark task as error
     if (result.status === 'error') {
       log('Video generation failed: %s', result.error);
       await asyncTaskModel.update(asyncTask.id, {
         error: new AsyncTaskError(AsyncTaskErrorType.ServerError, result.error),
         status: AsyncTaskStatus.Error,
       });
+
+      try {
+        await chargeAfterGenerate({
+          isError: true,
+          metadata: {
+            asyncTaskId: asyncTask.id,
+            generationBatchId: generation.generationBatchId!,
+            modelId: '',
+            topicId: undefined,
+          },
+          model: '',
+          prechargeResult: (asyncTask.metadata as any)?.precharge,
+          provider,
+          userId: asyncTask.userId,
+        });
+      } catch (refundError) {
+        console.error('[video-webhook] Failed to refund precharge on error:', refundError);
+      }
 
       return NextResponse.json({ success: true });
     }
@@ -157,6 +179,7 @@ export const POST = async (req: Request, { params }: { params: Promise<{ provide
           topicId: batch?.generationTopicId,
         },
         model: result.model ?? batch?.model ?? '',
+        prechargeResult: (asyncTask.metadata as any)?.precharge,
         provider,
         usage: result.usage,
         userId: asyncTask.userId,
@@ -180,6 +203,22 @@ export const POST = async (req: Request, { params }: { params: Promise<{ provide
         });
       } catch (updateError) {
         console.error('[video-webhook] Failed to update asyncTask status:', updateError);
+      }
+    }
+
+    // Refund precharge on unexpected failure
+    if (asyncTaskUserId && asyncTaskMetadata?.precharge) {
+      try {
+        await chargeAfterGenerate({
+          isError: true,
+          metadata: { asyncTaskId: asyncTaskId ?? '', generationBatchId: '', modelId: '' },
+          model: '',
+          prechargeResult: asyncTaskMetadata.precharge,
+          provider,
+          userId: asyncTaskUserId,
+        });
+      } catch (refundError) {
+        console.error('[video-webhook] Failed to refund precharge on failure:', refundError);
       }
     }
 

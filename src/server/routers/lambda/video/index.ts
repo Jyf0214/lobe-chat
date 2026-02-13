@@ -125,15 +125,15 @@ export const videoRouter = router({
       }
     }
 
-    // Step 0: Pre-charge check (budget exhaustion check, no deduction)
-    const chargeResult = await chargeBeforeGenerate({
+    // Step 0: Pre-charge (atomic budget deduction to prevent concurrent abuse)
+    const { errorBatch, prechargeResult } = await chargeBeforeGenerate({
       generationTopicId,
       model,
       params,
       provider,
       userId,
     });
-    if (chargeResult) return chargeResult;
+    if (errorBatch) return errorBatch;
 
     // Step 1: Atomically create all database records in a transaction
     const {
@@ -165,10 +165,11 @@ export const videoRouter = router({
       const [generation] = await tx.insert(generations).values(newGeneration).returning();
       log('Generation created: %s', generation.id);
 
-      // 3. Create asyncTask
+      // 3. Create asyncTask with precharge metadata
       const [asyncTask] = await tx
         .insert(asyncTasks)
         .values({
+          metadata: prechargeResult ? { precharge: prechargeResult } : {},
           status: AsyncTaskStatus.Pending,
           type: AsyncTaskType.VideoGeneration,
           userId,

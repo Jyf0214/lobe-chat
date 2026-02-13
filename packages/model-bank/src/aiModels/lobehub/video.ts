@@ -33,13 +33,12 @@ export const lobehubVideoModels: AIVideoModelCard[] = [
     organization: 'ByteDance',
     parameters: seedance15ProParams,
     pricing: {
-      approximatePricePerVideo: 0.243,
-      currency: 'CNY',
+      approximatePricePerVideo: 0.25,
       units: [
         {
           lookup: {
             pricingParams: ['generateAudio'],
-            prices: { false: 8, true: 16 },
+            prices: { false: 1.2, true: 2.4 },
           },
           name: 'videoGeneration',
           strategy: 'lookup',

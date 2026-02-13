@@ -29,7 +29,7 @@ export const lobehubVideoModels: AIVideoModelCard[] = [
       'Seedance 1.5 Pro by ByteDance supports text-to-video, image-to-video (first frame, first+last frame), and audio generation synchronized with visuals.',
     displayName: 'Seedance 1.5 Pro',
     enabled: true,
-    id: 'doubao-seedance-1-5-pro-251215',
+    id: 'seedance-1-5-pro-251215',
     organization: 'ByteDance',
     parameters: seedance15ProParams,
     pricing: {

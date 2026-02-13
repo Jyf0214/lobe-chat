@@ -1,7 +1,7 @@
 'use client';
 
 import { ModelTag } from '@lobehub/icons';
-import { Block, Flexbox, Markdown, Text } from '@lobehub/ui';
+import { Block, Flexbox, Markdown, Tag, Text } from '@lobehub/ui';
 import { App } from 'antd';
 import dayjs from 'dayjs';
 import { memo, useCallback, useMemo } from 'react';
@@ -14,6 +14,7 @@ import { downloadFile } from '@/utils/client/downloadFile';
 
 import VideoErrorItem from './VideoErrorItem';
 import VideoLoadingItem from './VideoLoadingItem';
+import VideoReferenceFrames from './VideoReferenceFrames';
 import VideoSuccessItem from './VideoSuccessItem';
 
 interface VideoGenerationBatchItemProps {
@@ -115,12 +116,48 @@ export const VideoGenerationBatchItem = memo<VideoGenerationBatchItemProps>(({ b
     return <VideoLoadingItem aspectRatio={batch.config?.aspectRatio} generation={generation} />;
   };
 
-  return (
-    <Block gap={8} variant={'borderless'}>
+  const hasReferenceFrames = batch.config?.imageUrl || batch.config?.endImageUrl;
+
+  const displayAspectRatio = useMemo(() => {
+    const ratio = batch.config?.aspectRatio;
+    if (ratio && ratio !== 'adaptive') return ratio;
+
+    // Compute from video asset dimensions
+    const asset = generation?.asset;
+    if (asset && asset.width && asset.height && asset.width > 0 && asset.height > 0) {
+      const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+      const d = gcd(asset.width, asset.height);
+      return `${asset.width / d}:${asset.height / d}`;
+    }
+    return undefined;
+  }, [batch.config?.aspectRatio, generation?.asset]);
+
+  const promptAndMetadata = (
+    <>
       <Markdown variant={'chat'}>{batch.prompt}</Markdown>
       <Flexbox gap={4} horizontal style={{ marginBottom: 10 }}>
         <ModelTag model={batch.model} />
+        {batch.config?.resolution && <Tag>{batch.config.resolution}</Tag>}
+        {displayAspectRatio && <Tag>{displayAspectRatio}</Tag>}
       </Flexbox>
+    </>
+  );
+
+  return (
+    <Block gap={8} variant={'borderless'}>
+      {hasReferenceFrames ? (
+        <Flexbox align={'center'} gap={16} horizontal>
+          <VideoReferenceFrames
+            endImageUrl={batch.config?.endImageUrl}
+            imageUrl={batch.config?.imageUrl}
+          />
+          <Flexbox flex={1} gap={8}>
+            {promptAndMetadata}
+          </Flexbox>
+        </Flexbox>
+      ) : (
+        promptAndMetadata
+      )}
       {renderContent()}
       <Text as={'time'} fontSize={12} type={'secondary'}>
         {time}

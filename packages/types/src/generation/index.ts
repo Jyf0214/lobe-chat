@@ -50,10 +50,12 @@ export type GenerationAsset = ImageGenerationAsset | VideoGenerationAsset;
 export interface GenerationConfig {
   aspectRatio?: string;
   cfg?: number;
+  endImageUrl?: string | null;
   height?: number;
   imageUrl?: string | null;
   imageUrls?: string[];
   prompt: string;
+  resolution?: string;
   size?: string;
   steps?: number;
   width?: number;

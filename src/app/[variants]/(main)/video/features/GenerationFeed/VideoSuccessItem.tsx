@@ -17,12 +17,14 @@ const VideoSuccessItem = memo<VideoSuccessItemProps>(({ generation, onDelete, on
   const asset = generation.asset as VideoGenerationAsset;
 
   return (
-    <Block className={styles.imageContainer} style={{ width: '100%' }} variant={'filled'}>
+    <Block className={styles.imageContainer} style={{ width: 'fit-content' }} variant={'filled'}>
       <video
         controls
+        loop
+        playsInline
         poster={asset.coverUrl || asset.thumbnailUrl}
         src={asset.url}
-        style={{ display: 'block', width: '100%' }}
+        style={{ display: 'block', maxHeight: '50vh', maxWidth: '100%' }}
       />
       <ActionButtons onDelete={onDelete} onDownload={onDownload} showDownload />
     </Block>

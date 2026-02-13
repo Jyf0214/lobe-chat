@@ -136,13 +136,13 @@
       "prettier --write"
     ],
     "*.{js,jsx}": [
-      "eslint --fix",
+      "eslint --fix --prune-suppressions",
       "stylelint --fix",
       "prettier --write"
     ],
     "*.{ts,tsx}": [
       "stylelint --fix",
-      "eslint --fix",
+      "eslint --fix --prune-suppressions",
       "prettier --parser=typescript --write"
     ],
     "*.{yml,yaml}": [

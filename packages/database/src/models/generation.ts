@@ -4,6 +4,7 @@ import type {
   Generation,
   GenerationAsset,
   ImageGenerationAsset,
+  VideoGenerationAsset,
 } from '@lobechat/types';
 import { FileSource } from '@lobechat/types';
 import debug from 'debug';
@@ -178,14 +179,26 @@ export class GenerationModel {
    */
   async transformGeneration(generation: GenerationWithAsyncTask): Promise<Generation> {
     // Process asset URLs if they exist, following the same logic as in generationBatch.ts
-    const asset = generation.asset as ImageGenerationAsset | null;
+    const asset = generation.asset as ImageGenerationAsset | VideoGenerationAsset | null;
     if (asset && asset.url && asset.thumbnailUrl) {
-      const [url, thumbnailUrl] = await Promise.all([
+      const urlPromises: Promise<string>[] = [
         this.fileService.getFullFileUrl(asset.url),
         this.fileService.getFullFileUrl(asset.thumbnailUrl),
-      ]);
-      asset.url = url;
-      asset.thumbnailUrl = thumbnailUrl;
+      ];
+
+      // Also convert coverUrl for video assets
+      const videoAsset = asset as VideoGenerationAsset;
+      const hasCoverUrl = videoAsset.coverUrl;
+      if (hasCoverUrl) {
+        urlPromises.push(this.fileService.getFullFileUrl(videoAsset.coverUrl!));
+      }
+
+      const urls = await Promise.all(urlPromises);
+      asset.url = urls[0];
+      asset.thumbnailUrl = urls[1];
+      if (hasCoverUrl) {
+        videoAsset.coverUrl = urls[2];
+      }
     }
 
     // Build the Generation object following the same structure as in generationBatch.ts

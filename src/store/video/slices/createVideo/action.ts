@@ -1,7 +1,9 @@
 import { ENABLE_BUSINESS_FEATURES } from '@lobechat/business-const';
+import { t } from 'i18next';
 import { type StateCreator } from 'zustand';
 
 import { markUserValidAction } from '@/business/client/markUserValidAction';
+import { message } from '@/components/AntdStaticMethods';
 import { videoService } from '@/services/video';
 
 import { type VideoStore } from '../../store';
@@ -38,6 +40,24 @@ export const createCreateVideoSlice: StateCreator<
 
     if (!parameters.prompt) {
       throw new TypeError('prompt is empty');
+    }
+
+    // Validate: end frame requires start frame (driven by model schema)
+    const parametersSchema = videoGenerationConfigSelectors.parametersSchema(store);
+    const endImageUrlSchema = parametersSchema?.endImageUrl;
+    if (
+      endImageUrlSchema &&
+      'requiresImageUrl' in endImageUrlSchema &&
+      endImageUrlSchema.requiresImageUrl &&
+      parameters.endImageUrl &&
+      !parameters.imageUrl
+    ) {
+      message.warning({
+        content: t('generation.validation.endFrameRequiresStartFrame', { ns: 'video' }),
+        duration: 3,
+      });
+      set({ isCreating: false }, false, 'createVideo/endCreateVideo');
+      return;
     }
 
     let finalTopicId = activeGenerationTopicId;

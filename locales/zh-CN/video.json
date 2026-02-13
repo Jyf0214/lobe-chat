@@ -12,6 +12,7 @@
   "config.seed.label": "种子",
   "config.seed.random": "随机",
   "generation.actions.generate": "生成",
+  "generation.validation.endFrameRequiresStartFrame": "不支持单独设置尾帧，请先设置起始帧",
   "generation.status.generating": "生成中...",
   "topic.createNew": "新建主题",
   "topic.deleteConfirm": "删除视频主题",

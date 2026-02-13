@@ -36,6 +36,7 @@ export const VideoModelParamsMetaSchema = z.object({
       default: z.string().nullable().optional(),
       description: z.string().optional(),
       maxFileSize: z.number().optional(),
+      requiresImageUrl: z.boolean().optional(),
       type: z.tuple([z.literal('string'), z.literal('null')]).optional(),
     })
     .optional(),

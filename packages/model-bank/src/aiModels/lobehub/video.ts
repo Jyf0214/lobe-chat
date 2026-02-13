@@ -1,9 +1,9 @@
 import {
   PRESET_VIDEO_ASPECT_RATIOS,
   PRESET_VIDEO_RESOLUTIONS,
-  VideoModelParamsSchema,
+  type VideoModelParamsSchema,
 } from '../../standard-parameters/video';
-import { AIVideoModelCard } from '../../types/aiModel';
+import { type AIVideoModelCard } from '../../types/aiModel';
 
 export const seedance15ProParams: VideoModelParamsSchema = {
   aspectRatio: {
@@ -12,7 +12,7 @@ export const seedance15ProParams: VideoModelParamsSchema = {
   },
   cameraFixed: { default: false },
   duration: { default: 5, max: 12, min: 4 },
-  endImageUrl: { default: null, maxFileSize: 30 * 1024 * 1024 },
+  endImageUrl: { default: null, maxFileSize: 30 * 1024 * 1024, requiresImageUrl: true },
   generateAudio: { default: true },
   imageUrl: { default: null, maxFileSize: 30 * 1024 * 1024 },
   prompt: { default: '' },

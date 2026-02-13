@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { memo, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import useRenderBusinessVideoBatchItem from '@/business/client/hooks/useRenderBusinessVideoBatchItem';
 import { useVideoStore } from '@/store/video';
 import { AsyncTaskStatus } from '@/types/asyncTask';
 import type { GenerationBatch } from '@/types/generation';
@@ -27,6 +28,8 @@ export const VideoGenerationBatchItem = memo<VideoGenerationBatchItemProps>(({ b
   const useCheckGenerationStatus = useVideoStore((s) => s.useCheckGenerationStatus);
   const removeGeneration = useVideoStore((s) => s.removeGeneration);
   const activeTopicId = useVideoStore((s) => s.activeGenerationTopicId);
+  const { shouldRenderBusinessBatchItem, businessBatchItem } =
+    useRenderBusinessVideoBatchItem(batch);
 
   const time = useMemo(() => {
     return dayjs(batch.createdAt).format('YYYY-MM-DD HH:mm:ss');
@@ -87,8 +90,26 @@ export const VideoGenerationBatchItem = memo<VideoGenerationBatchItemProps>(({ b
     }
   }, [generation?.task.error, message, t]);
 
+  const displayAspectRatio = useMemo(() => {
+    const ratio = batch.config?.aspectRatio;
+    if (ratio && ratio !== 'adaptive') return ratio;
+
+    // Compute from video asset dimensions
+    const asset = generation?.asset;
+    if (asset && asset.width && asset.height && asset.width > 0 && asset.height > 0) {
+      const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+      const d = gcd(asset.width, asset.height);
+      return `${asset.width / d}:${asset.height / d}`;
+    }
+    return undefined;
+  }, [batch.config?.aspectRatio, generation?.asset]);
+
   if (!generation) {
     return null;
+  }
+
+  if (shouldRenderBusinessBatchItem) {
+    return businessBatchItem;
   }
 
   const renderContent = () => {
@@ -117,20 +138,6 @@ export const VideoGenerationBatchItem = memo<VideoGenerationBatchItemProps>(({ b
   };
 
   const hasReferenceFrames = batch.config?.imageUrl || batch.config?.endImageUrl;
-
-  const displayAspectRatio = useMemo(() => {
-    const ratio = batch.config?.aspectRatio;
-    if (ratio && ratio !== 'adaptive') return ratio;
-
-    // Compute from video asset dimensions
-    const asset = generation?.asset;
-    if (asset && asset.width && asset.height && asset.width > 0 && asset.height > 0) {
-      const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
-      const d = gcd(asset.width, asset.height);
-      return `${asset.width / d}:${asset.height / d}`;
-    }
-    return undefined;
-  }, [batch.config?.aspectRatio, generation?.asset]);
 
   const promptAndMetadata = (
     <>

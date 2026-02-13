@@ -33,6 +33,7 @@ export const lobehubVideoModels: AIVideoModelCard[] = [
     organization: 'ByteDance',
     parameters: seedance15ProParams,
     pricing: {
+      approximatePricePerVideo: 0.243,
       currency: 'CNY',
       units: [
         {

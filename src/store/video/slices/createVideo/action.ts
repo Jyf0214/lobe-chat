@@ -7,6 +7,7 @@ import { message } from '@/components/AntdStaticMethods';
 import { videoService } from '@/services/video';
 
 import { type VideoStore } from '../../store';
+import { generationBatchSelectors } from '../generationBatch/selectors';
 import { videoGenerationConfigSelectors } from '../generationConfig/selectors';
 import { generationTopicSelectors } from '../generationTopic';
 
@@ -14,6 +15,7 @@ import { generationTopicSelectors } from '../generationTopic';
 
 export interface CreateVideoAction {
   createVideo: () => Promise<void>;
+  recreateVideo: (generationBatchId: string) => Promise<void>;
 }
 
 // ====== action implementation ====== //
@@ -121,6 +123,34 @@ export const createCreateVideoSlice: StateCreator<
       } else {
         set({ isCreating: false }, false, 'createVideo/endCreateVideo');
       }
+    }
+  },
+
+  async recreateVideo(generationBatchId: string) {
+    set({ isCreating: true }, false, 'recreateVideo/start');
+
+    const store = get();
+    const activeGenerationTopicId = generationTopicSelectors.activeGenerationTopicId(store);
+    if (!activeGenerationTopicId) {
+      throw new Error('No active generation topic');
+    }
+
+    const { removeGenerationBatch } = store;
+    const batch = generationBatchSelectors.getGenerationBatchByBatchId(generationBatchId)(store)!;
+
+    try {
+      await removeGenerationBatch(generationBatchId, activeGenerationTopicId);
+
+      await videoService.createVideo({
+        generationTopicId: activeGenerationTopicId,
+        model: batch.model,
+        params: batch.config as any,
+        provider: batch.provider,
+      });
+
+      await store.refreshGenerationBatches();
+    } finally {
+      set({ isCreating: false }, false, 'recreateVideo/end');
     }
   },
 });

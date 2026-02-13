@@ -192,6 +192,10 @@ export interface Pricing {
    * Fallback approximate per-image price (USD) when detailed pricing table is unavailable
    */
   approximatePricePerImage?: number;
+  /**
+   * Fallback approximate per-video price (USD) when detailed pricing table is unavailable
+   */
+  approximatePricePerVideo?: number;
   currency?: ModelPriceCurrency;
   units: PricingUnit[];
 }

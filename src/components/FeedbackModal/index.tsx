@@ -1,5 +1,6 @@
 'use client';
 
+import { BRANDING_EMAIL } from '@lobechat/business-const';
 import { MarketSDK } from '@lobehub/market-sdk';
 import { Button, Flexbox, Icon, Modal } from '@lobehub/ui';
 import { App, Form, Input, Upload } from 'antd';
@@ -14,7 +15,6 @@ import { useUserStore } from '@/store/user/store';
 
 interface FeedbackInitialValues {
   message?: string;
-  title?: string;
 }
 
 interface FeedbackModalProps {
@@ -25,7 +25,6 @@ interface FeedbackModalProps {
 
 interface FormValues {
   message: string;
-  title: string;
 }
 
 const FeedbackModal = memo<FeedbackModalProps>(({ initialValues, onClose, open }) => {
@@ -76,6 +75,11 @@ const FeedbackModal = memo<FeedbackModalProps>(({ initialValues, onClose, open }
 
       const sdk = new MarketSDK();
 
+      // Generate title from first few words of message
+      const words = values.message.trim().split(/\s+/);
+      const titleWords = words.slice(0, 8).join(' ');
+      const generatedTitle = titleWords.length < values.message.length ? `${titleWords}...` : titleWords;
+
       // Build message with screenshot if available
       let feedbackMessage = values.message;
       if (screenshotUrl) {
@@ -91,7 +95,7 @@ const FeedbackModal = memo<FeedbackModalProps>(({ initialValues, onClose, open }
         },
         email: userEmail,
         message: feedbackMessage,
-        title: values.title,
+        title: generatedTitle,
       });
 
       message.success(t('feedback.success'));
@@ -138,20 +142,12 @@ const FeedbackModal = memo<FeedbackModalProps>(({ initialValues, onClose, open }
       }
       onCancel={handleCancel}
     >
+      <p style={{ color: 'var(--colorTextSecondary)', fontSize: 14, marginBottom: 16 }}>
+        {t('feedback.emailContact', { email: BRANDING_EMAIL.business })}
+      </p>
+
       <Form form={form} initialValues={initialValues} layout="vertical">
         <Form.Item
-          label={t('feedback.fields.title.label')}
-          name="title"
-          rules={[
-            { message: t('feedback.fields.title.required'), required: true },
-            { max: 200, message: t('feedback.fields.title.maxLength') },
-          ]}
-        >
-          <Input showCount maxLength={200} placeholder={t('feedback.fields.title.placeholder')} />
-        </Form.Item>
-
-        <Form.Item
-          label={t('feedback.fields.message.label')}
           name="message"
           rules={[
             { message: t('feedback.fields.message.required'), required: true },

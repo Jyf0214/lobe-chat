@@ -38,9 +38,12 @@ export class AgentEvalTestCaseModel {
    * Find test case by id
    */
   findById = async (id: string) => {
-    return this.db.query.agentEvalTestCases.findFirst({
-      where: eq(agentEvalTestCases.id, id),
-    });
+    const [result] = await this.db
+      .select()
+      .from(agentEvalTestCases)
+      .where(eq(agentEvalTestCases.id, id))
+      .limit(1);
+    return result;
   };
 
   /**

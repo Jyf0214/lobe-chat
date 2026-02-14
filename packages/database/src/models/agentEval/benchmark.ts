@@ -97,18 +97,24 @@ export class AgentEvalBenchmarkModel {
    * Find benchmark by id
    */
   findById = async (id: string) => {
-    return this.db.query.agentEvalBenchmarks.findFirst({
-      where: eq(agentEvalBenchmarks.id, id),
-    });
+    const [result] = await this.db
+      .select()
+      .from(agentEvalBenchmarks)
+      .where(eq(agentEvalBenchmarks.id, id))
+      .limit(1);
+    return result;
   };
 
   /**
    * Find benchmark by identifier
    */
   findByIdentifier = async (identifier: string) => {
-    return this.db.query.agentEvalBenchmarks.findFirst({
-      where: eq(agentEvalBenchmarks.identifier, identifier),
-    });
+    const [result] = await this.db
+      .select()
+      .from(agentEvalBenchmarks)
+      .where(eq(agentEvalBenchmarks.identifier, identifier))
+      .limit(1);
+    return result;
   };
 
   /**

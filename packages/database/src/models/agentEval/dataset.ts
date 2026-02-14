@@ -1,6 +1,6 @@
-import { and, count, desc, eq, isNull, or } from 'drizzle-orm';
+import { and, asc, count, desc, eq, isNull, or } from 'drizzle-orm';
 
-import { agentEvalDatasets, agentEvalTestCases,type NewAgentEvalDataset } from '../../schemas';
+import { agentEvalDatasets, agentEvalTestCases, type NewAgentEvalDataset } from '../../schemas';
 import { type LobeChatDatabase } from '../../type';
 
 export class AgentEvalDatasetModel {
@@ -69,17 +69,26 @@ export class AgentEvalDatasetModel {
    * Find dataset by id (with test cases)
    */
   findById = async (id: string) => {
-    return this.db.query.agentEvalDatasets.findFirst({
-      where: and(
-        eq(agentEvalDatasets.id, id),
-        or(eq(agentEvalDatasets.userId, this.userId), isNull(agentEvalDatasets.userId)),
-      ),
-      with: {
-        testCases: {
-          orderBy: (testCases, { asc }) => [asc(testCases.sortOrder)],
-        },
-      },
-    });
+    const [dataset] = await this.db
+      .select()
+      .from(agentEvalDatasets)
+      .where(
+        and(
+          eq(agentEvalDatasets.id, id),
+          or(eq(agentEvalDatasets.userId, this.userId), isNull(agentEvalDatasets.userId)),
+        ),
+      )
+      .limit(1);
+
+    if (!dataset) return undefined;
+
+    const testCases = await this.db
+      .select()
+      .from(agentEvalTestCases)
+      .where(eq(agentEvalTestCases.datasetId, id))
+      .orderBy(asc(agentEvalTestCases.sortOrder));
+
+    return { ...dataset, testCases };
   };
 
   /**

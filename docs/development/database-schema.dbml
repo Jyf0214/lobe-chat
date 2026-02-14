@@ -108,7 +108,6 @@ table agent_eval_benchmarks {
   name text [not null]
   description text
   rubrics jsonb [not null]
-  pass_threshold real [not null, default: 0.6]
   reference_url text
   metadata jsonb
   is_system boolean [not null, default: true]
@@ -145,6 +144,9 @@ table agent_eval_run_topics {
   run_id text [not null]
   topic_id text [not null]
   test_case_id text [not null]
+  score real
+  passed boolean
+  eval_result jsonb
   created_at "timestamp with time zone" [not null, default: `now()`]
 
   indexes {

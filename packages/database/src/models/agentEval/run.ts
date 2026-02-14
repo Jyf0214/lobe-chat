@@ -64,9 +64,12 @@ export class AgentEvalRunModel {
    * Find run by id
    */
   findById = async (id: string) => {
-    return this.db.query.agentEvalRuns.findFirst({
-      where: and(eq(agentEvalRuns.id, id), eq(agentEvalRuns.userId, this.userId)),
-    });
+    const [result] = await this.db
+      .select()
+      .from(agentEvalRuns)
+      .where(and(eq(agentEvalRuns.id, id), eq(agentEvalRuns.userId, this.userId)))
+      .limit(1);
+    return result;
   };
 
   /**

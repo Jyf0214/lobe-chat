@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS "agent_eval_benchmarks" (
 	"name" text NOT NULL,
 	"description" text,
 	"rubrics" jsonb NOT NULL,
-	"pass_threshold" real DEFAULT 0.6 NOT NULL,
 	"reference_url" text,
 	"metadata" jsonb,
 	"is_system" boolean DEFAULT true NOT NULL,
@@ -30,6 +29,9 @@ CREATE TABLE IF NOT EXISTS "agent_eval_run_topics" (
 	"run_id" text NOT NULL,
 	"topic_id" text NOT NULL,
 	"test_case_id" text NOT NULL,
+	"score" real,
+	"passed" boolean,
+	"eval_result" jsonb,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "agent_eval_run_topics_run_id_topic_id_pk" PRIMARY KEY("run_id","topic_id")
 );

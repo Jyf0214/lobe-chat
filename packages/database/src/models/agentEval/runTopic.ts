@@ -1,9 +1,12 @@
-import { and, eq } from 'drizzle-orm';
+import { and, asc, desc, eq } from 'drizzle-orm';
 
 import {
   type AgentEvalRunTopicItem,
   type NewAgentEvalRunTopic,
   agentEvalRunTopics,
+  agentEvalRuns,
+  agentEvalTestCases,
+  topics,
 } from '../../schemas';
 import { LobeChatDatabase } from '../../type';
 
@@ -28,14 +31,25 @@ export class AgentEvalRunTopicModel {
    * Find all topics for a run (with TestCase and Topic details)
    */
   findByRunId = async (runId: string) => {
-    return this.db.query.agentEvalRunTopics.findMany({
-      orderBy: (runTopics, { asc }) => [asc(runTopics.createdAt)],
-      where: eq(agentEvalRunTopics.runId, runId),
-      with: {
-        testCase: true,
-        topic: true,
-      },
-    });
+    const rows = await this.db
+      .select({
+        createdAt: agentEvalRunTopics.createdAt,
+        evalResult: agentEvalRunTopics.evalResult,
+        passed: agentEvalRunTopics.passed,
+        runId: agentEvalRunTopics.runId,
+        score: agentEvalRunTopics.score,
+        testCase: agentEvalTestCases,
+        testCaseId: agentEvalRunTopics.testCaseId,
+        topic: topics,
+        topicId: agentEvalRunTopics.topicId,
+      })
+      .from(agentEvalRunTopics)
+      .leftJoin(agentEvalTestCases, eq(agentEvalRunTopics.testCaseId, agentEvalTestCases.id))
+      .leftJoin(topics, eq(agentEvalRunTopics.topicId, topics.id))
+      .where(eq(agentEvalRunTopics.runId, runId))
+      .orderBy(asc(agentEvalRunTopics.createdAt));
+
+    return rows;
   };
 
   /**
@@ -49,30 +63,55 @@ export class AgentEvalRunTopicModel {
    * Find all runs that used a specific test case
    */
   findByTestCaseId = async (testCaseId: string) => {
-    return this.db.query.agentEvalRunTopics.findMany({
-      orderBy: (runTopics, { desc }) => [desc(runTopics.createdAt)],
-      where: eq(agentEvalRunTopics.testCaseId, testCaseId),
-      with: {
-        run: true,
-        topic: true,
-      },
-    });
+    const rows = await this.db
+      .select({
+        createdAt: agentEvalRunTopics.createdAt,
+        evalResult: agentEvalRunTopics.evalResult,
+        passed: agentEvalRunTopics.passed,
+        run: agentEvalRuns,
+        runId: agentEvalRunTopics.runId,
+        score: agentEvalRunTopics.score,
+        testCaseId: agentEvalRunTopics.testCaseId,
+        topic: topics,
+        topicId: agentEvalRunTopics.topicId,
+      })
+      .from(agentEvalRunTopics)
+      .leftJoin(agentEvalRuns, eq(agentEvalRunTopics.runId, agentEvalRuns.id))
+      .leftJoin(topics, eq(agentEvalRunTopics.topicId, topics.id))
+      .where(eq(agentEvalRunTopics.testCaseId, testCaseId))
+      .orderBy(desc(agentEvalRunTopics.createdAt));
+
+    return rows;
   };
 
   /**
    * Find a specific run-topic association by run and test case
    */
   findByRunAndTestCase = async (runId: string, testCaseId: string) => {
-    return this.db.query.agentEvalRunTopics.findFirst({
-      where: and(
-        eq(agentEvalRunTopics.runId, runId),
-        eq(agentEvalRunTopics.testCaseId, testCaseId),
-      ),
-      with: {
-        testCase: true,
-        topic: true,
-      },
-    });
+    const [row] = await this.db
+      .select({
+        createdAt: agentEvalRunTopics.createdAt,
+        evalResult: agentEvalRunTopics.evalResult,
+        passed: agentEvalRunTopics.passed,
+        runId: agentEvalRunTopics.runId,
+        score: agentEvalRunTopics.score,
+        testCase: agentEvalTestCases,
+        testCaseId: agentEvalRunTopics.testCaseId,
+        topic: topics,
+        topicId: agentEvalRunTopics.topicId,
+      })
+      .from(agentEvalRunTopics)
+      .leftJoin(agentEvalTestCases, eq(agentEvalRunTopics.testCaseId, agentEvalTestCases.id))
+      .leftJoin(topics, eq(agentEvalRunTopics.topicId, topics.id))
+      .where(
+        and(
+          eq(agentEvalRunTopics.runId, runId),
+          eq(agentEvalRunTopics.testCaseId, testCaseId),
+        ),
+      )
+      .limit(1);
+
+    return row;
   };
 
   /**

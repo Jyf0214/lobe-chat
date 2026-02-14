@@ -3,6 +3,7 @@ import { Loader2, SquareArrowOutUpRight } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useGoogleDataProtection } from '@/hooks/useGoogleDataProtection';
 import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
 import { useToolStore } from '@/store/tool';
@@ -191,6 +192,9 @@ const KlavisServerItem = memo<KlavisServerItemProps>(
       [effectiveAgentId, plugins, updateAgentConfigById],
     );
 
+    // Google Data Protection check
+    const { checkGoogleToolConnect } = useGoogleDataProtection();
+
     const handleConnect = async () => {
       if (!userId) {
         return;
@@ -199,6 +203,10 @@ const KlavisServerItem = memo<KlavisServerItemProps>(
       if (server) {
         return;
       }
+
+      // Google Data Protection: Block connection if using restricted provider
+      const isBlocked = await checkGoogleToolConnect(identifier);
+      if (isBlocked) return;
 
       setIsConnecting(true);
       try {
@@ -230,6 +238,14 @@ const KlavisServerItem = memo<KlavisServerItemProps>(
 
     const handleToggle = async () => {
       if (!server) return;
+
+      // Google Data Protection: Block enabling (not disabling) if using restricted provider
+      // checked === false means user wants to enable it
+      if (!checked) {
+        const isBlocked = await checkGoogleToolConnect(identifier);
+        if (isBlocked) return;
+      }
+
       setIsToggling(true);
       await togglePlugin(pluginId);
       setIsToggling(false);

@@ -65,7 +65,7 @@ export interface SidebarUIAction {
   /**
    * Update group sort order
    */
-  updateGroupSort: (items: SessionGroupItem[]) => Promise<void>;
+  updateGroupSort: (items: Pick<SessionGroupItem, 'id'>[]) => Promise<void>;
 
   // ========== UI State Actions ==========
   /**

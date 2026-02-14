@@ -72,12 +72,12 @@ export const useGoogleDataProtection = () => {
   const connectedServers = useToolStore(klavisStoreSelectors.getConnectedServers);
 
   const state = useMemo((): GoogleDataProtectionState => {
-    const connectedGoogleServerIds = connectedServers
+    const connectedGoogleServerIds = new Set(connectedServers
       .filter((server) => isGoogleTool(server.identifier))
-      .map((server) => server.identifier);
+      .map((server) => server.identifier));
 
     const enabledGoogleToolIds = plugins.filter((pluginId) =>
-      connectedGoogleServerIds.includes(pluginId),
+      connectedGoogleServerIds.has(pluginId),
     );
 
     const hasEnabledGoogleTools = enabledGoogleToolIds.length > 0;

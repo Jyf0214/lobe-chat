@@ -232,6 +232,7 @@ describe('execAgent', () => {
         })
         .returning();
 
+      // @ts-ignore
       const [thread] = await serverDB
         .insert(threads)
         .values({

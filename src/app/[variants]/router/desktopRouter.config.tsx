@@ -1,11 +1,12 @@
 'use client';
 
+import { type RouteObject } from 'react-router-dom';
+
 import {
   BusinessDesktopRoutesWithMainLayout,
   BusinessDesktopRoutesWithoutMainLayout,
 } from '@/business/client/BusinessDesktopRoutes';
 import { isDesktop } from '@/const/version';
-import { type RouteConfig } from '@/utils/router';
 import { dynamicElement, ErrorBoundary, redirectElement } from '@/utils/router';
 
 import DesktopOnboarding from '../(desktop)/desktop-onboarding';
@@ -17,7 +18,7 @@ import DesktopMemoryLayout from '../(main)/memory/_layout';
 import DesktopPageLayout from '../(main)/page/_layout';
 
 // Desktop router configuration (declarative mode)
-export const desktopRoutes: RouteConfig[] = [
+export const desktopRoutes: RouteObject[] = [
   {
     children: [
       // Chat routes (agent)

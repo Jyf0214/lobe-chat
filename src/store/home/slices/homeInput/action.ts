@@ -12,6 +12,10 @@ import { setNamespace } from '@/utils/storeDebug';
 
 import { type StarterMode } from './initialState';
 
+interface SendParams {
+  navigate?: NavigateFunction;
+}
+
 const n = setNamespace('homeInput');
 
 type Setter = StoreSetter<HomeStore>;
@@ -32,7 +36,7 @@ export class HomeInputActionImpl {
     this.#set({ inputActiveMode: null }, false, n('clearInputMode'));
   };
 
-  sendAsAgent = async (message: string): Promise<string> => {
+  sendAsAgent = async (message: string, params?: SendParams): Promise<string> => {
     this.#set({ homeInputLoading: true }, false, n('sendAsAgent/start'));
 
     try {
@@ -57,9 +61,9 @@ export class HomeInputActionImpl {
       });
 
       // 3. Navigate to Agent profile page
-      const { navigate } = this.#get();
-      if (navigate) {
-        navigate(`/agent/${result.agentId}/profile`);
+      const nav = params?.navigate ?? this.#get().navigate;
+      if (nav) {
+        nav(`/agent/${result.agentId}/profile`);
       }
 
       // 4. Refresh agent list
@@ -90,7 +94,7 @@ export class HomeInputActionImpl {
     }
   };
 
-  sendAsGroup = async (message: string): Promise<string> => {
+  sendAsGroup = async (message: string, params?: SendParams): Promise<string> => {
     this.#set({ homeInputLoading: true }, false, n('sendAsGroup/start'));
 
     try {
@@ -120,9 +124,9 @@ export class HomeInputActionImpl {
       this.#get().refreshAgentList();
 
       // 5. Navigate to Group profile page
-      const { navigate } = this.#get();
-      if (navigate) {
-        navigate(`/group/${group.id}/profile`);
+      const nav = params?.navigate ?? this.#get().navigate;
+      if (nav) {
+        nav(`/group/${group.id}/profile`);
       }
 
       // 6. Update groupAgentBuilder's model config and send initial message
@@ -158,7 +162,7 @@ export class HomeInputActionImpl {
     this.#set({ inputActiveMode: null }, false, n('sendAsResearch'));
   };
 
-  sendAsWrite = async (message: string): Promise<string> => {
+  sendAsWrite = async (message: string, params?: SendParams): Promise<string> => {
     this.#set({ homeInputLoading: true }, false, n('sendAsWrite/start'));
 
     try {
@@ -180,9 +184,9 @@ export class HomeInputActionImpl {
       });
 
       // 3. Navigate to Page
-      const { navigate } = this.#get();
-      if (navigate) {
-        navigate(`/page/${newDoc.id}`);
+      const nav = params?.navigate ?? this.#get().navigate;
+      if (nav) {
+        nav(`/page/${newDoc.id}`);
       }
 
       // 4. Update pageAgent's model config and send initial message

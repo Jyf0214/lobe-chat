@@ -1,5 +1,6 @@
 import { SESSION_CHAT_URL } from '@lobechat/const';
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useQueryRoute } from '@/hooks/useQueryRoute';
 import { useAgentStore } from '@/store/agent';
@@ -10,6 +11,7 @@ import { useHomeStore } from '@/store/home';
 
 export const useSend = () => {
   const router = useQueryRoute();
+  const navigate = useNavigate();
   const inboxAgentId = useAgentStore(builtinAgentSelectors.inboxAgentId);
   const sendMessage = useChatStore((s) => s.sendMessage);
   const clearChatUploadFileList = useFileStore((s) => s.clearChatUploadFileList);
@@ -27,20 +29,22 @@ export const useSend = () => {
     // Require input content (except for default inbox which can have files/context)
     if (!inputMessage && fileList.length === 0 && contextList.length === 0) return;
 
+    const sendParams = { navigate };
+
     try {
       switch (inputActiveMode) {
         case 'agent': {
-          await sendAsAgent(inputMessage);
+          await sendAsAgent(inputMessage, sendParams);
           break;
         }
 
         case 'group': {
-          await sendAsGroup(inputMessage);
+          await sendAsGroup(inputMessage, sendParams);
           break;
         }
 
         case 'write': {
-          await sendAsWrite(inputMessage);
+          await sendAsWrite(inputMessage, sendParams);
           break;
         }
 
@@ -69,7 +73,14 @@ export const useSend = () => {
       clearChatContextSelections();
       mainInputEditor?.clearContent();
     }
-  }, [inboxAgentId, sendMessage, clearChatContextSelections, clearChatUploadFileList, router]);
+  }, [
+    inboxAgentId,
+    navigate,
+    sendMessage,
+    clearChatContextSelections,
+    clearChatUploadFileList,
+    router,
+  ]);
 
   return {
     inboxAgentId,

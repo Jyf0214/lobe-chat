@@ -4,6 +4,7 @@ import {
   type ClientSecretPayload,
   type CloudflareKeyVault,
   type ComfyUIKeyVault,
+  type OpenAICodexKeyVault,
   type OpenAICompatibleKeyVault,
   type VertexAIKeyVault,
 } from '@lobechat/types';
@@ -25,6 +26,7 @@ export const getProviderAuthPayload = (
     AWSBedrockKeyVault &
     CloudflareKeyVault &
     ComfyUIKeyVault &
+    OpenAICodexKeyVault &
     VertexAIKeyVault,
 ) => {
   switch (provider) {
@@ -95,6 +97,14 @@ export const getProviderAuthPayload = (
         apiKey: keyVaults?.apiKey,
         baseURL: keyVaults?.baseURL,
         vertexAIRegion: keyVaults?.region,
+      };
+    }
+
+    case ModelProvider.OpenAICodex: {
+      return {
+        chatgptAccountId: keyVaults?.chatgptAccountId,
+        oauthAccessToken: keyVaults?.oauthAccessToken,
+        oaiDeviceId: keyVaults?.oaiDeviceId,
       };
     }
 

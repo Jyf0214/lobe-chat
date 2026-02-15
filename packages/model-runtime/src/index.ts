@@ -27,6 +27,7 @@ export { LobeNewAPIAI } from './providers/newapi';
 export { LobeOllamaAI } from './providers/ollama';
 export { LobeOllamaCloudAI } from './providers/ollamacloud';
 export { LobeOpenAI } from './providers/openai';
+export { LobeOpenAICodexAI } from './providers/openaiCodex';
 export { LobeOpenRouterAI } from './providers/openrouter';
 export { LobePerplexityAI } from './providers/perplexity';
 export { LobeQwenAI } from './providers/qwen';

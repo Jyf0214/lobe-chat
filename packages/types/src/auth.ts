@@ -1,4 +1,3 @@
-/* eslint-disable typescript-sort-keys/interface */
 export interface ClientSecretPayload {
   /**
    * Represents the user's API key
@@ -27,9 +26,14 @@ export interface ClientSecretPayload {
   bearerToken?: string;
 
   bearerTokenExpiresAt?: number;
+  /**
+   * OpenAI Codex OAuth fields
+   */
+  chatgptAccountId?: string;
 
   cloudflareBaseURLOrAccountID?: string;
   customHeaders?: Record<string, string>;
+  oaiDeviceId?: string;
   /**
    * GitHub Copilot OAuth fields
    */

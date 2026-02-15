@@ -62,6 +62,13 @@ export interface GithubCopilotKeyVault {
   oauthAccessToken?: string;
 }
 
+export interface OpenAICodexKeyVault {
+  chatgptAccountId?: string;
+  oaiDeviceId?: string;
+  oauthAccessToken?: string;
+  oauthTokenExpiresAt?: string;
+}
+
 export interface SearchEngineKeyVaults {
   searchxng?: {
     apiKey?: string;

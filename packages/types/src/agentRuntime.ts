@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 // ******* Runtime Biz Error ******* //
 export const AgentRuntimeErrorType = {
   AgentRuntimeError: 'AgentRuntimeError', // Agent Runtime module runtime error
@@ -25,6 +24,7 @@ export const AgentRuntimeErrorType = {
 
   InvalidGithubToken: 'InvalidGithubToken',
   InvalidGithubCopilotToken: 'InvalidGithubCopilotToken',
+  InvalidOpenAICodexToken: 'InvalidOpenAICodexToken',
 
   ConnectionCheckFailed: 'ConnectionCheckFailed',
 

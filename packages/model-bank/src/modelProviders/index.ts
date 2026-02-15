@@ -45,6 +45,7 @@ import NvidiaProvider from './nvidia';
 import OllamaProvider from './ollama';
 import OllamaCloudProvider from './ollamacloud';
 import OpenAIProvider from './openai';
+import OpenAICodexProvider from './openaiCodex';
 import OpenRouterProvider from './openrouter';
 import PerplexityProvider from './perplexity';
 import PPIOProvider from './ppio';
@@ -153,6 +154,7 @@ export const DEFAULT_MODEL_PROVIDER_LIST = [
   CloudflareProvider,
   GithubProvider,
   GithubCopilotProvider,
+  OpenAICodexProvider,
   NewAPIProvider,
   BflProvider,
   NovitaProvider,
@@ -256,6 +258,7 @@ export { default as NvidiaProviderCard } from './nvidia';
 export { default as OllamaProviderCard } from './ollama';
 export { default as OllamaCloudProviderCard } from './ollamacloud';
 export { default as OpenAIProviderCard } from './openai';
+export { default as OpenAICodexProviderCard } from './openaiCodex';
 export { default as OpenRouterProviderCard } from './openrouter';
 export { default as PerplexityProviderCard } from './perplexity';
 export { default as PPIOProviderCard } from './ppio';

@@ -10,6 +10,7 @@ import {
   getOAuthService,
   GithubCopilotOAuthService,
 } from '@/server/services/oauthDeviceFlow/providers/githubCopilot';
+import { OpenAICodexOAuthService } from '@/server/services/oauthDeviceFlow/providers/openaiCodex';
 
 const oauthProcedure = authedProcedure.use(serverDatabase).use(async (opts) => {
   const { ctx } = opts;
@@ -151,6 +152,31 @@ export const oauthDeviceFlowRouter = router({
         }
       }
 
+      // For OpenAI Codex, use the specialized service
+      if (input.providerId === 'openaicodex' && service instanceof OpenAICodexOAuthService) {
+        const tokens = await service.completeAuthFlow(config, input.deviceCode);
+
+        if (!tokens) {
+          return { status: 'pending' as const };
+        }
+
+        await ctx.aiProviderModel.updateConfig(
+          input.providerId,
+          {
+            keyVaults: {
+              chatgptAccountId: tokens.chatgptAccountId,
+              oauthAccessToken: tokens.oauthAccessToken,
+              oauthTokenExpiresAt: String(tokens.oauthTokenExpiresAt),
+              oaiDeviceId: tokens.oaiDeviceId,
+            },
+          },
+          ctx.gateKeeper.encrypt,
+          KeyVaultsGateKeeper.getUserKeyVaults,
+        );
+
+        return { status: 'success' as const };
+      }
+
       // Generic OAuth flow
       const pollResult = await service.pollForToken(config, input.deviceCode);
 
@@ -187,10 +213,12 @@ export const oauthDeviceFlowRouter = router({
           keyVaults: {
             bearerToken: undefined,
             bearerTokenExpiresAt: undefined,
+            chatgptAccountId: undefined,
             githubAvatarUrl: undefined,
             githubUsername: undefined,
             oauthAccessToken: undefined,
             oauthTokenExpiresAt: undefined,
+            oaiDeviceId: undefined,
           },
         },
         ctx.gateKeeper.encrypt,

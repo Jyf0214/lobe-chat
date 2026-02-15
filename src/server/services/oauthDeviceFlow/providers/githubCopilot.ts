@@ -1,6 +1,7 @@
 import { type OAuthDeviceFlowConfig } from '@/types/aiProvider';
 
 import { OAuthDeviceFlowService } from '../index';
+import { OpenAICodexOAuthService } from './openaiCodex';
 
 export interface CopilotTokenResponse {
   expiresAt: number;
@@ -130,6 +131,9 @@ export class GithubCopilotOAuthService extends OAuthDeviceFlowService {
 export function getOAuthService(providerId: string): OAuthDeviceFlowService {
   if (providerId === 'githubcopilot') {
     return new GithubCopilotOAuthService();
+  }
+  if (providerId === 'openaicodex') {
+    return new OpenAICodexOAuthService();
   }
   return new OAuthDeviceFlowService();
 }

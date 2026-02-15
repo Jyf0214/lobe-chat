@@ -8,6 +8,7 @@ import {
   type CloudflareKeyVault,
   type ComfyUIKeyVault,
   type GithubCopilotKeyVault,
+  type OpenAICodexKeyVault,
   type OpenAICompatibleKeyVault,
   type VertexAIKeyVault,
 } from '@lobechat/types';
@@ -32,6 +33,7 @@ type ProviderKeyVaults = OpenAICompatibleKeyVault &
   CloudflareKeyVault &
   ComfyUIKeyVault &
   GithubCopilotKeyVault &
+  OpenAICodexKeyVault &
   VertexAIKeyVault;
 
 /**
@@ -143,6 +145,15 @@ export const buildPayloadFromKeyVaults = (
       };
     }
 
+    case ModelProvider.OpenAICodex: {
+      return {
+        chatgptAccountId: keyVaults.chatgptAccountId,
+        oauthAccessToken: keyVaults.oauthAccessToken,
+        oaiDeviceId: keyVaults.oaiDeviceId,
+        runtimeProvider,
+      };
+    }
+
     default: {
       return {
         apiKey: keyVaults.apiKey,
@@ -242,6 +253,14 @@ const getParamsFromPayload = (provider: string, payload: ClientSecretPayload) =>
         bearerToken: payload.bearerToken,
         bearerTokenExpiresAt: payload.bearerTokenExpiresAt,
         oauthAccessToken: payload.oauthAccessToken,
+      };
+    }
+
+    case ModelProvider.OpenAICodex: {
+      return {
+        chatgptAccountId: payload.chatgptAccountId,
+        oauthAccessToken: payload.oauthAccessToken,
+        oaiDeviceId: payload.oaiDeviceId,
       };
     }
 

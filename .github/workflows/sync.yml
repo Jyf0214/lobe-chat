@@ -1,54 +1,65 @@
-name: Upstream Sync
-
-permissions:
-  contents: write
-  issues: write
-  actions: write
+name: Sync LobeHub
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # every 6 hours
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  sync_latest_from_upstream:
-    name: Sync latest commits from upstream repo
+  sync_job:
     runs-on: ubuntu-latest
-    if: ${{ github.event.repository.fork }}
-
     steps:
-      - uses: actions/checkout@v6
+      - name: System Cleanup
+        run: |
+          echo ">>> 正在清空 /tmp 目录..."
+          rm -rf /tmp/* 2>/dev/null || true
+          echo ">>> /tmp 清理完毕"
 
-      - name: Clean issue notice
-        uses: actions-cool/issues-helper@v3
+      - uses: actions/checkout@v4
         with:
-          actions: 'close-issues'
-          labels: '🚨 Sync Fail'
+          token: ${{ secrets.PAT }}
+          fetch-depth: 0
 
-      - name: Sync upstream changes
-        id: sync
-        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
-        with:
-          upstream_sync_repo: lobehub/lobehub
-          upstream_sync_branch: main
-          target_sync_branch: main
-          target_repo_token: ${{ secrets.GITHUB_TOKEN }} # automatically generated, no need to set
-          test_mode: false
+      - name: Sync Logic
+        env:
+          UPSTREAM_URL: https://github.com/lobehub/lobehub.git
+          TARGET_REPO: Jyf0214/lobe-chat
+          TARGET_BRANCH: main
+          WORKFLOW_FILE: sync.yml
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+        run: |
+          echo ">>> 配置 Git 用户信息..."
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Sync check
-        if: failure()
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: 'create-issue'
-          title: '🚨 同步失败 | Sync Fail'
-          labels: '🚨 Sync Fail'
-          body: |
-            Due to a change in the workflow file of the [LobeChat][lobechat] upstream repository, GitHub has automatically suspended the scheduled automatic update. You need to manually sync your fork. Please refer to the detailed [Tutorial][tutorial-en-US] for instructions.
+          echo ">>> 备份同步工作流文件..."
+          cp ".github/workflows/$WORKFLOW_FILE" "/tmp/$WORKFLOW_FILE"
 
-            由于 [LobeChat][lobechat] 上游仓库的 workflow 文件变更，导致 GitHub 自动暂停了本次自动更新，你需要手动 Sync Fork 一次，请查看 [详细教程][tutorial-zh-CN]
+          echo ">>> 拉取上游仓库 main 分支历史..."
+          git remote add upstream "$UPSTREAM_URL"
+          git fetch upstream "$TARGET_BRANCH"
 
-            ![](https://github-production-user-asset-6210df.s3.amazonaws.com/17870709/273954625-df80c890-0822-4ac2-95e6-c990785cbed5.png)
+          echo ">>> 强制切换并重置到上游 main 分支..."
+          git checkout -B "$TARGET_BRANCH" "upstream/$TARGET_BRANCH"
 
-            [lobechat]: https://github.com/lobehub/lobe-chat
-            [tutorial-zh-CN]: https://lobehub.com/zh/docs/self-hosting/advanced/upstream-sync
-            [tutorial-en-US]: https://lobehub.com/docs/self-hosting/advanced/upstream-sync
+          echo ">>> 移除 .github 文件夹内容..."
+          rm -rf .github
+
+          echo ">>> 还原同步工作流文件..."
+          mkdir -p .github/workflows
+          cp "/tmp/$WORKFLOW_FILE" ".github/workflows/$WORKFLOW_FILE"
+
+          echo ">>> 提交清理与同步更改..."
+          git add -A
+          git commit -m "build: 同步上游历史并清理配置"
+
+          echo ">>> 设置远程仓库地址..."
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${TARGET_REPO}.git"
+
+          echo ">>> 正在强制推送到远程 main 分支..."
+          git push -f origin "$TARGET_BRANCH"
+
+          echo ">>> 同步流程结束，已确保远程仅更新 main 分支"

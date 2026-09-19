@@ -1,30 +1,71 @@
-name: Upstream Sync
-
-permissions:
-  contents: write
-  issues: write
-  actions: write
+name: Sync LobeHub 
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # every 6 hours
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  sync_latest_from_upstream:
-    name: Sync latest commits from upstream repo
+  sync_job:
     runs-on: ubuntu-latest
-    if: ${{ github.event.repository.fork }}
-
     steps:
-      - uses: actions/checkout@v6
+      - name: System Cleanup
+        run: rm -rf /tmp/* 2>/dev/null || true
 
-      - name: Sync upstream changes
-        id: sync
-        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
+      - uses: actions/checkout@v4
         with:
-          upstream_sync_repo: lobehub/lobehub
-          upstream_sync_branch: main
-          target_sync_branch: main
-          target_repo_token: ${{ secrets.GITHUB_TOKEN }} # automatically generated, no need to set
-          test_mode: false
+          token: ${{ secrets.PAT }}
+          fetch-depth: 0
+
+      - name: Sync Logic
+        env:
+          UPSTREAM_URL: https://github.com/lobehub/lobehub.git
+          TARGET_REPO: Jyf0214/lobe-chat
+          TARGET_BRANCH: main
+          WORKFLOW_FILE: sync.yml
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          cp ".github/workflows/$WORKFLOW_FILE" "/tmp/$WORKFLOW_FILE"
+          git remote add upstream "$UPSTREAM_URL"
+          git fetch upstream "$TARGET_BRANCH"
+          git checkout -B "$TARGET_BRANCH" "upstream/$TARGET_BRANCH"
+          rm -rf .github
+          mkdir -p .github/workflows
+          cp "/tmp/$WORKFLOW_FILE" ".github/workflows/$WORKFLOW_FILE"
+          git add -A
+          git commit -m "build: sync upstream"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${TARGET_REPO}.git"
+          git push -f origin "$TARGET_BRANCH"
+
+  build_latest:
+    needs: sync_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Original Latest
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lobe-chat:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
